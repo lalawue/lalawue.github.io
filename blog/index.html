@@ -20,6 +20,113 @@
       <div id="text">
 	<h1>Sucha's Blog ~ Welcome</h1>
 	<!-- Page published by Emacs Wiki begins here -->
+<h2>14年1月7日 周二 04:14</h2>
+
+<h3>改成靠 GitHub 托管了</h3>
+
+<p>
+<a href="https://help.github.com/categories/20/articles">GitHub&#32;Pages</a> 真是个好东东，提供了静态网页的发布功能，本来是开放给开源工
+程介绍页面的，不过我的主页也是完全开源的嘛，也可以借来托管了。
+
+</p>
+
+<p>
+空间足够，git 方式更新，还可以绑定域名，对于我是完全足够了。虽然我的虚拟
+主机还有近 7 个月才到期，价钱也不贵，而且之前才更新了上传脚本，这个工具
+还没用爽呢，没想到才过了 2 天就完全用不上了。
+
+</p>
+
+<p>
+因为 GitHub Pages 需要以 username.github.io 来创建仓库，如果生成这些静态
+网页的源码也打算放到 github 托管，就像我是把整个主页都放到了 github 上，
+并使用 EmacsWiki 在本地生成静态网页，如下的目录结构：
+
+</p>
+
+<pre class="source">homepage +
+         - publish
+         - sources
+</pre>
+
+
+那么可以考虑将 publish 作为 homepage 的一个 submodule 关联起来：
+
+</p>
+
+<pre class="source">$ cd homepage
+$ git submodule add git@github.com:username/username.github.io.git publish
+</pre>
+
+
+这样 homepage 也可以单独作为 github 的工程了，publish 以及 sources 目录
+可以互不干扰，大不了 homepage 下建立 .gitignore 屏蔽 publish 目录下的东
+西好了。
+
+</p>
+
+<p>
+最后域名绑定部分，看了一下 help 页面才搞定，Pages 这边是建立一个
+CNAME 文件来记录 domain，另外还需要修改域名的 A 记录，次级域名的绑定还更
+麻烦，我没看了。
+
+</p>
+
+<p>
+免费使用，空间足够，自由度也高，吸引力够大的，可仔细想一下，感觉非程序员
+还得学不少东西才能用起来：
+
+</p>
+
+<ul>
+<li>创建静态网页
+</li>
+<li>在 github 上注册并建立 Pages 仓库
+</li>
+<li>git 的安装及日常使用
+</li>
+<li>绑定域名
+</li>
+<li>美化界面
+</li>
+</ul>
+
+<p>
+官方推荐采用支持 markdown 语法的静态网页生成工具，比如 JekyII，我看了一
+下，感觉也不简单呀，要安装 Ruby 神马的。
+
+</p>
+
+<p>
+git 的使用如果只是发布的话，感觉了解 git push 就够了吧。
+
+</p>
+
+<p>
+界面部分 Pages 有提供不少主题，感觉这点应该还好啊，域名部分，有自己域名
+的童鞋自然懂得。
+
+</p>
+
+<p>
+貌似到现在为止还是程序猿玩的多。
+
+</p>
+
+<p>
+我在 04 年就使用 wiki 语法来管理主页了，也是类似于 markdown 这样的轻量级
+标记语言，静态 html 页面的发布部分一点都不需要改，加上又是 git 的日常使
+用者，毫无压力。
+
+</p>
+
+<h4><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2014-01.html#p2">Permalink</a> </h4>
+
+<p>
+<!-- date: 2014-01-07T04:14:39+0800 -->
+
+</p>
+
 <h2>14年1月4日 周六 15:04</h2>
 
 <h3>更方便简洁的 Upload Script</h3>
@@ -848,82 +955,6 @@ git，为此我还查找了 diff 和 apply 的使用，git 有自己的一套东
 
 </p>
 
-<h2>13年9月29日 周日 18:45</h2>
-
-<h3>Bash 下对比两个文件夹的文件并更新</h3>
-
-<p>
-有时候确实有这样的需求，两个文件夹下面的文件都差不多，但是他们因为各种原
-因不属于同一个 git 根，至少在没有这些强大的版本控制系统下，我们又需要做对
-比更新，那请看下面，需要 diff、cut 以及 bash 内建的 cp 命令。
-
-</p>
-
-<pre class="source"><span class="function-name">checknew</span>() {
-    <span class="keyword">if</span> [ $<span class="variable-name">#</span> == 2 ]; <span class="keyword">then</span>
-        diff -rqX ~/bin/diff_ignore.txt $<span class="variable-name">1</span> $<span class="variable-name">2</span>
-    <span class="keyword">else</span>
-        <span class="builtin">echo</span> checknew DIR1 DIR2
-    <span class="keyword">fi</span>
-}
-</pre>
-
-
-checknew 用来检测那些文件有变动，其中会排除一些文件，文件名的模式放到了
-~/bin/diff_ignore.txt 中，我的那个内容如下：
-
-</p>
-
-<pre class="source">*.git
-*.so
-*.dSYM
-TAGS
-*.elc
-.gitignore
-</pre>
-
-
-而 copynew src dest 这是将不同目录下的文件比较后做拷贝更新。
-
-</p>
-
-<pre class="source"><span class="function-name">copynew</span>() {
-    <span class="keyword">if</span> [ $<span class="variable-name">#</span> != 2 ]; <span class="keyword">then</span>
-        <span class="builtin">echo</span> copynew srcDir desDir
-        <span class="keyword">return</span>
-    <span class="keyword">fi</span>
-
-    <span class="variable-name">tmp_file</span>=/tmp/ccc.txt
-    
-    <span class="comment-delimiter"># </span><span class="comment">generate diff output
-</span>    diff -rqX ~/bin/diff_ignore.txt $<span class="variable-name">1</span> $<span class="variable-name">2</span> | grep <span class="string">"^Files"</span> | cut -d<span class="string">" "</span> -f 2,4 &gt; $<span class="variable-name">tmp_file</span>
-
-    <span class="comment-delimiter">#</span><span class="comment">update file
-</span>    <span class="variable-name">magic</span>=12343188
-    <span class="variable-name">src</span>=$<span class="variable-name">magic</span>
-    <span class="keyword">for</span> file<span class="keyword"> in</span> $(<span class="sh-quoted-exec">cat</span> $<span class="variable-name">tmp_file</span>); <span class="keyword">do</span>
-        <span class="variable-name">des</span>=$<span class="variable-name">file</span>
-        <span class="keyword">if</span> [ $<span class="variable-name">src</span> == $<span class="variable-name">magic</span> ]; <span class="keyword">then</span>
-            <span class="variable-name">src</span>=$<span class="variable-name">des</span>
-            <span class="keyword">continue</span>
-        <span class="keyword">else</span>
-            cp $<span class="variable-name">src</span> $<span class="variable-name">des</span>
-            <span class="variable-name">src</span>=$<span class="variable-name">magic</span>
-        <span class="keyword">fi</span>
-    <span class="keyword">done</span>
-
-    rm $<span class="variable-name">tmp_file</span>
-}
-</pre>
-
-
-<h4><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2013-09.html#p0">Permalink</a>  </h4>
-
-<p>
-<!-- date: 2013-09-29T18:45:56+0800 -->
-
-</p>
-
 <!-- Page published by Emacs Wiki ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -941,7 +972,7 @@ TAGS
       </ul>
 
       <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>January 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td></td><td><a title="快速关闭远程 server 的 expect 脚本" href="2014-01.html#p0">1</a></td><td>2</td><td>3</td><td><a title="更方便简洁的 Upload Script" href="2014-01.html#p1">4</a></td></tr><tr><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td></tr><tr><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td></tr><tr><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr><tr><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
+      <div class="calendar"><table><caption>January 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td></td><td><a title="快速关闭远程 server 的 expect 脚本" href="2014-01.html#p0">1</a></td><td>2</td><td>3</td><td><a title="更方便简洁的 Upload Script" href="2014-01.html#p1">4</a></td></tr><tr><td>5</td><td>6</td><td><a title="改成靠 Git''''Hub 托管了" href="2014-01.html#p2">7</a></td><td>8</td><td>9</td><td>10</td><td>11</td></tr><tr><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td></tr><tr><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr><tr><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
 
       <p class="header">Search</p><!-- Google Search -->
       <form id="searchform" method="get"
