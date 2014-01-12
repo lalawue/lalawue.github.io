@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
+  <head>
+    <title>Sucha's Homepage - Emacs Programming Env</title>
+    <meta name="generator" content="emacs-wiki.el" />
+    <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
+    <meta name="author" content="Sucha" />
+    <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
+    <meta name="keywords" content="Sucha, Suchang, programming, GNU, Unix, Linux, Slackware, Emacs, elisp" />
+    <meta name="description" content="Sucha's homepage and blog" />
+    <link rel="made" href="mailto:suchaaa@gmail.com" />
+    <link rel="shortcut icon" href="../images/ico.png" />
+    <link rel="stylesheet" type="text/css" href="../styles/site.css" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="../blog/rss.xml" />
+    <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="../styles/ie.css" /><![endif]-->
+  </head>
+  <body>
+    <div id="body">
+      <div id="text">
+	<h1>Sucha's Homepage ~ Emacs Programming Env</h1>
+	<!-- Page published by Emacs Wiki begins here -->
+<h2>完善 EMACS 的编程环境</h2>
+
+<p>
+最近更新：2014-01-12
+
+</p>
+
+<dl class="contents">
+<dt class="contents">
+<a href="#sec-1">简介</a>
+</dt>
+<dd>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec-2">direx 以及 popwin 的配置</a>
+</dt>
+<dt class="contents">
+<a href="#sec-3">fiplr 的配置</a>
+</dt>
+<dt class="contents">
+<a href="#sec-4">其他有关编程环境的设置</a>
+</dt>
+</dl>
+</dd>
+<dt class="contents">
+<a href="#sec-5">问题及建议</a>
+</dt>
+</dl>
+
+
+<h3><a id="sec-1">简介</a></h3>
+
+<p>
+与许多使用 emacs 的童鞋一样，我也喜欢折腾并不断完善围绕 emacs 的工作、编
+程环境，尝试一些新鲜的 elisp 包，根据需要选择纳入自己的 load-path 里。
+
+</p>
+
+<p>
+平时工作面对的是散落在各个文件夹下的工程源码，所以对目录文件的搜索、访问、
+修改也是经常使用的部分，它们与 auto-complete、find-tag 一起组成了我日常
+的编程环境。
+
+</p>
+
+<p>
+最近玩的是 direx.el + popwin.el，auto-complete 作者写的小工具，在其
+github 上也蛮受欢迎的。
+
+</p>
+
+<p>
+direx 用来显示目录的树状图，popwin 目的是减少弹出窗口的干扰，如在
+<em>&#42;Help&#42;</em>, <em>&#42;Completions&#42;</em> 等不那么重要 buffer 的弹出后，直接
+C-g 或者other-window 跳到别的窗口时自动关闭它。
+
+</p>
+
+<p>
+fiplr 用来模糊搜索工程目录的文件，它会从当前目录一直搜索到拥有 .git、.svn
+的顶层目录，对于需要定位工程文件却又不知道其具体位置的时候非常有用。
+
+</p>
+
+<h4><a id="sec-2">direx</a> 以及 popwin 的配置</h4>
+
+<p>
+direx 可以跟 popwin 结合起来，这也是作者推荐的，
+
+</p>
+
+<pre class="source">(<span class="keyword">require</span> '<span class="constant">popwin</span>)
+(popwin-mode 1)
+<span class="comment-delimiter">;; </span><span class="comment">(setq popwin:popup-window-position 'right)
+</span><span class="comment-delimiter">;; </span><span class="comment">(setq popwin:popup-window-width 0.5)
+</span>
+(<span class="keyword">require</span> '<span class="constant">direx</span>)
+(push '(direx:direx-mode <span class="builtin">:position</span> left <span class="builtin">:width</span> 30 <span class="builtin">:dedicated</span> t)
+     popwin:special-display-config)
+
+(global-set-key (kbd <span class="string">"C-x C-j"</span>) 'direx:jump-to-directory-other-window)
+</pre>
+
+
+上面的配置是使用 C-x C-j 将目录树窗口开在左边，30 个字符宽度，C-g 就可以
+关闭。
+
+</p>
+
+<p>
+popwin 默认弹出窗口在 bottom，高度 15，维护了一个special-display-config
+的列表 来确定弹出窗口是否需要纳入 popwin 的管理范围。
+
+</p>
+
+<p>
+由于 popwin 默认管理 <em>vc-diff</em>，而我使用这个挺多的，上面注释掉的配置是将
+buffer 放在屏幕右边，宽度是当前 frame 的 50%，C-g 关闭弹出窗口已经足够方
+便了，大一点的弹出窗口也很好。
+
+</p>
+
+<p>
+direx 提供模式下的命令，g 刷新整个显示目录树，E 递归展开整个目录树。
+direx 的优缺点我感觉挺明显的，优点是可以一目了然地看到指定目录下各个文件、
+子目录、模块的相关关系，全部展开后更明显（如果能提供仅展开目录就更好了，
+必要时我可以移动到那个目录再看文件）；缺点是无法对目录编辑，只能打开文件。
+
+</p>
+
+<p>
+这个时候我只能求助于 dired 模式，不过 dired 模式中 i 展开子目录后收不回
+来，且平铺的方式模块关系不明显。目前是两个一起使用。
+
+</p>
+
+<p>
+popwin、direx 可以从作者的 github 主页上下载 <a href="https://github.com/m2ymï%bc">https://github.com/m2ym，</a>
+popwin 下还有不少相关插件，有需要的童鞋可以看看，这里不做介绍了。
+
+</p>
+
+<h4><a id="sec-3">fiplr</a> 的配置</h4>
+
+<p>
+fiplr 依赖 grizzl 包来做底层的模糊搜索引擎，不过我们不需要对 grizzl 做配
+置，只需要配置 fiplr：
+
+</p>
+
+<pre class="source">(<span class="keyword">require</span> '<span class="constant">fiplr</span>)
+(setq fiplr-root-markers '(<span class="string">".git"</span> <span class="string">".svn"</span>))
+(setq fiplr-ignored-globs 
+    '((directories (<span class="string">".git"</span> <span class="string">".svn"</span>))
+      (files (<span class="string">"*.jpg"</span> <span class="string">"*.png"</span> <span class="string">"*.zip"</span> <span class="string">"*~"</span>))))
+
+(global-set-key (kbd <span class="string">"C-x f"</span>) 'fiplr-find-file)
+</pre>
+
+
+设置搜索到顶层目录，遇到拥有 .git 或 .svn 的目录时停止，忽略
+.jpg、.png、.zip 以及后缀有 ~ 的文件，忽略 .git、.svn 目录，并绑定 "C-x
+f" 为搜索命令。
+
+</p>
+
+<p>
+fiplr 命令启动后会对所有工程文件做一次 cache，然后底部弹出小窗提示用户键
+入需要搜索的文件名，并实时显示匹配结果；如果新添了文件需要更新 cache，
+C-c r 清空一下当前 cache 就好了。
+
+</p>
+
+<p>
+grizzl 请访问这里下载，<a href="https://github.com/d11wtq/grizzl">https://github.com/d11wtq/grizzl</a>
+fiplr 请访问这里下载，<a href="https://github.com/d11wtq/fiplr">https://github.com/d11wtq/fiplr</a>
+
+</p>
+
+<h4><a id="sec-4">其他有关编程环境的设置</a></h4>
+
+<p>
+除了以上的配置包，我还有不少其他编程环境相关的配置，感觉平时挺有用的，这
+些都是我从一些个人博客、论坛或者 emacswiki.org 等地方搜刮来的，具体出处
+已经无法提供了。
+
+</p>
+
+<ul>
+<li>同目录下的头文件与源文件的快速跳转，适用于 C/C++/ObjC，我将其绑定在 M-[ 以及 M-]。
+</li>
+</ul>
+
+<pre class="source"><span class="comment-delimiter">;; </span><span class="comment">jump between source and header file
+</span>(<span class="keyword">defun</span> <span class="function-name">c-base-mode-in-header-file</span> ()
+  (<span class="keyword">let*</span> ((filename (buffer-file-name))
+         (extension (car (last (split-string filename <span class="string">"\\."</span>)))))
+    (string= <span class="string">"h"</span> extension)))
+
+(<span class="keyword">defun</span> <span class="function-name">c-base-mode-file-jump-to-extension</span> (extension)
+  (<span class="keyword">let*</span> ((filename (buffer-file-name))
+         (file-components (append (butlast (split-string filename
+                                                         <span class="string">"\\."</span>))
+                                  (list extension)))
+         (filepath (mapconcat 'identity file-components <span class="string">"."</span>)))
+    (<span class="keyword">if</span> (file-readable-p filepath)
+        (find-file filepath)
+      nil)))
+
+<span class="comment-delimiter">;;; </span><span class="comment">Assumes that Header and Source file are in same directory
+</span>(<span class="keyword">defun</span> <span class="function-name">c-base-mode-jump-between-header-source</span> ()
+  (interactive)
+  (<span class="keyword">if</span> (c-base-mode-in-header-file)
+      (or
+       (c-base-mode-file-jump-to-extension <span class="string">"m"</span>)
+       (c-base-mode-file-jump-to-extension <span class="string">"mm"</span>)
+       (c-base-mode-file-jump-to-extension <span class="string">"c"</span>)
+       (c-base-mode-file-jump-to-extension <span class="string">"cc"</span>)
+       (c-base-mode-file-jump-to-extension <span class="string">"cpp"</span>))
+    (c-base-mode-file-jump-to-extension <span class="string">"h"</span>)))
+
+(add-hook
+ 'c-mode-common-hook
+ (<span class="keyword">lambda</span> ()
+   (define-key c-mode-base-map (kbd <span class="string">"M-["</span>) 'c-base-mode-jump-between-header-source)
+   (define-key c-mode-base-map (kbd <span class="string">"M-]"</span>) 'c-base-mode-jump-between-header-source))
+t)
+</pre>
+<ul>
+<li>列出当前 buffer 下的所有函数，使用正则表达式匹配的，也许需要配合你对函数名的书写习惯做更改（如 C 中返回类型与函数名不同行），下面的配置适合 C/C++/ObjC/Lua，其实可以很方便地扩充到支持别的语言。
+</li>
+</ul>
+
+<pre class="source"><span class="comment-delimiter">;; </span><span class="comment">for Xcode pragma mark, and C/C++ functions
+</span>(<span class="keyword">require</span> '<span class="constant">anything</span>)
+(<span class="keyword">require</span> '<span class="constant">anything-config</span>)
+
+(<span class="keyword">defvar</span> <span class="variable-name">anything-objc-headline</span>
+  '((name . <span class="string">"Objective-C Headline"</span>)
+    (headline  <span class="string">"^[-+@]</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">^#pragma mark</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">FIXME"</span>)
+))
+
+(<span class="keyword">defvar</span> <span class="variable-name">anything-c-headline</span>
+  '((name . <span class="string">"C Headline"</span>)
+    (headline  <span class="string">"^[A-Za-z_]+?[ A-Za-z_0-9\*]+[A-Za-z_0-9]+?(</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">FIXME"</span>)
+))
+
+(<span class="keyword">defvar</span> <span class="variable-name">anything-cpp-headline</span>
+  '((name . <span class="string">"Cpp Headline"</span>)
+    (headline  <span class="string">"^[A-Za-z_]+?[ A-Za-z_:~0-9\*]+[A-Za-z_0-9]+?(</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">FIXME"</span>)
+))
+
+(<span class="keyword">defvar</span> <span class="variable-name">anything-lua-headline</span>
+  '((name . <span class="string">"Lua Headline"</span>)
+    (headline  <span class="string">"^local </span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">^function </span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">[A-Za-z]+?[A-Za-z0-9_.] +\{</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">FIXME"</span>)
+))
+
+(<span class="keyword">defun</span> <span class="function-name">major-mode-headline</span> ()
+  (interactive)
+  <span class="comment-delimiter">;; </span><span class="comment">Set to 500 so it is displayed even if all methods are not narrowed down.
+</span>  (<span class="keyword">let</span> ((anything-candidate-number-limit 500))
+    (<span class="keyword">cond</span>
+     ((eq major-mode 'objc-mode) 
+      (anything-other-buffer '(anything-objc-headline)
+                             <span class="string">"*ObjC Headline*"</span>))
+     ((eq major-mode 'c++-mode)
+      (anything-other-buffer '(anything-cpp-headline)
+                             <span class="string">"*Cpp Headline*"</span>))
+     ((eq major-mode 'c-mode)
+      (anything-other-buffer '(anything-c-headline)
+                             <span class="string">"*C Headline*"</span>))
+     ((eq major-mode 'lua-mode)
+      (anything-other-buffer '(anything-lua-headline)
+                             <span class="string">"*C Headline*"</span>))
+     )))
+
+(add-hook
+ 'c-mode-common-hook
+ (<span class="keyword">lambda</span> ()
+   (define-key c-mode-base-map (kbd <span class="string">"M-i"</span>) 'major-mode-headline))
+t)
+</pre>
+<ul>
+<li>当对窗口进行分割时（我经常这么做），下面的快捷键可以很方便地调整窗口的大小，(control -) 调整上下窗口的高度，(meta -)调整左右窗口的宽度，感觉挺好用的。
+</li>
+</ul>
+
+<pre class="source">(global-set-key [(control -)] 'shrink-window)
+(global-set-key [(control =)] (<span class="keyword">lambda</span> () (interactive) (shrink-window -1)))
+
+(global-set-key [(control meta -)] 'shrink-window-horizontally)
+(global-set-key [(control meta =)] (<span class="keyword">lambda</span> () (interactive)
+                                     (shrink-window-horizontally -1)))
+</pre>
+
+
+这两个小函数我将其扔在 <a href="https://gist.github.com/lalawue">https://gist.github.com/lalawue</a> 维护，大家有更新
+的东西不妨去修改一下。
+
+</p>
+
+<h3><a id="sec-5">问题及建议</a></h3>
+
+<p>
+配置或使用上有问题可以联系我 suchaaa 谷歌，或者给作者的 github 提 issue。
+
+</p>
+
+<p>
+目前使用 C++/ObjC/Lua 混合编程，使用 etag 代码跳转是个问题，没用过 cedet，
+有相关经验的同学不妨传授一下？
+
+</p>
+
+      <!-- Page published by Emacs Wiki ends here -->
+      <div id="foot">
+	2004-<script language="javascript">var d = new
+	Date();document.write(d.getFullYear())</script> &copy;
+	Sucha. Powered by EmacsWiki.
+      </div><!-- foot -->
+      </div><!-- text -->
+      <div id="sidebar">
+	<p class="header">Here</p>
+	<ul>
+	  <li><a href="../index.html">Home</a></li>
+	  <li><a href="index.html">Front</a></li>
+	  <li><a href="../scratch/ThisSite.html">This Site</a></li>
+	  <li><a href="../live/AboutMe.html">About Me</a></li>
+	  <li><a href="../scratch/EmacsWiki.html">Emacs Wiki</a></li>
+	</ul>
+	<p class="header">Categories</p>
+	<ul>
+	  <li><a href="../blog/index.html">Blog</a></li>
+	  <li><a href="../live/index.html">Life</a></li>
+	  <li><a href="../cs/index.html">Lab</a></li>
+	  <li><a href="../slack/index.html">Slackware</a></li>
+	  <li><a href="../muse/index.html">Muse</a></li>
+	  <li><a href="../scratch/index.html">Scratch</a></li>
+	</ul>
+	<p class="header">Search</p><!-- Google Search -->
+	<form id="searchform" method="get"
+	      action="http://www.google.com/search" >
+	  <p><input id="searchtext" type="text" name="q" value="" /></p>
+          <p><input type="hidden" name="ie" value="utf-8" /></p>
+	  <p><input type="hidden" name="oe" value="utf-8" /></p>
+	  <p><input type="hidden" name="hl" value="zh-CN" /></p>
+ 	  <p><input type="hidden" name="domains" value="suchang.net" /></p>
+          <p><input name="si" type="hidden" value="suchang.net" /></p>
+          <p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
+	</form>
+	<p class="header">Contact</p>
+	<ul>
+	  <li><a href="mailto:suchaaa@gmail.com">Email Me</a></li>
+	</ul>
+      </div><!-- sidebar -->
+    </div><!-- body -->
+  </body>
+</html>
