@@ -9,10 +9,107 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Wed, 15 Jan 2014 14:45:21 +0800</pubDate>
+    <pubDate>Thu, 16 Jan 2014 13:02:53 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
+
+    <item>
+      <title>设置服务器网络唤醒（WOL）</title>
+      <guid>http://suchang.net/blog/2014-01.html#p4</guid>
+      <pubDate>2014-01-16T12:23:08+0800</pubDate>
+      <dc:creator>sucha</dc:creator>
+      <category>CategoryLinux</category>
+      <description><![CDATA[<p>
+我的破笔记本往服务器方向又迈了一大步，被我设置成网络唤醒了（Wake On Lan）。
+加上之前可以远程关闭的 expect 脚本，现在开关机都不需要手动按电源键，可以
+把它放到一个安静的角落里了。
+
+</p>
+
+<p>
+话说 baidu 上搜到的网络唤醒要什么主板支持，要先设置 BIOS 电源管理，我的
+例子是不需要的。感觉 WOL 早就是每个主板都必备的功能了吧，即便是被阉割过
+的 BIOS，也无法掩盖硬件本身能支持吧。
+
+</p>
+
+<p>
+查了一下破老笔记本的信息，2007 年 11 月买的 HP Presario V3500 的结构，能
+看到的 BIOS 管理界面极为简单，根本没有电源管理设置的入口。
+
+</p>
+
+<p>
+在 XP 下设置了网卡接收 Magic Packet 的唤醒方式、电源管理方式，可是 XP 系
+统一关闭，网卡的灯也不亮了。当然也无法网络唤醒。
+
+</p>
+
+<p>
+还好有 ubuntu，apt get 一个 ethtool 工具，按照这篇帖子的设置
+<a href="http://ubuntuforums.org/showthread.php?t=234588">HOWTO:&#32;Set&#32;your&#32;system&#32;up&#32;for&#32;Wake&#32;On&#32;LAN&#32;&#40;WOL&#41;</a>，然后关闭的时候使用
+shutdown -P now 仅仅 poweroff 就好了。
+
+</p>
+
+<p>
+帖子里介绍的内容也挺简单，先 apt-get ethtool，然后往 /etc/init.d 放一个
+wakeonlanconfig 开机启动脚本，内容为：
+
+</p>
+
+<pre class="source">#!/bin/bash
+ethtool -s eth0 wol g
+exit
+</pre>
+
+
+chmod a+x wakeonlanconfig，然后设置开机启动方式：
+
+</p>
+
+<pre class="source">update-rc.d -f wakeonlanconfig defaults
+</pre>
+
+
+这两步手工运行一下，再使用上面的关机命令，可以发现系统关闭了，硬件指示灯
+也都不亮了，除了网卡灯和供电部分。
+
+</p>
+
+<p>
+比如我的破本电源连接处、电源键、硬盘、无线以及网卡都有灯，XP 系统的关闭
+方式，只剩下电源连接处的灯是亮着的（估计这是一上电就亮，软件无法控制）；
+而 ubuntu 下的关机方式，网卡的灯还亮着。
+
+</p>
+
+<p>
+然后网上下一个 WOL 的程序，比如我下的这个 perl 脚本 <a href="http://gsd.di.uminho.pt/jpo/software/wakeonlan/">Wakeonlan</a>，命令行下
+运行，后面跟网卡地址就可以唤醒了。
+
+</p>
+
+<p>
+如果发送唤醒命令的主机与被唤醒的主机不在一个子网内，估计要路由做 forward
+了，没试过不懂了。
+
+</p>
+
+<p>
+还有，我的破本如果关闭后拔掉电源，网卡不亮了，再接入电源网卡也不亮了，估
+计确实是 BIOS 不支持吧，不过只要一直连着电源就没事。
+
+</p>
+
+<p>
+这种远程控制开关机真的很好玩哈哈哈。
+
+</p>
+
+]]></description>
+    </item>
 
     <item>
       <title>苹果折扣日买了个 iPad Air</title>
