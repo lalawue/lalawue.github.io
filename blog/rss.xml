@@ -9,419 +9,98 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Thu, 16 Jan 2014 13:02:53 +0800</pubDate>
+    <pubDate>Fri, 28 Feb 2014 15:27:13 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>设置服务器网络唤醒（WOL）</title>
-      <guid>http://suchang.net/blog/2014-01.html#p4</guid>
-      <pubDate>2014-01-16T12:23:08+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryLinux</category>
-      <description><![CDATA[<p>
-我的破笔记本往服务器方向又迈了一大步，被我设置成网络唤醒了（Wake On Lan）。
-加上之前可以远程关闭的 expect 脚本，现在开关机都不需要手动按电源键，可以
-把它放到一个安静的角落里了。
-
-</p>
-
-<p>
-话说 baidu 上搜到的网络唤醒要什么主板支持，要先设置 BIOS 电源管理，我的
-例子是不需要的。感觉 WOL 早就是每个主板都必备的功能了吧，即便是被阉割过
-的 BIOS，也无法掩盖硬件本身能支持吧。
-
-</p>
-
-<p>
-查了一下破老笔记本的信息，2007 年 11 月买的 HP Presario V3500 的结构，能
-看到的 BIOS 管理界面极为简单，根本没有电源管理设置的入口。
-
-</p>
-
-<p>
-在 XP 下设置了网卡接收 Magic Packet 的唤醒方式、电源管理方式，可是 XP 系
-统一关闭，网卡的灯也不亮了。当然也无法网络唤醒。
-
-</p>
-
-<p>
-还好有 ubuntu，apt get 一个 ethtool 工具，按照这篇帖子的设置
-<a href="http://ubuntuforums.org/showthread.php?t=234588">HOWTO:&#32;Set&#32;your&#32;system&#32;up&#32;for&#32;Wake&#32;On&#32;LAN&#32;&#40;WOL&#41;</a>，然后关闭的时候使用
-shutdown -P now 仅仅 poweroff 就好了。
-
-</p>
-
-<p>
-帖子里介绍的内容也挺简单，先 apt-get ethtool，然后往 /etc/init.d 放一个
-wakeonlanconfig 开机启动脚本，内容为：
-
-</p>
-
-<pre class="source">#!/bin/bash
-ethtool -s eth0 wol g
-exit
-</pre>
-
-
-chmod a+x wakeonlanconfig，然后设置开机启动方式：
-
-</p>
-
-<pre class="source">update-rc.d -f wakeonlanconfig defaults
-</pre>
-
-
-这两步手工运行一下，再使用上面的关机命令，可以发现系统关闭了，硬件指示灯
-也都不亮了，除了网卡灯和供电部分。
-
-</p>
-
-<p>
-比如我的破本电源连接处、电源键、硬盘、无线以及网卡都有灯，XP 系统的关闭
-方式，只剩下电源连接处的灯是亮着的（估计这是一上电就亮，软件无法控制）；
-而 ubuntu 下的关机方式，网卡的灯还亮着。
-
-</p>
-
-<p>
-然后网上下一个 WOL 的程序，比如我下的这个 perl 脚本 <a href="http://gsd.di.uminho.pt/jpo/software/wakeonlan/">Wakeonlan</a>，命令行下
-运行，后面跟网卡地址就可以唤醒了。
-
-</p>
-
-<p>
-如果发送唤醒命令的主机与被唤醒的主机不在一个子网内，估计要路由做 forward
-了，没试过不懂了。
-
-</p>
-
-<p>
-还有，我的破本如果关闭后拔掉电源，网卡不亮了，再接入电源网卡也不亮了，估
-计确实是 BIOS 不支持吧，不过只要一直连着电源就没事。
-
-</p>
-
-<p>
-这种远程控制开关机真的很好玩哈哈哈。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>苹果折扣日买了个 iPad Air</title>
-      <guid>http://suchang.net/blog/2014-01.html#p3</guid>
-      <pubDate>2014-01-11T14:16:39+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryLife</category>
-      <description><![CDATA[<p>
-其实很早就想去 HK 了，要给家里人带奶粉。上一次去 HK 还以为在关口可以买到，
-当时奶粉还禁购，然后去澳门也没买，这次可不能忘。
-
-</p>
-
-<p>
-因为还要给基友带 PS4，而 PS4 在 HK 是 12 月 17 号首发，所以 1 月份过来以
-为有货，后来终于认识到 PS4 太火爆，整个 HK 都断货。
-
-</p>
-
-<p>
-珠海坐船出发，最早的一班 8:00，70 分钟左右到 HK 中港城，走 5 分钟到天星
-小轮，对面就是港岛。船票略贵，去 ￥175，返 HK 210。没几个人过关，回来的
-时候也是一样。
-
-</p>
-
-<p>
-到了港岛直奔 IFC 的 Apple Store，早已是里面三圈，外面三圈，好几个苹果员
-工在维持队伍秩序。排了大概一个多小时，终于可以进场，看到人家买一个麻袋的，
-我只要一个 iPad Air 实在是太不经济了。
-
-</p>
-
-<p>
-本来基友还想要个 iPad 3 smart case 的，可惜都没卖了。iPad Air 折扣到
-3.5k 港币，smart cover 也有折扣，就买了个黑色的。全部到手，下单激活不超
-过 15 分钟。
-
-</p>
-
-<p>
-剩下的就是给别人带货的时间，买个 Red Wing 的鞋我的鞋都要磨破了，百度地图
-不给力，搜索到的店面都是假的，后来只好联系基友谷歌搜索。还好有联通 20 块
-50M 的套餐，不至于在 HK 摸黑。
-
-</p>
-
-<p>
-在铜锣湾耗费了整个下午呀，才买到了那双鞋，PS4 断货，着急带上奶粉已经五点
-多了，后来发现奶粉买错了，还好后来老妈没认真。然后傻乎乎地回到中港城码头，
-还走过头了。结果人家中港城 17:30 后就没有到珠海的了，只有港澳码头才有，
-我还从港岛折腾回来坐船，无语。。。哽咽。。。
-
-</p>
-
-<p>
-要不是珠海到 HK 首班是到中港城的，我怎么会犯这种错误。算了，这种误机误车
-走冤枉路的事情我已经经历过 N 次了，习惯了。
-
-</p>
-
-<p>
-买到了 21:30 分的船票，然后 KFC 跟着一堆傻逼排队排了 10 分钟，队伍都没动!我
-都饿晕了，转身走过了一个 block 那边有家 M 记，没人排队，我才发现在 HK 大
-家是有多爱排队！
-
-</p>
-
-<p>
-还好一个汉堡加杯小可只要港币 21，其他真是糟糕透了。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>改成靠 Git''''Hub 托管了</title>
-      <guid>http://suchang.net/blog/2014-01.html#p2</guid>
-      <pubDate>2014-01-07T04:14:39+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryThisSite</category>
-      <description><![CDATA[<p>
-<a href="https://help.github.com/categories/20/articles">GitHub&#32;Pages</a> 真是个好东东，提供了静态网页的发布功能，本来是开放给开源工
-程介绍页面的，不过我的主页也是完全开源的嘛，也可以借来托管了。
-
-</p>
-
-<p>
-空间足够，git 方式更新，还可以绑定域名，对于我是完全足够了。虽然我的虚拟
-主机还有近 7 个月才到期，价钱也不贵，而且之前才更新了上传脚本，这个工具
-还没用爽呢，没想到才过了 2 天就完全用不上了。
-
-</p>
-
-<p>
-因为 GitHub Pages 需要以 username.github.io 来创建仓库，如果生成这些静态
-网页的源码也打算放到 github 托管，就像我是把整个主页都放到了 github 上，
-并使用 EmacsWiki 在本地生成静态网页，如下的目录结构：
-
-</p>
-
-<pre class="source">homepage +
-         - publish
-         - sources
-</pre>
-
-
-那么可以考虑将 publish 作为 homepage 的一个 submodule 关联起来：
-
-</p>
-
-<pre class="source">$ cd homepage
-$ git submodule add git@github.com:username/username.github.io.git publish
-</pre>
-
-
-这样 homepage 也可以单独作为 github 的工程了，publish 以及 sources 目录
-可以互不干扰，大不了 homepage 下建立 .gitignore 屏蔽 publish 目录下的东
-西好了。
-
-</p>
-
-<p>
-最后域名绑定部分，看了一下 help 页面才搞定，Pages 这边是建立一个
-CNAME 文件来记录 domain，另外还需要修改域名的 A 记录，次级域名的绑定还更
-麻烦，我没看了。
-
-</p>
-
-<p>
-免费使用，空间足够，自由度也高，吸引力够大的，可仔细想一下，感觉非程序员
-还得学不少东西才能用起来：
-
-</p>
-
-<ul>
-<li>创建静态网页
-</li>
-<li>在 github 上注册并建立 Pages 仓库
-</li>
-<li>git 的安装及日常使用
-</li>
-<li>绑定域名
-</li>
-<li>美化界面
-</li>
-</ul>
-
-<p>
-官方推荐采用支持 markdown 语法的静态网页生成工具，比如 JekyII，我看了一
-下，感觉也不简单呀，要安装 Ruby 神马的。
-
-</p>
-
-<p>
-git 的使用如果只是发布的话，感觉了解 git push 就够了吧。
-
-</p>
-
-<p>
-界面部分 Pages 有提供不少主题，感觉这点应该还好啊，域名部分，有自己域名
-的童鞋自然懂得。
-
-</p>
-
-<p>
-貌似到现在为止还是程序猿玩的多。
-
-</p>
-
-<p>
-我在 04 年就使用 wiki 语法来管理主页了，也是类似于 markdown 这样的轻量级
-标记语言，静态 html 页面的发布部分一点都不需要改，加上又是 git 的日常使
-用者，毫无压力。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>更方便简洁的 Upload Script</title>
-      <guid>http://suchang.net/blog/2014-01.html#p1</guid>
-      <pubDate>2014-01-04T15:04:51+0800</pubDate>
+      <title>玩了一下 2D 骨骼动画</title>
+      <guid>http://suchang.net/blog/2014-02.html#p0</guid>
+      <pubDate>2014-02-28T15:08:59+0800</pubDate>
       <dc:creator>sucha</dc:creator>
       <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-我一直使用一个上传脚本更新这个网站，这个脚本始于 2005 年五一
-<a href="../blog/2005-05.html#p2">Upload&#32;shell&#32;script&#32;v1.2</a>，当时还使用什么 ncftpput 程序来对每一个更新过的
-文件进行一次 ftp 连接传输。
+春节前忙着出了一个只包含战斗场景的 demo，还没有动画部分，那时候这部分还
+不熟悉，可没想到年后好懒散，一直弄到现在才把动画部分弄出来了一个样子。
 
 </p>
 
 <p>
-然后这个脚本我居然还一直使用到了昨天，横跨 Win、Mac、Linux 系统，甚至还
-在虚拟机里面用过，因为有 ncftpput 的依赖嘛，Win 下以及一些小系统上还真不
-好弄。
+年后也玩到了一些新的卡牌游戏，动画之精美、动作之合理连贯，让我总觉得那些
+动画不像是用程序里面调出来的，而是像用动画编辑器做的。
 
 </p>
 
 <p>
-虽然我很早就已经了解了终端下的 ftp 命令，还使用过好多次，可是我怎么就不
-懂得结合起来、多动动脑筋呢。
+反正我也要研究这部分，索性就大框架都看了一遍。cocos2dx 里面的 actions 就
+不说了，那是基础。
 
 </p>
 
 <p>
-下面做同样事情的脚本更简洁，只需要一次 ftp 连接，对于访问连接慢的大量更
-新更为有利，且所需要的背景知识 05 年的我应该也已经具备了，深深地鄙视这么
-多年的自己，笨死了。
+不过涉及到人物复杂一点的动作，比如跑动、跳跃、攻击，这些如果用 actions
+来调整，那真是头大了，且程序也不用调整那么细的部分。
 
 </p>
 
 <p>
-贴一下核心部分就好了：
-
-</p>
-
-<pre class="source"><span class="comment-delimiter">#</span><span class="comment">!/bin/bash
-</span>ftp -n &lt;&lt; <span class="string">"___EOF__"</span><span class="sh-heredoc">
-open 192.168.33.88
-user FTP_USER FTP_PASS_WORD
-mkdir PATH_1_TO_CREATE
-mkdir PATH_2/TO_CREATE
-put LOCAL/PATH/FILE_1 REMOTE/PATH/FILE_1
-put LOCAL/PATH/FILE_2 REMOTE/PATH/FILE_2
-bye
-"___EOF__"
-</span></pre>
-
-
-将需要创建的目录、上传的文件替换上去就好了。目前我是生成一个临时脚本，然
-后运行上传命令。
+这些其实是 2D 骨骼动画，之所以不用序列帧，是因为序列帧太费存储空间了。
 
 </p>
 
 <p>
-我把这个脚本扔到了这里 <a href="https://github.com/lalawue/shell_script_stuff">https://github.com/lalawue/shell_script_stuff</a> 。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>快速关闭远程 server 的 expect 脚本</title>
-      <guid>http://suchang.net/blog/2014-01.html#p0</guid>
-      <pubDate>2014-01-01T02:34:43+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-我停掉了之前的阿里云服务器，而在自己液晶屏亮不起来的破笔记本上安装了
-ubuntu server，将 git server、nginx + wiki 都安装在了上面，反正 server
-只是提供网络服务，不需要显示器。不过暂时每天的开关机还是需要的。
+基于 cocos2dx 的有 spine、dragonbones 以及官方的 cocostuido，其实我觉得
+cocostudio 是很浅显易用的，只是导出的数据只能用在 cocos2dx 2.2.2 版本上，
+可我是基于 quick-cocos2dx 来做的，这边提供的 CCArmature 版本是 2.1.5 的
+呀。
 
 </p>
 
 <p>
-目前开机还是得按本本的电源键，不过关机倒是可以通过网络来进行，当然也就可
-以使用下面的 expect 脚本了。
+所以播放出来的动画坐标都不对，我花了几个小时将 2.2.2 的 CCArmature 移植
+到了 quickx 上，可是动画的前面几帧时间轴不对，总是太快，不晓得是不是新版
+本底层的有了更新。
 
 </p>
 
 <p>
-我是 ssh 上去关闭的，可以根据需要改成 telnet，一些适配的变量是 root 用户
-ssh 上去的 prompt，shell 下 power off 的命令，一些发行版可能是 halt，不
-过也得看电源模块的配置的吧，最后是 server power off 后广播出来的字符串。
+网上搜到了 zrong 修改的 Flash Pro dragonbones 插件，介绍说这部分在 2.1.5
+上面效果很好，zrong 本身就经常出没于 quickx 邮件列表，我可是潜水很久了。
 
 </p>
 
 <p>
-按照惯例贴代码：
+之所以一开始不考虑 dragonbones，一方面是担心兼容，另外就是觉得那个方向制
+作工具、套件的复杂。 
 
 </p>
 
-<pre class="source"><span class="comment-delimiter">#</span><span class="comment">!/usr/bin/expect
-</span><span class="comment-delimiter">#</span><span class="comment">
-</span><span class="comment-delimiter"># </span><span class="comment">create in 2013/12/31, by sucha in http://suchang.net
-</span><span class="comment-delimiter">#</span><span class="comment">
-</span><span class="comment-delimiter"># </span><span class="comment">Usage: halt_server host_ip
-</span>
-<span class="comment-delimiter"># </span><span class="comment">prompt for root@host_ip
-</span><span class="builtin">set</span> serv_root_prompt <span class="string">"password"</span>
-<span class="builtin">set</span> serv_halt_cmd <span class="string">"shutdown -h now"</span>
-<span class="builtin">set</span> serv_halt_expect <span class="string">"halt"</span>
+<p>
+Flash Pro 确实是大块头，黑苹果本来没装有，我不得不重新下载一个新的，而原
+来的 Adobe Extention Manager 还老是闪退，又下了一个新的，然后又花了一个
+下午的时间才弄懂 Flash Pro 上面怎么玩动画。
 
-<span class="builtin">set</span> timeout 10
-<span class="keyword">if</span> { $<span class="variable-name">argc</span> != 1 } {
-    send_user <span class="string">"$argv0 \$HOST_IP\n"</span>
-    <span class="keyword">exit</span>
-}
+</p>
 
-<span class="comment-delimiter"># </span><span class="comment">get server ip
-</span><span class="builtin">set</span> host [lrange $<span class="variable-name">argv</span> 0 0]
+<p>
+从程序员的眼光来看，感觉相比 cocostudio 的入手难度大多了，不晓得从动画制
+作师的角度看如何。
 
-<span class="comment-delimiter"># </span><span class="comment">get root's passwd
-</span>stty -echo
-send_user -- <span class="string">"Password for root@$host: "</span>
-expect_user -re <span class="string">"(.*)\n"</span>
-send_user <span class="string">"\n"</span>
-<span class="builtin">set</span> pass $<span class="variable-name">expect_out</span>(1,string)
+</p>
 
-<span class="comment-delimiter"># </span><span class="comment">login server and run halt
-</span>spawn ssh -2 root@$<span class="variable-name">host</span>
-expect $<span class="variable-name">serv_root_prompt</span>
-send $<span class="variable-name">pass</span>\r
-send $<span class="variable-name">serv_halt_cmd</span>\r
-expect $<span class="variable-name">serv_halt_expect</span>
-<span class="keyword">exit</span>
-</pre>
+<p>
+不过这个学习成本到最后发现还是值得的，播放的效果很好，然后缓动也很好，引
+擎计算的插值帧也很好，还有骨骼动画确实是要构造骨骼关系才行，否则缓动计算
+的骨骼运动路径是不对的。
 
+</p>
+
+<p>
+又学会了一些东西，不过玩归玩，实际上我的游戏估计用不上这么高级的东西，老
+老实实玩 actions 就好了。
+
+</p>
 
 ]]></description>
     </item>
