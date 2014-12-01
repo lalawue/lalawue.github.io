@@ -9,46 +9,128 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Fri, 23 May 2014 22:17:44 +0800</pubDate>
+    <pubDate>Mon, 01 Dec 2014 23:51:29 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>有关 AOSP</title>
-      <guid>http://suchang.net/blog/2014-05.html#p0</guid>
-      <pubDate>2014-05-23T21:49:45+0800</pubDate>
+      <title>实践了一个 JPEG 解码器</title>
+      <guid>http://suchang.net/blog/2014-12.html#p0</guid>
+      <pubDate>2014-12-01T22:53:41+0800</pubDate>
       <dc:creator>sucha</dc:creator>
-      <category>CategoryLife</category>
+      <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-荣耀 3X 的新机出来了，叫做 3X pro，也还是 1698 元，然后上到了 1080p，之
-前论坛说的什么 720p 续航优势啊之类的，算是打了自己嘴巴，真的是不能再相信
-500 强了。
+为了更好地了解 JPEG 的解码过程，实践了一个 JPEG 解码器，放到个人 github
+上面了，<a href="http://github.com/lalawue/jpeg_dec">http://github.com/lalawue/jpeg_dec</a>.
 
 </p>
 
 <p>
-然后开心的事情是，虽然官方 3X 固件不给力，但是有个移动叔叔论坛的 wasser
-大侠修改 MTK 的 AOSP 固件却十分给力，操作速度上来了，然后耗电也还好，那
-个重力工具箱十分好用，包括锁屏亮背光当手电筒，调整屏幕亮度，设置物理按键
-功能等，相当给力，一点卡顿都没有，真正发挥了八核的威力，且不怎么耗电。
+参考了不少中英文资料，更多的是中文的，marker 的部分倒是看了 itu-81 的图表。
 
 </p>
 
 <p>
-自从我停用了 LT 光感解锁后，一般都能用两天以上了，才发现 LT 是真耗电。
+不需要用 shadowsocks 翻墙技能，仅靠百度到的中文博客歪歪斜斜排版杂乱不堪
+的文章，其实也能从无到有实践一个 JPEG 解码器。
 
 </p>
 
 <p>
-没想到对于我来说，操作省心、省电好用的固件不是官方的，并且对 AOSP 的好感
-也慢慢上升。
+也参考了不少 nanojpeg 的代码以及处理流程，最复杂的部分，在我看来是霍夫曼
+编码的生成，是自己理解得不好，数据结构课上面的霍夫曼编码部分忘得差不多了。
 
 </p>
 
 <p>
-总之比华为的官方固件好太多，话说自从 3x pro 出来后，很明显对于 3x 的支持，
-也会慢慢减弱，比如那个双击亮屏的固件，就一直空缺，3C 有而 3X 没有。
+而 nanojpeg 包括 public domain 的 c++ jpegd 实现的霍夫曼码，其生成我感觉
+都不明晰，所以花了不少时间。这个部分倒是中文的某些博客写得很清楚，虽然这
+些博客其实也是不知道从哪里抄的（未必是博主第一手资料，且有些还无来源）。
+
+</p>
+
+<p>
+实现了霍夫曼表后，接下来的困难是 IDCT 的部分，看了几个解码库的，包括
+libjpeg 的，README 里面写得明明白白：
+
+</p>
+
+<pre>
+If you think that you know about DCT-based JPEG after reading this book,
+then you are in delusion.
+</pre>
+
+<p>
+所以就不琢磨了，说不好都是优化过的代码，调试出来的，不是给人看的，这部分
+直接来自 nanojpeg，是一个整型使用位移调整精度的 IDCT 算法，传说的 AA&N
+算法，如 libjpeg 里面的，没有看得很明白，其实 jpgd c++ 用的跟 libjpeg 一
+样，有用到浮点就是。
+
+</p>
+
+<p>
+然后是一些细节问题，估计看 ITU-81 里面也难看得明白，比如霍夫曼的 VLC 部
+分其实我是根据 nanojpeg 的输出比对排错的、IDCT 的部分也是；还有读到
+0xffd9 后补齐 bits 的问题，都补 binary 1；以及每个 component 的 dc
+restart interval 问题等等。
+
+</p>
+
+<p>
+八卦一下，Mac 下面预览导出的 jpeg 图片，霍夫曼表是一个 DHT segment 带一
+个的，PS 则是一个 DHT segment 带多个的。
+
+</p>
+
+<p>
+前人也总结了太多有关 JPEG 结构、解码所需要的知识，这里不重复了，评论下看
+到的一些源码吧。
+
+</p>
+
+<p>
+首先目前自己实现的是一个仅支持 Baseline DCT、H1V1 chroma sampling、<a class="nonexistent" href="mailto:suchaaa@gmail.com">YCbCr</a>
+色彩的 JPEG decoder。其实绝大部分的 JPEG 都是 Baseline、H1V1 的，Gray
+Scale 其实要比 <a class="nonexistent" href="mailto:suchaaa@gmail.com">YCbCr</a> 的简单，再看看后续要不要加上。
+
+</p>
+
+<p>
+nanojpeg 为了实现的简单，资源都全部先申请，包括输出的图片缓冲，亮点是为
+了霍夫曼解码的方便，每个霍夫曼表开了个 1^16 条目的数组，将最多 256 个实
+际变长码 map 到里面去，这种 LUT 的时间效率没得说了，它自己也介绍说解码时
+间上面只比 libjpeg 慢一点点（不支持多线程）。不过空间使用率到了这个地步，
+为啥不像下面的解码库一样，对 YUV 转 RGB 也先做 LUT 呢。
+
+</p>
+
+<p>
+而 jpgd c++ 是个 public domain 的解码库，看了一下作者，之前在 Valve 呢，
+现在项目合并到了 JPEG encoder 里面去，最后的更新是 2012 年的。其霍夫曼变
+长码是将常用的长度小于 8 bits 的 VLC map 到一个 1^8 的空间里面去，剩下的
+放到一个 512 大小的空间里面进行二次查询，两个 LUT 加上一个顺序查找的空间
+（应该是顺序查找的吧，命名为 tree 的）。
+
+</p>
+
+<p>
+小于 7 bits 的变长码，一次 lookup 就可以定位，超过 7 bits，则需要一个个
+bits 来顺序检测并跳转查找了。
+
+</p>
+
+<p>
+jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个空间消耗很
+小，比 nanojpeg 丧心病狂的 1^16 LUT 空间少了 N 个数量级，且效率很显著，
+特别是当图片变大，像素越来越多的时候。
+
+</p>
+
+<p>
+后续有时间，我也想弄一个稍微改进点的霍夫曼变长码检测方法、以及 YUV 转RGB
+的 LUT，目前霍夫曼编码部分是完全按照位数长度从小到大顺序检测的，非常非常
+耗时。
 
 </p>
 
