@@ -20,6 +20,73 @@
       <div id="text">
 	<h1>Sucha's Blog ~ Archive for December, 2014</h1>
 	<!-- Page published by Emacs Wiki begins here -->
+<h2><a id="p1">14年12月9日 周二 19:42</a></h2>
+
+<h3>OpenGL 3.3 under MacOS</h3>
+
+<p>
+其实我想说的是在黑苹果下的情况，一般阿婆是只打开 OpenGL 2.1 而已的，用
+X11 XQuartz 或者 GLEW，都无法使用 OpenGL 3.3 的，对于我这个初学者来说，
+想从 Modern OpenGL 入门，痛苦不堪。
+
+</p>
+
+<p>
+首先，还是先确认黑苹果在硬件上能够支持的 OpenGL API 版本吧，App Store 上
+下载 OpenGL Extensions Viewer 来确认硬件情况，比如我的是 GeForce 310，是
+能够支持到 OpenGL 3.3 Core 的。
+
+</p>
+
+<p>
+剩下的就是驱动问题了，谷歌得到的结果是建议用新的 GLFW 而不是 GLUT 或者
+GLEW 来做，GLFW 在 MacOS 下默认也只打开 OpenGL 2.1 而已，听说要这样才能
+打开 3.3 的 Core：
+
+</p>
+
+<pre class="source"><span class="keyword">static</span> <span class="type">void</span> <span class="function-name">using_opengl_version_330</span>(<span class="type">void</span>) {
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+}
+</pre>
+
+
+设置完之后，我就按教程走了，但是，又出现了意外的情况，在我的黑苹果上面，
+<a id="version">330</a> 的 shader 源码都编译链接过了，但就是没有显示，窗口里面都是
+黑的。总之 OpenGL 2.1 可以，3.3 就是不行。即便 glClear 颜色显示 OK，loop
+循环也有走。
+
+</p>
+
+<p>
+又不甘心使用 OpenGL 2.1 呢，只好救助于 Apple 原生的系统接口看看了，还好
+谷歌查到了不错的东西 <a href="https://developer.apple.com/library/mac/samplecode/GLEssentials/Introduction/Intro.html">GLEssentials</a>，是官方提供的 Objective-C 使用 OpenGL
+3.3 API 编程的例子。
+
+</p>
+
+<p>
+立马左上角的 "Download Sample Code"，XCode 打开工程瞬间编译完成，看了一
+下接口以及 Shader，确认是使用 OpenGL 3.3 接口无疑，demo 也挺高大上的，果
+然官方的东西就是妥妥的。
+
+</p>
+
+<p>
+之前依靠跨平台各种库、以及过时的库起步，加上黑苹果的原因吧，缓慢起步。
+
+</p>
+
+<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p1">Permalink</a> </h4>
+
+<p>
+<!-- date: 2014-12-09T19:42:30+0800 -->
+
+</p>
+
 <h2><a id="p0">14年12月1日 周一 22:53</a></h2>
 
 <h3>实践了一个 JPEG 解码器</h3>
@@ -162,7 +229,7 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
       </ul>
 
       <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr><tr><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
+      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td><a title="OpenGL 3.3 under MacOS" href="2014-12.html#p1">9</a></td><td>10</td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr><tr><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
 
       <p class="header">Search</p><!-- Google Search -->
       <form id="searchform" method="get"

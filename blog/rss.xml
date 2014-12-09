@@ -9,10 +9,75 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Tue, 02 Dec 2014 16:49:51 +0800</pubDate>
+    <pubDate>Tue, 09 Dec 2014 20:12:18 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
+
+    <item>
+      <title>OpenGL 3.3 under MacOS</title>
+      <guid>http://suchang.net/blog/2014-12.html#p1</guid>
+      <pubDate>2014-12-09T19:42:30+0800</pubDate>
+      <dc:creator>sucha</dc:creator>
+      <category>CategoryProgramming</category>
+      <description><![CDATA[<p>
+其实我想说的是在黑苹果下的情况，一般阿婆是只打开 OpenGL 2.1 而已的，用
+X11 XQuartz 或者 GLEW，都无法使用 OpenGL 3.3 的，对于我这个初学者来说，
+想从 Modern OpenGL 入门，痛苦不堪。
+
+</p>
+
+<p>
+首先，还是先确认黑苹果在硬件上能够支持的 OpenGL API 版本吧，App Store 上
+下载 OpenGL Extensions Viewer 来确认硬件情况，比如我的是 <a class="nonexistent" href="mailto:suchaaa@gmail.com">GeForce</a> 310，是
+能够支持到 OpenGL 3.3 Core 的。
+
+</p>
+
+<p>
+剩下的就是驱动问题了，谷歌得到的结果是建议用新的 GLFW 而不是 GLUT 或者
+GLEW 来做，GLFW 在 MacOS 下默认也只打开 OpenGL 2.1 而已，听说要这样才能
+打开 3.3 的 Core：
+
+</p>
+
+<pre class="source"><span class="keyword">static</span> <span class="type">void</span> <span class="function-name">using_opengl_version_330</span>(<span class="type">void</span>) {
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+}
+</pre>
+
+
+设置完之后，我就按教程走了，但是，又出现了意外的情况，在我的黑苹果上面，
+<a id="version">330</a> 的 shader 源码都编译链接过了，但就是没有显示，窗口里面都是
+黑的。总之 OpenGL 2.1 可以，3.3 就是不行。即便 glClear 颜色显示 OK，loop
+循环也有走。
+
+</p>
+
+<p>
+又不甘心使用 OpenGL 2.1 呢，只好救助于 Apple 原生的系统接口看看了，还好
+谷歌查到了不错的东西 <a href="https://developer.apple.com/library/mac/samplecode/GLEssentials/Introduction/Intro.html">GLEssentials</a>，是官方提供的 Objective-C 使用 OpenGL
+3.3 API 编程的例子。
+
+</p>
+
+<p>
+立马左上角的 "Download Sample Code"，XCode 打开工程瞬间编译完成，看了一
+下接口以及 Shader，确认是使用 OpenGL 3.3 接口无疑，demo 也挺高大上的，果
+然官方的东西就是妥妥的。
+
+</p>
+
+<p>
+之前依靠跨平台各种库、以及过时的库起步，加上黑苹果的原因吧，缓慢起步。
+
+</p>
+
+]]></description>
+    </item>
 
     <item>
       <title>实践了一个 JPEG 解码器</title>
