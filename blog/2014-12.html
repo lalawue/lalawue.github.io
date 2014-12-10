@@ -20,6 +20,38 @@
       <div id="text">
 	<h1>Sucha's Blog ~ Archive for December, 2014</h1>
 	<!-- Page published by Emacs Wiki begins here -->
+<h2><a id="p2">14年12月10日 周三 21:47</a></h2>
+
+<h3>OpenGL 3.3 under MacOS (2)</h3>
+
+<p>
+终于查明原因了，并不是 GLFW 不堪用的问题，而是需要在 glGenBuffers 之前，
+先跑下面：
+
+</p>
+
+<pre class="source">    glGenVertexArrays(1, &amp;vaoHandle);
+    glBindVertexArray(vaoHandle);
+</pre>
+
+
+当然，那些诸如 <Learning Modern 3D Graphics Programming> 的书上面是没有
+这两句代码的。
+
+</p>
+
+<p>
+蛋疼呀。
+
+</p>
+
+<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p2">Permalink</a> </h4>
+
+<p>
+<!-- date: 2014-12-10T21:47:14+0800 -->
+
+</p>
+
 <h2><a id="p1">14年12月9日 周二 19:42</a></h2>
 
 <h3>OpenGL 3.3 under MacOS</h3>
@@ -229,7 +261,7 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
       </ul>
 
       <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td><a title="OpenGL 3.3 under MacOS" href="2014-12.html#p1">9</a></td><td>10</td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr><tr><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
+      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td><a title="OpenGL 3.3 under MacOS" href="2014-12.html#p1">9</a></td><td><a title="OpenGL 3.3 under MacOS (2)" href="2014-12.html#p2">10</a></td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr><tr><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
 
       <p class="header">Search</p><!-- Google Search -->
       <form id="searchform" method="get"

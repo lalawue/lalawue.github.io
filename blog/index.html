@@ -20,6 +20,38 @@
       <div id="text">
 	<h1>Sucha's Blog ~ Welcome</h1>
 	<!-- Page published by Emacs Wiki begins here -->
+<h2>14年12月10日 周三 21:47</h2>
+
+<h3>OpenGL 3.3 under MacOS (2)</h3>
+
+<p>
+终于查明原因了，并不是 GLFW 不堪用的问题，而是需要在 glGenBuffers 之前，
+先跑下面：
+
+</p>
+
+<pre class="source">    glGenVertexArrays(1, &amp;vaoHandle);
+    glBindVertexArray(vaoHandle);
+</pre>
+
+
+当然，那些诸如 <Learning Modern 3D Graphics Programming> 的书上面是没有
+这两句代码的。
+
+</p>
+
+<p>
+蛋疼呀。
+
+</p>
+
+<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p2">Permalink</a> </h4>
+
+<p>
+<!-- date: 2014-12-10T21:47:14+0800 -->
+
+</p>
+
 <h2>14年12月9日 周二 19:42</h2>
 
 <h3>OpenGL 3.3 under MacOS</h3>
@@ -1024,79 +1056,6 @@ bye
 
 </p>
 
-<h2>14年1月1日 周三 02:34</h2>
-
-<h3>快速关闭远程 server 的 expect 脚本</h3>
-
-<p>
-我停掉了之前的阿里云服务器，而在自己液晶屏亮不起来的破笔记本上安装了
-ubuntu server，将 git server、nginx + wiki 都安装在了上面，反正 server
-只是提供网络服务，不需要显示器。不过暂时每天的开关机还是需要的。
-
-</p>
-
-<p>
-目前开机还是得按本本的电源键，不过关机倒是可以通过网络来进行，当然也就可
-以使用下面的 expect 脚本了。
-
-</p>
-
-<p>
-我是 ssh 上去关闭的，可以根据需要改成 telnet，一些适配的变量是 root 用户
-ssh 上去的 prompt，shell 下 power off 的命令，一些发行版可能是 halt，不
-过也得看电源模块的配置的吧，最后是 server power off 后广播出来的字符串。
-
-</p>
-
-<p>
-按照惯例贴代码：
-
-</p>
-
-<pre class="source"><span class="comment-delimiter">#</span><span class="comment">!/usr/bin/expect
-</span><span class="comment-delimiter">#</span><span class="comment">
-</span><span class="comment-delimiter"># </span><span class="comment">create in 2013/12/31, by sucha in http://suchang.net
-</span><span class="comment-delimiter">#</span><span class="comment">
-</span><span class="comment-delimiter"># </span><span class="comment">Usage: halt_server host_ip
-</span>
-<span class="comment-delimiter"># </span><span class="comment">prompt for root@host_ip
-</span><span class="builtin">set</span> serv_root_prompt <span class="string">"password"</span>
-<span class="builtin">set</span> serv_halt_cmd <span class="string">"shutdown -h now"</span>
-<span class="builtin">set</span> serv_halt_expect <span class="string">"halt"</span>
-
-<span class="builtin">set</span> timeout 10
-<span class="keyword">if</span> { $<span class="variable-name">argc</span> != 1 } {
-    send_user <span class="string">"$argv0 \$HOST_IP\n"</span>
-    <span class="keyword">exit</span>
-}
-
-<span class="comment-delimiter"># </span><span class="comment">get server ip
-</span><span class="builtin">set</span> host [lrange $<span class="variable-name">argv</span> 0 0]
-
-<span class="comment-delimiter"># </span><span class="comment">get root's passwd
-</span>stty -echo
-send_user -- <span class="string">"Password for root@$host: "</span>
-expect_user -re <span class="string">"(.*)\n"</span>
-send_user <span class="string">"\n"</span>
-<span class="builtin">set</span> pass $<span class="variable-name">expect_out</span>(1,string)
-
-<span class="comment-delimiter"># </span><span class="comment">login server and run halt
-</span>spawn ssh -2 root@$<span class="variable-name">host</span>
-expect $<span class="variable-name">serv_root_prompt</span>
-send $<span class="variable-name">pass</span>\r
-send $<span class="variable-name">serv_halt_cmd</span>\r
-expect $<span class="variable-name">serv_halt_expect</span>
-<span class="keyword">exit</span>
-</pre>
-
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-01.html#p0">Permalink</a> </h4>
-
-<p>
-<!-- date: 2014-01-01T02:34:43+0800 -->
-
-</p>
-
 <!-- Page published by Emacs Wiki ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -1114,7 +1073,7 @@ expect $<span class="variable-name">serv_halt_expect</span>
       </ul>
 
       <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td><a title="OpenGL 3.3 under MacOS" href="2014-12.html#p1">9</a></td><td>10</td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr><tr><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
+      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td><a title="OpenGL 3.3 under MacOS" href="2014-12.html#p1">9</a></td><td><a title="OpenGL 3.3 under MacOS (2)" href="2014-12.html#p2">10</a></td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr><tr><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
 
       <p class="header">Search</p><!-- Google Search -->
       <form id="searchform" method="get"

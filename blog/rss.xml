@@ -9,10 +9,40 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Tue, 09 Dec 2014 20:16:37 +0800</pubDate>
+    <pubDate>Wed, 10 Dec 2014 21:49:31 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
+
+    <item>
+      <title>OpenGL 3.3 under MacOS (2)</title>
+      <guid>http://suchang.net/blog/2014-12.html#p2</guid>
+      <pubDate>2014-12-10T21:47:14+0800</pubDate>
+      <dc:creator>sucha</dc:creator>
+      <category>CategoryProgramming</category>
+      <description><![CDATA[<p>
+终于查明原因了，并不是 GLFW 不堪用的问题，而是需要在 glGenBuffers 之前，
+先跑下面：
+
+</p>
+
+<pre class="source">    glGenVertexArrays(1, &amp;vaoHandle);
+    glBindVertexArray(vaoHandle);
+</pre>
+
+
+当然，那些诸如 <Learning Modern 3D Graphics Programming> 的书上面是没有
+这两句代码的。
+
+</p>
+
+<p>
+蛋疼呀。
+
+</p>
+
+]]></description>
+    </item>
 
     <item>
       <title>OpenGL 3.3 under MacOS</title>
