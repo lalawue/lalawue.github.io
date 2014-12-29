@@ -20,6 +20,116 @@
       <div id="text">
 	<h1>Sucha's Blog ~ Archive for December, 2014</h1>
 	<!-- Page published by Emacs Wiki begins here -->
+<h2><a id="p6">14年12月29日 周一 10:22</a></h2>
+
+<h3>My First Mac App - TcBrowserMac</h3>
+
+<p>
+开始练习 Mac App 的编写，与 iOS App 有许多不同，昨天花了一天时间，山寨了
+一个 TcBrowser，一个筛选算法题目的小软件，作者博客页面
+<a href="http://zh.lucida.me/blog/top-code-offline-browser/">Top&#32;Coder算法题目浏览器</a>。
+
+</p>
+
+<p>
+也许是我没有深入开发的原因，感觉不再像 iOS 一样，需要多个 View
+Controller 了，使得我一开始就考虑模块划分的问题，虽然这个软件是个小工具
+而已。
+
+</p>
+
+<p>
+然后考虑像 win 一样，可以在文件夹下面打开访问当前文件夹的目录，由于 Mac
+是打包成 bundle 来跑的，界面上的 app 其实是个文件夹，所以我之前整的方法
+都不对，需要通过 [[NSBundle mainBundle] bundlePath] 来获取。
+
+</p>
+
+<p>
+然后 StoryBoard 方面，由于软件是个窗口，所以大小是可变的，一开始就得考虑
+自动布局的问题，Apple 文档那边对于自动布局长篇大论不说，还有一个用于自动
+布局的 DSL，足够复杂了，昨天时间有限，我是没有看透。
+
+</p>
+
+<p>
+实际是用 StoryBoard 点击 nib 后 Editor -> Resolve Auto Layout Issues 上
+面的 Add Missing Constraints 来做的，每添加一个控件，就要 Add 一次。
+
+</p>
+
+<p>
+然后感觉还跟控件添加的顺序有关系，Xcode 会猜测这个控件到底是对齐那一边，
+依据的是 superview 还是哪个 view，这些 constraints 在 inspector 里面几乎
+不能配置，我本来一个 webview 靠右是要左对齐的，然后右边让它跟着
+superview 无限扩展，可是如果给弄成右对齐就改不了了，反正我是没弄懂怎么改，
+所以我只好把 constraints 删除又添加一遍。
+
+</p>
+
+<p>
+然后是 tableview，与 iOS 也有些不同，没有了 cell 的概念，取而代之的是
+NSView，没有了 index，而是一个 NSTableColumn 的结构，table column 的
+identifier 可以设置，重用时也是依据这些 identifier。不过 column 的
+header title 我折腾了不少时间，然后是宽度也是通过 column 设置的。
+
+</p>
+
+<p>
+跟 iOS 一样，只需要设置两个函数就可以让数据上来了，一个是
+numberOfRowsInTableView，一个是 viewForTableColumn。
+
+</p>
+
+<p>
+最后是软件图标的问题，感觉与 iOS 也不一样，也许是我之前没有那么正规军的
+原因。我是想要 Dock 上面自定义图标，谷歌到的方法也只是动态设置的而已，关
+闭的时候很明显会显示回默认的那个。
+
+</p>
+
+<p>
+实际上呢，需要设置的方法在 <a href="https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html#//apple_ref/doc/uid/TP40012302-CH7-SW3">Apple&#32;Doc&#32;-&#32;Optimizing&#32;for&#32;High&#32;Resolution</a>，
+具体是需要下面几个大小的图标，然后放到 icon_name.iconset 这个文件夹下面
+
+</p>
+
+<pre class="example">icon_16x16.png
+icon_16x16@2x.png
+icon_32x32.png
+icon_32x32@2x.png
+icon_128x128.png
+icon_128x128@2x.png
+icon_256x256.png
+icon_256x256@2x.png
+icon_512x512.png
+icon_512x512@2x.png
+</pre>
+
+<p>
+终端下使用命令
+
+</p>
+
+<pre class="source">$ iconutil -c icns icon_name.iconset
+</pre>
+
+
+ 来生成，然后拖到工程文件里面就好了，默认就是那个图标了，这个也折腾了不
+<blockquote>
+<p>
+ 少时间 ，第一个 Mac App 终于完成了，地址在这里 <a href="http://pan.baidu.com/s/1sjv3gNN">TcBrowserMac</a>，密码是宇宙终极答案。
+
+</p>
+</blockquote>
+
+<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p6">Permalink</a> </h4>
+
+<p>
+<!-- date: 2014-12-29T10:22:03+0800 -->
+
+</p>
+
 <h2><a id="p5">14年12月27日 周六 17:58</a></h2>
 
 <h3>ObjC Animation</h3>
@@ -646,7 +756,7 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
 
 </p>
 
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p0">Permalink</a> </h4>
+<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p0">Permalink</a></h4>
 
 <p>
 <!-- date: 2014-12-01T22:53:41+0800 -->
@@ -670,7 +780,7 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
       </ul>
 
       <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td><a title="OpenGL 3.3 under MacOS" href="2014-12.html#p1">9</a></td><td><a title="OpenGL 3.3 under MacOS (2)" href="2014-12.html#p2">10</a></td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td><a title="NSThread、''''NSRunLoop、GCD、__block" href="2014-12.html#p3">24</a></td><td><a title="ObjC Core Data" href="2014-12.html#p4">25</a></td><td>26</td><td><a title="ObjC Animation" href="2014-12.html#p5">27</a></td></tr><tr><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
+      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td><a title="OpenGL 3.3 under MacOS" href="2014-12.html#p1">9</a></td><td><a title="OpenGL 3.3 under MacOS (2)" href="2014-12.html#p2">10</a></td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td><a title="NSThread、''''NSRunLoop、GCD、__block" href="2014-12.html#p3">24</a></td><td><a title="ObjC Core Data" href="2014-12.html#p4">25</a></td><td>26</td><td><a title="ObjC Animation" href="2014-12.html#p5">27</a></td></tr><tr><td>28</td><td><a title="My First Mac App - ''''TcBrowserMac" href="2014-12.html#p6">29</a></td><td>30</td><td>31</td></tr></table></div>
 
       <p class="header">Search</p><!-- Google Search -->
       <form id="searchform" method="get"

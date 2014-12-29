@@ -9,10 +9,118 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Sat, 27 Dec 2014 18:01:32 +0800</pubDate>
+    <pubDate>Mon, 29 Dec 2014 10:31:13 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
+
+    <item>
+      <title>My First Mac App - ''''TcBrowserMac</title>
+      <guid>http://suchang.net/blog/2014-12.html#p6</guid>
+      <pubDate>2014-12-29T10:22:03+0800</pubDate>
+      <dc:creator>sucha</dc:creator>
+      <category>CategoryProgramming</category>
+      <description><![CDATA[<p>
+开始练习 Mac App 的编写，与 iOS App 有许多不同，昨天花了一天时间，山寨了
+一个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">TcBrowser</a>，一个筛选算法题目的小软件，作者博客页面
+<a href="http://zh.lucida.me/blog/top-code-offline-browser/">Top&#32;Coder算法题目浏览器</a>。
+
+</p>
+
+<p>
+也许是我没有深入开发的原因，感觉不再像 iOS 一样，需要多个 View
+Controller 了，使得我一开始就考虑模块划分的问题，虽然这个软件是个小工具
+而已。
+
+</p>
+
+<p>
+然后考虑像 win 一样，可以在文件夹下面打开访问当前文件夹的目录，由于 Mac
+是打包成 bundle 来跑的，界面上的 app 其实是个文件夹，所以我之前整的方法
+都不对，需要通过 [[NSBundle mainBundle] bundlePath] 来获取。
+
+</p>
+
+<p>
+然后 <a class="nonexistent" href="mailto:suchaaa@gmail.com">StoryBoard</a> 方面，由于软件是个窗口，所以大小是可变的，一开始就得考虑
+自动布局的问题，Apple 文档那边对于自动布局长篇大论不说，还有一个用于自动
+布局的 DSL，足够复杂了，昨天时间有限，我是没有看透。
+
+</p>
+
+<p>
+实际是用 <a class="nonexistent" href="mailto:suchaaa@gmail.com">StoryBoard</a> 点击 nib 后 Editor -> Resolve Auto Layout Issues 上
+面的 Add Missing Constraints 来做的，每添加一个控件，就要 Add 一次。
+
+</p>
+
+<p>
+然后感觉还跟控件添加的顺序有关系，Xcode 会猜测这个控件到底是对齐那一边，
+依据的是 superview 还是哪个 view，这些 constraints 在 inspector 里面几乎
+不能配置，我本来一个 webview 靠右是要左对齐的，然后右边让它跟着
+superview 无限扩展，可是如果给弄成右对齐就改不了了，反正我是没弄懂怎么改，
+所以我只好把 constraints 删除又添加一遍。
+
+</p>
+
+<p>
+然后是 tableview，与 iOS 也有些不同，没有了 cell 的概念，取而代之的是
+NSView，没有了 index，而是一个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSTableColumn</a> 的结构，table column 的
+identifier 可以设置，重用时也是依据这些 identifier。不过 column 的
+header title 我折腾了不少时间，然后是宽度也是通过 column 设置的。
+
+</p>
+
+<p>
+跟 iOS 一样，只需要设置两个函数就可以让数据上来了，一个是
+numberOfRowsInTableView，一个是 viewForTableColumn。
+
+</p>
+
+<p>
+最后是软件图标的问题，感觉与 iOS 也不一样，也许是我之前没有那么正规军的
+原因。我是想要 Dock 上面自定义图标，谷歌到的方法也只是动态设置的而已，关
+闭的时候很明显会显示回默认的那个。
+
+</p>
+
+<p>
+实际上呢，需要设置的方法在 <a href="https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html#//apple_ref/doc/uid/TP40012302-CH7-SW3">Apple&#32;Doc&#32;-&#32;Optimizing&#32;for&#32;High&#32;Resolution</a>，
+具体是需要下面几个大小的图标，然后放到 icon_name.iconset 这个文件夹下面
+
+</p>
+
+<pre class="example">icon_16x16.png
+icon_16x16@2x.png
+icon_32x32.png
+icon_32x32@2x.png
+icon_128x128.png
+icon_128x128@2x.png
+icon_256x256.png
+icon_256x256@2x.png
+icon_512x512.png
+icon_512x512@2x.png
+</pre>
+
+<p>
+终端下使用命令
+
+</p>
+
+<pre class="source">$ iconutil -c icns icon_name.iconset
+</pre>
+
+
+ 来生成，然后拖到工程文件里面就好了，默认就是那个图标了，这个也折腾了不
+<blockquote>
+<p>
+ 少时间 ，第一个 Mac App 终于完成了，地址在这里 <a href="http://pan.baidu.com/s/1sjv3gNN">TcBrowserMac</a>，密码是宇宙终极答案。
+
+</p>
+</blockquote>
+
+]]></description>
+    </item>
 
     <item>
       <title>ObjC Animation</title>
