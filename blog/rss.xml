@@ -9,734 +9,82 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Mon, 29 Dec 2014 10:31:13 +0800</pubDate>
+    <pubDate>Sat, 03 Jan 2015 11:27:19 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>My First Mac App - ''''TcBrowserMac</title>
-      <guid>http://suchang.net/blog/2014-12.html#p6</guid>
-      <pubDate>2014-12-29T10:22:03+0800</pubDate>
+      <title>HTTP Downloader</title>
+      <guid>http://suchang.net/blog/2015-01.html#p0</guid>
+      <pubDate>2015-01-03T11:19:57+0800</pubDate>
       <dc:creator>sucha</dc:creator>
       <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-开始练习 Mac App 的编写，与 iOS App 有许多不同，昨天花了一天时间，山寨了
-一个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">TcBrowser</a>，一个筛选算法题目的小软件，作者博客页面
-<a href="http://zh.lucida.me/blog/top-code-offline-browser/">Top&#32;Coder算法题目浏览器</a>。
+忙了两天多那个 <a href="https://github.com/lalawue/http_downloader">HTTP&#32;Downloader</a>，原来只是想实现一个 keep-alive 的连接的
+socket，当时也想到这个东西不会简单，因为一方面底层的是 low level 的
+socket，另外一方面呢，需要处理一层 http 协议，还有一个 dns。
 
 </p>
 
 <p>
-也许是我没有深入开发的原因，感觉不再像 iOS 一样，需要多个 View
-Controller 了，使得我一开始就考虑模块划分的问题，虽然这个软件是个小工具
-而已。
+后来是因为找到了 dns 的代码，就开工了，才发现复杂呀，一方面 c 的部分我觉
+得我大意了，编码不够小心，各种折腾。
 
 </p>
 
 <p>
-然后考虑像 win 一样，可以在文件夹下面打开访问当前文件夹的目录，由于 Mac
-是打包成 bundle 来跑的，界面上的 app 其实是个文件夹，所以我之前整的方法
-都不对，需要通过 [[NSBundle mainBundle] bundlePath] 来获取。
+另外就是 c 的 string 库太不好用了，所以不得不封装了一个，至少得有 split
+这个函数吧，没有的话啥都不用玩了。
 
 </p>
 
 <p>
-然后 <a class="nonexistent" href="mailto:suchaaa@gmail.com">StoryBoard</a> 方面，由于软件是个窗口，所以大小是可变的，一开始就得考虑
-自动布局的问题，Apple 文档那边对于自动布局长篇大论不说，还有一个用于自动
-布局的 DSL，足够复杂了，昨天时间有限，我是没有看透。
+其实大概一天不到基本的 http get 已经完成了，只是代码太糟糕，我觉得需要改
+进一下，最主要的就是 string 库，于是昨天折腾了快一天呀，代码清晰了很多。
 
 </p>
 
 <p>
-实际是用 <a class="nonexistent" href="mailto:suchaaa@gmail.com">StoryBoard</a> 点击 nib 后 Editor -> Resolve Auto Layout Issues 上
-面的 Add Missing Constraints 来做的，每添加一个控件，就要 Add 一次。
+这个 string 库是有 gc 的，从 head 操作产生的其他 object，都会随着 head
+的 destroy 而 destory。新建 head 的 interface 就那么几个，很有限，所以其
+实可以在开始复杂操作时新建 head，之后后清除掉那个入口的 head。
 
 </p>
 
 <p>
-然后感觉还跟控件添加的顺序有关系，Xcode 会猜测这个控件到底是对齐那一边，
-依据的是 superview 还是哪个 view，这些 constraints 在 inspector 里面几乎
-不能配置，我本来一个 webview 靠右是要左对齐的，然后右边让它跟着
-superview 无限扩展，可是如果给弄成右对齐就改不了了，反正我是没弄懂怎么改，
-所以我只好把 constraints 删除又添加一遍。
+新建 head 的接口除了 malloc 一段 cstring，还可以 map 一段 cstring 地址给
+它作为操作的空间，这时候内部标记 clone，就是这个 mstring 的 cstr 地址不
+是自己保存的，之后的 destroy 不用释放这个空间，对于像 http head 或者
+body 的分析时，这个就很有用了。
 
 </p>
 
 <p>
-然后是 tableview，与 iOS 也有些不同，没有了 cell 的概念，取而代之的是
-NSView，没有了 index，而是一个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSTableColumn</a> 的结构，table column 的
-identifier 可以设置，重用时也是依据这些 identifier。不过 column 的
-header title 我折腾了不少时间，然后是宽度也是通过 column 设置的。
+由于新建 mstring 的空间其实是堆上的，对于各种小操作时产生的 mstring，不
+大好，还不如 cloudwu 那个栈上的方式，栈上的方式新建轻松，而且没有碎片的
+产生。
 
 </p>
 
 <p>
-跟 iOS 一样，只需要设置两个函数就可以让数据上来了，一个是
-numberOfRowsInTableView，一个是 viewForTableColumn。
+不过呢，就是得随时注意，这些栈上的对象何时销毁，需要的时候需要转成堆上的
+对象。
 
 </p>
 
 <p>
-最后是软件图标的问题，感觉与 iOS 也不一样，也许是我之前没有那么正规军的
-原因。我是想要 Dock 上面自定义图标，谷歌到的方法也只是动态设置的而已，关
-闭的时候很明显会显示回默认的那个。
+我有个想法，其实这些小碎片，不如申请一个专用的堆来操作，比如这个堆绑定在
+head 的 allocator 上，从 head 产生的所有 object 都是用这个 allocator，这
+样就避免了大量的小对象，对于内存碎片的控制是有益的，特别是对于那种 map
+cstring 过来的对象，因为本身 cstring 空间是不用释放的，这时候就很有用了，
+因为 mstring 自己控制用的结构，空间占用不大。
 
 </p>
 
 <p>
-实际上呢，需要设置的方法在 <a href="https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html#//apple_ref/doc/uid/TP40012302-CH7-SW3">Apple&#32;Doc&#32;-&#32;Optimizing&#32;for&#32;High&#32;Resolution</a>，
-具体是需要下面几个大小的图标，然后放到 icon_name.iconset 这个文件夹下面
-
-</p>
-
-<pre class="example">icon_16x16.png
-icon_16x16@2x.png
-icon_32x32.png
-icon_32x32@2x.png
-icon_128x128.png
-icon_128x128@2x.png
-icon_256x256.png
-icon_256x256@2x.png
-icon_512x512.png
-icon_512x512@2x.png
-</pre>
-
-<p>
-终端下使用命令
-
-</p>
-
-<pre class="source">$ iconutil -c icns icon_name.iconset
-</pre>
-
-
- 来生成，然后拖到工程文件里面就好了，默认就是那个图标了，这个也折腾了不
-<blockquote>
-<p>
- 少时间 ，第一个 Mac App 终于完成了，地址在这里 <a href="http://pan.baidu.com/s/1sjv3gNN">TcBrowserMac</a>，密码是宇宙终极答案。
-
-</p>
-</blockquote>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>ObjC Animation</title>
-      <guid>http://suchang.net/blog/2014-12.html#p5</guid>
-      <pubDate>2014-12-27T17:58:25+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-其实去年在做那个 App 的时候就有使用过简单的动画，接口是 UIView 的
-animateWithDuration，只是平移了一下 view。
-
-</p>
-
-<p>
-今天学到的 iOS 的动画，分成几个部分，分别是针对 view 的，针对 controller
-的过渡动画，还有就是自由度很高的交互动画，交互动画其实可以看成是最简单的
-游戏了。
-
-</p>
-
-<p>
-针对 view 的动画除了我之前用的 animateWithDuration 方法，其实 view 的很
-多属性都是可以更改数值然后交给系统去实现动作的，只需要创建 animation 设
-置动画属性，然后使用 view 的 layer 实体 addAnimation 就好。
-
-</p>
-
-<p>
-view 中的 layer 需要说一下，为了实现动画，有多个副本，一个是表示最终状态
-的（model layer），一个是表示的是当前的（presentation layer），
-presentation 是专门用来显示动画的，结束后就被设成了 model 的状态。
-
-</p>
-
-<p>
-后面例子的还用画图实现了一个动画，画图部分就纯是 CPU 来计算了。另外一个
-部分是 controller 的转场动画，例子比我之前的平移复杂了一些，用了系统给出
-的 delegate 接口来设置，总之这也是可以自定义的。
-
-</p>
-
-<p>
-还有最后的可交互动画，实际上就跟游戏没啥区别了，动画部分的数值需要不断根
-据用户的交互来获取、计算，然后设置具体的显示，这些计算实际上是在显示驱动
-的每一帧间隔里面做的。
-
-</p>
-
-<p>
-cocos2dx 的底层部分也是通过 display link 来驱动实现每一帧的画图与计算，
-然后用户的输入是通过 UIView 的 <a class="nonexistent" href="mailto:suchaaa@gmail.com">UIKeyInput</a> delegate 来做的，而不像这个例
-子通过手势控件 recognizer 来做的， cocos2dx 的方式更灵活一些，不过两者对
-于动画显示、操作最底层的部分是相似的。
-
-</p>
-
-<p>
-没想到两者后底层部分的驱动结构其实是一样的，display link 与 run loop。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>ObjC Core Data</title>
-      <guid>http://suchang.net/blog/2014-12.html#p4</guid>
-      <pubDate>2014-12-25T22:16:40+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-Core Data 市面上的文章太多，不管是中文还是英文，所以打算以自己的理解从简
-描述。
-
-</p>
-
-<p>
-先从上到下、从大到小理解概念。关键的概念其实只有 4 个：
-
-</p>
-
-<ul>
-<li><a class="nonexistent" href="mailto:suchaaa@gmail.com">NSManagedModel</a>：数据模型，数据的结构
-</li>
-<li><a class="nonexistent" href="mailto:suchaaa@gmail.com">NSManagedModelContext</a>：具体存取增删数据的接口
-</li>
-<li><a class="nonexistent" href="mailto:suchaaa@gmail.com">NSPersistentStoreCoordinator</a>：连接 context 与 persistent store 的中间
-   件
-</li>
-<li><a class="nonexistent" href="mailto:suchaaa@gmail.com">NSPersistentStore</a>：数据库，具体的文件
-</li>
-</ul>
-
-<p>
-如果还要简约，那概念上只需要关注 model 跟 store 就可以了，一个是 schema，
-模型结构，比如一张表，另一个是数据库，具体到文件。
-
-</p>
-
-<p>
-描述概念间相互关系的图表网上太多，我简略看了一下接口，了解到的是目前 8.1
-的 SDK下，一个 context 对应一个 model 和一个 coordinator，一个
-coordinator 可以连接多个 store，相互的关系可以脑补了吧。
-
-</p>
-
-<p>
-下面的代码只要建立一个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">TestCoreData</a> 的头文件调用一下最下面的 test 就可以
-编译跑了，粗看有点多，其实分开函数看就好了，函数名很直白了。
-
-</p>
-
-<pre class="source"><span class="keyword">@interface</span> <span class="type">UserInfo</span> : <span class="type">NSManagedObject</span>
-@property (<span class="type">nonatomic</span>,<span class="type">copy</span>) <span class="type">NSString</span> *<span class="variable-name">name</span>;
-@property (<span class="type">nonatomic</span>,<span class="type">copy</span>) <span class="type">NSNumber</span> *<span class="variable-name">uid</span>;
-<span class="keyword">@end</span>
-
-<span class="keyword">@implementation</span> <span class="type">UserInfo</span>
-@dynamic name;
-@dynamic uid;
-<span class="keyword">@end</span>
-
-<span class="keyword">@implementation</span> <span class="type">TestCoreData</span>
-- (<span class="type">NSURL</span>*)<span class="function-name">createStoreDir</span>
-{
-    <span class="type">NSFileManager</span> *<span class="variable-name">fm</span> = [[<span class="type">NSFileManager</span> alloc] init];
-    <span class="type">NSError</span> *<span class="variable-name">error</span> = <span class="constant">nil</span>;
-    <span class="type">NSURL</span> *<span class="variable-name">durl</span> = [fm URLForDirectory:NSDocumentDirectory
-                             inDomain:NSUserDomainMask
-                    appropriateForURL:<span class="constant">nil</span>
-                               create:<span class="constant">YES</span>
-                                error:&amp;error];
-    <span class="keyword">if</span> (durl == <span class="constant">nil</span>) {
-        NSLog(@<span class="string">"Fail to create document dir:%@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> <span class="constant">nil</span>;
-    }
-    <span class="keyword">return</span> durl;
-}
-
-- (<span class="type">NSManagedObjectModel</span>*)<span class="function-name">createModel</span>
-{
-    <span class="type">NSManagedObjectModel</span> *<span class="variable-name">moModel</span> = [[<span class="type">NSManagedObjectModel</span> alloc] init];
-    
-    <span class="comment-delimiter">// </span><span class="comment">create the entity
-</span>    <span class="type">NSEntityDescription</span> *<span class="variable-name">infoEntity</span> = [[<span class="type">NSEntityDescription</span> alloc] init];
-    [infoEntity setName:@<span class="string">"UserInfo"</span>];
-    [infoEntity setManagedObjectClassName:@<span class="string">"UserInfo"</span>];
-    
-    [moModel setEntities:[<span class="type">NSArray</span> arrayWithObject:infoEntity]];
-    
-    <span class="comment-delimiter">// </span><span class="comment">add the attribute
-</span>    <span class="type">NSAttributeDescription</span> *<span class="variable-name">nameAttr</span> = [[<span class="type">NSAttributeDescription</span> alloc] init];
-    [nameAttr setName:@<span class="string">"name"</span>];
-    [nameAttr setAttributeType:NSStringAttributeType];
-    [nameAttr setOptional:<span class="constant">NO</span>];
-    
-    <span class="type">NSAttributeDescription</span> *<span class="variable-name">uidAttr</span> = [[<span class="type">NSAttributeDescription</span> alloc] init];
-    [uidAttr setName:@<span class="string">"uid"</span>];
-    [uidAttr setAttributeType:NSInteger32AttributeType];
-    [uidAttr setOptional:<span class="constant">NO</span>];
-    
-    <span class="comment-delimiter">// </span><span class="comment">set the properties for the entity
-</span>    <span class="type">NSArray</span> *<span class="variable-name">ary</span> = [<span class="type">NSArray</span> arrayWithObjects:nameAttr, uidAttr, <span class="constant">nil</span>];
-    [infoEntity setProperties:ary];
-    
-    <span class="comment-delimiter">// </span><span class="comment">add localization dictionary
-</span>    <span class="type">NSMutableDictionary</span> *<span class="variable-name">localDict</span> = [<span class="type">NSMutableDictionary</span> dictionary];
-    [localDict setObject:@<span class="string">"name"</span> forKey:@<span class="string">"Property/name/Entity/UserInfo"</span>];
-    [localDict setObject:@<span class="string">"uid"</span> forKey:@<span class="string">"Property/uid/Entity/UserInfo"</span>];
-    
-    [moModel setLocalizationDictionary:localDict];
-    
-    <span class="keyword">return</span> moModel;
-}
-
-- (<span class="type">NSManagedObjectContext</span>*)<span class="function-name">createModelObjectContext</span>:(<span class="type">NSManagedObjectModel</span>*) <span class="variable-name">moModel</span>
-{
-    <span class="type">NSManagedObjectContext</span> *<span class="variable-name">moMOC</span> = [[<span class="type">NSManagedObjectContext</span> alloc] init];
-    <span class="type">NSPersistentStoreCoordinator</span> *<span class="variable-name">co</span> =
-           [[<span class="type">NSPersistentStoreCoordinator</span> alloc] initWithManagedObjectModel:moModel];
-    
-    [moMOC setPersistentStoreCoordinator:co];
-    
-    <span class="type">NSString</span> *<span class="variable-name">store_type</span> = NSBinaryStoreType; <span class="comment-delimiter">// </span><span class="comment">NSSQLiteStoreType
-</span>    <span class="type">NSString</span> *<span class="variable-name">store_filename</span> = [<span class="type">NSString</span> stringWithFormat:@<span class="string">"storeExample.bin"</span>];
-    
-    <span class="type">NSError</span> *<span class="variable-name">error</span> = <span class="constant">nil</span>;
-    <span class="type">NSURL</span> *<span class="variable-name">store_url</span> = [[<span class="keyword">self</span> createStoreDir]
-           URLByAppendingPathComponent:store_filename];
-    
-    NSLog(@<span class="string">"store url: %@"</span>, [store_url absoluteString]);
-
-    <span class="type">NSPersistentStore</span> *<span class="variable-name">pstore</span> = [co addPersistentStoreWithType:store_type
-                                                 configuration:<span class="constant">nil</span>
-                                                           URL:store_url
-                                                       options:<span class="constant">nil</span>
-                                                         error:&amp;error];
-    <span class="keyword">if</span> (pstore == <span class="constant">nil</span>) {
-        NSLog(@<span class="string">"Fail to create persistence store %@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> <span class="constant">nil</span>;
-    }
-    <span class="keyword">return</span> moMOC;
-}
-
-- (<span class="type">BOOL</span>)<span class="function-name">test</span>
-{
-    <span class="type">NSManagedObjectModel</span> *<span class="variable-name">moModel</span> = [<span class="keyword">self</span> createModel];
-    <span class="type">NSManagedObjectContext</span> *<span class="variable-name">moMOC</span> = [<span class="keyword">self</span> createModelObjectContext:moModel];
-    
-    <span class="type">NSEntityDescription</span> *<span class="variable-name">infoEntity</span> =
-          [[moModel entitiesByName] objectForKey:@<span class="string">"UserInfo"</span>];
-    
-    <span class="comment-delimiter">// </span><span class="comment">insert
-</span>    <span class="type">int</span> <span class="variable-name">i</span>;
-    <span class="keyword">for</span> (i=0; i&lt;10; i++) {
-        <span class="type">UserInfo</span> *<span class="variable-name">info</span> = [[<span class="type">UserInfo</span> alloc] initWithEntity:infoEntity
-                           insertIntoManagedObjectContext:moMOC];
-        info.name = [<span class="type">NSString</span> stringWithFormat:@<span class="string">"n%d"</span>, i];
-        info.uid = [<span class="type">NSNumber</span> numberWithInt:i];
-    }
-    
-    <span class="comment-delimiter">// </span><span class="comment">save
-</span>    <span class="type">NSError</span> *<span class="variable-name">error</span> = <span class="constant">nil</span>;
-    [moMOC save:&amp;error];
-    <span class="keyword">if</span> (error) {
-        NSLog(@<span class="string">"Fail to save: %@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> false;
-    }
-    
-<span class="preprocessor">#if</span> 1
-    <span class="comment-delimiter">// </span><span class="comment">query &amp; delete
-</span>    <span class="type">NSFetchRequest</span> *<span class="variable-name">req</span> = [[<span class="type">NSFetchRequest</span> alloc] init];
-    [req setEntity:infoEntity];
-    
-    <span class="type">NSSortDescriptor</span> *<span class="variable-name">sdesc</span> = 
-          [[<span class="type">NSSortDescriptor</span> alloc] initWithKey:@<span class="string">"uid"</span> ascending:<span class="constant">YES</span>];
-    [req setSortDescriptors:[<span class="type">NSArray</span> arrayWithObject:sdesc]];
-    
-    <span class="type">NSArray</span> *<span class="variable-name">ary</span> = [moMOC executeFetchRequest:req error:&amp;error];
-    <span class="keyword">if</span> (error &amp;&amp; (ary==<span class="constant">nil</span>)) {
-        NSLog(@<span class="string">"Fail to fetch object: %@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> false;
-    }
-    <span class="keyword">for</span> (<span class="type">UserInfo</span> *<span class="variable-name">info</span> <span class="keyword">in</span> ary) {
-        NSLog(@<span class="string">"user info name:%@, uid:%d"</span>, info.name, [info.uid intValue]);
-        [moMOC deleteObject:info];
-    }
-
-    <span class="comment-delimiter">// </span><span class="comment">save again
-</span>    [moMOC save:&amp;error];
-    <span class="keyword">if</span> (error) {
-        NSLog(@<span class="string">"Fail to save: %@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> false;
-    }
-<span class="preprocessor">#endif</span>
-    <span class="keyword">return</span> true;
-}
-<span class="keyword">@end</span>
-</pre>
-
-
-更具体细节的东西，比如 Predicates、搜索结果的缓存，可以需要的时候再细查
-了，有了重要概念、框架的支撑，往下往细里面走就好办了吧。
-
-</p>
-
-<p>
-明天玩玩新的东西。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>NSThread、''''NSRunLoop、GCD、__block</title>
-      <guid>http://suchang.net/blog/2014-12.html#p3</guid>
-      <pubDate>2014-12-24T15:29:33+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-因为想求职 Objective-C 开发的原因，被问到了一些很基础的问题，而我做 iOS
-App 已经是一年以前的事情，且也没有那么系统地学习过，所以就慢慢把这些补齐。
-
-</p>
-
-<p>
-我是从 POSIX 的 pthread 入门了解多线程的，用过 mutex 这些临界区保护的方
-法，对于 Mac Objective-C 这边的多线程，对应的是 NSThread。
-
-</p>
-
-<p>
-建立多线程是为了同步做一些事情，不影响界面的响应等等，这些事情要么是纯计
-算的，要么是各种事件的处理，对于这些事件的检测以及处理，Objective-C 是放
-到 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 里面去的，感觉跟满足了 select 以及 epoll 条件下的大括号块差
-不多吧。
-
-</p>
-
-<p>
-<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 就是一个内部循环的结构，一定是从属于某个线程的，要么是属于主线
-程，要么是属于自己创建的线程。
-
-</p>
-
-<p>
-下面的例子是建立了一个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 响应一秒一次的 NSTimer，这个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a>
-是跑在一个单独的线程（非主线程）里的。
-
-</p>
-
-<pre class="source">- (<span class="type">void</span>)<span class="function-name">timer_entry</span>:(<span class="type">NSTimer</span>*)<span class="variable-name">t</span>
-{
-    NSLog(@<span class="string">"timer is main thread %d"</span>, [<span class="type">NSThread</span> isMainThread]);
-}
-
-<span class="keyword">static</span> <span class="type">int</span> <span class="variable-name">_newThreadAborted</span>;
-
-- (<span class="type">void</span>)<span class="function-name">thread_entry</span>:(<span class="type">id</span>)<span class="variable-name">param</span>
-{
-    NSLog(<span class="variable-name">@</span><span class="string">"enter thread"</span>);
-    @autoreleasepool {
-        <span class="type">NSTimer</span> *<span class="variable-name">t</span> = [<span class="type">NSTimer</span> timerWithTimeInterval:1
-                                              target:<span class="keyword">self</span>
-                                            selector:<span class="keyword">@selector</span>(timer_entry:)
-                                            userInfo:<span class="constant">nil</span>
-                                             repeats:<span class="constant">YES</span>];
-        <span class="type">NSRunLoop</span> *<span class="variable-name">r</span> = [<span class="type">NSRunLoop</span> currentRunLoop];
-        [r addTimer:t forMode:NSDefaultRunLoopMode];
-        <span class="keyword">while</span> (<span class="negation-char">!</span>_newThreadAborted) {
-            [r runMode:NSDefaultRunLoopMode beforeDate:[<span class="type">NSDate</span> distantFuture]];
-            NSLog(@<span class="string">"should not reach here until loop ending"</span>);
-        }
-        NSLog(@<span class="string">"thread aborted"</span>);
-    }
-}
-
-- (<span class="type">void</span>)<span class="function-name">applicationDidFinishLaunching</span>:(<span class="type">NSNotification</span> *)<span class="variable-name">aNotification</span> {
-    <span class="comment-delimiter">// </span><span class="comment">Insert code here to initialize your application
-</span>    
-    NSLog(@<span class="string">"is main thread %d"</span>, [<span class="type">NSThread</span> isMainThread]);
-    
-    <span class="type">NSThread</span> *<span class="variable-name">t</span> = [[<span class="type">NSThread</span> alloc] initWithTarget:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(thread_entry:) object:<span class="constant">nil</span>];
-    [t start];
-}
-</pre>
-
-
-上面的例子 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 添加了一个 NSTimer 事件源，同样的可以添加其他的事件
-源，比如鼠标、键盘的，这样就可以在某个线程的 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 里面处理具体的事
-情了，且不影响主线程。
-
-</p>
-
-<p>
-如果 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 里面 while 了一个死循环，这个线程就做不了其他事情了。如果
-这个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 是在主线程里面，界面就会卡住，一个 NSThread 里面只能有一
-个 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a>，新建立的线程会在调用获取 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 的时候创建。
-
-</p>
-
-<p>
-而 GCD （Grand Central Dispatch） 我觉得中文网络上面的信息挺不错的，也许
-也是因为自己之前已经使用了不少了吧，也因为使用的简单，所以当时的项目里面
-也让我不需要去关注 NSThread 跟 <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSRunLoop</a> 了。
-
-</p>
-
-<p>
-具体的使用其实就是构建一个闭包函数，跟 Lua 里面的闭包效果一样，所以这样
-的函数也可以作为值传递了。
-
-</p>
-
-<p>
-比较需要注意的是栈上的闭包函数与堆上的闭包函数的区别，其生命周期是不一样
-的。
-
-</p>
-
-<p>
-另外就是闭包内部访问外部的变量值，若是栈上的变量，则是取建立闭包时的值，
-若无 __block 修饰，则是建立闭包函数时拷贝到闭包结构里面的值，这个变量在
-闭包内部与外部已经没有文法上的联系了，具体表现就是闭包内部修改不影响外面
-的变量，外部的修改不影响闭包内部同名的变量。
-
-</p>
-
-<p>
-若加了 __block 修饰，则在文法上面，两者是联系在一起的，闭包内部以及上下
-文可以访问到的地方都可以修改，具体的存储地址呢则看闭包是放在栈上还是堆上
-了，也就是这个变量实际是跟随闭包的变量。
-
-</p>
-
-<p>
-对了，其实还有全局区的闭包，我觉得只要区别不是栈上的闭包就好了。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>OpenGL 3.3 under MacOS (2)</title>
-      <guid>http://suchang.net/blog/2014-12.html#p2</guid>
-      <pubDate>2014-12-10T21:47:14+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-终于查明原因了，并不是 GLFW 不堪用的问题，而是需要在 glGenBuffers 之前，
-先跑下面：
-
-</p>
-
-<pre class="source">    glGenVertexArrays(1, &amp;vaoHandle);
-    glBindVertexArray(vaoHandle);
-</pre>
-
-
-当然，那些诸如 &#60;Learning Modern 3D Graphics Programming&#62; 的书上面是没有
-这两句代码的。
-
-</p>
-
-<p>
-蛋疼呀。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>OpenGL 3.3 under MacOS</title>
-      <guid>http://suchang.net/blog/2014-12.html#p1</guid>
-      <pubDate>2014-12-09T19:42:30+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-其实我想说的是在黑苹果下的情况，一般阿婆是只打开 OpenGL 2.1 而已的，用
-X11 XQuartz 或者 GLEW，都无法使用 OpenGL 3.3 的，对于我这个初学者来说，
-想从 Modern OpenGL 入门，痛苦不堪。
-
-</p>
-
-<p>
-首先，还是先确认黑苹果在硬件上能够支持的 OpenGL API 版本吧，App Store 上
-下载 OpenGL Extensions Viewer 来确认硬件情况，比如我的是 <a class="nonexistent" href="mailto:suchaaa@gmail.com">GeForce</a> 310，是
-能够支持到 OpenGL 3.3 Core 的。
-
-</p>
-
-<p>
-剩下的就是驱动问题了，谷歌得到的结果是建议用新的 GLFW 而不是 GLUT 或者
-GLEW 来做，GLFW 在 MacOS 下默认也只打开 OpenGL 2.1 而已，听说要这样才能
-打开 3.3 的 Core：
-
-</p>
-
-<pre class="source"><span class="keyword">static</span> <span class="type">void</span> <span class="function-name">using_opengl_version_330</span>(<span class="type">void</span>) {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-}
-</pre>
-
-
-设置完之后，我就按教程走了，但是，又出现了意外的情况，在我的黑苹果上面，
-#version 330 的 shader 源码都编译链接过了，但就是没有显示，窗口里面都是
-黑的。总之 OpenGL 2.1 可以，3.3 就是不行。即便 glClear 颜色显示 OK，loop
-循环也有走。
-
-</p>
-
-<p>
-又不甘心使用 OpenGL 2.1 呢，只好救助于 Apple 原生的系统接口看看了，还好
-谷歌查到了不错的东西 <a href="https://developer.apple.com/library/mac/samplecode/GLEssentials/Introduction/Intro.html">GLEssentials</a>，是官方提供的 Objective-C 使用 OpenGL
-3.3 API 编程的例子。
-
-</p>
-
-<p>
-立马左上角的 "Download Sample Code"，XCode 打开工程瞬间编译完成，看了一
-下接口以及 Shader，确认是使用 OpenGL 3.3 接口无疑，demo 也挺高大上的，果
-然官方的东西就是妥妥的。
-
-</p>
-
-<p>
-之前依靠跨平台各种库、以及过时的库起步，加上黑苹果的原因吧，缓慢起步。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>实践了一个 JPEG 解码器</title>
-      <guid>http://suchang.net/blog/2014-12.html#p0</guid>
-      <pubDate>2014-12-01T22:53:41+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-为了更好地了解 JPEG 的解码过程，实践了一个 JPEG 解码器，放到个人 github
-上面了，<a href="http://github.com/lalawue/jpeg_dec">http://github.com/lalawue/jpeg_dec</a>.
-
-</p>
-
-<p>
-参考了不少中英文资料，更多的是中文的，marker 的部分倒是看了 itu-81 的图表。
-
-</p>
-
-<p>
-不需要用 shadowsocks 翻墙技能，仅靠百度到的中文博客歪歪斜斜排版杂乱不堪
-的文章，其实也能从无到有实践一个 JPEG 解码器。
-
-</p>
-
-<p>
-也参考了不少 nanojpeg 的代码以及处理流程，最复杂的部分，在我看来是霍夫曼
-编码的生成，是自己理解得不好，数据结构课上面的霍夫曼编码部分忘得差不多了。
-
-</p>
-
-<p>
-而 nanojpeg 包括 public domain 的 c++ jpegd 实现的霍夫曼码，其生成我感觉
-都不明晰，所以花了不少时间。这个部分倒是中文的某些博客写得很清楚，虽然这
-些博客其实也是不知道从哪里抄的（未必是博主第一手资料，且有些还无来源）。
-
-</p>
-
-<p>
-实现了霍夫曼表后，接下来的困难是 IDCT 的部分，看了几个解码库的，包括
-libjpeg 的，README 里面写得明明白白：
-
-</p>
-
-<pre>
-If you think that you know about DCT-based JPEG after reading this book,
-then you are in delusion.
-</pre>
-
-<p>
-所以就不琢磨了，说不好都是优化过的代码，调试出来的，不是给人看的，这部分
-直接来自 nanojpeg，是一个整型使用位移调整精度的 IDCT 算法，传说的 AA&N
-算法，如 libjpeg 里面的，没有看得很明白，其实 jpgd c++ 用的跟 libjpeg 一
-样，有用到浮点就是。
-
-</p>
-
-<p>
-然后是一些细节问题，估计看 ITU-81 里面也难看得明白，比如霍夫曼的 VLC 部
-分其实我是根据 nanojpeg 的输出比对排错的、IDCT 的部分也是；还有读到
-0xffd9 后补齐 bits 的问题，都补 binary 1；以及每个 component 的 dc
-restart interval 问题等等。
-
-</p>
-
-<p>
-八卦一下，Mac 下面预览导出的 jpeg 图片，霍夫曼表是一个 DHT segment 带一
-个的，PS 则是一个 DHT segment 带多个的。
-
-</p>
-
-<p>
-前人也总结了太多有关 JPEG 结构、解码所需要的知识，这里不重复了，评论下看
-到的一些源码吧。
-
-</p>
-
-<p>
-首先目前自己实现的是一个仅支持 Baseline DCT、H1V1 chroma sampling、<a class="nonexistent" href="mailto:suchaaa@gmail.com">YCbCr</a>
-色彩的 JPEG decoder。其实绝大部分的 JPEG 都是 Baseline、H1V1 的，Gray
-Scale 其实要比 <a class="nonexistent" href="mailto:suchaaa@gmail.com">YCbCr</a> 的简单，再看看后续要不要加上。
-
-</p>
-
-<p>
-nanojpeg 为了实现的简单，资源都全部先申请，包括输出的图片缓冲，亮点是为
-了霍夫曼解码的方便，每个霍夫曼表开了个 1^16 条目的数组，将最多 256 个实
-际变长码 map 到里面去，这种 LUT 的时间效率没得说了，它自己也介绍说解码时
-间上面只比 libjpeg 慢一点点（不支持多线程）。不过空间使用率到了这个地步，
-为啥不像下面的解码库一样，对 YUV 转 RGB 也先做 LUT 呢。
-
-</p>
-
-<p>
-而 jpgd c++ 是个 public domain 的解码库，看了一下作者，之前在 Valve 呢，
-现在项目合并到了 JPEG encoder 里面去，最后的更新是 2012 年的。其霍夫曼变
-长码是将常用的长度小于 8 bits 的 VLC map 到一个 1^8 的空间里面去，剩下的
-放到一个 512 大小的空间里面进行二次查询，两个 LUT 加上一个顺序查找的空间
-（应该是顺序查找的吧，命名为 tree 的）。
-
-</p>
-
-<p>
-小于 7 bits 的变长码，一次 lookup 就可以定位，超过 7 bits，则需要一个个
-bits 来顺序检测并跳转查找了。
-
-</p>
-
-<p>
-jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个空间消耗很
-小，比 nanojpeg 丧心病狂的 1^16 LUT 空间少了 N 个数量级，且效率很显著，
-特别是当图片变大，像素越来越多的时候。
-
-</p>
-
-<p>
-后续有时间，我也想弄一个稍微改进点的霍夫曼变长码检测方法、以及 YUV 转RGB
-的 LUT，目前霍夫曼编码部分是完全按照位数长度从小到大顺序检测的，非常非常
-耗时，只是作为一个样例来理解的话，倒还好。
+不过呢，新建的 heap 多大才有用而又不至于浪费，那就又是另外一回事了，以及
+这个接口如何提供的问题，这个想法还得斟酌一下。
 
 </p>
 
