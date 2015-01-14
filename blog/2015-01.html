@@ -20,6 +20,73 @@
       <div id="text">
 	<h1>Sucha's Blog ~ Archive for January, 2015</h1>
 	<!-- Page published by Emacs Wiki begins here -->
+<h2><a id="p1">15年1月15日 周四 01:34</a></h2>
+
+<h3>获取默认网卡的 IP 地址</h3>
+
+<p>
+目前在做一个简单的服务端程序，需要客户端发现服务端的 IP 地址，然后请求链
+接。发现部分是用 UDP 的广播来做了，但是服务端获取 IP 地址部分，遇到了问
+题。
+
+</p>
+
+<p>
+服务端里面 TCP bind 时，地址是可以为 INADDR_ANY 的，意味着不管是哪个网络
+过来的数据，只要路由到系统，端口对应上，我的服务端程序就可以 accept。看
+起来美好，但是流程上走不通，这时候程序其实是不知道 IP 包是从哪个网卡过来
+的，所以即便接收到了客户端的 UDP 广播请求，也仍然无法发送可以连接的 IP
+地址给客户端，因为从系统里面获取地址的 getsockname() 获取的其实是之前
+bind 的地址，也就是 &#34;0.0.0.0&#34;。
+
+</p>
+
+<p>
+路由都已经通了，但却无法获取路由过的网卡 IP 地址。如果这一切都只能通过之
+前的 bind 来显式地指定只接收某个网络过来的包，确实是太折腾了。
+
+</p>
+
+<p>
+简单点，不如就是用系统默认网卡的 IP 地址好了，至少系统保证这个是最为可用
+的地址。
+
+</p>
+
+<p>
+MacOS 下获取系统网络设备名称以及地址跟 Linux 下的相似，都是 getifaddrs()，
+搜到了一篇中文介绍；然后获取系统默认网卡的信息，我是从 stackoverflow 上
+面搜到的。
+
+</p>
+
+<ul>
+<li><a href="http://www.cnblogs.com/sammei/p/3955679.html">getifaddrs</a>
+</li>
+<li><a href="http://stackoverflow.com/questions/4872196/how-to-get-the-wifi-gateway-address-on-the-iphone">How&#32;to&#32;get&#32;the&#32;WIFI&#32;gateway&#32;address&#32;on&#32;the&#32;iPhone?</a>
+</li>
+</ul>
+
+<p>
+这样，bind 的时候仍然可以为 INADDR_ANY，客户端 UDP 广播请求的时候，服务
+端大方发送可连接的 IP 地址。扯远点，复杂点的情况，多个网卡，多个异构网络，
+服务端可以根据具体的请求发送不同的 IP 地址，只要能路由过来，都可以
+accept。
+
+</p>
+
+<p>
+大概就是这个意思了吧。
+
+</p>
+
+<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-01.html#p1">Permalink</a> </h4>
+
+<p>
+<!-- date: 2015-01-15T01:34:41+0800 -->
+
+</p>
+
 <h2><a id="p0">15年1月3日 周六 11:19</a></h2>
 
 <h3>HTTP Downloader</h3>
@@ -116,7 +183,7 @@ cstring 过来的对象，因为本身 cstring 空间是不用释放的，这时
       </ul>
 
       <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>January 2015</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td><a title="HTTP Downloader" href="2015-01.html#p0">3</a></td></tr><tr><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr><tr><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr><tr><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr><tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
+      <div class="calendar"><table><caption>January 2015</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td><a title="HTTP Downloader" href="2015-01.html#p0">3</a></td></tr><tr><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr><tr><td>11</td><td>12</td><td>13</td><td>14</td><td><a title="获取默认网卡的 IP 地址" href="2015-01.html#p1">15</a></td><td>16</td><td>17</td></tr><tr><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr><tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
 
       <p class="header">Search</p><!-- Google Search -->
       <form id="searchform" method="get"
