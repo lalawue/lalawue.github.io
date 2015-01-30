@@ -9,10 +9,46 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Thu, 15 Jan 2015 01:56:42 +0800</pubDate>
+    <pubDate>Fri, 30 Jan 2015 12:48:29 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
+
+    <item>
+      <title>有关 GLFW</title>
+      <guid>http://suchang.net/blog/2015-01.html#p2</guid>
+      <pubDate>2015-01-30T12:42:25+0800</pubDate>
+      <dc:creator>sucha</dc:creator>
+      <category>CategoryProgramming</category>
+      <description><![CDATA[<p>
+这段时间做的项目是使用 GLFW 来做跨平台的播放器，大体上框架已经好了，音视
+频也同步了，大概花了快两周时间，然后也是今天才知道 cocos2dx 3.x 系列是用
+glfw 来做 opengl 窗口管理的，我是没有继续深究了，不过因为看到这个，忽然
+有种我选得没错的感觉。
+
+</p>
+
+<p>
+GLFW 横跨 Mac/Win/Linux 三个平台，提供基于 OpenGL 渲染窗口，消息机制，这
+点很不错，大体上统一了三个平台基础 OpenGL 的创建，销毁，以及鼠标、键盘消
+息。
+
+</p>
+
+<p>
+我之前因为想学习 OpenGL，看到的很多国内教程都是 glut 来入门，而且还是
+OpenGL 2.x 系列的 API，实际上，现在都已经是 3.x 系列的 API 了，当然系统
+总是向下兼容的，老的 API 也能用就是。
+
+</p>
+
+<p>
+若是现在开始涉及到桌面 OpenGL 部分的，强烈推荐呀。
+
+</p>
+
+]]></description>
+    </item>
 
     <item>
       <title>获取默认网卡的 IP 地址</title>
