@@ -20,6 +20,64 @@
       <div id="text">
 	<h1>Sucha's Blog ~ Welcome</h1>
 	<!-- Page published by Emacs Wiki begins here -->
+<h2>15年2月28日 周六 23:44</h2>
+
+<h3>IUP & vs2012</h3>
+
+<p>
+过年在家搭建了 app 的 win 服务端，create install 免费版打包，已经可以使
+用了。
+
+</p>
+
+<p>
+架构方面，两个程序组成，都是 win32 api，不需要依赖 dot net。
+
+</p>
+
+<p>
+网上抄的一个 win32 任务栏图标代码，在此基础上加入了之前的跨平台服务端线
+程，就跑起来了。
+
+</p>
+
+<p>
+设置界面用的是 IUP 界面库，一个支持 win、gtk、motif 的框架，事件驱动，要
+比基础的 win32 gdi 编程好太多，而又不需要依赖 dot net。
+
+</p>
+
+<p>
+之前为了 IPC 通信，还尝试使用了 mail slot，不过当时我的架构不是很好，出
+了不少问题，最后也没有继续用下来去，而是直接 findwindow，通过标题栏、
+class name 匹配，然后 post message 来通信，感觉也足够了。
+
+</p>
+
+<p>
+学习使用 iup 也花了一些时间，相比之下，为了让 vs2012 支持 xp 而弄的各种
+调试，简直让人吐血。
+
+</p>
+
+<p>
+后来我是放弃了 vs2012，改用 vs2010，xp 可是不能放弃的。vs2010 还必须安装
+sp1 才行，否则编译下来各种问题，即便是 sp1，也不是每次编译都能顺利通过。
+
+</p>
+
+<p>
+一个 sp1 补丁包就 1.5G，也够吐血的。
+
+</p>
+
+<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-02.html#p1">Permalink</a> </h4>
+
+<p>
+<!-- date: 2015-02-28T23:44:09+0800 -->
+
+</p>
+
 <h2>15年2月14日 周六 00:38</h2>
 
 <h3>[iOS] dispatch_after</h3>
@@ -888,131 +946,6 @@ GLEW 来做，GLFW 在 MacOS 下默认也只打开 OpenGL 2.1 而已，听说要
 
 </p>
 
-<h2>14年12月1日 周一 22:53</h2>
-
-<h3>实践了一个 JPEG 解码器</h3>
-
-<p>
-为了更好地了解 JPEG 的解码过程，实践了一个 JPEG 解码器，放到个人 github
-上面了，<a href="http://github.com/lalawue/jpeg_dec">http://github.com/lalawue/jpeg_dec</a>.
-
-</p>
-
-<p>
-参考了不少中英文资料，更多的是中文的，marker 的部分倒是看了 itu-81 的图表。
-
-</p>
-
-<p>
-不需要用 shadowsocks 翻墙技能，仅靠百度到的中文博客歪歪斜斜排版杂乱不堪
-的文章，其实也能从无到有实践一个 JPEG 解码器。
-
-</p>
-
-<p>
-也参考了不少 nanojpeg 的代码以及处理流程，最复杂的部分，在我看来是霍夫曼
-编码的生成，是自己理解得不好，数据结构课上面的霍夫曼编码部分忘得差不多了。
-
-</p>
-
-<p>
-而 nanojpeg 包括 public domain 的 c++ jpegd 实现的霍夫曼码，其生成我感觉
-都不明晰，所以花了不少时间。这个部分倒是中文的某些博客写得很清楚，虽然这
-些博客其实也是不知道从哪里抄的（未必是博主第一手资料，且有些还无来源）。
-
-</p>
-
-<p>
-实现了霍夫曼表后，接下来的困难是 IDCT 的部分，看了几个解码库的，包括
-libjpeg 的，README 里面写得明明白白：
-
-</p>
-
-<pre>
-If you think that you know about DCT-based JPEG after reading this book,
-then you are in delusion.
-</pre>
-
-<p>
-所以就不琢磨了，说不好都是优化过的代码，调试出来的，不是给人看的，这部分
-直接来自 nanojpeg，是一个整型使用位移调整精度的 IDCT 算法，传说的 AA&N
-算法，如 libjpeg 里面的，没有看得很明白，其实 jpgd c++ 用的跟 libjpeg 一
-样，有用到浮点就是。
-
-</p>
-
-<p>
-然后是一些细节问题，估计看 ITU-81 里面也难看得明白，比如霍夫曼的 VLC 部
-分其实我是根据 nanojpeg 的输出比对排错的、IDCT 的部分也是；还有读到
-0xffd9 后补齐 bits 的问题，都补 binary 1；以及每个 component 的 dc
-restart interval 问题等等。
-
-</p>
-
-<p>
-八卦一下，Mac 下面预览导出的 jpeg 图片，霍夫曼表是一个 DHT segment 带一
-个的，PS 则是一个 DHT segment 带多个的。
-
-</p>
-
-<p>
-前人也总结了太多有关 JPEG 结构、解码所需要的知识，这里不重复了，评论下看
-到的一些源码吧。
-
-</p>
-
-<p>
-首先目前自己实现的是一个仅支持 Baseline DCT、H1V1 chroma sampling、YCbCr
-色彩的 JPEG decoder。其实绝大部分的 JPEG 都是 Baseline、H1V1 的，Gray
-Scale 其实要比 YCbCr 的简单，再看看后续要不要加上。
-
-</p>
-
-<p>
-nanojpeg 为了实现的简单，资源都全部先申请，包括输出的图片缓冲，亮点是为
-了霍夫曼解码的方便，每个霍夫曼表开了个 1^16 条目的数组，将最多 256 个实
-际变长码 map 到里面去，这种 LUT 的时间效率没得说了，它自己也介绍说解码时
-间上面只比 libjpeg 慢一点点（不支持多线程）。不过空间使用率到了这个地步，
-为啥不像下面的解码库一样，对 YUV 转 RGB 也先做 LUT 呢。
-
-</p>
-
-<p>
-而 jpgd c++ 是个 public domain 的解码库，看了一下作者，之前在 Valve 呢，
-现在项目合并到了 JPEG encoder 里面去，最后的更新是 2012 年的。其霍夫曼变
-长码是将常用的长度小于 8 bits 的 VLC map 到一个 1^8 的空间里面去，剩下的
-放到一个 512 大小的空间里面进行二次查询，两个 LUT 加上一个顺序查找的空间
-（应该是顺序查找的吧，命名为 tree 的）。
-
-</p>
-
-<p>
-小于 7 bits 的变长码，一次 lookup 就可以定位，超过 7 bits，则需要一个个
-bits 来顺序检测并跳转查找了。
-
-</p>
-
-<p>
-jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个空间消耗很
-小，比 nanojpeg 丧心病狂的 1^16 LUT 空间少了 N 个数量级，且效率很显著，
-特别是当图片变大，像素越来越多的时候。
-
-</p>
-
-<p>
-后续有时间，我也想弄一个稍微改进点的霍夫曼变长码检测方法、以及 YUV 转RGB
-的 LUT，目前霍夫曼编码部分是完全按照位数长度从小到大顺序检测的，非常非常
-耗时，只是作为一个样例来理解的话，倒还好。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p0">Permalink</a></h4>
-
-<p>
-<!-- date: 2014-12-01T22:53:41+0800 -->
-
-</p>
-
 <!-- Page published by Emacs Wiki ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -1030,7 +963,7 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
       </ul>
 
       <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>February 2015</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr><tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td><a title="[iOS] dispatch_after" href="2015-02.html#p0">14</a></td></tr><tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr><tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr></table></div>
+      <div class="calendar"><table><caption>February 2015</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr><tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td><a title="[iOS] dispatch_after" href="2015-02.html#p0">14</a></td></tr><tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr><tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td><a title="IUP & vs2012" href="2015-02.html#p1">28</a></td></tr></table></div>
 
       <p class="header">Search</p><!-- Google Search -->
       <form id="searchform" method="get"
