@@ -58,14 +58,14 @@
 
 <p>
 说一下我要的效果，table view cell 里面放多张方形图片，portrait 跟
-<table class="ewiki-table" border="2" cellpadding="5">
-<tbody>
-<tr>
-<td>landscape 下布局不一样，前者 space</td><td>image</td><td>space</td><td>image</td><td>fixed space，</td>
-</tr>
-</tbody>
-</table>
+landscape 下布局不一样，前者是
 
+</p>
+
+<pre class="example">space | image | space | image | fixed space
+</pre>
+
+<p>
 后者是三个 image，而且我还考虑 6p 下面多加一个 image。如果我选择 xib，不
 是累死。
 
@@ -141,126 +141,72 @@ UIView 了，可以直接指定了。
 
 </p>
 
-<p>
-<code type="objc">
-// formula as 'width == width'
-static <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutConstraint</a>*
-_lcItemRel(UIView *v1, NSString *formula, UIView *v2, float ratio, float constant) {
-    static NSDictionary *attrValueForName = nil;
-    static dispatch_once_t attrOnceToken;
-    dispatch_once(&attrOnceToken, ^{
+<pre class="source"><span class="comment-delimiter">// </span><span class="comment">formula as 'width == width'
+</span><span class="keyword">static</span> <span class="type">NSLayoutConstraint</span>*
+<span class="function-name">_lcItemRel</span>(<span class="type">UIView</span> *<span class="variable-name">v1</span>, <span class="type">NSString</span> *<span class="variable-name">formula</span>, <span class="type">UIView</span> *<span class="variable-name">v2</span>, <span class="type">float</span> <span class="variable-name">ratio</span>, <span class="type">float</span> <span class="variable-name">constant</span>) {
+    <span class="keyword">static</span> <span class="type">NSDictionary</span> *<span class="variable-name">attrValueForName</span> = <span class="constant">nil</span>;
+    <span class="keyword">static</span> <span class="type">dispatch_once_t</span> <span class="variable-name">attrOnceToken</span>;
+    dispatch_once(&amp;attrOnceToken, ^{
         attrValueForName =
         @{
-          @"left":      @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeLeft</a>),
-          @"right":     @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeRight</a>),
-          @"top":       @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeTop</a>),
-          @"bottom":    @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeBottom</a>),
-          @"leading":   @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeLeading</a>),
-          @"trailing":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeTrailing</a>),
-          @"width":     @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeWidth</a>),
-          @"height":    @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeHeight</a>),
-          @"centerX":   @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeCenter</a>X),
-          @"centerY":   @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeCenter</a>Y),
-          @"baseline":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeBaseline</a>),
+          @<span class="string">"left"</span>:      @(NSLayoutAttributeLeft),
+          @<span class="string">"right"</span>:     @(NSLayoutAttributeRight),
+          @<span class="string">"top"</span>:       @(NSLayoutAttributeTop),
+          @<span class="string">"bottom"</span>:    @(NSLayoutAttributeBottom),
+          @<span class="string">"leading"</span>:   @(NSLayoutAttributeLeading),
+          @<span class="string">"trailing"</span>:  @(NSLayoutAttributeTrailing),
+          @<span class="string">"width"</span>:     @(NSLayoutAttributeWidth),
+          @<span class="string">"height"</span>:    @(NSLayoutAttributeHeight),
+          @<span class="string">"centerX"</span>:   @(NSLayoutAttributeCenterX),
+          @<span class="string">"centerY"</span>:   @(NSLayoutAttributeCenterY),
+          @<span class="string">"baseline"</span>:  @(NSLayoutAttributeBaseline),
           };
-<blockquote>
-<p>
     });
-
-</p>
-</blockquote>
-
-<p>
-    static NSDictionary *relationValueForName = nil;
-    static dispatch_once_t relationOnceToken;
-    dispatch_once(&relationOnceToken, ^{
+    
+    <span class="keyword">static</span> <span class="type">NSDictionary</span> *<span class="variable-name">relationValueForName</span> = <span class="constant">nil</span>;
+    <span class="keyword">static</span> <span class="type">dispatch_once_t</span> <span class="variable-name">relationOnceToken</span>;
+    dispatch_once(&amp;relationOnceToken, ^{
         relationValueForName =
         @{
-          @"==":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelationEqual</a>),
-          @">=":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelationGreaterThanOrEqual</a>),
-          @"<=":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelationLessThanOrEqual</a>),
+          @<span class="string">"=="</span>:  @(NSLayoutRelationEqual),
+          @<span class="string">"&gt;="</span>:  @(NSLayoutRelationGreaterThanOrEqual),
+          @<span class="string">"&lt;="</span>:  @(NSLayoutRelationLessThanOrEqual),
           };
-<blockquote>
-<p>
     });
-
-</p>
-</blockquote>
-
-<blockquote>
-<p>
-    NSArray *kv = [formula componentsSeparatedByString:@" "];
-
-</p>
-</blockquote>
-
-<p>
-    <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttribute</a> a1, a2;
-<blockquote>
-<p>
-    <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelation</a> r;
-
-</p>
-</blockquote>
-
-<table class="ewiki-table" border="2" cellpadding="5">
-<thead>
-<tr>
-<th>if (kv[0]==nil</th><th>kv<sup><a id="fnr.1" href="#fn.1">1</a></sup>==nil</th><th>kv<sup><a id="fnr.2" href="#fn.2">2</a></sup>==nil) {</th>
-</tr>
-</thead>
-</table>
-
-        return nil;
-<blockquote>
-<p>
+    
+    <span class="type">NSArray</span> *<span class="variable-name">kv</span> = [formula componentsSeparatedByString:@<span class="string">" "</span>];
+    
+    <span class="type">NSLayoutAttribute</span> <span class="variable-name">a1</span>, <span class="variable-name">a2</span>;
+    <span class="type">NSLayoutRelation</span> <span class="variable-name">r</span>;
+    
+    <span class="keyword">if</span> (kv[0]==<span class="constant">nil</span> || kv[1]==<span class="constant">nil</span> || kv[2]==<span class="constant">nil</span>) {
+        <span class="keyword">return</span> <span class="constant">nil</span>;
     }
+    
+    a1 = (NSLayoutAttribute)[((<span class="type">NSNumber</span>*)attrValueForName[kv[0]]) integerValue];
+    a2 = (NSLayoutAttribute)[((<span class="type">NSNumber</span>*)attrValueForName[kv[2]]) integerValue];
+    r = (NSLayoutRelation)[((<span class="type">NSNumber</span>*)relationValueForName[kv[1]]) integerValue];
 
-</p>
-</blockquote>
-
-<p>
-    a1 = (<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttribute</a>)[((NSNumber*)attrValueForName[kv[0]]) integerValue];
-    a2 = (<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttribute</a>)[((NSNumber*)attrValueForName[kv<sup><a id="fnr.2" href="#fn.2">2</a></sup>]) integerValue];
-<blockquote>
-<p>
-    r = (<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelation</a>)[((NSNumber*)relationValueForName[kv<sup><a id="fnr.1" href="#fn.1">1</a></sup>]) integerValue];
-
-</p>
-</blockquote>
-
-<p>
-    return [<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutConstraint</a> constraintWithItem:v1
+    <span class="keyword">return</span> [<span class="type">NSLayoutConstraint</span> constraintWithItem:v1
                                         attribute:a1
                                         relatedBy:r
                                            toItem:v2
                                         attribute:a2
                                        multiplier:ratio
-<center>
-<p>
                                          constant:constant];
 }
 
-</p>
-</center>
-
-<p>
-static NSArray*
-_lcAryOfVFL(NSString *formula, <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutFormatOptions</a> opt, NSDictionary *metric, NSDictionary *views) {
-    return [<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutConstraint</a>
+<span class="keyword">static</span> <span class="type">NSArray</span>*
+<span class="function-name">_lcAryOfVFL</span>(<span class="type">NSString</span> *<span class="variable-name">formula</span>, <span class="type">NSLayoutFormatOptions</span> <span class="variable-name">opt</span>, <span class="type">NSDictionary</span> *<span class="variable-name">metric</span>, <span class="type">NSDictionary</span> *<span class="variable-name">views</span>) {
+    <span class="keyword">return</span> [<span class="type">NSLayoutConstraint</span>
             constraintsWithVisualFormat:formula
             options:opt
             metrics:metric
-<center>
-<p>
             views:views];
 }
-</code>
+</pre>
 
-</p>
-</center>
 
-<p>
 gist 地址，<a href="https://gist.github.com/lalawue/430102f68327fe302964">https://gist.github.com/lalawue/430102f68327fe302964</a>, 请自备
 梯子。（最后又发现了个不错的 <a href="https://github.com/floriankugler/FLKAutoLayout">FLKAutoLayout</a>，不过没用过，具体就不知道了)
 
