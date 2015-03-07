@@ -9,61 +9,256 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Sat, 28 Feb 2015 23:53:02 +0800</pubDate>
+    <pubDate>Sun, 08 Mar 2015 00:42:34 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>IUP & vs2012</title>
-      <guid>http://suchang.net/blog/2015-02.html#p1</guid>
-      <pubDate>2015-02-28T23:44:09+0800</pubDate>
+      <title>[iOS] 被逼的 VFL</title>
+      <guid>http://suchang.net/blog/2015-03.html#p1</guid>
+      <pubDate>2015-03-07T23:41:59+0800</pubDate>
       <dc:creator>sucha</dc:creator>
       <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-过年在家搭建了 app 的 win 服务端，create install 免费版打包，已经可以使
-用了。
+把几年前的 app demo 搬出来，当年还没有 5、5s、6、6p 的时候，界面的布局是
+简单的，可是这两年 duang 一下出来了这么多新机器，现在 iOS 下屏幕分辨率的
+分裂程度也是让人目瞪口呆。
 
 </p>
 
 <p>
-架构方面，两个程序组成，都是 win32 api，不需要依赖 dot net。
+当年一个控件 xib 就可以横行天下，5、5s 出来后有些控件不得不加了一个 xib，
+6、6p 出来后，我想我有时是拒绝使用 xib 了，妹的 6 跟 6p 的分辨率都没什么
+关联嘛。
 
 </p>
 
 <p>
-网上抄的一个 win32 任务栏图标代码，在此基础上加入了之前的跨平台服务端线
-程，就跑起来了。
+官方的说法 5、5s、6 都是 2x，6p 是 3x，并且为动态的控件还加了 autosize，
+可这玩意儿我不懂用。
 
 </p>
 
 <p>
-设置界面用的是 IUP 界面库，一个支持 win、gtk、motif 的框架，事件驱动，要
-比基础的 win32 gdi 编程好太多，而又不需要依赖 dot net。
+学着在 xib 里面使用 constraints，总是达不到自己想要的效果，折腾了好久好
+久，腰酸背痛是真的。
 
 </p>
 
 <p>
-之前为了 IPC 通信，还尝试使用了 mail slot，不过当时我的架构不是很好，出
-了不少问题，最后也没有继续用下来去，而是直接 findwindow，通过标题栏、
-class name 匹配，然后 post message 来通信，感觉也足够了。
+看了一下官方那一页 VFL，第一次感觉到不知所云。于是上 github 找替代品，比
+如 <a class="nonexistent" href="mailto:suchaaa@gmail.com">PureLayout</a>，用了一下，使用上有些限制，且效果仍然不是我想要的。
 
 </p>
 
 <p>
-学习使用 iup 也花了一些时间，相比之下，为了让 vs2012 支持 xp 而弄的各种
-调试，简直让人吐血。
+说一下我要的效果，table view cell 里面放多张方形图片，portrait 跟
+<table class="ewiki-table" border="2" cellpadding="5">
+<tbody>
+<tr>
+<td>landscape 下布局不一样，前者 space</td><td>image</td><td>space</td><td>image</td><td>fixed space，</td>
+</tr>
+</tbody>
+</table>
+
+后者是三个 image，而且我还考虑 6p 下面多加一个 image。如果我选择 xib，不
+是累死。
 
 </p>
 
 <p>
-后来我是放弃了 vs2012，改用 vs2010，xp 可是不能放弃的。vs2010 还必须安装
-sp1 才行，否则编译下来各种问题，即便是 sp1，也不是每次编译都能顺利通过。
+即便 <a class="nonexistent" href="mailto:suchaaa@gmail.com">PureLayout</a>，还需要我指定中间间隔 space 的宽度，可我想这不是需要动态
+计算的吗，如果我能知道这个宽度的值，我都可以自己计算 frame 的大小咯，还
+要constraints 干嘛，我都 specify 了。
 
 </p>
 
 <p>
-一个 sp1 补丁包就 1.5G，也够吐血的。
+我不明白的是，当年 CSS 都可以指定某个标签具体位置的百分比，方位，为啥水
+果的 VFL 不行呢，看起来 <a class="nonexistent" href="mailto:suchaaa@gmail.com">PureLayout</a> 也不好使呀，比如第三个例子，我想要的
+效果还有距离。
+
+</p>
+
+<p>
+于是又 baidu、bing VFL 的资料，官网又硬着头皮看了一下，终于有点开窍了，
+后来发现其实 VFL 是简单的。
+
+</p>
+
+<p>
+它的基础是所有需要动态伸缩的东西，都是一个 UIView（我是这么理解的），所
+有的数值，都是固定的，要么是间隔，要么是相互关系，比如宽是高的两倍。
+
+</p>
+
+<p>
+这就清楚了，其实官方 VFL 里面的 Spacing and Wrapping 举的例子就很清晰了，
+我上面要的效果里面，space 都是 UIView，动态计算就好。
+
+</p>
+
+<p>
+指定三个 image 宽、高相等，三个 image 的宽都相等，多个 space 的宽都相等，
+然后在指定 image 的高度（Y值）就足够了，后面 fix space 就不需要一个
+UIView 了，可以直接指定了。
+
+</p>
+
+<p>
+相比之下，感觉到是 IB 里面的 constraits 反而操作复杂了，而且经常是说限制
+不够，运行又出错什么的。
+
+</p>
+
+<p>
+可是明明二维的坐标，x、y 可以确定的话，那个东西就固定了呀，IB 会有让我找
+不着北的感觉，且里面的 constraints 也不容易看出来，太乱。
+
+</p>
+
+<p>
+相比之下 VFL 就好很多，只是概念不好说清，比如那个 space，我是先入为主，
+觉得为啥不能像 CSS 一样，直接指定 UIView 的位置呢，谁能想到即便官方的文
+档里面，需要动态计算大小的元素，只能是 UIView。
+
+</p>
+
+<p>
+写了一点 VFL 后，github 上又找了 Auto Layout Shorthand，但貌似不是完全的
+映射，它自己封装了一些东西，只能作罢。
+
+</p>
+
+<p>
+所以我也简单封装了自己的一些东西，试用了一个小时，感觉还不错，也放到 gist 上面
+了。
+
+</p>
+
+<p>
+<code type="objc">
+// formula as 'width == width'
+static <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutConstraint</a>*
+_lcItemRel(UIView *v1, NSString *formula, UIView *v2, float ratio, float constant) {
+    static NSDictionary *attrValueForName = nil;
+    static dispatch_once_t attrOnceToken;
+    dispatch_once(&attrOnceToken, ^{
+        attrValueForName =
+        @{
+          @"left":      @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeLeft</a>),
+          @"right":     @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeRight</a>),
+          @"top":       @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeTop</a>),
+          @"bottom":    @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeBottom</a>),
+          @"leading":   @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeLeading</a>),
+          @"trailing":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeTrailing</a>),
+          @"width":     @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeWidth</a>),
+          @"height":    @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeHeight</a>),
+          @"centerX":   @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeCenter</a>X),
+          @"centerY":   @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeCenter</a>Y),
+          @"baseline":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttributeBaseline</a>),
+          };
+<blockquote>
+<p>
+    });
+
+</p>
+</blockquote>
+
+<p>
+    static NSDictionary *relationValueForName = nil;
+    static dispatch_once_t relationOnceToken;
+    dispatch_once(&relationOnceToken, ^{
+        relationValueForName =
+        @{
+          @"==":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelationEqual</a>),
+          @">=":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelationGreaterThanOrEqual</a>),
+          @"<=":  @(<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelationLessThanOrEqual</a>),
+          };
+<blockquote>
+<p>
+    });
+
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+    NSArray *kv = [formula componentsSeparatedByString:@" "];
+
+</p>
+</blockquote>
+
+<p>
+    <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttribute</a> a1, a2;
+<blockquote>
+<p>
+    <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelation</a> r;
+
+</p>
+</blockquote>
+
+<table class="ewiki-table" border="2" cellpadding="5">
+<thead>
+<tr>
+<th>if (kv[0]==nil</th><th>kv<sup><a id="fnr.1" href="#fn.1">1</a></sup>==nil</th><th>kv<sup><a id="fnr.2" href="#fn.2">2</a></sup>==nil) {</th>
+</tr>
+</thead>
+</table>
+
+        return nil;
+<blockquote>
+<p>
+    }
+
+</p>
+</blockquote>
+
+<p>
+    a1 = (<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttribute</a>)[((NSNumber*)attrValueForName[kv[0]]) integerValue];
+    a2 = (<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutAttribute</a>)[((NSNumber*)attrValueForName[kv<sup><a id="fnr.2" href="#fn.2">2</a></sup>]) integerValue];
+<blockquote>
+<p>
+    r = (<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutRelation</a>)[((NSNumber*)relationValueForName[kv<sup><a id="fnr.1" href="#fn.1">1</a></sup>]) integerValue];
+
+</p>
+</blockquote>
+
+<p>
+    return [<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutConstraint</a> constraintWithItem:v1
+                                        attribute:a1
+                                        relatedBy:r
+                                           toItem:v2
+                                        attribute:a2
+                                       multiplier:ratio
+<center>
+<p>
+                                         constant:constant];
+}
+
+</p>
+</center>
+
+<p>
+static NSArray*
+_lcAryOfVFL(NSString *formula, <a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutFormatOptions</a> opt, NSDictionary *metric, NSDictionary *views) {
+    return [<a class="nonexistent" href="mailto:suchaaa@gmail.com">NSLayoutConstraint</a>
+            constraintsWithVisualFormat:formula
+            options:opt
+            metrics:metric
+<center>
+<p>
+            views:views];
+}
+</code>
+
+</p>
+</center>
+
+<p>
+gist 地址，<a href="https://gist.github.com/lalawue/430102f68327fe302964">https://gist.github.com/lalawue/430102f68327fe302964</a>, 请自备
+梯子。（最后又发现了个不错的 <a href="https://github.com/floriankugler/FLKAutoLayout">FLKAutoLayout</a>，不过没用过，具体就不知道了)
 
 </p>
 
@@ -71,63 +266,73 @@ sp1 才行，否则编译下来各种问题，即便是 sp1，也不是每次编
     </item>
 
     <item>
-      <title>[iOS] dispatch_after</title>
-      <guid>http://suchang.net/blog/2015-02.html#p0</guid>
-      <pubDate>2015-02-14T00:38:00+0800</pubDate>
+      <title>播放器使用 OpenAL 需要注意的</title>
+      <guid>http://suchang.net/blog/2015-03.html#p0</guid>
+      <pubDate>2015-03-07T23:22:57+0800</pubDate>
       <dc:creator>sucha</dc:creator>
       <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-忙活的网络播放器有了眉目，音视频同步起来了，之前的问题，在于 audio 播放
-一直很不顺利，总是偶尔会卡，或者嗤嗤地想，我一直单独地认为是 audio 播放
-的问题，或者是 OpenAL 管理 buffer 的问题。
+扯一下写在线视频播放器使用 OpenAL 遇到过的坑吧。
 
 </p>
 
 <p>
-当然后来也发现 OpenAL 的 buffer 管理也是需要注意的，比如建立了 64 个
-buffer，做 streaming，最好是都先全部 queue 上去，再 query 哪些已经
-processed，之后 buffer data，之后再 re queue；而不是先 queue 一部分，
-query 无 processed 之后，queue 新的 buffer，iOS 上面者会造成嗤地噪声，估
-计是 OpenAL 管理的问题。
+由于不涉及到 listener 的位置与加速度，openal 参数的设置是简单的，且仅仅
+只需要一个 source，一定量的 buffer，加上 streaming 的操作。
 
 </p>
 
 <p>
-当然 OpenAL 在我这里还有一些未解决的问题，以后再说吧。
+第一个问题来了，streaming 的操作，多个 buffer，可具体需要多少个呢，这个
+还真不好说。我做过一些边界测试，不过没那么详细，iOS 真机还是模拟器上面，
+总共可以开到 512 个 buffer name，这个数量总该够了吧。
 
 </p>
 
 <p>
-接着说不同步的部分，更多的是时钟不同步造成的，也就是延时。
+或者，buffer 固定数量，自己先缓存一定量再扔进去，这样就解决了 buffer
+name 不够的问题。我这边播放 1M 多的码流，每个 audio packet 大概 8k，可以
+算出来自己需要缓存多少时间。
 
 </p>
 
 <p>
-比如主时钟一般都是 video 管着的，而 video 每一帧时间跨度要比 audio 大多
-了，一秒才小几十帧，每一帧稍微拖延或快一点，其实我们人眼不敏感，而 audio
-呢，普通的 22k 都是差的音频，一般 44.1k，或者 48k，这个时钟相比 video 部
-分就要求很精确了，当然这部分其实都是硬件管着，封装出来的 OpenAL 接口也简
-单，扔 buffer 进去就行。
+第二个问题，其实是 OpenAL 默认的情况，就是 queue 上去的 buffer，播放完毕，
+到达 stop 的状态后，新的 buffer queue 进来，其实仍然是 queue 到这些
+buffer 的后面去，一旦设置成 play 状态，会先播放一遍已经 stop 的旧数据。
 
 </p>
 
 <p>
-问题在于 video 管时钟，video 拖延一点，我们人眼觉得 video 还正常，但是怎
-么 audio 就那么刺耳了呢，其实是 audio 的 buffer 数据跟不上了。
+这个 bug 瞒了我很久，因为我之前的 seek 有些问题，加上 audio cache 又不多，
+现象不明显。
 
 </p>
 
 <p>
-在 iOS 平台上面，是 dispatch_after 等这些延时的函数时间非常不精确，虽然
-是以 nano seconds 为单位的，但是这个单位只是说能够延时的最小单位，而并不
-是精确到这个单位，这两者是有很大区别的。
+这意味每次 queue 新的 buffer 进去之前，把里面的 processed buffer 都给
+unqueue 先才行，这绝壁是个坑啊，哪有 stop 后还赖着不走的。
 
 </p>
 
 <p>
-所以 AV 同步部分就得做很多的时间检测以及补偿，如果是 video 主时钟，就补
-偿 video，并不是为了人眼看得舒服（其实真看不出来），而是为了 audio 能够
-顺利同步，两边的 buffer 都能够平衡。
+第三个问题，processed 后的 buffer name，其实在 C 的操作里面，不好存到已
+有的 buffer 数组里面，得新开一个 free_buffer name 的数组，来存放已经
+processed 的 buffer name，要不然这些 buffer name 会丢失，再想扔新的数据
+时就找不到它了。
+
+</p>
+
+<p>
+如果无论如何都先 queue 完已申请的 buffer name，然后再取 processed 的，就
+能避免这个问题。可这又溶于遇到第二个问题，我就是这么绕进去的。
+
+</p>
+
+<p>
+典型的 API 足够简单，但是使用小别扭的问题。OpenAL 我是参考了 1.1 的
+specification，对于写视频播放器足够了，iOS 上官方说是低阶 API，性能足够，
+且又跨平台，何求？
 
 </p>
 
