@@ -9,353 +9,84 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Mon, 30 Mar 2015 15:23:55 +0800</pubDate>
+    <pubDate>Sat, 09 May 2015 22:34:43 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>升级 Yosemite</title>
-      <guid>http://suchang.net/blog/2015-03.html#p2</guid>
-      <pubDate>2015-03-30T15:10:10+0800</pubDate>
+      <title>入手 HTC One M8</title>
+      <guid>http://suchang.net/blog/2015-05.html#p0</guid>
+      <pubDate>2015-05-09T22:07:05+0800</pubDate>
       <dc:creator>sucha</dc:creator>
-      <category>CategoryLinux</category>
+      <category>CategoryLife</category>
       <description><![CDATA[<p>
-完全就是一次被迫升级。
+五一被母上召唤回家，家里有大件要买，我本想着省钱，还盘算着躲过节前市内的
+拥堵，下班后可以从城市外围一点赶车回家，然后从福永买票，没想到福永的车是
+私人大巴，到站时间非常不确定，车票上写着 20 点开车的，实际报晚点 22 点多
+才到，21 点多的时候来了一位大忽悠，说我们车快来了、车转弯过头了，稳定大
+伙情绪。
 
 </p>
 
 <p>
-事情的开端在于好奇心升级了 iPad Air 到 iOS 8.2，然后有个 APP 要调，偏偏
-Xcode 6.1 的 SDK 不支持 iOS 8.2，然后又是好奇心，下载了个 Xcode 6.3 beta
-2，周日下了整整一天呀，宿舍里宅人太多了，各种抢带宽。
+然后走的什么路，一路堵到广州，半夜都是在大广州过的，又高速绕道梧州，然后
+下岑溪，五一下午近两点才到玉林，我已经吐了 N 遍血，死了好几次了。
 
 </p>
 
 <p>
-到了凌晨才下载完，安装后显示需要 10.10 才能跑，无可奈何。
+回深圳的时候也是折腾，花了 11 个小时，我是不知该庆幸还是郁闷，相比回家的
+那趟。
 
 </p>
 
 <p>
-于是不关机了，通宵 App Store 下载 10.10，我之前升级到 10.9.5 从变色龙到
-Clover，用的是懒人版，其实很多安装设置我是不懂的，我只晓得 i3 2120 + H61
-跑黑苹果没啥问题而已。
+老娘收走了我的 iPad Air，于是我不得不再买一个，本想国行的，然后拗不过省
+钱的心思淘宝了一个港行官修，结果是国行官修，除了淘宝的 cover 不能用遗憾
+退掉外，其他功能方面，用来开发的都正常，对了，貌似之前公司提供的 5c 耳塞
+也没法在这个上面用。
 
 </p>
 
 <p>
-也许 Clover 版本太旧吧，开始安装 10.10 后一直卡在全屏白光，光标变光盘状
-不动。
+然后又想换手机，MX4 跟 M8 犹豫中，两个都摸了实体，后来 M8 胜出的原因是机
+身没那么宽，然后因为是 HTC 的牌子系统比较新鲜不容易见到特别想尝试，又是
+老旗舰系统稳定性加分；MX4 毕竟从未旗舰过，然后配色也偏女性化非常小清新，
+有些不符合哥一路绝尘而去的大叔范。
 
 </p>
 
 <p>
-于是重启进入老系统 10.9.5，下了个 Clover 安装，看了一些小道消息，只是拷
-贝了 EFI 下的 BOOT 和 CLOVER，其实真正的做法是保留 config.plist 用来参考，
-安装 Clover 到系统盘，再配置就好。再原先错误的方式下，系统起不来了，BIOS
-后显示插入 media。
+M8 到手摸到现在各种满意，特别是机身机背、全金属的感觉其他机子现在都看不
+上了，还有那个 400 万的 <a class="nonexistent" href="mailto:suchaaa@gmail.com">UtralPixel</a> 镜头，比我之前的华为 3X 好了无数倍，
+特别是夜景，过时的旗舰毕竟旗舰过，真的是不同各档次的完全不能比，也许晓龙
+801 也是多多少少加分的吧。
 
 </p>
 
 <p>
-手头的 SD 读卡器 + 8G SD 卡这个 H61 主板不认，没法当成启动盘，那个 320G
-的 USB 硬盘也不可以。
+然后之前手握 3X 毫无拍照的意愿，现在是各种新鲜各种跃跃欲试，特别是晚上灯
+火霓虹的时候。
 
 </p>
 
 <p>
-我差点忘了手头还有一个前几天面试某公司人家当礼物送的 U 盘，现在马上用上
-当成系统救急盘了。
+加之那个三下巴的系统三键，被我 S-OFF、刷了第三方 Recovery、ROOT，又加持
+了 Xposed、绿色守护跟全能手势，可以轻轻松松隐藏且不影响操作，续航也 OK，
+除了还没有 5.0 的默认 ART 魔法（暂时 4.4.4 过阵子再折腾 5.0）。
 
 </p>
 
 <p>
-将 07 年购入的双系统老笔记本启动到 win7 热身，在 U 盘上装了 Clover 启动
-了 10.9.5，重新安装新版 Clover 继续 10.10 的安装，然后启动。
+当然也有对我来说的小问题，外插的 Micro SD 会掉卡，我留存在上面的一些 3X
+照片信息永远地消失了，虽然那些东西不是很重要。所以 M8 对我来说，也只有
+16G 是可信赖的，对于几乎不玩游戏的我，几乎是完全够用了。
 
 </p>
 
 <p>
-已经是下午 3 点了，折腾。
-
-</p>
-
-<p>
-第一眼的感觉，就是进入系统后感觉扁平化的视觉不如之前的 10.9.5 的好看，其
-他方面还没弄，一些软件不兼容，报告的有 VMware 的一些 kext，这个有点蛋疼，
-估计要把这个 VMware 给去掉了，以后用那台双系统老机子跑 win7 好了。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>[iOS] 被逼的 VFL</title>
-      <guid>http://suchang.net/blog/2015-03.html#p1</guid>
-      <pubDate>2015-03-07T23:41:59+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-把几年前的 app demo 搬出来，当年还没有 5、5s、6、6p 的时候，界面的布局是
-简单的，可是这两年 duang 一下出来了这么多新机器，现在 iOS 下屏幕分辨率的
-分裂程度也是让人目瞪口呆。
-
-</p>
-
-<p>
-当年一个控件 xib 就可以横行天下，5、5s 出来后有些控件不得不加了一个 xib，
-6、6p 出来后，我想我有时是拒绝使用 xib 了，妹的 6 跟 6p 的分辨率都没什么
-关联嘛。
-
-</p>
-
-<p>
-官方的说法 5、5s、6 都是 2x，6p 是 3x，并且为动态的控件还加了 autosize，
-可这玩意儿我不懂用。
-
-</p>
-
-<p>
-学着在 xib 里面使用 constraints，总是达不到自己想要的效果，折腾了好久好
-久，腰酸背痛是真的。
-
-</p>
-
-<p>
-看了一下官方那一页 VFL，第一次感觉到不知所云。于是上 github 找替代品，比
-如 <a class="nonexistent" href="mailto:suchaaa@gmail.com">PureLayout</a>，用了一下，使用上有些限制，且效果仍然不是我想要的。
-
-</p>
-
-<p>
-说一下我要的效果，table view cell 里面放多张方形图片，portrait 跟
-landscape 下布局不一样，前者是
-
-</p>
-
-<pre class="example">space | image | space | image | fixed space
-</pre>
-
-<p>
-后者是三个 image，而且我还考虑 6p 下面多加一个 image。如果我选择 xib，不
-是累死。
-
-</p>
-
-<p>
-即便 <a class="nonexistent" href="mailto:suchaaa@gmail.com">PureLayout</a>，还需要我指定中间间隔 space 的宽度，可我想这不是需要动态
-计算的吗，如果我能知道这个宽度的值，我都可以自己计算 frame 的大小咯，还
-要constraints 干嘛，我都 specify 了。
-
-</p>
-
-<p>
-我不明白的是，当年 CSS 都可以指定某个标签具体位置的百分比，方位，为啥水
-果的 VFL 不行呢，看起来 <a class="nonexistent" href="mailto:suchaaa@gmail.com">PureLayout</a> 也不好使呀，比如第三个例子，我想要的
-效果还有距离。
-
-</p>
-
-<p>
-于是又 baidu、bing VFL 的资料，官网又硬着头皮看了一下，终于有点开窍了，
-后来发现其实 VFL 是简单的。
-
-</p>
-
-<p>
-它的基础是所有需要动态伸缩的东西，都是一个 UIView（我是这么理解的），所
-有的数值，都是固定的，要么是间隔，要么是相互关系，比如宽是高的两倍。
-
-</p>
-
-<p>
-这就清楚了，其实官方 VFL 里面的 Spacing and Wrapping 举的例子就很清晰了，
-我上面要的效果里面，space 都是 UIView，动态计算就好。
-
-</p>
-
-<p>
-指定三个 image 宽、高相等，三个 image 的宽都相等，多个 space 的宽都相等，
-然后在指定 image 的高度（Y值）就足够了，后面 fix space 就不需要一个
-UIView 了，可以直接指定了。
-
-</p>
-
-<p>
-相比之下，感觉到是 IB 里面的 constraits 反而操作复杂了，而且经常是说限制
-不够，运行又出错什么的。
-
-</p>
-
-<p>
-可是明明二维的坐标，x、y 可以确定的话，那个东西就固定了呀，IB 会有让我找
-不着北的感觉，且里面的 constraints 也不容易看出来，太乱。
-
-</p>
-
-<p>
-相比之下 VFL 就好很多，只是概念不好说清，比如那个 space，我是先入为主，
-觉得为啥不能像 CSS 一样，直接指定 UIView 的位置呢，谁能想到即便官方的文
-档里面，需要动态计算大小的元素，只能是 UIView。
-
-</p>
-
-<p>
-写了一点 VFL 后，github 上又找了 Auto Layout Shorthand，但貌似不是完全的
-映射，它自己封装了一些东西，只能作罢。
-
-</p>
-
-<p>
-所以我也简单封装了自己的一些东西，试用了一个小时，感觉还不错，也放到 gist 上面
-了。
-
-</p>
-
-<pre class="source"><span class="comment-delimiter">// </span><span class="comment">formula as 'width == width'
-</span><span class="keyword">static</span> <span class="type">NSLayoutConstraint</span>*
-<span class="function-name">_lcItemRel</span>(<span class="type">UIView</span> *<span class="variable-name">v1</span>, <span class="type">NSString</span> *<span class="variable-name">formula</span>, <span class="type">UIView</span> *<span class="variable-name">v2</span>, <span class="type">float</span> <span class="variable-name">ratio</span>, <span class="type">float</span> <span class="variable-name">constant</span>) {
-    <span class="keyword">static</span> <span class="type">NSDictionary</span> *<span class="variable-name">attrValueForName</span> = <span class="constant">nil</span>;
-    <span class="keyword">static</span> <span class="type">dispatch_once_t</span> <span class="variable-name">attrOnceToken</span>;
-    dispatch_once(&amp;attrOnceToken, ^{
-        attrValueForName =
-        @{
-          @<span class="string">"left"</span>:      @(NSLayoutAttributeLeft),
-          @<span class="string">"right"</span>:     @(NSLayoutAttributeRight),
-          @<span class="string">"top"</span>:       @(NSLayoutAttributeTop),
-          @<span class="string">"bottom"</span>:    @(NSLayoutAttributeBottom),
-          @<span class="string">"leading"</span>:   @(NSLayoutAttributeLeading),
-          @<span class="string">"trailing"</span>:  @(NSLayoutAttributeTrailing),
-          @<span class="string">"width"</span>:     @(NSLayoutAttributeWidth),
-          @<span class="string">"height"</span>:    @(NSLayoutAttributeHeight),
-          @<span class="string">"centerX"</span>:   @(NSLayoutAttributeCenterX),
-          @<span class="string">"centerY"</span>:   @(NSLayoutAttributeCenterY),
-          @<span class="string">"baseline"</span>:  @(NSLayoutAttributeBaseline),
-          };
-    });
-    
-    <span class="keyword">static</span> <span class="type">NSDictionary</span> *<span class="variable-name">relationValueForName</span> = <span class="constant">nil</span>;
-    <span class="keyword">static</span> <span class="type">dispatch_once_t</span> <span class="variable-name">relationOnceToken</span>;
-    dispatch_once(&amp;relationOnceToken, ^{
-        relationValueForName =
-        @{
-          @<span class="string">"=="</span>:  @(NSLayoutRelationEqual),
-          @<span class="string">"&gt;="</span>:  @(NSLayoutRelationGreaterThanOrEqual),
-          @<span class="string">"&lt;="</span>:  @(NSLayoutRelationLessThanOrEqual),
-          };
-    });
-    
-    <span class="type">NSArray</span> *<span class="variable-name">kv</span> = [formula componentsSeparatedByString:@<span class="string">" "</span>];
-    
-    <span class="type">NSLayoutAttribute</span> <span class="variable-name">a1</span>, <span class="variable-name">a2</span>;
-    <span class="type">NSLayoutRelation</span> <span class="variable-name">r</span>;
-    
-    <span class="keyword">if</span> (kv[0]==<span class="constant">nil</span> || kv[1]==<span class="constant">nil</span> || kv[2]==<span class="constant">nil</span>) {
-        <span class="keyword">return</span> <span class="constant">nil</span>;
-    }
-    
-    a1 = (NSLayoutAttribute)[((<span class="type">NSNumber</span>*)attrValueForName[kv[0]]) integerValue];
-    a2 = (NSLayoutAttribute)[((<span class="type">NSNumber</span>*)attrValueForName[kv[2]]) integerValue];
-    r = (NSLayoutRelation)[((<span class="type">NSNumber</span>*)relationValueForName[kv[1]]) integerValue];
-
-    <span class="keyword">return</span> [<span class="type">NSLayoutConstraint</span> constraintWithItem:v1
-                                        attribute:a1
-                                        relatedBy:r
-                                           toItem:v2
-                                        attribute:a2
-                                       multiplier:ratio
-                                         constant:constant];
-}
-
-<span class="keyword">static</span> <span class="type">NSArray</span>*
-<span class="function-name">_lcAryOfVFL</span>(<span class="type">NSString</span> *<span class="variable-name">formula</span>, <span class="type">NSLayoutFormatOptions</span> <span class="variable-name">opt</span>, <span class="type">NSDictionary</span> *<span class="variable-name">metric</span>, <span class="type">NSDictionary</span> *<span class="variable-name">views</span>) {
-    <span class="keyword">return</span> [<span class="type">NSLayoutConstraint</span>
-            constraintsWithVisualFormat:formula
-            options:opt
-            metrics:metric
-            views:views];
-}
-</pre>
-
-
-gist 地址，<a href="https://gist.github.com/lalawue/430102f68327fe302964">https://gist.github.com/lalawue/430102f68327fe302964</a>, 请自备
-梯子。（最后又发现了个不错的 <a href="https://github.com/floriankugler/FLKAutoLayout">FLKAutoLayout</a>，不过没用过，具体就不知道了)
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>播放器使用 OpenAL 需要注意的</title>
-      <guid>http://suchang.net/blog/2015-03.html#p0</guid>
-      <pubDate>2015-03-07T23:22:57+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
-      <description><![CDATA[<p>
-扯一下写在线视频播放器使用 OpenAL 遇到过的坑吧。
-
-</p>
-
-<p>
-由于不涉及到 listener 的位置与加速度，openal 参数的设置是简单的，且仅仅
-只需要一个 source，一定量的 buffer，加上 streaming 的操作。
-
-</p>
-
-<p>
-第一个问题来了，streaming 的操作，多个 buffer，可具体需要多少个呢，这个
-还真不好说。我做过一些边界测试，不过没那么详细，iOS 真机还是模拟器上面，
-总共可以开到 512 个 buffer name，这个数量总该够了吧。
-
-</p>
-
-<p>
-或者，buffer 固定数量，自己先缓存一定量再扔进去，这样就解决了 buffer
-name 不够的问题。我这边播放 1M 多的码流，每个 audio packet 大概 8k，可以
-算出来自己需要缓存多少时间。
-
-</p>
-
-<p>
-第二个问题，其实是 OpenAL 默认的情况，就是 queue 上去的 buffer，播放完毕，
-到达 stop 的状态后，新的 buffer queue 进来，其实仍然是 queue 到这些
-buffer 的后面去，一旦设置成 play 状态，会先播放一遍已经 stop 的旧数据。
-
-</p>
-
-<p>
-这个 bug 瞒了我很久，因为我之前的 seek 有些问题，加上 audio cache 又不多，
-现象不明显。
-
-</p>
-
-<p>
-这意味每次 queue 新的 buffer 进去之前，把里面的 processed buffer 都给
-unqueue 先才行，这绝壁是个坑啊，哪有 stop 后还赖着不走的。
-
-</p>
-
-<p>
-第三个问题，processed 后的 buffer name，其实在 C 的操作里面，不好存到已
-有的 buffer 数组里面，得新开一个 free_buffer name 的数组，来存放已经
-processed 的 buffer name，要不然这些 buffer name 会丢失，再想扔新的数据
-时就找不到它了。
-
-</p>
-
-<p>
-如果无论如何都先 queue 完已申请的 buffer name，然后再取 processed 的，就
-能避免这个问题。可这又溶于遇到第二个问题，我就是这么绕进去的。
-
-</p>
-
-<p>
-典型的 API 足够简单，但是使用小别扭的问题。OpenAL 我是参考了 1.1 的
-specification，对于写视频播放器足够了，iOS 上官方说是低阶 API，性能足够，
-且又跨平台，何求？
+就这两块支出，血流了一地，该好好搬砖了。
 
 </p>
 
