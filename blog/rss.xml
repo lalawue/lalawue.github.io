@@ -9,63 +9,65 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Tue, 15 Sep 2015 23:57:40 +0800</pubDate>
+    <pubDate>Mon, 19 Oct 2015 07:59:23 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>Cross platform HTTP server</title>
-      <guid>http://suchang.net/blog/2015-09.html#p0</guid>
-      <pubDate>2015-09-15T23:40:10+0800</pubDate>
+      <title>iPhone 6s plus</title>
+      <guid>http://suchang.net/blog/2015-10.html#p0</guid>
+      <pubDate>2015-10-19T07:41:28+0800</pubDate>
       <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
+      <category>CategoryLife</category>
       <description><![CDATA[<p>
-这个开源的跨平台的小型 HTTP 服务端已经正式用在了公司内部产品上，地址是
-<a href="https://github.com/lalawue/m_http_server">https://github.com/lalawue/m_http_server</a>.
+上上周五，到益田 Apple Store 买了个 64G 银色 6s plus，由于港版不支持电信，
+而之前因为拉宽带绑定的电信号码每月有 4G 流量 700 分钟，妥妥的要比联通同
+资费便宜，再说，还不太舍得拉下 HTC M8，貌似还可以升级 Android 6.0
+Marshmallow，做移动开发的，感觉迟早要入安卓的坑。
 
 </p>
 
 <p>
-支持浏览器端通过 HTTP 访问设备上面的内容，上传下载都是现成的。
+十一之前在就已经开始纠结，比如港版国行，16G 还是 64G，不大了解现货购买的
+政策，了解到的渠道只是网上预约，至少要 2 ~ 3 周，这让我又有了更多的时间
+犹豫。
 
 </p>
 
 <p>
-各目录下的小 demo 展示在 iOS/MacOS/Linux/Windows 平台下面的使用方式。实
-际上，只要有 socket 接口，以及支持 C99 的编译器，这套玩意儿就能跑起来。
+十一假期结束回来路过益田，进去问了一下，外面的工作人员提到，现货银色有
+16G 的，64G 的没有。
 
 </p>
 
 <p>
-因为所有代码都是用 C 实作的，底层是跨平台的 select 构造的消息循环，内部
-的封装是支持 TCP 跟 UDP 的 IPV4。
+于是我又更纠结了，上了两天班，就出手了，那天也奇怪，外面的工作人员是显示
+只有 16G 的可以预约，64G 的只有金色，于是我说要 64G 金色，最后还是觉得金
+色太土，改成 16G 的银色，可是不能现场预约了，下不了单了，他跑去跟主管沟
+通，看能否下单，让我在外面等一下，结果也不知道是运气还是水果为了防止黄牛
+所以外面的工作人员很小心各种试探（我有说是给自己用的），回来时候就告诉我
+有 64G 的，我没啥犹豫的了，国行多 800 就多 800 吧。
 
 </p>
 
 <p>
-这个项目最早只是一个跨平台的 socket 接口，用于之前的游戏上面，跑自定义的
-二进制流，后来年初尝试着用它搭建一个 HTTP 下载器，不了了之。实话说，用 C
-写处理 HTTP 确实蛋疼，其实应该用 C++ 的，C++ 跨平台也 OK，当然问题是我不
-熟 C++。
+使用了一周多，不满意的有几点，一是三星的芯，花了这么多钱买到的芯不是盛传
+优异的台积电的，略微不爽；二是虽然一直开着定位、蓝牙，总感觉电量续航没有之前
+想象的那么强大；三是 iOS9 的系统远没有之前的 6、7 稳定（没怎么用过 8）。
 
 </p>
 
 <p>
-后来因为有这方面的需要，慢慢发展成为了 HTTP 服务器，倒也能用，只是问题比
-较多，趁着用在了公司的内部产品上面，做了一些修改，慢慢完善并稳定下来。
+比较满意的是屏幕（虽然是暖屏），摄像头不错，Touch ID 大赞，这真是现实版
+的一键下单呀，要比输入密码的方便多了，还有"嘿，Siri”，虽然各种原因，用的
+情况不多。
 
 </p>
 
 <p>
-现在用 ObjC 比较多，面对古老的 C，是感觉 C 缺乏闭包，以及用于惰性计算的
-block，相当致命，实在是完全不应该用来开发应用程序了。C 用来控制硬件，给
-硬件同仁在这方面使用就好了。
-
-</p>
-
-<p>
-从 socket、select 开始搭建系统，蛮开心的。
+另外，其实按照我的情况，小心点用的话，16G 是完全够的，因为很少玩游戏，现
+在玩的最多的是单机麻将。。。
 
 </p>
 
