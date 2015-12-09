@@ -9,54 +9,60 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Sat, 21 Nov 2015 23:12:25 +0800</pubDate>
+    <pubDate>Wed, 09 Dec 2015 23:52:32 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>升级家用电脑</title>
-      <guid>http://suchang.net/blog/2015-11.html#p0</guid>
-      <pubDate>2015-11-21T23:01:28+0800</pubDate>
+      <title>类 Shadowsocks 的 sock5 proxy － m_tunnel</title>
+      <guid>http://suchang.net/blog/2015-12.html#p0</guid>
+      <pubDate>2015-12-09T23:41:54+0800</pubDate>
       <dc:creator>sucha</dc:creator>
-      <category>CategoryLife</category>
+      <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-12 年初买的那台黑苹果，因为散热不好（小机箱），我总是开着侧盖使用，估计
-是这个原因，主板加速老化，加上又不是大厂的主板，终于在一次我用虚拟机玩
-LOL 结束之后，直接闪屏，后来再也无法启动。
+也是好奇，自己写了一个类似 shadowsocks 的 sock5 proxy，与其协议不一样，
+local 跟 remote 是通过一个 TCP 连接起来的，两边的数据，都通过这个 TCP 连
+接。
 
 </p>
 
 <p>
-我的显卡年中时已换成 GT650，所以肯定不会是显卡过载之类的问题，由于 CPU
-是 I3 2120，也是蛮旧的 CPU 了，所以也想着吧这个换了吧。
+当时这么设计，是觉得，每次一个 TCP 过去，重新握手，认证，是个多么麻烦的
+事情，如果之前已经认证好了，就走一个通道就行了，反正都有加密嘛，不过现在
+看来，也许是麻烦的开端，因为这意味着需要下面的协议内容：
+
+</p>
+
+<ul>
+<li>connect
+</li>
+<li>data
+</li>
+<li>close
+</li>
+</ul>
+
+<p>
+data 部分就是切割数据，connect 部分意味着异步连接，close 也要保证同步，
+而且任何一方都要关注到底是 server 还是 local 关闭的。
 
 </p>
 
 <p>
-网上看了下配置，大概如下 I5 4590、技嘉主板、120G SSD，中等的小机箱，算下
-来大概 2k 这样，由于前几天加班，今天又是恒大决赛，时间紧迫，不想淘宝、京
-东慢慢等货了，于是去了华强北，也是第一次到华强北装机（之前的黑苹果是淘宝
-来的）。
+现在这个软件不太稳定，可是总感觉不是代码上面的问题，而是协议处理上，还需
+要斟酌一下。
 
 </p>
 
 <p>
-整个流程其实挺顺利的，由于价格比较透明，所以商家也不会坑很多，最终配的价
-格是 2.2k，我还算接受，反正 2 个小时不到，商家帮我装好机，我就可以带回家
-了。
+还有，其实如果是使用 shadowsocks 那样每个 local 进来的 tcp 都单独链接，
+其实更容易处理些。
 
 </p>
 
 <p>
-在 120G 的 SSD 上也装了黑苹果，10.11 的系统，安装很快，然后之前的 500 GB
-硬盘，当存储盘用，开机速度，以及应用程序要比之前快了不少，目的达到了。
-
-</p>
-
-<p>
-不过 I5 的 CPU，实际上感觉没有太大的差别，毕竟处理的东西也不多，如果只是
-写程序，其实也不会有那么高的要求吧，总的来说是快了一些。
+不扯了，地址是 <a href="https://github.com/lalawue/m_tunnel">https://github.com/lalawue/m_tunnel</a>.
 
 </p>
 
