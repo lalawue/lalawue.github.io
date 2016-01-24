@@ -9,60 +9,46 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Wed, 09 Dec 2015 23:52:32 +0800</pubDate>
+    <pubDate>Sun, 24 Jan 2016 12:46:32 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>类 Shadowsocks 的 sock5 proxy － m_tunnel</title>
-      <guid>http://suchang.net/blog/2015-12.html#p0</guid>
-      <pubDate>2015-12-09T23:41:54+0800</pubDate>
+      <title>Pebble Time</title>
+      <guid>http://suchang.net/blog/2016-01.html#p0</guid>
+      <pubDate>2016-01-24T12:30:54+0800</pubDate>
       <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
+      <category>CategoryLife</category>
       <description><![CDATA[<p>
-也是好奇，自己写了一个类似 shadowsocks 的 sock5 proxy，与其协议不一样，
-local 跟 remote 是通过一个 TCP 连接起来的，两边的数据，都通过这个 TCP 连
-接。
+上个月底美亚直邮的 Pebble Time 到手，黑色款，样子我是十分喜欢，丰富的表
+盘不多说，虽然是塑料表带材质，不过表盘外圈是金属的，所以对我来说不是问题，
+我反而是不太喜欢全金属的类型，觉得风格是太硬了。
 
 </p>
 
 <p>
-当时这么设计，是觉得，每次一个 TCP 过去，重新握手，认证，是个多么麻烦的
-事情，如果之前已经认证好了，就走一个通道就行了，反正都有加密嘛，不过现在
-看来，也许是麻烦的开端，因为这意味着需要下面的协议内容：
-
-</p>
-
-<ul>
-<li>connect
-</li>
-<li>data
-</li>
-<li>close
-</li>
-</ul>
-
-<p>
-data 部分就是切割数据，connect 部分意味着异步连接，close 也要保证同步，
-而且任何一方都要关注到底是 server 还是 local 关闭的。
+戴了两周，即便口袋没有手机，步数、睡眠都纳入数据量化了，这点是很大的转变，
+我也终于知道自己的睡眠质量是多么的差，除此外，小工具 timer 等都很有用。
 
 </p>
 
 <p>
-现在这个软件不太稳定，可是总感觉不是代码上面的问题，而是协议处理上，还需
-要斟酌一下。
+只留了一个电话通知的 Notification，觉得有这个就够了，其他的通知都是不重
+要的通知，就让它们留在手机里吧。
 
 </p>
 
 <p>
-还有，其实如果是使用 shadowsocks 那样每个 local 进来的 tcp 都单独链接，
-其实更容易处理些。
+这个月是刚给家里人下单了一台 11.6 寸的小本，赛扬四核，性能对于看网页、炒
+股应该是足够，市面上相同屏幕尺寸这个价位的，大多都是凌动的 intel 芯，算
+是平板的核，运算力上应该是赛扬更好。
 
 </p>
 
 <p>
-不扯了，地址是 <a href="https://github.com/lalawue/m_tunnel">https://github.com/lalawue/m_tunnel</a>.
+夹持 128G SSD，操作应该会迅捷便利吧，到手后再仔细评估下，工作用台式，出
+差等等，这样的小本其实是完全足够了。
 
 </p>
 
