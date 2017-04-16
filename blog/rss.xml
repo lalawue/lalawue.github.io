@@ -9,79 +9,107 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Sat, 18 Mar 2017 11:18:19 +0800</pubDate>
+    <pubDate>Sun, 16 Apr 2017 23:14:30 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>Git 二三事</title>
-      <guid>http://suchang.net/blog/2017-03.html#p0</guid>
-      <pubDate>2017-03-18T10:43:54+0800</pubDate>
+      <title>m_tunnel 支持 Win7</title>
+      <guid>http://suchang.net/blog/2017-04.html#p1</guid>
+      <pubDate>2017-04-16T22:52:47+0800</pubDate>
       <dc:creator>sucha</dc:creator>
       <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-之前公司一直在用 svn，虽然我也有用 github，但并没有真正参与过多人开发的
-情况，分布式的 git 在多人开发方面与 svn 有很多不同。
+其实 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 使用单 TCP 来连接本地、远端有风险，就是 TCP 本身并不是为流
+速设计的，而是为流量设计的，这使得很多请求，在 TCP 网络不稳定的时候，很
+容易就被卡住，而这里本身的设计，就使得后一个请求，跟前一个请求发生了关联，
+要卡大家一起卡。
 
 </p>
 
 <p>
-git 是完全并行的开发，意味着提交的时候，origin 远端只是看对应文件能否
-merge，不不冲突的话就直接接受了。可是如果我们看版本线，会有这样的情况，
-本地刚提交的版本的上一个版本，并不是远端的末端版本，也就是说，在我们这两
-次提交的中间，其他人已经有版本提交到远端了。
+这个大 BUG 是最开始设计的问题，后来就想转而使用 KCP 来做中间的管道，而不
+是使用 TCP，当然当时也有不少使用 KCP 的类似工具了。
 
 </p>
 
 <p>
-如果用 source tree 这样的工具看，可以看到本地上个版本对应的远端版本，很
-可能有多条线并行出来；先提交的同学，版本线在主线上，后提交的同学，版本线
-被并行出来，在最后提交的版本上合并。
+最近是看上了 <a href="https://github.com/xtaci/kcptun">kcptun</a>，一个使用 kcp 来做管道的工具，管道还需要配上两端的
+shadowshocks，来为浏览器等提供标准的 socks5 接口，以及对应远端发起真实的
+请求。而我则刚好可以使用 m_tunnel 来替代 shadowsocks。加入 Win7 的支持，
+则是因为现在玩游戏比较多了，算了一下，在 Win7 下面的时间更多。
 
 </p>
 
 <p>
-svn 呢，因为没有分布式的概念，因此只有一条开发线。
+还好，用 VS2017 建立工程编译，需要修改的东西不多，就可以跑了，效果是杠杠
+的，当然，m_tunnel 是用的是 select 来实现 MacOS、Linux、Windows 三端接口
+一致，而不是 libuv 这类框架。
 
 </p>
 
 <p>
-为了更明晰远端库的版本线问题，每次 push 到远端前，需要在本地分支上
-rebase origin 分支，其实就是先找到本地跟远端版本的公共父节点，从这个点开
-始，将远端的版本合并到本地分支，再将本地分支这个公共父节点版本后的代码，
-一个个 apply 上去，之后再 push 到远端，这时候就只有一条线了。
+使用 select，就有一些效率的问题，但如果不是做极端的 server，其实是没有关
+系的，这个我也有一些 CPU 使用量的数据；还有就是 socket 同时使用的数量是
+有限制的，但是对于一般人来说，其实都足够了，因为你真的很难很难能够同时用
+完 select 提供的最大 socket 数量。
 
 </p>
 
 <p>
-因此，merge 仅仅在末端版本上合并代码，而 rebase 则会找到公共父节点，重整
-版本线。
+我这边也提供了一个 Win7 的 <a href="https://github.com/lalawue/m_tunnel/releases/download/v20170415/mtunnel_local_windows_amd64.zip">precompiled&#32;版本</a>，自己则是买了 Linode 东京每
+月 5 刀的套餐，在 SZ 看 Youtube 720P 几乎秒开，大概这样。
+
+</p>
+
+]]></description>
+    </item>
+
+    <item>
+      <title>emacs-wiki-mode 已死</title>
+      <guid>http://suchang.net/blog/2017-04.html#p0</guid>
+      <pubDate>2017-04-16T22:42:10+0800</pubDate>
+      <dc:creator>sucha</dc:creator>
+      <category>CategoryThisSite</category>
+      <description><![CDATA[<p>
+为这个静态站点更新了几个链接，RSS 地址，还有搜索地址，这个站点不知不觉已
+经超过了 10 年，保留了最开始学习 Linux 的点点滴滴，各种嬉戏玩耍，不过，
+开始工作一段时间后，这里就都是流水了。
 
 </p>
 
 <p>
-另外一种情况，是本地再多开分支，其中一个分支用来同步远端，这个时候，本地
-的另外一个分支，提交的顺序是先提交到本地同步分支，同步分支再 push 到远端。
+自从搬家到了 <a class="nonexistent" href="mailto:suchaaa@gmail.com">GitHub</a> Pages，省心了很多。十年前，用 Wiki 的方式记录并连接
+各个页面，用 Emacs 作为工具编写并转换成 HTML 是一个新奇的方式，现在，还
+有谁会抱着一个客户端来写博客，有了通用的浏览器，和强大的 JS，Web 可以扮
+演所有的东西。
 
 </p>
 
 <p>
-这个时候，如果要保证三个分支的末端版本一致，同步分支可以先 rebase 远端，
-保证末端版本与远端一致，本地分支再 rebase 本地同步分支，本地分支版本线也
-与远端一致了；之后，同步分支 merge 本地分支，再 push 到远端。
+所以当我在 google 里面搜索 emacs-wiki-mode 时，已经搜索不到什么有用的东
+西了。也许最开始大家只是使用 emacs 来写 <a class="nonexistent" href="mailto:suchaaa@gmail.com">LiveJournal</a>，最后变成了 wiki，最
+后大神 maintain 了这个 project，然后变成了 <a class="nonexistent" href="mailto:suchaaa@gmail.com">EmacsMuse</a>，然后 muse 成了 GNU
+的官方项目，那时候 emacs-wiki-mode 就已经半死不活，有谁还会用一个老项目？
 
 </p>
 
 <p>
-或者也可以这样，本地同步分支先 merge 本地分支，再 pull rebase 远端，再
-push 到远端。不过这个时候，这个用来并行开发的本地分支，版本线跟远端很可
-能已经不一样了，这个又要怎么整呢，:)
+之前 github 上的 emacsmirror 还保留着 emacs-wiki-mode，当时看到这个老项
+目，我还是蛮开心的，没想到现在上去翻找，已经搜不到了。
 
 </p>
 
 <p>
-坑好多呀，因为之前不明白这些，请教了组里面的一位实习生大神，才终于弄懂了。
+也许我比较古旧吧，还用着这个 mode 写东西，反正也挺趁手的，反正写的也很少，
+反正都是流水，反正这个附加挂上去的 emacs-wiki-journal 也是我自己一个人用
+而已。
+
+</p>
+
+<p>
+本来还想把自己用的 emacs-wiki-mode 源代码挂到 github 上，现在有点犹豫了。
 
 </p>
 

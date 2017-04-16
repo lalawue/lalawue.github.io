@@ -74,7 +74,7 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 <pre class="source">  
    <span class="comment-delimiter"># </span><span class="comment">.bash_profile
 </span>   <span class="keyword">if</span> [ -f ~/.bashrc ]; <span class="keyword">then</span>
-     . ~/.bashrc
+     <span class="builtin">.</span> ~/.bashrc
    <span class="keyword">fi</span>
 </pre>
 
@@ -122,7 +122,7 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 <p>
 假设你最喜爱的编辑器是 mcedit。让我们用它打开 ~/.bashrc 并把这些置于alias 后<sup><a id="fnr.1" href="#fn.1">1</a></sup>：
 <pre class="source">  
-   alias <span class="variable-name">edb</span>=<span class="string">'mcedit ~/.bashrc &amp;&amp; . ~/.bashrc'</span>
+   <span class="builtin">alias</span> <span class="variable-name">edb</span>=<span class="string">'mcedit ~/.bashrc &amp;&amp; . ~/.bashrc'</span>
 </pre>
 <blockquote>
 <p>
@@ -166,9 +166,9 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 </p>
 
 <pre class="source">   <span class="comment-delimiter"># </span><span class="comment">&#25346;&#36733;&#36719;&#30424;
-</span>   alias <span class="variable-name">mf</span>=<span class="string">'mount /mnt/floppy &amp;&amp; cd /mnt/floppy &amp;&amp; ls'</span>
+</span>   <span class="builtin">alias</span> <span class="variable-name">mf</span>=<span class="string">'mount /mnt/floppy &amp;&amp; cd /mnt/floppy &amp;&amp; ls'</span>
    <span class="comment-delimiter"># </span><span class="comment">&#21368;&#36733;&#36719;&#30424;
-</span>   alias <span class="variable-name">uf</span>=<span class="string">'cd &amp;&amp; umount /mnt/floppy'</span>
+</span>   <span class="builtin">alias</span> <span class="variable-name">uf</span>=<span class="string">'cd &amp;&amp; umount /mnt/floppy'</span>
 </pre>
 <blockquote>
 <p>
@@ -188,12 +188,12 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 
 <pre class="source">  
    <span class="variable-name">CDROM</span>=<span class="string">"/mnt/cdrom"</span>
-   alias <span class="variable-name">mcd</span>=<span class="string">'mount $CDROM &amp;&amp; cd $CDROM &amp;&amp; ls'</span>
-   alias <span class="variable-name">ucd</span>=<span class="string">'cd &amp;&amp; umount $CDROM &amp;&amp; eject &amp;&amp; sleep 10 &amp;&amp; eject -t'</span>
+   <span class="builtin">alias</span> <span class="variable-name">mcd</span>=<span class="string">'mount $CDROM &amp;&amp; cd $CDROM &amp;&amp; ls'</span>
+   <span class="builtin">alias</span> <span class="variable-name">ucd</span>=<span class="string">'cd &amp;&amp; umount $CDROM &amp;&amp; eject &amp;&amp; sleep 10 &amp;&amp; eject -t'</span>
    <span class="comment-delimiter"># </span><span class="comment">&#24377;&#20986;&#20809;&#30424;&#65306;
-</span>   alias <span class="variable-name">ecd</span>=<span class="string">'eject'</span>
+</span>   <span class="builtin">alias</span> <span class="variable-name">ecd</span>=<span class="string">'eject'</span>
    <span class="comment-delimiter"># </span><span class="comment">&#24377;&#20837;&#20809;&#30424;&#65306;
-</span>   alias <span class="variable-name">ccd</span>=<span class="string">'eject -t'</span>
+</span>   <span class="builtin">alias</span> <span class="variable-name">ccd</span>=<span class="string">'eject -t'</span>
 </pre>
 <blockquote>
 <p>
@@ -218,7 +218,7 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 
 <pre class="source">  
    <span class="variable-name">DEV</span>=<span class="string">"dev=0,0,0"</span>
-   alias <span class="variable-name">burn</span>=<span class="string">'ccd &amp;&amp; cdrecord -eject $DEV -dao'</span>
+   <span class="builtin">alias</span> <span class="variable-name">burn</span>=<span class="string">'ccd &amp;&amp; cdrecord -eject $DEV -dao'</span>
 </pre>
 <blockquote>
 <p>
@@ -264,13 +264,13 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 </span>   <span class="variable-name">ISO</span>=<span class="string">"/tmp/a.iso"</span>
 
    <span class="comment-delimiter"># </span><span class="comment">&#21046;&#20316; iso &#38236;&#20687;:
-</span>   alias <span class="variable-name">mkiso</span>=<span class="string">'mkisofs -R -J -v -hide-rr-moved -o $ISO'</span>
+</span>   <span class="builtin">alias</span> <span class="variable-name">mkiso</span>=<span class="string">'mkisofs -R -J -v -hide-rr-moved -o $ISO'</span>
 
    <span class="comment-delimiter"># </span><span class="comment">CD &#21051;&#24405;&#26426;&#22312;&#21051;&#24405; CD &#21069;&#30340;&#31561;&#24453;&#26102;&#38388;
 </span>   <span class="variable-name">WAIT</span>=<span class="string">"gracetime=5"</span>
 
    <span class="comment-delimiter"># </span><span class="comment">&#21478;&#19968;&#20010;&#20415;&#20110;&#20351;&#29992;&#30340;&#21035;&#21517;&#65306;
-</span>   alias <span class="variable-name">BURN</span>=<span class="string">"cdrecord -v -eject $DEV $WAIT -tao -multi $ISO &amp;&amp; \
+</span>   <span class="builtin">alias</span> <span class="variable-name">BURN</span>=<span class="string">"cdrecord -v -eject $DEV $WAIT -tao -multi $ISO &amp;&amp; \
      rm -f $ISO &amp;&amp; sleep 10 ; ccd"</span>
 
    begincd() {
@@ -329,13 +329,13 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 
 <ul>
 <li>目录导航：
-<pre class="source">     alias <span class="variable-name">cda</span>=<span class="string">'cd ~/some/directory/where../writing/an/Article'</span>
+<pre class="source">     <span class="builtin">alias</span> <span class="variable-name">cda</span>=<span class="string">'cd ~/some/directory/where../writing/an/Article'</span>
 </pre>
 </li>
 <li>打包和解包 tar 文件：
 <pre class="source">  
-     alias <span class="variable-name">tgz</span>=<span class="string">'tar czpvf'</span>
-     alias <span class="variable-name">utgz</span>=<span class="string">'tar xzvf'</span>
+     <span class="builtin">alias</span> <span class="variable-name">tgz</span>=<span class="string">'tar czpvf'</span>
+     <span class="builtin">alias</span> <span class="variable-name">utgz</span>=<span class="string">'tar xzvf'</span>
 </pre>
 </li>
 <li>就像这么简单：
@@ -347,7 +347,7 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 <li>备份文件，比方说，重置文件：
 <pre class="source">  
      <span class="variable-name">BACKUP_DIR</span>=<span class="string">"/pa../the/backup/directory"</span>
-     alias <span class="variable-name">back</span>=<span class="string">"cd $BACKUP_DIR &amp;&amp; tgz conf-`date +%F`.tgz ~/.??* &amp;&amp; \
+     <span class="builtin">alias</span> <span class="variable-name">back</span>=<span class="string">"cd $BACKUP_DIR &amp;&amp; tgz conf-`date +%F`.tgz ~/.??* &amp;&amp; \
        ls &amp;&amp; cd"</span>
 </pre>
 </li>
@@ -367,19 +367,19 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 </li>
 <li>为新近下载的 Slackware 包检查 PGP 签名：
 <pre class="source">  
-     alias <span class="variable-name">gpgv</span>=<span class="string">"for i in ./*.tgz ; do echo $i ; \
+     <span class="builtin">alias</span> <span class="variable-name">gpgv</span>=<span class="string">"for i in ./*.tgz ; do echo $i ; \
        gpg --no-secmem-warning --verify $i.asc $i ; echo ; done"</span>
 </pre>
 </li>
 <li>听音乐，比如，播放当前目录下所有的 mp3 文件和 wav 文件：
 <pre class="source">  
-     alias <span class="variable-name">mp3</span>=<span class="string">'madplay -v --display-time=current ./*.mp3'</span>
-     alias <span class="variable-name">wav</span>=<span class="string">'for i in ./*.wav ; do play $i ; done'</span>
+     <span class="builtin">alias</span> <span class="variable-name">mp3</span>=<span class="string">'madplay -v --display-time=current ./*.mp3'</span>
+     <span class="builtin">alias</span> <span class="variable-name">wav</span>=<span class="string">'for i in ./*.wav ; do play $i ; done'</span>
 </pre>
 </li>
 <li>看搜集的 jpg 图片：
 <pre class="source">  
-     alias <span class="variable-name">slide</span>=<span class="string">'qiv -f -s --delay=5 -i ./*.jpg'</span>
+     <span class="builtin">alias</span> <span class="variable-name">slide</span>=<span class="string">'qiv -f -s --delay=5 -i ./*.jpg'</span>
 </pre>
 </li>
 </ul>
@@ -401,7 +401,7 @@ shell 不作为登录的 shell 启动时，bash 从 ~/.bashrc 读取并执行命
 
 <p>
 <sup>[<a id="fn.1" href="#fnr.1">1</a>]</sup> 更为普遍的做法像下面这样：
-<pre class="source">   alias <span class="variable-name">edb</span>=<span class="string">'$VISUAL ~/.bashrc &amp;&amp; . ~/.bashrc'</span>
+<pre class="source">   <span class="builtin">alias</span> <span class="variable-name">edb</span>=<span class="string">'$VISUAL ~/.bashrc &amp;&amp; . ~/.bashrc'</span>
 </pre>
 <blockquote>
 <p>
@@ -458,9 +458,8 @@ $ which new_name
 	  <li><a href="../muse/index.html">Muse</a></li>
 	  <li><a href="../scratch/index.html">Scratch</a></li>
 	</ul>
-	<p class="header">Search</p><!-- Google Search -->
-	<form id="searchform" method="get"
-	      action="http://www.google.com/search" >
+	<p class="header">Search</p><!-- Bing Search -->
+	<form id="searchform" method="get" action="http://cn.bing.com/search" >
 	  <p><input id="searchtext" type="text" name="q" value="" /></p>
           <p><input type="hidden" name="ie" value="utf-8" /></p>
 	  <p><input type="hidden" name="oe" value="utf-8" /></p>

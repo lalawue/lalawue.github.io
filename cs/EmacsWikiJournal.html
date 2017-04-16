@@ -255,15 +255,15 @@ Planner 的 sacha。实在是非常好用，可以省去每次保存后还要发
   (<span class="keyword">when</span> (derived-mode-p 'emacs-wiki-mode)
     (<span class="keyword">unless</span> emacs-wiki-publishing-p
       (<span class="keyword">let</span> ((emacs-wiki-publishing-p t)
-        (emacs-wiki-after-wiki-publish-hook nil))
-    (emacs-wiki-journal-publish-this-page)
-<span class="comment-delimiter">;</span><span class="comment">   (emacs-wiki-publish-index) ; &#22914;&#26524;&#20320;&#38656;&#35201;&#22312;&#20445;&#23384;&#30340;&#21516;&#26102;&#33258;&#21160;&#21457;&#24067; 
-</span>    ))))                       <span class="comment-delimiter">; </span><span class="comment">WikiIndex&#65292;&#35831;&#23558;&#34892;&#39318;&#30340;';'&#21435;&#25481;
+            (emacs-wiki-after-wiki-publish-hook nil))
+        (emacs-wiki-journal-publish-this-page)
+<span class="comment-delimiter">;</span><span class="comment">       (emacs-wiki-publish-index) ; &#22914;&#26524;&#20320;&#38656;&#35201;&#22312;&#20445;&#23384;&#30340;&#21516;&#26102;&#33258;&#21160;&#21457;&#24067; 
+</span>        ))))                       <span class="comment-delimiter">; </span><span class="comment">WikiIndex&#65292;&#35831;&#23558;&#34892;&#39318;&#30340;';'&#21435;&#25481;
 </span>
 (add-hook 'emacs-wiki-mode-hook
-      (<span class="keyword">lambda</span> () (add-hook 'after-save-hook
-                   'sacha-emacs-wiki-auto-publish
-                   nil t)))
+          (<span class="keyword">lambda</span> () (add-hook 'after-save-hook
+                               'sacha-emacs-wiki-auto-publish
+                               nil t)))
 </pre>
 
 
@@ -294,7 +294,7 @@ Planner 的 sacha。实在是非常好用，可以省去每次保存后还要发
 <h3><a id="sec-11">感谢</a></h3>
 
 <p>
-感谢 <a href="http://www.mwolson.org/">Mwolson</a> 的 <a href="http://mwolson.org/projects/EmacsWikiMode.html">EmacsWiki</a>，使得维护一个网站变得如此简单。<br />
+感谢 <a href="http://www.mwolson.org/">Mwolson</a> 的 <a class="nonexistent" href="mailto:suchaaa@gmail.com">EmacsWiki</a>，使得维护一个网站变得如此简单。<br />
 感谢 Yamagata Yoriyuki 的 <a href="http://www15.ocn.ne.jp/%7erodinia/emacs-wiki-journal.el">EmacsWikiJournal</a>，给我有了现实中修改的基础。<br />
 感谢 <a href="http://www.sfu.ca/%7egswamina">gswamina</a> 的 <a href="http://www.sfu.ca/%7egswamina/EmacsWikiBlog.html">EmacsWikiBlog</a>，带给了我如此多的灵感。
 
@@ -336,9 +336,8 @@ Planner 的 sacha。实在是非常好用，可以省去每次保存后还要发
 	  <li><a href="../muse/index.html">Muse</a></li>
 	  <li><a href="../scratch/index.html">Scratch</a></li>
 	</ul>
-	<p class="header">Search</p><!-- Google Search -->
-	<form id="searchform" method="get"
-	      action="http://www.google.com/search" >
+	<p class="header">Search</p><!-- Bing Search -->
+	<form id="searchform" method="get" action="http://cn.bing.com/search" >
 	  <p><input id="searchtext" type="text" name="q" value="" /></p>
           <p><input type="hidden" name="ie" value="utf-8" /></p>
 	  <p><input type="hidden" name="oe" value="utf-8" /></p>
