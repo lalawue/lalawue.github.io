@@ -9,7 +9,7 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Sun, 07 May 2017 13:57:40 +0800</pubDate>
+    <pubDate>Sun, 07 May 2017 14:20:02 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
@@ -204,6 +204,12 @@ GTX 1060 无法支持，这是个太大的硬伤。考虑到之前几次升级�
 <p>
 这里的 kernel panic 出现在安装第 2. 步，我也遇到过，看看是什么 kext 引起
 的，将其更新或删除就好，一般有了 DSDT 后，对硬件的描述应该不成问题了。
+
+</p>
+
+<p>
+Clover 可以修改启动参数，在 Option 里面，选择启动参数，enter 后修改，一
+般是增加减少 -v，nv_disable=1，-x，-f 之类的。
 
 </p>
 
