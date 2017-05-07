@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - Category Linux</title>
+    <title>Sucha's Blog - Archive for May, 2017</title>
     <meta name="generator" content="emacs-wiki-journal.el" />
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -18,343 +18,226 @@
   <body>
     <div id="body">
       <div id="text">
-	<h1>Sucha's Blog ~ Category Linux</h1>
+	<h1>Sucha's Blog ~ Archive for May, 2017</h1>
 	<!-- Page published by Emacs Wiki begins here -->
-<h3>2017.05</h3>
+<h2><a id="p0">17年5月7日 周日 10:36</a></h2>
+
+<h3>安装黑苹果 10.12 macOS Sierra</h3>
+
+<p>
+想想距离上次安装已经有一年多了，这次升级安装，原因是之前查到 10.11 下对
+GTX 1060 无法支持，这是个太大的硬伤。考虑到之前几次升级安装，也还算顺利，
+这次没多想就开干了，但这次巨蛋疼，来来回回花了近三天时间，通了一次宵才搞
+定。
+
+</p>
+
+<p>
+这次黑苹果安装，把 Clover 的普通安装、启动引导安装，EFI 系统分区，系统安
+装盘，DSDT，相关工具的使用，以及这个版本安装的其他坑弄清楚了一些。
+
+</p>
+
+<p>
+回头想想，如果要达到一个类似 Windows 安装流程那样顺利的安装，需要了解上
+面的这些概念才行，然后还需要用到下面列出来的工具，要不然，随便碰到一点现
+象，就不知道该怎么办了，那就难了。
+
+</p>
+
+<p>
+比如所谓的懒人版，应该是加了一些驱动吧，但我觉得在普适性上面，也还是会挑
+硬件的，苹果的系统，本来就没有考虑过这一点，从需要第三方的引导器如 Clover，
+以及需要 DSDT 来看就知道了。
+
+</p>
+
+<p>
+还有，我之所以不用懒人版，还是担心安全性的问题。
+
+</p>
+
+<h5>一、安装前提</h5>
 
 <ul>
-<li>5月7日 周日 10:36 <a href="2017-05.html#p0">安装黑苹果&#32;10.12&#32;macOS&#32;Sierra</a>
-<!-- date: 2017-05-07T10:36:11+0800 -->
+<li>PC macOS 独立硬盘安装，支持 64 位的硬件，支持 UEFI 启动的主板
+</li>
+<li>需要设置 BIOS，需要插拔独立显卡
+</li>
+<li>不懂我说啥的同学，非 64 位硬件非 UEFI 的同学，其他非独立硬盘想双系统
+   的同学，这里帮不了你了
 </li>
 </ul>
 
-<h3>2015.10</h3>
+<h5>二、需要的工具</h5>
+
+<p>
+下面列出需要的工具，但一些工具需要在 macOS 下运行，只有 Windows 的考虑下
+其他替代工具吧，需要的工具有：
+
+</p>
 
 <ul>
-<li>10月25日 周日 23:17 <a href="2015-10.html#p1">OS&#32;X&#32;El&#32;Capitan</a>
-<!-- date: 2015-10-25T23:17:12+0800 -->
+<li>MaciASL.app，用于生成 DSDT 描述文件
+</li>
+<li>Clover Configurator.app，用于配置 Clover，以及挂载 EFI 分区
+</li>
+<li>最新版的 Clover，到 sourceForge 下就好
+</li>
+<li>AGDPfix.app，用于解决部分 SMBIOS 接 Nvidia 显卡后启动显示黑屏的问题，
+   有其他的替代方案，可通过搜这个 app 看看（这个驱动独立显卡，安装后使用
+   的）
 </li>
 </ul>
 
-<h3>2015.03</h3>
+<p>
+另外，需要一个 8G 或者更大容量的 U 盘，以及需要对主板 BIOS 进行以下设置：
+
+</p>
 
 <ul>
-<li>3月30日 周一 15:10 <a href="2015-03.html#p2">升级&#32;Yosemite</a>
-<!-- date: 2015-03-30T15:10:11+0800 -->
+<li>Secure Boot disable
+</li>
+<li>AHCI enable
+</li>
+<li>UEFI enable（可以选择 UEFI、legacy 都支持）
+</li>
+<li>XHCI SmartAuto
+</li>
+<li>XHCI/EHCI handoff enable
+</li>
+<li>设置 U 盘启动优先级最高
 </li>
 </ul>
 
-<h3>2014.01</h3>
+<p>
+上面的设置来源于外文网站，我自己也是这么设置的，那些懒人版都没有这个说明
+的。由于对部分开关不了解，所以这里不展开描述。
+
+</p>
+
+<p>
+我自己电脑的大概信息是 3 个硬盘，一个单用于 Windows，一个单用于 macOS 的
+最新版本（就是这次准备安装的），一个是备份启动的 macOS 系统（10.11.6），
+只有这个不是 SSD，也分区用于存数据资料。上面的 BIOS 设置，对 Windows 系
+统没有影响。
+
+</p>
+
+<h5>三、准备资源</h5>
+
+<p>
+这里列一下大概需要准备的资源，创建硬件描述表 DSDT，准备安装用的 U 盘
+
+</p>
 
 <ul>
-<li>1月16日 周四 12:23 <a href="2014-01.html#p4">设置服务器网络唤醒（WOL）</a>
-<!-- date: 2014-01-16T12:23:08+0800 -->
+<li>10.12 macOS Sierra 原版安装盘，并创建系统安装 U 盘
+</li>
+<li>最新版的 Clover，先给系统安装 U 盘创建 Clover 启动，务必在安装界面勾
+   选自定（customize），选择安装启动引导以及 Drivers64UEFI 下
+   的OsxAptioFixDrv-64
+</li>
+<li>使用 MaciASL.app 生成 DSDT，并编译，遇到编译不过的问题，将这一行或这
+   一块删除，直到通过编译，保存为 AML 二进制文件
+</li>
+<li>使用 Clover Configurator.app 挂载 U 盘的 EFI 分区（请注意不是当前启动
+   macOS 的 EFI 分区），将 DSDT 描述文件放到 EFI/ACPI/patched 以及
+   origin 下面
+</li>
+<li>下载最新版的 FakeSMC.kext 放到 U 盘 EFI/CLOVER/kexts/Others 下面，
+   kexts 目录下如果还有其他文件夹的，建议将 10.12 文件夹下面的也拷贝到
+   Others，然后删除掉除 Others 的其他，要不每次升级系统都得拷贝一遍，麻烦
+</li>
+<li>使用 Clover Configurator.app 配置 U 盘 EFI 分区下的 config.plist，
+   boot 下面的 verbose、x86_64、xcpm、kext-dev-mode=1、nv_disable=1 勾选；
+   SMBIOS 里面点魔术棒选个跟当前硬件配置差不多的就好；还有 Kernel 下的
+   AppleRTC 勾选；或者用你当前 Clover 的配置也行，但是要去掉独立显卡的选
+   项
+</li>
+<li>关闭保存 Clover Configurator.app 并推出 U 盘 EFI 分区
 </li>
 </ul>
 
-<h3>2013.12</h3>
+<h5>四、安装流程</h5>
+
+<p>
+先说一下大概的流程，U 盘启动安装，遇到问题增添 U 盘 EFI 分区的 kext，安
+装后修复部分 SMBIOS 下的黑屏问题。
+
+</p>
+
+<ol>
+<li>如果有像我这样 Nvidia GTX 1060 显卡的，先把显卡拔掉，BIOS 设置使用 Intel
+    内置显卡
+</li>
+<li>BIOS 设置 U 盘启动优先级最高，使用 U 盘 Clover 启动安装，如果没有
+    kext 挂掉，kernel panic，那么可以走到安装界面；选择盘符抹盘安装
+</li>
+<li>安装顺利完成，使用 U 盘引导并启动到新版系统，先驱动起网卡，然后下载
+    Nvidia 的 web 驱动安装，并使用 AGDPfix.app 修正部分 SMBIOS 设置的黑
+    屏问题
+</li>
+<li>使用 Clover 给新版系统安装启动引导，将之前 U 盘的 EFI 分区内容拷贝到
+    新系统的 EFI 分区，修改 config.plist，去掉 nv_disable=1，加入
+    nvidiaweb 支持（请看这一节的最后），保存并推出 EFI 分区
+</li>
+<li>关机下电，将 Nvidia 独立显卡插回主板，修改 BIOS 的启动顺序
+</li>
+<li>顺利启动新系统，安装结束；其他 kext 安装、声卡、网卡驱动安装，Clover
+    默认启动项请搜索其他吧
+</li>
+</ol>
+
+<p>
+有关 nvidiaweb 驱动的支持，需要使用文本编辑器编辑 config.plist，在
+SystemParameters key 下添加：
+
+</p>
+
+<pre class="example">	&lt;key&gt;SystemParameters&lt;/key&gt;
+	&lt;dict&gt;
+                ... 其他配置 ...
+        	&lt;key&gt;NvidiaWeb&lt;/key&gt;
+        	&lt;true/&gt;
+	&lt;/dict&gt;
+</pre>
+
+<h5>五、kernel panic、黑屏问题</h5>
+
+<p>
+这里的 kernel panic 出现在安装第 2. 步，我也遇到过，看看是什么 kext 引起
+的，将其更新或删除就好，一般有了 DSDT 后，对硬件的描述应该不成问题了。
+
+</p>
+
+<p>
+黑屏问题看外文参考资料是因为 SMBIOS 设置，苹果针对 OEM 单独做的处理，请
+看下面的英文参考资料。
+
+</p>
+
+<h5>六、参考资料</h5>
+
+<p>
+参考外文资料比较好，比如 www.tonymacx86.com
+
+</p>
 
 <ul>
-<li>12月24日 周二 18:14 <a href="2013-12.html#p1">笔记本使用外接&#32;VGA&#32;作为主屏</a>
-<!-- date: 2013-12-24T18:14:40+0800 -->
+<li><a href="https://www.tonymacx86.com/threads/good-news-for-x99-10-11-haswell-e-el-capitan.178425/page-4#post-1151520">Clover&#32;设置及黑屏问题</a>
+</li>
+<li><a href="https://www.tonymacx86.com/threads/black-screen-with-macpro-6-1-or-imac-15-or-imac-17-system-definition.183113/">Black&#32;Screen&#32;with&#32;MacPro&#32;6&#44;1&#32;or&#32;iMac&#32;15&#32;or&#32;iMac&#32;17&#32;System&#32;Definition</a>
 </li>
 </ul>
 
-<h3>2012.10</h3>
+<h4><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2017-05.html#p0">Permalink</a> </h4>
 
-<ul>
-<li>10月3日 周三 12:42 <a href="2012-10.html#p1">XP&#32;下的硬链接工具&#32;Junction</a>
-<!-- date: 2012-10-03T12:42:25+0800 -->
-</li>
-</ul>
+<p>
+<!-- date: 2017-05-07T10:36:03+0800 -->
 
-<h3>2012.07</h3>
+</p>
 
-<ul>
-<li>7月12日 周四 15:53 <a href="2012-07.html#p1">有关&#32;coLinux</a>
-<!-- date: 2012-07-12T15:53:59+0800 -->
-</li>
-</ul>
-
-<h3>2008.10</h3>
-
-<ul>
-<li>10月29日 周三 23:28 <a href="2008-10.html#p3">GNU&#32;Screen</a>
-<!-- date: 2008-10-29T23:28:30+0800 -->
-</li>
-</ul>
-
-<h3>2006.10</h3>
-
-<ul>
-<li>10月4日 周三 16:48 <a href="2006-10.html#p1">Slackware&#32;11&#32;is&#32;release&#32;&#33;</a>
-<!-- date: 2006-10-04T16:48:54+0800 -->
-</li>
-</ul>
-
-<h3>2006.09</h3>
-
-<ul>
-<li>9月18日 周一 00:11 <a href="2006-09.html#p2">使用&#32;Slackware&#32;两周年&#44;&#32;:&#41;</a>
-<!-- date: 2006-09-18T00:11:25+0800 -->
-</li>
-</ul>
-
-<h3>2006.08</h3>
-
-<ul>
-<li>8月26日 周六 18:27 <a href="2006-08.html#p8">投身&#32;KDE</a>
-<!-- date: 2006-08-26T18:27:55+0800 -->
-</li>
-<li>8月14日 周一 03:24 <a href="2006-08.html#p5">Xfce4&#32;的自启动项</a>
-<!-- date: 2006-08-14T03:24:24+0800 -->
-</li>
-</ul>
-
-<h3>2006.06</h3>
-
-<ul>
-<li>6月11日 周日 15:32 <a href="2006-06.html#p1">FVWM&#32;SelectOnRelease</a>
-<!-- date: 2006-06-11T15:32:07+0800 -->
-</li>
-</ul>
-
-<h3>2006.04</h3>
-
-<ul>
-<li>4月26日 周三 23:27 <a href="2006-04.html#p9">Opera&#32;9.0&#32;beta</a>
-<!-- date: 2006-04-26T23:27:05+0800 -->
-</li>
-<li>4月22日 周六 21:05 <a href="2006-04.html#p7">版本更新&#32;CURRENT</a>
-<!-- date: 2006-04-22T21:05:31+0800 -->
-</li>
-<li>4月18日 周二 18:39 <a href="2006-04.html#p6">配置文件的备份</a>
-<!-- date: 2006-04-18T18:39:56+0800 -->
-</li>
-<li>4月14日 周五 12:22 <a href="2006-04.html#p4">Fun&#44;&#32;:&#41;</a>
-<!-- date: 2006-04-14T12:22:37+0800 -->
-</li>
-<li>4月10日 周一 15:54 <a href="2006-04.html#p3">嘿嘿&#44;&#32;可以上网了</a>
-<!-- date: 2006-04-10T15:54:49+0800 -->
-</li>
-</ul>
-
-<h3>2006.02</h3>
-
-<ul>
-<li>2月19日 周日 01:06 <a href="2006-02.html#p11">配置&#32;Samba</a>
-<!-- date: 2006-02-19T01:06:29+0800 -->
-</li>
-<li>2月7日 周二 15:58 <a href="2006-02.html#p4">MicroEmacs&#32;and&#32;JED</a>
-<!-- date: 2006-02-07T15:58:56+0800 -->
-</li>
-<li>2月6日 周一 14:45 <a href="2006-02.html#p3">alias&#32;与&#32;builtin</a>
-<!-- date: 2006-02-06T14:45:18+0800 -->
-</li>
-</ul>
-
-<h3>2006.01</h3>
-
-<ul>
-<li>1月25日 周三 17:33 <a href="2006-01.html#p8">搞定了&#32;fcitx</a>
-<!-- date: 2006-01-25T17:33:58+0800 -->
-</li>
-<li>1月23日 周一 22:02 <a href="2006-01.html#p7">Keep&#32;Current</a>
-<!-- date: 2006-01-23T22:02:12+0800 -->
-</li>
-<li>1月18日 周三 20:23 <a href="2006-01.html#p4">ADSL&#32;触网了</a>
-<!-- date: 2006-01-18T20:23:56+0800 -->
-</li>
-</ul>
-
-<h3>2005.12</h3>
-
-<ul>
-<li>12月13日 周二 12:33 <a href="2005-12.html#p5">在终端里浏览图片</a>
-<!-- date: 2005-12-13T12:33:51+0800 -->
-</li>
-</ul>
-
-<h3>2005.11</h3>
-
-<ul>
-<li>11月6日 周日 18:07 <a href="2005-11.html#p1">Set&#32;up&#32;my&#32;CVSROOT</a>
-<!-- date: 2005-11-06T18:07:12+0800 -->
-</li>
-</ul>
-
-<h3>2005.10</h3>
-
-<ul>
-<li>10月24日 周一 23:28 <a href="2005-10.html#p7">Wow&#44;&#32;VMware~&#33;</a>
-<!-- date: 2005-10-24T23:28:21+0800 -->
-</li>
-<li>10月17日 周一 14:01 <a href="2005-10.html#p5">Upgrade&#32;to&#32;10.2</a>
-<!-- date: 2005-10-17T14:01:14+0800 -->
-</li>
-<li>10月14日 周五 22:55 <a href="2005-10.html#p4">在&#32;Linux&#32;下玩魔兽&#44;&#32;CS</a>
-<!-- date: 2005-10-14T22:55:32+0800 -->
-</li>
-<li>10月8日 周六 22:43 <a href="2005-10.html#p3">在&#32;Win&#32;里运行&#32;Shell&#32;脚本</a>
-<!-- date: 2005-10-08T22:43:22+0800 -->
-</li>
-<li>10月7日 周五 23:01 <a href="2005-10.html#p2">超强的编译器&#32;TCC</a>
-<!-- date: 2005-10-07T23:01:50+0800 -->
-</li>
-</ul>
-
-<h3>2005.09</h3>
-
-<ul>
-<li>9月17日 周六 12:36 <a href="2005-09.html#p7">使用&#32;Slackware&#32;一周年&#44;&#32;:&#41;</a>
-<!-- date: 2005-09-17T12:36:21+0800 -->
-</li>
-<li>9月16日 周五 22:43 <a href="2005-09.html#p6">Slackware&#32;10.2&#32;is&#32;released~&#33;</a>
-<!-- date: 2005-09-16T22:43:13+0800 -->
-</li>
-<li>9月2日 周五 16:08 <a href="2005-09.html#p0">锐杰认证</a>
-<!-- date: 2005-09-02T16:08:56+0800 -->
-</li>
-</ul>
-
-<h3>2005.08</h3>
-
-<ul>
-<li>8月21日 周日 12:42 <a href="2005-08.html#p7">W3m&#32;and&#32;emacs-w3m</a>
-<!-- date: 2005-08-21T12:42:08+0800 -->
-</li>
-</ul>
-
-<h3>2005.7</h3>
-
-<ul>
-<li>2005-07-06, 星期三 <a href="2005-07.html#p2">Linux&#32;下实现字体的粗体</a>
-<!-- date: 2005-07-06T14:56:46+0800 -->
-</li>
-</ul>
-
-<h3>2005.06</h3>
-
-<ul>
-<li>Jun 13, Mon <a href="2005-06.html#p7">Emacs&#32;dictionary</a>
-<!-- date: 2005-06-13T18:21:21+0800 -->
-</li>
-<li>Jun 12, Sun <a href="2005-06.html#p5">The&#32;Slack&#32;World</a>
-<!-- date: 2005-06-12T16:04:31+0800 -->
-</li>
-<li>Jun  8, Wed <a href="2005-06.html#p2">All&#32;abou&#32;Opera</a>
-<!-- date: 2005-06-08T17:45:27+0800 -->
-</li>
-<li>Jun  2, Thu <a href="2005-06.html#p1">升级的惨痛经历</a>
-<!-- date: 2005-06-02T22:02:51+0800 -->
-</li>
-<li>Jun  1, Wed <a href="2005-06.html#p0">Slackware&#32;10.1</a>
-<!-- date: 2005-06-01T15:40:13+0800 -->
-</li>
-</ul>
-
-<h3>2005.05</h3>
-
-<ul>
-<li>2005-05-31, 星期二 <a href="2005-05.html#p17">LANG=zh_CN.UTF-8</a>
-<!-- date: 2005-05-31T15:02:40+0800 -->
-</li>
-<li>2005-05-27, 星期五 <a href="2005-05.html#p16">唉&#44;&#32;最后还是&#32;GBK</a>
-<!-- date: 2005-05-27T17:12:30+0800 -->
-</li>
-<li>2005-05-26, 星期四 <a href="2005-05.html#p14">微软&#34;万圣节备忘录&#34;事件</a>
-<!-- date: 2005-05-26T22:36:22+0800 -->
-</li>
-<li>2005-05-17, 星期二 <a href="2005-05.html#p10">Emacs&#32;TAGS&#32;设置</a>
-<!-- date: 2005-05-17T22:35:40+0800 -->
-</li>
-</ul>
-
-<h3>2005.04</h3>
-
-<ul>
-<li>2005-04-14, 星期四 <a href="2005-04.html#p3">Xlyrice&#32;歌词秀</a>
-<!-- date: 2005.04.14, 星期四 -->
-</li>
-<li>2005-04-11, 星期一 <a href="2005-04.html#p2">唉&#33;&#32;GBK</a>
-<!-- date: 2005.04.11, 星期一 -->
-</li>
-<li>2005-04-09, 星期六 <a href="2005-04.html#p1">New&#32;life...</a>
-<!-- date: 2005.04.09, 星期六 -->
-</li>
-</ul>
-
-<h3>2005.03</h3>
-
-<ul>
-<li>2005-03-31, 星期四 <a href="2005-03.html#p5">My&#32;FVWM&#32;decor~</a>
-<!-- date: 2005.03.31, 星期四 -->
-</li>
-</ul>
-
-<h3>2005.01</h3>
-
-<ul>
-<li>2005-01-30, 星期日 <a href="2005-01.html#p10">XP&#32;update....</a>
-<!-- date: 2005.01.30, 星期日 -->
-</li>
-</ul>
-
-<h3>2004.12</h3>
-
-<ul>
-<li>2004-12-27, 星期一 <a href="2004-12.html#p3">挂载&#32;U&#32;盘&#32;simple&#32;way~</a>
-<!-- date: 2004.12.27, 星期一 -->
-</li>
-<li>2004-12-10, 星期五 <a href="2004-12.html#p1">esmtp&#32;&#43;&#32;mutt&#32;&#43;&#32;fetchmail</a>
-<!-- date: 2004.12.10, 星期五 -->
-</li>
-<li>2004-12-05, 星期日 <a href="2004-12.html#p0">LaTex&#32;中文配置&#32;in&#32;SLK&#32;10.0</a>
-<!-- date: 2004.12.05, 星期日 -->
-</li>
-</ul>
-
-<h3>2004.11</h3>
-
-<ul>
-<li>2004-11-28, 星期日 <a href="2004-11.html#p3">Opera&#32;may&#32;be&#32;the&#32;best~&#33;</a>
-<!-- date: 2004.11.28, 星期日 -->
-</li>
-<li>2004-11-26, 星期五 <a href="2004-11.html#p1">重装&#32;SLK&#32;札记</a>
-<!-- date: 2004.11.26, 星期五 -->
-</li>
-<li>2004-11-09, 星期四 <a href="2004-11.html#p0">Fcitx&#32;的问题……&#32;</a>
-<!-- date: 2004.11.09, 星期四 -->
-</li>
-</ul>
-
-<h3>2004.10</h3>
-
-<ul>
-<li>2004-10-31, 星期日 <a href="2004-10.html#p4">Lumaqq&#32;or&#32;OpenQ&#32;?</a>
-<!-- date: 2004.10.31, 星期日 -->
-</li>
-<li>2004-10-24, 星期四 <a href="2004-10.html#p3">Rss&#32;in&#32;Liferea</a>
-<!-- date: 2004.10.24, 星期日 -->
-</li>
-<li>2004-10-16, 星期六 <a href="2004-10.html#p1">alsa&#32;确实是个好东西&#32;--&#32;Intel&#32;845&#32;PEI&#32;ac97&#32;出声了~~~</a>
-<!-- date: 2004.10.16, 星期六 -->
-</li>
-<li>2004-10-13, 星期三 <a href="2004-10.html#p0">Netscape&#32;的&#32;bug&#32;?</a>
-<!-- date: 2004.10.13, 星期三 -->
-</li>
-</ul>
-
-<h3>2004.09</h3>
-
-<ul>
-<li>2004-09-26, 星期六 <a href="2004-09.html#p1">在&#32;FVWM里使用&#32;qiv&#32;加载桌面背景图片</a>
-<!-- date: 2004.09.25, 星期六 --> 
-</li>
-<li>2004-09-17, 星期五 <a href="2004-09.html#p0">Slackware&#32;10.0&#32;的安装和&#32;Xwindows&#32;的设置</a>
-<!-- date: 2004.09.17, 星期五 -->
-</li>
-</ul>
 <!-- Page published by Emacs Wiki ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;

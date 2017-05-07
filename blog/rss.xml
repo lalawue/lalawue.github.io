@@ -9,109 +9,223 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Sun, 16 Apr 2017 23:14:30 +0800</pubDate>
+    <pubDate>Sun, 07 May 2017 13:57:40 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>m_tunnel 支持 Win7</title>
-      <guid>http://suchang.net/blog/2017-04.html#p1</guid>
-      <pubDate>2017-04-16T22:52:47+0800</pubDate>
+      <title>安装黑苹果 10.12 macOS Sierra</title>
+      <guid>http://suchang.net/blog/2017-05.html#p0</guid>
+      <pubDate>2017-05-07T10:36:03+0800</pubDate>
       <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
+      <category>CategoryLinux</category>
       <description><![CDATA[<p>
-其实 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 使用单 TCP 来连接本地、远端有风险，就是 TCP 本身并不是为流
-速设计的，而是为流量设计的，这使得很多请求，在 TCP 网络不稳定的时候，很
-容易就被卡住，而这里本身的设计，就使得后一个请求，跟前一个请求发生了关联，
-要卡大家一起卡。
+想想距离上次安装已经有一年多了，这次升级安装，原因是之前查到 10.11 下对
+GTX 1060 无法支持，这是个太大的硬伤。考虑到之前几次升级安装，也还算顺利，
+这次没多想就开干了，但这次巨蛋疼，来来回回花了近三天时间，通了一次宵才搞
+定。
 
 </p>
 
 <p>
-这个大 BUG 是最开始设计的问题，后来就想转而使用 KCP 来做中间的管道，而不
-是使用 TCP，当然当时也有不少使用 KCP 的类似工具了。
+这次黑苹果安装，把 Clover 的普通安装、启动引导安装，EFI 系统分区，系统安
+装盘，DSDT，相关工具的使用，以及这个版本安装的其他坑弄清楚了一些。
 
 </p>
 
 <p>
-最近是看上了 <a href="https://github.com/xtaci/kcptun">kcptun</a>，一个使用 kcp 来做管道的工具，管道还需要配上两端的
-shadowshocks，来为浏览器等提供标准的 socks5 接口，以及对应远端发起真实的
-请求。而我则刚好可以使用 m_tunnel 来替代 shadowsocks。加入 Win7 的支持，
-则是因为现在玩游戏比较多了，算了一下，在 Win7 下面的时间更多。
+回头想想，如果要达到一个类似 Windows 安装流程那样顺利的安装，需要了解上
+面的这些概念才行，然后还需要用到下面列出来的工具，要不然，随便碰到一点现
+象，就不知道该怎么办了，那就难了。
 
 </p>
 
 <p>
-还好，用 VS2017 建立工程编译，需要修改的东西不多，就可以跑了，效果是杠杠
-的，当然，m_tunnel 是用的是 select 来实现 MacOS、Linux、Windows 三端接口
-一致，而不是 libuv 这类框架。
+比如所谓的懒人版，应该是加了一些驱动吧，但我觉得在普适性上面，也还是会挑
+硬件的，苹果的系统，本来就没有考虑过这一点，从需要第三方的引导器如 Clover，
+以及需要 DSDT 来看就知道了。
 
 </p>
 
 <p>
-使用 select，就有一些效率的问题，但如果不是做极端的 server，其实是没有关
-系的，这个我也有一些 CPU 使用量的数据；还有就是 socket 同时使用的数量是
-有限制的，但是对于一般人来说，其实都足够了，因为你真的很难很难能够同时用
-完 select 提供的最大 socket 数量。
+还有，我之所以不用懒人版，还是担心安全性的问题。
+
+</p>
+
+<h5>一、安装前提</h5>
+
+<ul>
+<li>PC macOS 独立硬盘安装，支持 64 位的硬件，支持 UEFI 启动的主板
+</li>
+<li>需要设置 BIOS，需要插拔独立显卡
+</li>
+<li>不懂我说啥的同学，非 64 位硬件非 UEFI 的同学，其他非独立硬盘想双系统
+   的同学，这里帮不了你了
+</li>
+</ul>
+
+<h5>二、需要的工具</h5>
+
+<p>
+下面列出需要的工具，但一些工具需要在 macOS 下运行，只有 Windows 的考虑下
+其他替代工具吧，需要的工具有：
+
+</p>
+
+<ul>
+<li>MaciASL.app，用于生成 DSDT 描述文件
+</li>
+<li>Clover Configurator.app，用于配置 Clover，以及挂载 EFI 分区
+</li>
+<li>最新版的 Clover，到 sourceForge 下就好
+</li>
+<li>AGDPfix.app，用于解决部分 SMBIOS 接 Nvidia 显卡后启动显示黑屏的问题，
+   有其他的替代方案，可通过搜这个 app 看看（这个驱动独立显卡，安装后使用
+   的）
+</li>
+</ul>
+
+<p>
+另外，需要一个 8G 或者更大容量的 U 盘，以及需要对主板 BIOS 进行以下设置：
+
+</p>
+
+<ul>
+<li>Secure Boot disable
+</li>
+<li>AHCI enable
+</li>
+<li>UEFI enable（可以选择 UEFI、legacy 都支持）
+</li>
+<li>XHCI <a class="nonexistent" href="mailto:suchaaa@gmail.com">SmartAuto</a>
+</li>
+<li>XHCI/EHCI handoff enable
+</li>
+<li>设置 U 盘启动优先级最高
+</li>
+</ul>
+
+<p>
+上面的设置来源于外文网站，我自己也是这么设置的，那些懒人版都没有这个说明
+的。由于对部分开关不了解，所以这里不展开描述。
 
 </p>
 
 <p>
-我这边也提供了一个 Win7 的 <a href="https://github.com/lalawue/m_tunnel/releases/download/v20170415/mtunnel_local_windows_amd64.zip">precompiled&#32;版本</a>，自己则是买了 Linode 东京每
-月 5 刀的套餐，在 SZ 看 Youtube 720P 几乎秒开，大概这样。
+我自己电脑的大概信息是 3 个硬盘，一个单用于 Windows，一个单用于 macOS 的
+最新版本（就是这次准备安装的），一个是备份启动的 macOS 系统（10.11.6），
+只有这个不是 SSD，也分区用于存数据资料。上面的 BIOS 设置，对 Windows 系
+统没有影响。
 
 </p>
 
-]]></description>
-    </item>
+<h5>三、准备资源</h5>
 
-    <item>
-      <title>emacs-wiki-mode 已死</title>
-      <guid>http://suchang.net/blog/2017-04.html#p0</guid>
-      <pubDate>2017-04-16T22:42:10+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryThisSite</category>
-      <description><![CDATA[<p>
-为这个静态站点更新了几个链接，RSS 地址，还有搜索地址，这个站点不知不觉已
-经超过了 10 年，保留了最开始学习 Linux 的点点滴滴，各种嬉戏玩耍，不过，
-开始工作一段时间后，这里就都是流水了。
+<p>
+这里列一下大概需要准备的资源，创建硬件描述表 DSDT，准备安装用的 U 盘
+
+</p>
+
+<ul>
+<li>10.12 macOS Sierra 原版安装盘，并创建系统安装 U 盘
+</li>
+<li>最新版的 Clover，先给系统安装 U 盘创建 Clover 启动，务必在安装界面勾
+   选自定（customize），选择安装启动引导以及 Drivers64UEFI 下
+   的<a class="nonexistent" href="mailto:suchaaa@gmail.com">OsxAptioFixDrv</a>-64
+</li>
+<li>使用 MaciASL.app 生成 DSDT，并编译，遇到编译不过的问题，将这一行或这
+   一块删除，直到通过编译，保存为 AML 二进制文件
+</li>
+<li>使用 Clover Configurator.app 挂载 U 盘的 EFI 分区（请注意不是当前启动
+   macOS 的 EFI 分区），将 DSDT 描述文件放到 EFI/ACPI/patched 以及
+   origin 下面
+</li>
+<li>下载最新版的 FakeSMC.kext 放到 U 盘 EFI/CLOVER/kexts/Others 下面，
+   kexts 目录下如果还有其他文件夹的，建议将 10.12 文件夹下面的也拷贝到
+   Others，然后删除掉除 Others 的其他，要不每次升级系统都得拷贝一遍，麻烦
+</li>
+<li>使用 Clover Configurator.app 配置 U 盘 EFI 分区下的 config.plist，
+   boot 下面的 verbose、x86_64、xcpm、kext-dev-mode=1、nv_disable=1 勾选；
+   SMBIOS 里面点魔术棒选个跟当前硬件配置差不多的就好；还有 Kernel 下的
+   AppleRTC 勾选；或者用你当前 Clover 的配置也行，但是要去掉独立显卡的选
+   项
+</li>
+<li>关闭保存 Clover Configurator.app 并推出 U 盘 EFI 分区
+</li>
+</ul>
+
+<h5>四、安装流程</h5>
+
+<p>
+先说一下大概的流程，U 盘启动安装，遇到问题增添 U 盘 EFI 分区的 kext，安
+装后修复部分 SMBIOS 下的黑屏问题。
+
+</p>
+
+<ol>
+<li>如果有像我这样 Nvidia GTX 1060 显卡的，先把显卡拔掉，BIOS 设置使用 Intel
+    内置显卡
+</li>
+<li>BIOS 设置 U 盘启动优先级最高，使用 U 盘 Clover 启动安装，如果没有
+    kext 挂掉，kernel panic，那么可以走到安装界面；选择盘符抹盘安装
+</li>
+<li>安装顺利完成，使用 U 盘引导并启动到新版系统，先驱动起网卡，然后下载
+    Nvidia 的 web 驱动安装，并使用 AGDPfix.app 修正部分 SMBIOS 设置的黑
+    屏问题
+</li>
+<li>使用 Clover 给新版系统安装启动引导，将之前 U 盘的 EFI 分区内容拷贝到
+    新系统的 EFI 分区，修改 config.plist，去掉 nv_disable=1，加入
+    nvidiaweb 支持（请看这一节的最后），保存并推出 EFI 分区
+</li>
+<li>关机下电，将 Nvidia 独立显卡插回主板，修改 BIOS 的启动顺序
+</li>
+<li>顺利启动新系统，安装结束；其他 kext 安装、声卡、网卡驱动安装，Clover
+    默认启动项请搜索其他吧
+</li>
+</ol>
+
+<p>
+有关 nvidiaweb 驱动的支持，需要使用文本编辑器编辑 config.plist，在
+<a class="nonexistent" href="mailto:suchaaa@gmail.com">SystemParameters</a> key 下添加：
+
+</p>
+
+<pre class="example">	&lt;key&gt;SystemParameters&lt;/key&gt;
+	&lt;dict&gt;
+                ... 其他配置 ...
+        	&lt;key&gt;NvidiaWeb&lt;/key&gt;
+        	&lt;true/&gt;
+	&lt;/dict&gt;
+</pre>
+
+<h5>五、kernel panic、黑屏问题</h5>
+
+<p>
+这里的 kernel panic 出现在安装第 2. 步，我也遇到过，看看是什么 kext 引起
+的，将其更新或删除就好，一般有了 DSDT 后，对硬件的描述应该不成问题了。
 
 </p>
 
 <p>
-自从搬家到了 <a class="nonexistent" href="mailto:suchaaa@gmail.com">GitHub</a> Pages，省心了很多。十年前，用 Wiki 的方式记录并连接
-各个页面，用 Emacs 作为工具编写并转换成 HTML 是一个新奇的方式，现在，还
-有谁会抱着一个客户端来写博客，有了通用的浏览器，和强大的 JS，Web 可以扮
-演所有的东西。
+黑屏问题看外文参考资料是因为 SMBIOS 设置，苹果针对 OEM 单独做的处理，请
+看下面的英文参考资料。
 
 </p>
+
+<h5>六、参考资料</h5>
 
 <p>
-所以当我在 google 里面搜索 emacs-wiki-mode 时，已经搜索不到什么有用的东
-西了。也许最开始大家只是使用 emacs 来写 <a class="nonexistent" href="mailto:suchaaa@gmail.com">LiveJournal</a>，最后变成了 wiki，最
-后大神 maintain 了这个 project，然后变成了 <a class="nonexistent" href="mailto:suchaaa@gmail.com">EmacsMuse</a>，然后 muse 成了 GNU
-的官方项目，那时候 emacs-wiki-mode 就已经半死不活，有谁还会用一个老项目？
+参考外文资料比较好，比如 www.tonymacx86.com
 
 </p>
 
-<p>
-之前 github 上的 emacsmirror 还保留着 emacs-wiki-mode，当时看到这个老项
-目，我还是蛮开心的，没想到现在上去翻找，已经搜不到了。
-
-</p>
-
-<p>
-也许我比较古旧吧，还用着这个 mode 写东西，反正也挺趁手的，反正写的也很少，
-反正都是流水，反正这个附加挂上去的 emacs-wiki-journal 也是我自己一个人用
-而已。
-
-</p>
-
-<p>
-本来还想把自己用的 emacs-wiki-mode 源代码挂到 github 上，现在有点犹豫了。
-
-</p>
+<ul>
+<li><a href="https://www.tonymacx86.com/threads/good-news-for-x99-10-11-haswell-e-el-capitan.178425/page-4#post-1151520">Clover&#32;设置及黑屏问题</a>
+</li>
+<li><a href="https://www.tonymacx86.com/threads/black-screen-with-macpro-6-1-or-imac-15-or-imac-17-system-definition.183113/">Black&#32;Screen&#32;with&#32;MacPro&#32;6&#44;1&#32;or&#32;iMac&#32;15&#32;or&#32;iMac&#32;17&#32;System&#32;Definition</a>
+</li>
+</ul>
 
 ]]></description>
     </item>
