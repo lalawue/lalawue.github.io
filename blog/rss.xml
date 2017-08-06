@@ -9,41 +9,53 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Sun, 25 Jun 2017 00:53:02 +0800</pubDate>
+    <pubDate>Sun, 06 Aug 2017 13:49:21 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>m_tunnel 支持 epoll/kqueue</title>
-      <guid>http://suchang.net/blog/2017-06.html#p0</guid>
-      <pubDate>2017-06-25T00:30:16+0800</pubDate>
+      <title>m_kcptun</title>
+      <guid>http://suchang.net/blog/2017-08.html#p0</guid>
+      <pubDate>2017-08-06T13:34:04+0800</pubDate>
       <dc:creator>sucha</dc:creator>
       <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-<a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 支持 epoll/kqueue 了，所以默认情况下，Win 下编译使用 select 模
-型，Linux 下使用 epoll，MacOS 下使用 kqueue。这样的话，Linux 及 MacOS 下
-都没有了 socket 数量的限制，虽然大部分的情况下不会遇到这种问题。
+之前的 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 因为基于 TCP，实际环境单独使用其实不尽如人意，因为 TCP
+本身重发机制等等原因，在网络环境比较糟糕的情况下，延迟长得让人难以接受。
 
 </p>
 
 <p>
-自用 m_tunnel 一段时间了，配合 kcptun 使用很不错，觉得将 kcp 集成到
-m_tunnel 里，这个选项可以提上日程了，当代实际能用时又不知到什么时候了。
+早期的改进，诸如在手机、PC 端的动作游戏，IM 上，是使用改进的 UDP，封装自
+己的协议，以及重发机制管理，来达到速度、带宽的平衡。
 
 </p>
 
 <p>
-另外，将 m_tunnel 里面网络的部分单独抽取出来，放到了 <a href="https://github.com/lalawue/m_net">m_net</a> 里，修改了一
-些 API，增加了一个 ERROR 的状态，另外，增加了 example 以及 test 文件。
+比较有名的是 <a href="https://github.com/skywind3000/kcp">kcp</a>，包含完整协议，意图取代 TCP，野心更大的则是 Google 的
+<a href="https://www.chromium.org/quic">QUIC</a> 协议，还包含完整的安全性的考虑。
 
 </p>
 
 <p>
-epoll、kqueue 虽然使用平台不一样，但是其接口是类似的，较大的不同，在于对
-于 socket 的通知属性修改，epoll 的接口是单独对某个 socket 设置，而
-kqueue 的接口是通过 kevent API 来操作一个数组，在接口使用上，我感觉后者
-更好一些。
+上面也说到，其实很早之前大家就都有基于 UDP 的各自的方案，大家对 TCP 的局
+限也都比较清楚，所以类似 QUIC 这样的协议，感觉铺开会很快的。
+
+</p>
+
+<p>
+实际上，我自己使用 m_tunnel 是使用 <a href="https://github.com/xtaci/kcptun">kcptun</a>，要不实际环境跑起来太慢了，再
+说自己也想研究一下 kcp 的使用，于是构建了这个
+<a href="https://github.com/lalawue/m_kcptun">https://github.com/lalawue/m_kcptun</a> 。
+
+</p>
+
+<p>
+目前仅能完成基础的工作，离具体实用还有一段距离，因为实际上虽然基于 kcp，
+上层还是需要自己的协议，来模拟这端 TCP 与远端 TCP 是否还连上这个问题，起
+码能保证当本地 TCP 重连的时候，远端 TCP 也来一个断开重连，要不然，跑在
+TCP 上面的协议会乱的。
 
 </p>
 
