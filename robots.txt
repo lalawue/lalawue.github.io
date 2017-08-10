@@ -1,5 +1,5 @@
 #
-# robots.txt for http://suchang.net
+# robots.txt for http://suchang.org
 #
 # create by sucha in 2006/03/10
 
