@@ -9,148 +9,151 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>Sun, 20 Aug 2017 12:00:48 +0800</pubDate>
+    <pubDate>Tue, 05 Sep 2017 02:02:42 +0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>短信自动转发机</title>
-      <guid>http://suchang.org/blog/2017-08.html#p2</guid>
-      <pubDate>2017-08-20T11:36:36+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryMisc</category>
-      <description><![CDATA[<p>
-好早之前因为办理宽带，才知道天威视讯跟联通是一家，也才知道联通收了话费说
-能拉宽带，而天威可以接着说拉不了。
-
-</p>
-
-<p>
-所以我最后是进入了电信的坑，这条宽带也拉得很不容易，电信分几个不同的业务
-部，一个是营业厅，另外一个是电话 10000 号业务，营业厅说拉不了，但是
-10000 号也许业务很缺，说可以。最后我是跟着一个电信小哥花了半个小时横跨两
-层楼拉了一条电话线上来，然后终于光纤入户了。
-
-</p>
-
-<p>
-带来的问题是，我多了一个月流量 4G 的电信号码。这是两年以前，不久流量可以
-流转后，每个月手头有近 8G 流量。
-
-</p>
-
-<p>
-可是水果家的机子，只能装一张卡，没有流量玩什么手机，流量高的先包养起来，
-于是我装上了电信卡。联通卡仅剩下呼叫转移、短信转发的工作，变成了低保机。
-比较蛋疼的是短信，当时不懂自动短信转发，一开始带的是两个手机。
-
-</p>
-
-<p>
-后来是用 HTC_M8 装了一个第三方 APP，后台收短信，转发到相应公众号，我这边微信
-到相应公众号注册接收，一条一分钱。
-
-</p>
-
-<p>
-问题是这个后台太耗电了，一开始 HTC_M8 只负责呼叫转移，可以待机 4+ 天，加
-了这个后台 APP，只能待机近一天。备机吃起电来堪比主机，服侍不动，累瘫。
-
-</p>
-
-<p>
-而且还有安全问题，联通是主力注册号，在第三方小服务商眼皮底下过短信，总觉
-得太不靠谱。
-
-</p>
-
-<p>
-后来才知道水果家的 iMessage 可以同一个账号收发，但是要 8.0 及之上的系统。
-前一阵子我刚露了一手，给吃灰好久的 4S 装上了淘宝新电池，第二春蓄势待发。
-可还是 7.1 的系统，Home 键也坏了。还好水果爸爸心慈，有 <a class="nonexistent" href="mailto:suchaaa@gmail.com">AssidtiveTouch</a>，
-还答应可以升级到 9.3.5。
-
-</p>
-
-<p>
-小小设置了一番，电话转移也有了，短信收发也有了，延迟很小，完全可以接受，
-安全性要比之前的好太多。耗电方面，实测带着淘宝新电池的 4S，可以妥妥地扛
-3 ～ 4 天，这个结果相比之前，不能更开心。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>本站换域名了</title>
-      <guid>http://suchang.org/blog/2017-08.html#p1</guid>
-      <pubDate>2017-08-11T02:09:22+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryThisSite</category>
-      <description><![CDATA[<p>
-换成 <a href="http://suchang.org">http://suchang.org</a> 了，域名商还是原来那个，查到 github 只能绑定一个
-domain 吧，于是换了，这样旧的 <a href="http://suchang.net">http://suchang.net</a> 就无法访问了。
-
-</p>
-
-<p>
-前几天 gmail 收到一些域名降价邮件，随手查了一下，马上把这个域名给捞了。
-记得之前在大学时，好想抢这个，可惜抢不到，现在是没人要了。
-
-</p>
-
-<p>
-此一时彼一时。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>m_kcptun</title>
-      <guid>http://suchang.org/blog/2017-08.html#p0</guid>
-      <pubDate>2017-08-06T13:34:04+0800</pubDate>
+      <title>有关 m_net 跨平台的小型网络库</title>
+      <guid>http://suchang.org/blog/2017-09.html#p0</guid>
+      <pubDate>2017-09-05T00:59:18+0800</pubDate>
       <dc:creator>sucha</dc:creator>
       <category>CategoryProgramming</category>
       <description><![CDATA[<p>
-之前的 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 因为基于 TCP，实际环境单独使用其实不尽如人意，因为 TCP
-本身重发机制等等原因，在网络环境比较糟糕的情况下，延迟长得让人难以接受。
+最近一直在玩 <a href="https://github.com/lalawue/m_net">m_net</a>，当然总是处于修修改改当中。
 
 </p>
 
 <p>
-早期的改进，诸如在手机、PC 端的动作游戏，IM 上，是使用改进的 UDP，封装自
-己的协议，以及重发机制管理，来达到速度、带宽的平衡。
+很早就有参考 <a href="https://github.com/rxi/dyad">dyad</a> 这个优雅到不行的网络库，C89 的语法，接口设计清晰明了；
+仅针对 TCP 抽象为 Stream；对于 socket 的状态变化，设置为事件监听接收处理；
+简单粗暴的 SDK 接收数据再发通知，buffer 地址以及数据 size 直接送到用户手
+上，接收部分则随着数据增大，而不断 realloc 出来；读写接口还加上了方便的
+基于 C string 的处理。
 
 </p>
 
 <p>
-比较有名的是 <a href="https://github.com/skywind3000/kcp">kcp</a>，包含完整协议，意图取代 TCP，野心更大的则是 Google 的
-<a href="https://www.chromium.org/quic">QUIC</a> 协议，还包含完整的安全性的考虑。
+基于这一套网络库构造的 demo，简明得不行，比如首页的 echo server。
 
 </p>
 
 <p>
-上面也说到，其实很早之前大家就都有基于 UDP 的各自的方案，大家对 TCP 的局
-限也都比较清楚，所以类似 QUIC 这样的协议，感觉铺开会很快的。
+且后者还提供了 timer。这个 timer 的实现，其实基于 select 对于阻塞 socket
+的监听。
 
 </p>
 
 <p>
-实际上，我自己使用 m_tunnel 是使用 <a href="https://github.com/xtaci/kcptun">kcptun</a>，要不实际环境跑起来太慢了，再
-说自己也想研究一下 kcp 的使用，于是构建了这个
-<a href="https://github.com/lalawue/m_kcptun">https://github.com/lalawue/m_kcptun</a> 。
+m_net 历史，最早是从 13 年做游戏时弄的一个单独处理 socket 的接口，当时写
+得很挫先不说。后来慢慢发展，看到了 dyad 后，大量参考了 dyad 的设计。比如
+抽象了 win 下的接口，使用 select 处理三个平台的 socket 事件，不同的是，
+一开始就包含了 TCP、UDP 的支持，一开始就是非阻塞的接口，对于 socket 则命
+名为 channel，简称 chann。
 
 </p>
 
 <p>
-目前仅能完成基础的工作，离具体实用还有一段距离，因为实际上虽然基于 kcp，
-上层还是需要自己的协议，来模拟这端 TCP 与远端 TCP 是否还连上这个问题，起
-码能保证当本地 TCP 重连的时候，远端 TCP 也来一个断开重连，要不然，跑在
-TCP 上面的协议会乱的。
+但后来 m_net 在不同平台采用了 kqueue、epoll 的实现，接口以及处理上就很不
+同了，代码量也增加了很多。状态关注点少了不少，从事件数量上就可以看出来。
+
+</p>
+
+<p>
+最近 m_net 的更改，是将 C 这一层的接口整理了一下，增加了两个 utils。一个
+是用于 resolve host 的函数处理 host name 到 ip 的转化（DNS）；另外是单独
+对于 ip:port 这样的字串，加入一个 parse 的接口，分割拿到 ip 跟 port。
+
+</p>
+
+<p>
+把 C 的这一层命名为 core 之后，在 C 接口的基础上，抽象了 C++ 的 wrapper
+对象，有三种 <a class="nonexistent" href="mailto:suchaaa@gmail.com">ChannAddr</a>，Chann 和 <a class="nonexistent" href="mailto:suchaaa@gmail.com">ChannDispacher</a>。
+
+</p>
+
+<p>
+分别用来处理地址部分，chann 的数据、状态处理，以及所有 chann 的事件监听、
+分发。抽象的结果，是在 C++ 这一层，比如针对 client、server 的处理，可以
+类似 C 一样设置一个事件函数，或者继承 Chann 父类，封装专门处理 client、
+server 的子类，所有的事件、数据都在子类的内部流转，容易理解，易看易懂。
+
+</p>
+
+<p>
+C++ 支持了闭包后，单纯的 listen 接口不需要外建函数，或者派生子类，只需构
+造一个闭包处理就好，方便了很多。
+
+</p>
+
+<p>
+但是跟 dyad 还是有很大差距的，巨大的差距，在于对于数据的处理，m_net 不会
+在 recv 事件（数据到达）的时候帮用户接收数据，所以用户任何时候去 recv 数
+据，都需要自己准备一个 buffer，跟平常的 socket recv、send 没有什么不同。
+
+</p>
+
+<p>
+这个代码量就出来了，且 buffer 处理的优雅与否，比如针对不同的 protocol 抽
+象，是巨大的考验，我目前没有好的想法。
+
+</p>
+
+<p>
+暂时是不想跟 dyad 一样帮用户处理了，我觉得这样也不好，比如不断读取然后
+append 到已有的 buffer 上，大小不够了向系统要，不断 realloc 也很颓。
+
+</p>
+
+<p>
+m_net 没有对 recv 先接收处理，但是对于 send 部分，如果 socket 只是反馈
+would block，而不是其他的不可恢复的 error，则 SDK 会构造 buffer 存入用户
+数据，待 socket 可写后再慢慢 drain 数据。
+
+</p>
+
+<p>
+目前没有设置阈值，上层可以一直写，一直到内存耗尽，不知道底层其实 socket
+虽未断开但已经无法写入很久很久了。
+
+</p>
+
+<p>
+可以考虑设置某个阈值，比如 16M 的时候，给上层一个 EAGAIN 之类的，目前先
+不管。
+
+</p>
+
+<p>
+另外重要 feature，比如 timer 部分目前是没有的，由于所有 socket 都是非阻
+塞，如果仅仅在事件循环的时候获取当前时间，并走一次 timer chain，极端情况
+下，CPU 时间片占用是很可观的，这也是我一开始避免加入 timer 的原因。
+
+</p>
+
+<p>
+如果要加入 timer，那在这种情况下，我觉得，需要定一个最小的时间分割，一次
+循环，不多不少，就走一个 timer circle，比如 10ms，每 10ms 获取一次事件，
+或者多次循环获取一次，然后矫正，这个问题不大。
+
+</p>
+
+<p>
+这种方案下，CPU 时间片占用方面才可以接受，上层事件的精确度也能够保证。
+
+</p>
+
+<p>
+只是目前 timer 部分接口，如果 mnet_poll() 上面增加调用，感觉也不不是很好，
+毕竟很多时候，是不需要这个 timer 的。目前一个 -1 的值设过去，有事件就突
+击处理一下，没事件就死等待好了。
+
+</p>
+
+<p>
+所以 timer 部分的接口，是集成在 mnet_poll() 之上，还是给用户一个选择，单
+独的设置并处理，还需要斟酌一下。
 
 </p>
 
