@@ -9,10 +9,42 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.org/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>2017-12-02T11:53:50+0800</pubDate>
+    <pubDate>2017-12-02T11:59:51+0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
+
+    <item>
+      <title>Emacs 升级到了 25.3.1</title>
+      <guid>http://suchang.net/blog/2017-12.html#p1</guid>
+      <pubDate>2017-12-02T11:56:07+0800</pubDate>
+      <dc:creator>sucha</dc:creator>
+      <category>CategoryMisc</category>
+      <description><![CDATA[<p>
+Emacs 升级到了 25.3.1，因为许久没有写这个 blog，忘记了应该用什么命令来加
+入 entry，还以为是 emacs-wiki-journal 用不了了，不兼容了，开始杞人忧天。
+
+</p>
+
+<p>
+升级 Emacs，是因为黑苹果想升级 10.13 而不得，不得已重装了系统，又回到了
+10.12，然后看到了一个不错的模块，貌似是可以保存窗口大小的，依赖于新版的
+Emacs，之前一直觉得蛮需要这个的。
+
+</p>
+
+<p>
+只可惜，重装完系统后，这个模块叫啥名字，又忘记了，蛋疼。
+
+</p>
+
+<p>
+不过 Emacs 总算跟上了新的版本，记录一下吧。
+
+</p>
+
+]]></description>
+    </item>
 
     <item>
       <title>More Than Human</title>
