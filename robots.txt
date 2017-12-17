@@ -10,3 +10,4 @@ Disallow: /code
 Disallow: /doc
 Disallow: /images
 Disallow: /styles
+Disallow: /none
