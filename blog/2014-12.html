@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
     <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
-    <meta name="keywords" content="Sucha, Suchang, programming, GNU, Unix, Linux, Slackware, Emacs, elisp" />
+    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, elisp" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -241,152 +241,152 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。
 
 </p>
 
-<pre class="source"><span class="keyword">@interface</span> <span class="type">UserInfo</span> : <span class="type">NSManagedObject</span>
-@property (<span class="type">nonatomic</span>,<span class="type">copy</span>) <span class="type">NSString</span> *<span class="variable-name">name</span>;
-@property (<span class="type">nonatomic</span>,<span class="type">copy</span>) <span class="type">NSNumber</span> *<span class="variable-name">uid</span>;
-<span class="keyword">@end</span>
+<pre class="source">@interface UserInfo : NSManagedObject
+@property (nonatomic,copy) NSString *name;
+@property (nonatomic,copy) NSNumber *uid;
+@end
 
-<span class="keyword">@implementation</span> <span class="type">UserInfo</span>
+@implementation UserInfo
 @dynamic name;
 @dynamic uid;
-<span class="keyword">@end</span>
+@end
 
-<span class="keyword">@implementation</span> <span class="type">TestCoreData</span>
-- (<span class="type">NSURL</span>*)<span class="function-name">createStoreDir</span>
+@implementation TestCoreData
+- (NSURL*)createStoreDir
 {
-    <span class="type">NSFileManager</span> *<span class="variable-name">fm</span> = [[<span class="type">NSFileManager</span> alloc] init];
-    <span class="type">NSError</span> *<span class="variable-name">error</span> = <span class="constant">nil</span>;
-    <span class="type">NSURL</span> *<span class="variable-name">durl</span> = [fm URLForDirectory:NSDocumentDirectory
+    NSFileManager *fm = [[NSFileManager alloc] init];
+    NSError *error = nil;
+    NSURL *durl = [fm URLForDirectory:NSDocumentDirectory
                              inDomain:NSUserDomainMask
-                    appropriateForURL:<span class="constant">nil</span>
-                               create:<span class="constant">YES</span>
+                    appropriateForURL:nil
+                               create:YES
                                 error:&amp;error];
-    <span class="keyword">if</span> (durl == <span class="constant">nil</span>) {
-        NSLog(@<span class="string">"Fail to create document dir:%@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> <span class="constant">nil</span>;
+    if (durl == nil) {
+        NSLog(@"Fail to create document dir:%@", [error localizedDescription]);
+        return nil;
     }
-    <span class="keyword">return</span> durl;
+    return durl;
 }
 
-- (<span class="type">NSManagedObjectModel</span>*)<span class="function-name">createModel</span>
+- (NSManagedObjectModel*)createModel
 {
-    <span class="type">NSManagedObjectModel</span> *<span class="variable-name">moModel</span> = [[<span class="type">NSManagedObjectModel</span> alloc] init];
+    NSManagedObjectModel *moModel = [[NSManagedObjectModel alloc] init];
     
-    <span class="comment-delimiter">// </span><span class="comment">create the entity
-</span>    <span class="type">NSEntityDescription</span> *<span class="variable-name">infoEntity</span> = [[<span class="type">NSEntityDescription</span> alloc] init];
-    [infoEntity setName:@<span class="string">"UserInfo"</span>];
-    [infoEntity setManagedObjectClassName:@<span class="string">"UserInfo"</span>];
+    // create the entity
+    NSEntityDescription *infoEntity = [[NSEntityDescription alloc] init];
+    [infoEntity setName:@"UserInfo"];
+    [infoEntity setManagedObjectClassName:@"UserInfo"];
     
-    [moModel setEntities:[<span class="type">NSArray</span> arrayWithObject:infoEntity]];
+    [moModel setEntities:[NSArray arrayWithObject:infoEntity]];
     
-    <span class="comment-delimiter">// </span><span class="comment">add the attribute
-</span>    <span class="type">NSAttributeDescription</span> *<span class="variable-name">nameAttr</span> = [[<span class="type">NSAttributeDescription</span> alloc] init];
-    [nameAttr setName:@<span class="string">"name"</span>];
+    // add the attribute
+    NSAttributeDescription *nameAttr = [[NSAttributeDescription alloc] init];
+    [nameAttr setName:@"name"];
     [nameAttr setAttributeType:NSStringAttributeType];
-    [nameAttr setOptional:<span class="constant">NO</span>];
+    [nameAttr setOptional:NO];
     
-    <span class="type">NSAttributeDescription</span> *<span class="variable-name">uidAttr</span> = [[<span class="type">NSAttributeDescription</span> alloc] init];
-    [uidAttr setName:@<span class="string">"uid"</span>];
+    NSAttributeDescription *uidAttr = [[NSAttributeDescription alloc] init];
+    [uidAttr setName:@"uid"];
     [uidAttr setAttributeType:NSInteger32AttributeType];
-    [uidAttr setOptional:<span class="constant">NO</span>];
+    [uidAttr setOptional:NO];
     
-    <span class="comment-delimiter">// </span><span class="comment">set the properties for the entity
-</span>    <span class="type">NSArray</span> *<span class="variable-name">ary</span> = [<span class="type">NSArray</span> arrayWithObjects:nameAttr, uidAttr, <span class="constant">nil</span>];
+    // set the properties for the entity
+    NSArray *ary = [NSArray arrayWithObjects:nameAttr, uidAttr, nil];
     [infoEntity setProperties:ary];
     
-    <span class="comment-delimiter">// </span><span class="comment">add localization dictionary
-</span>    <span class="type">NSMutableDictionary</span> *<span class="variable-name">localDict</span> = [<span class="type">NSMutableDictionary</span> dictionary];
-    [localDict setObject:@<span class="string">"name"</span> forKey:@<span class="string">"Property/name/Entity/UserInfo"</span>];
-    [localDict setObject:@<span class="string">"uid"</span> forKey:@<span class="string">"Property/uid/Entity/UserInfo"</span>];
+    // add localization dictionary
+    NSMutableDictionary *localDict = [NSMutableDictionary dictionary];
+    [localDict setObject:@"name" forKey:@"Property/name/Entity/UserInfo"];
+    [localDict setObject:@"uid" forKey:@"Property/uid/Entity/UserInfo"];
     
     [moModel setLocalizationDictionary:localDict];
     
-    <span class="keyword">return</span> moModel;
+    return moModel;
 }
 
-- (<span class="type">NSManagedObjectContext</span>*)<span class="function-name">createModelObjectContext</span>:(<span class="type">NSManagedObjectModel</span>*) <span class="variable-name">moModel</span>
+- (NSManagedObjectContext*)createModelObjectContext:(NSManagedObjectModel*) moModel
 {
-    <span class="type">NSManagedObjectContext</span> *<span class="variable-name">moMOC</span> = [[<span class="type">NSManagedObjectContext</span> alloc] init];
-    <span class="type">NSPersistentStoreCoordinator</span> *<span class="variable-name">co</span> =
-           [[<span class="type">NSPersistentStoreCoordinator</span> alloc] initWithManagedObjectModel:moModel];
+    NSManagedObjectContext *moMOC = [[NSManagedObjectContext alloc] init];
+    NSPersistentStoreCoordinator *co =
+           [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:moModel];
     
     [moMOC setPersistentStoreCoordinator:co];
     
-    <span class="type">NSString</span> *<span class="variable-name">store_type</span> = NSBinaryStoreType; <span class="comment-delimiter">// </span><span class="comment">NSSQLiteStoreType
-</span>    <span class="type">NSString</span> *<span class="variable-name">store_filename</span> = [<span class="type">NSString</span> stringWithFormat:@<span class="string">"storeExample.bin"</span>];
+    NSString *store_type = NSBinaryStoreType; // NSSQLiteStoreType
+    NSString *store_filename = [NSString stringWithFormat:@"storeExample.bin"];
     
-    <span class="type">NSError</span> *<span class="variable-name">error</span> = <span class="constant">nil</span>;
-    <span class="type">NSURL</span> *<span class="variable-name">store_url</span> = [[<span class="keyword">self</span> createStoreDir]
+    NSError *error = nil;
+    NSURL *store_url = [[self createStoreDir]
            URLByAppendingPathComponent:store_filename];
     
-    NSLog(@<span class="string">"store url: %@"</span>, [store_url absoluteString]);
+    NSLog(@"store url: %@", [store_url absoluteString]);
 
-    <span class="type">NSPersistentStore</span> *<span class="variable-name">pstore</span> = [co addPersistentStoreWithType:store_type
-                                                 configuration:<span class="constant">nil</span>
+    NSPersistentStore *pstore = [co addPersistentStoreWithType:store_type
+                                                 configuration:nil
                                                            URL:store_url
-                                                       options:<span class="constant">nil</span>
+                                                       options:nil
                                                          error:&amp;error];
-    <span class="keyword">if</span> (pstore == <span class="constant">nil</span>) {
-        NSLog(@<span class="string">"Fail to create persistence store %@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> <span class="constant">nil</span>;
+    if (pstore == nil) {
+        NSLog(@"Fail to create persistence store %@", [error localizedDescription]);
+        return nil;
     }
-    <span class="keyword">return</span> moMOC;
+    return moMOC;
 }
 
-- (<span class="type">BOOL</span>)<span class="function-name">test</span>
+- (BOOL)test
 {
-    <span class="type">NSManagedObjectModel</span> *<span class="variable-name">moModel</span> = [<span class="keyword">self</span> createModel];
-    <span class="type">NSManagedObjectContext</span> *<span class="variable-name">moMOC</span> = [<span class="keyword">self</span> createModelObjectContext:moModel];
+    NSManagedObjectModel *moModel = [self createModel];
+    NSManagedObjectContext *moMOC = [self createModelObjectContext:moModel];
     
-    <span class="type">NSEntityDescription</span> *<span class="variable-name">infoEntity</span> =
-          [[moModel entitiesByName] objectForKey:@<span class="string">"UserInfo"</span>];
+    NSEntityDescription *infoEntity =
+          [[moModel entitiesByName] objectForKey:@"UserInfo"];
     
-    <span class="comment-delimiter">// </span><span class="comment">insert
-</span>    <span class="type">int</span> <span class="variable-name">i</span>;
-    <span class="keyword">for</span> (i=0; i&lt;10; i++) {
-        <span class="type">UserInfo</span> *<span class="variable-name">info</span> = [[<span class="type">UserInfo</span> alloc] initWithEntity:infoEntity
+    // insert
+    int i;
+    for (i=0; i&lt;10; i++) {
+        UserInfo *info = [[UserInfo alloc] initWithEntity:infoEntity
                            insertIntoManagedObjectContext:moMOC];
-        info.name = [<span class="type">NSString</span> stringWithFormat:@<span class="string">"n%d"</span>, i];
-        info.uid = [<span class="type">NSNumber</span> numberWithInt:i];
+        info.name = [NSString stringWithFormat:@"n%d", i];
+        info.uid = [NSNumber numberWithInt:i];
     }
     
-    <span class="comment-delimiter">// </span><span class="comment">save
-</span>    <span class="type">NSError</span> *<span class="variable-name">error</span> = <span class="constant">nil</span>;
+    // save
+    NSError *error = nil;
     [moMOC save:&amp;error];
-    <span class="keyword">if</span> (error) {
-        NSLog(@<span class="string">"Fail to save: %@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> false;
+    if (error) {
+        NSLog(@"Fail to save: %@", [error localizedDescription]);
+        return false;
     }
     
-<span class="preprocessor">#if</span> 1
-    <span class="comment-delimiter">// </span><span class="comment">query &amp; delete
-</span>    <span class="type">NSFetchRequest</span> *<span class="variable-name">req</span> = [[<span class="type">NSFetchRequest</span> alloc] init];
+#if 1
+    // query &amp; delete
+    NSFetchRequest *req = [[NSFetchRequest alloc] init];
     [req setEntity:infoEntity];
     
-    <span class="type">NSSortDescriptor</span> *<span class="variable-name">sdesc</span> = 
-          [[<span class="type">NSSortDescriptor</span> alloc] initWithKey:@<span class="string">"uid"</span> ascending:<span class="constant">YES</span>];
-    [req setSortDescriptors:[<span class="type">NSArray</span> arrayWithObject:sdesc]];
+    NSSortDescriptor *sdesc = 
+          [[NSSortDescriptor alloc] initWithKey:@"uid" ascending:YES];
+    [req setSortDescriptors:[NSArray arrayWithObject:sdesc]];
     
-    <span class="type">NSArray</span> *<span class="variable-name">ary</span> = [moMOC executeFetchRequest:req error:&amp;error];
-    <span class="keyword">if</span> (error &amp;&amp; (ary==<span class="constant">nil</span>)) {
-        NSLog(@<span class="string">"Fail to fetch object: %@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> false;
+    NSArray *ary = [moMOC executeFetchRequest:req error:&amp;error];
+    if (error &amp;&amp; (ary==nil)) {
+        NSLog(@"Fail to fetch object: %@", [error localizedDescription]);
+        return false;
     }
-    <span class="keyword">for</span> (<span class="type">UserInfo</span> *<span class="variable-name">info</span> <span class="keyword">in</span> ary) {
-        NSLog(@<span class="string">"user info name:%@, uid:%d"</span>, info.name, [info.uid intValue]);
+    for (UserInfo *info in ary) {
+        NSLog(@"user info name:%@, uid:%d", info.name, [info.uid intValue]);
         [moMOC deleteObject:info];
     }
 
-    <span class="comment-delimiter">// </span><span class="comment">save again
-</span>    [moMOC save:&amp;error];
-    <span class="keyword">if</span> (error) {
-        NSLog(@<span class="string">"Fail to save: %@"</span>, [error localizedDescription]);
-        <span class="keyword">return</span> false;
+    // save again
+    [moMOC save:&amp;error];
+    if (error) {
+        NSLog(@"Fail to save: %@", [error localizedDescription]);
+        return false;
     }
-<span class="preprocessor">#endif</span>
-    <span class="keyword">return</span> true;
+#endif
+    return true;
 }
-<span class="keyword">@end</span>
+@end
 </pre>
 
 
@@ -443,38 +443,38 @@ NSRunLoop 就是一个内部循环的结构，一定是从属于某个线程的�
 
 </p>
 
-<pre class="source">- (<span class="type">void</span>)<span class="function-name">timer_entry</span>:(<span class="type">NSTimer</span>*)<span class="variable-name">t</span>
+<pre class="source">- (void)timer_entry:(NSTimer*)t
 {
-    NSLog(@<span class="string">"timer is main thread %d"</span>, [<span class="type">NSThread</span> isMainThread]);
+    NSLog(@"timer is main thread %d", [NSThread isMainThread]);
 }
 
-<span class="keyword">static</span> <span class="type">int</span> <span class="variable-name">_newThreadAborted</span>;
+static int _newThreadAborted;
 
-- (<span class="type">void</span>)<span class="function-name">thread_entry</span>:(<span class="type">id</span>)<span class="variable-name">param</span>
+- (void)thread_entry:(id)param
 {
-    NSLog(<span class="variable-name">@</span><span class="string">"enter thread"</span>);
+    NSLog(@"enter thread");
     @autoreleasepool {
-        <span class="type">NSTimer</span> *<span class="variable-name">t</span> = [<span class="type">NSTimer</span> timerWithTimeInterval:1
-                                              target:<span class="keyword">self</span>
-                                            selector:<span class="keyword">@selector</span>(timer_entry:)
-                                            userInfo:<span class="constant">nil</span>
-                                             repeats:<span class="constant">YES</span>];
-        <span class="type">NSRunLoop</span> *<span class="variable-name">r</span> = [<span class="type">NSRunLoop</span> currentRunLoop];
+        NSTimer *t = [NSTimer timerWithTimeInterval:1
+                                              target:self
+                                            selector:@selector(timer_entry:)
+                                            userInfo:nil
+                                             repeats:YES];
+        NSRunLoop *r = [NSRunLoop currentRunLoop];
         [r addTimer:t forMode:NSDefaultRunLoopMode];
-        <span class="keyword">while</span> (<span class="negation-char">!</span>_newThreadAborted) {
-            [r runMode:NSDefaultRunLoopMode beforeDate:[<span class="type">NSDate</span> distantFuture]];
-            NSLog(@<span class="string">"should not reach here until loop ending"</span>);
+        while (!_newThreadAborted) {
+            [r runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+            NSLog(@"should not reach here until loop ending");
         }
-        NSLog(@<span class="string">"thread aborted"</span>);
+        NSLog(@"thread aborted");
     }
 }
 
-- (<span class="type">void</span>)<span class="function-name">applicationDidFinishLaunching</span>:(<span class="type">NSNotification</span> *)<span class="variable-name">aNotification</span> {
-    <span class="comment-delimiter">// </span><span class="comment">Insert code here to initialize your application
-</span>    
-    NSLog(@<span class="string">"is main thread %d"</span>, [<span class="type">NSThread</span> isMainThread]);
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    // Insert code here to initialize your application
     
-    <span class="type">NSThread</span> *<span class="variable-name">t</span> = [[<span class="type">NSThread</span> alloc] initWithTarget:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(thread_entry:) object:<span class="constant">nil</span>];
+    NSLog(@"is main thread %d", [NSThread isMainThread]);
+    
+    NSThread *t = [[NSThread alloc] initWithTarget:self selector:@selector(thread_entry:) object:nil];
     [t start];
 }
 </pre>
@@ -788,15 +788,15 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
 	<p><input type="hidden" name="ie" value="utf-8" /></p>
 	<p><input type="hidden" name="oe" value="utf-8" /></p>
 	<p><input type="hidden" name="hl" value="zh-CN" /></p>
-	<p><input type="hidden" name="domains" value="suchang.org" /></p>
-	<p><input name="si" type="hidden" value="suchang.org" /></p>
-	<p><input type="hidden" name="sitesearch" value="suchang.org" /></p>
+	<p><input type="hidden" name="domains" value="suchang.net" /></p>
+	<p><input name="si" type="hidden" value="suchang.net" /></p>
+	<p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
       </form>
 
       
       <p class="header">Feeds &#38; Contact</p>
         <ul>
-          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.org/blog/rss.xml">RSS</a></li>
+          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.net/blog/rss.xml">RSS</a></li>
           <li><a href="mailto:suchaaa@gmail.com">Mail me</a></li>
         </ul>
 
@@ -821,7 +821,7 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
       </ul>
 
       <p class="header">Archives</p>
-      <div class="archive_links"><ul><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div>
+      <div class="archive_links"><ul><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div>
 
     </div><!-- sidebar -->
    </div> <!-- body -->

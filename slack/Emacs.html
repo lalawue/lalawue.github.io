@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
     <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
-    <meta name="keywords" content="Sucha, Suchang, programming, GNU, Unix, Linux, Slackware, Emacs, elisp" />
+    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, elisp" />
     <meta name="description" content="Sucha's homepage and blog" />
     <link rel="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -125,7 +125,7 @@ Makefile 的时候并不多，而 Emacs 原配的 compile 命令对于小小的�
 </span><span class="comment-delimiter">;; </span><span class="comment">f5, &#20445;&#23384;&#24403;&#21069;&#31383;&#21475;&#24182;&#36873;&#29992;&#19981;&#21516;&#30340;&#32534;&#35793;&#22120;&#32534;&#35793;&#65292;&#21487;&#22914;&#27861;&#24448;&#19978;&#28155;&#21152;&#21305;&#37197;
 </span>(<span class="keyword">defun</span> <span class="function-name">sucha-smart-compile</span> ()
   <span class="doc">"Simply compile your file according to the file type."</span>
-  (interactive)
+  (<span class="keyword">interactive</span>)
   (save-some-buffers t)
   (<span class="keyword">let</span>
       ((compile-command nil)
@@ -135,12 +135,12 @@ Makefile 的时候并不多，而 Emacs 原配的 compile 命令对于小小的�
               '(<span class="string">"\\.cpp$"</span> . <span class="string">"g++"</span>))))
     (<span class="keyword">while</span> (not (null alist))
       (<span class="keyword">if</span> (string-match (caar alist) (buffer-file-name))
-          (setq compile-command
+          (<span class="keyword">setq</span> compile-command
                 (concat (cdar alist) <span class="string">" "</span> (buffer-file-name))))
-        (setq alist (cdr alist)))
+        (<span class="keyword">setq</span> alist (cdr alist)))
 
     (<span class="keyword">if</span> (null compile-command)
-         (setq compile-command
+         (<span class="keyword">setq</span> compile-command
                (read-from-minibuffer <span class="string">"Compile command: "</span>)))
     (compile compile-command)))
 (global-set-key [C-f5] 'compile)
@@ -171,7 +171,7 @@ Emacs 本身就提供了许多代码浏览的工具，对我来说，Emacs + Spe
 </span><span class="comment-delimiter">;; </span><span class="comment">C-M-, &#25552;&#31034;&#35201;&#26597;&#25214;&#30340; tag&#65292;&#24182;&#36339;&#36716;
 </span><span class="comment-delimiter">;; </span><span class="comment">C-return, &#26597;&#25214; tag &#33258;&#21160;&#34917;&#20840;
 </span>
-(global-set-key [(control .)] '(<span class="keyword">lambda</span> () (interactive) (lev/find-tag t)))
+(global-set-key [(control .)] '(lambda () (<span class="keyword">interactive</span>) (lev/find-tag t)))
 (global-set-key [(control ,)] 'delete-other-windows)
 (global-set-key [(meta .)] 'lev/find-tag)
 (global-set-key [(meta ,)] 'pop-tag-mark)
@@ -180,8 +180,8 @@ Emacs 本身就提供了许多代码浏览的工具，对我来说，Emacs + Spe
 
 (<span class="keyword">defun</span> <span class="function-name">lev/find-tag</span> (<span class="type">&amp;optional</span> show-only)
   <span class="doc">"Show tag in other window with no prompt in minibuf."</span>
-  (interactive)
-  (<span class="keyword">let</span> ((default (funcall (or find-tag-default-function
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">let</span> ((default (funcall (<span class="keyword">or</span> find-tag-default-function
                               (get major-mode 'find-tag-default-function)
                               'find-tag-default))))
     (<span class="keyword">if</span> show-only
@@ -197,8 +197,8 @@ Emacs 本身就提供了许多代码浏览的工具，对我来说，Emacs + Spe
 
 </p>
 
-<pre class="source">(setq speedbar-update-speed 3)
-(setq speedbar-use-images nil)  <span class="comment-delimiter">;; </span><span class="comment">clear face, :)
+<pre class="source">(<span class="keyword">setq</span> speedbar-update-speed 3)
+(<span class="keyword">setq</span> speedbar-use-images nil)  <span class="comment-delimiter">;; </span><span class="comment">clear face, :)
 </span></pre>
 
 
@@ -249,7 +249,7 @@ functions-list 这个变量里各个函数的顺序来进行尝试性扩展的�
 </p>
 
 <pre class="source"><span class="comment-delimiter">;; </span><span class="comment">&#23450;&#20041;&#20320;&#30340; hippie-expend-try&#65293;functions-list
-</span>(setq hippie-expand-try-functions-list
+</span>(<span class="keyword">setq</span> hippie-expand-try-functions-list
       '( <span class="comment-delimiter">;;</span><span class="comment">senator-complete-symbol
 </span>        try-expand-dabbrev
         try-expand-dabbrev-visible
@@ -357,9 +357,9 @@ functions-list 这个变量里各个函数的顺序来进行尝试性扩展的�
           <p><input type="hidden" name="ie" value="utf-8" /></p>
 	  <p><input type="hidden" name="oe" value="utf-8" /></p>
 	  <p><input type="hidden" name="hl" value="zh-CN" /></p>
- 	  <p><input type="hidden" name="domains" value="suchang.org" /></p>
-          <p><input name="si" type="hidden" value="suchang.org" /></p>
-          <p><input type="hidden" name="sitesearch" value="suchang.org" /></p>
+ 	  <p><input type="hidden" name="domains" value="suchang.net" /></p>
+          <p><input name="si" type="hidden" value="suchang.net" /></p>
+          <p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
 	</form>
 	<p class="header">Contact</p>
 	<ul>

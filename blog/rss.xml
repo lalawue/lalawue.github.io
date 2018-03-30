@@ -7,12 +7,26 @@
      >
   <channel>
     <title>Sucha's Blog</title>
-    <link>http://suchang.org/blog/index.html</link>
+    <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>2018-03-19T01:07:34+0800</pubDate>
+    <pubDate>2018-03-30T23:50:10+0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
+
+    <item>
+      <title>换回 suchang.net</title>
+      <guid>http://suchang.net/blog/2018-03.html#p3</guid>
+      <pubDate>2018-03-30T23:49:44+0800</pubDate>
+      <dc:creator>sucha</dc:creator>
+      <category>CategoryThisSite</category>
+      <description><![CDATA[<p>
+再次换回 <a href="http://suchang.net">suchang.net</a>。
+
+</p>
+
+]]></description>
+    </item>
 
     <item>
       <title>True Life</title>

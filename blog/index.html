@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
     <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
-    <meta name="keywords" content="Sucha, Suchang, programming, GNU, Unix, Linux, Slackware, Emacs, elisp" />
+    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, elisp" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -20,6 +20,22 @@
       <div id="text">
 	<h1>Sucha's Blog ~ Welcome</h1>
 	<!-- Page published by Emacs Wiki begins here -->
+<h2>18年3月30日 周五 23:49</h2>
+
+<h3>换回 suchang.net</h3>
+
+<p>
+再次换回 <a href="http://suchang.net">suchang.net</a>。
+
+</p>
+
+<h4><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2018-03.html#p3">Permalink</a> </h4>
+
+<p>
+<!-- date: 2018-03-30T23:49:44+0800 -->
+
+</p>
+
 <h2>18年3月19日 周一 01:06</h2>
 
 <h3>True Life</h3>
@@ -604,44 +620,6 @@ TCP 上面的协议会乱的。
 
 </p>
 
-<h2>17年6月25日 周日 00:30</h2>
-
-<h3>m_tunnel 支持 epoll/kqueue</h3>
-
-<p>
-<a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 支持 epoll/kqueue 了，所以默认情况下，Win 下编译使用 select 模
-型，Linux 下使用 epoll，MacOS 下使用 kqueue。这样的话，Linux 及 MacOS 下
-都没有了 socket 数量的限制，虽然大部分的情况下不会遇到这种问题。
-
-</p>
-
-<p>
-自用 m_tunnel 一段时间了，配合 kcptun 使用很不错，觉得将 kcp 集成到
-m_tunnel 里，这个选项可以提上日程了，当代实际能用时又不知到什么时候了。
-
-</p>
-
-<p>
-另外，将 m_tunnel 里面网络的部分单独抽取出来，放到了 <a href="https://github.com/lalawue/m_net">m_net</a> 里，修改了一
-些 API，增加了一个 ERROR 的状态，另外，增加了 example 以及 test 文件。
-
-</p>
-
-<p>
-epoll、kqueue 虽然使用平台不一样，但是其接口是类似的，较大的不同，在于对
-于 socket 的通知属性修改，epoll 的接口是单独对某个 socket 设置，而
-kqueue 的接口是通过 kevent API 来操作一个数组，在接口使用上，我感觉后者
-更好一些。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2017-06.html#p0">Permalink</a> </h4>
-
-<p>
-<!-- date: 2017-06-25T00:30:16+0800 -->
-
-</p>
-
 <!-- Page published by Emacs Wiki ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -659,7 +637,7 @@ kqueue 的接口是通过 kevent API 来操作一个数组，在接口使用上�
       </ul>
 
       <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>March 2018</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td></tr><tr><td><a title="开始接触 FreeBSD" href="2018-03.html#p0">4</a></td><td><a title="m_net 支持 FreeBSD" href="2018-03.html#p1">5</a></td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr><tr><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr><tr><td>18</td><td><a title="True Life" href="2018-03.html#p2">19</a></td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr><tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
+      <div class="calendar"><table><caption>March 2018</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td></tr><tr><td><a title="开始接触 FreeBSD" href="2018-03.html#p0">4</a></td><td><a title="m_net 支持 FreeBSD" href="2018-03.html#p1">5</a></td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr><tr><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr><tr><td>18</td><td><a title="True Life" href="2018-03.html#p2">19</a></td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr><tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td><a title="换回 suchang.net" href="2018-03.html#p3">30</a></td><td>31</td></tr></table></div>
 
       <p class="header">Search</p><!-- Bing Search -->
       <form id="searchform" method="get" action="http://cn.bing.com/search" >
@@ -667,15 +645,15 @@ kqueue 的接口是通过 kevent API 来操作一个数组，在接口使用上�
 	<p><input type="hidden" name="ie" value="utf-8" /></p>
 	<p><input type="hidden" name="oe" value="utf-8" /></p>
 	<p><input type="hidden" name="hl" value="zh-CN" /></p>
-	<p><input type="hidden" name="domains" value="suchang.org" /></p>
-	<p><input name="si" type="hidden" value="suchang.org" /></p>
-	<p><input type="hidden" name="sitesearch" value="suchang.org" /></p>
+	<p><input type="hidden" name="domains" value="suchang.net" /></p>
+	<p><input name="si" type="hidden" value="suchang.net" /></p>
+	<p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
       </form>
 
       
       <p class="header">Feeds &#38; Contact</p>
         <ul>
-          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.org/blog/rss.xml">RSS</a></li>
+          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.net/blog/rss.xml">RSS</a></li>
           <li><a href="mailto:suchaaa@gmail.com">Mail me</a></li>
         </ul>
 
