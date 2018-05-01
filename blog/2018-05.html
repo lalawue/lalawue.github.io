@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
+  <head>
+    <title>Sucha's Blog - Archive for May, 2018</title>
+    <meta name="generator" content="emacs-wiki-journal.el" />
+    <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
+    <meta name="author" content="Sucha" />
+    <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
+    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, elisp" />
+    <meta name="description" content="Sucha's blog" />
+    <link rev="made" href="mailto:suchaaa@gmail.com" />
+    <link rel="shortcut icon" href="../images/ico.png" />
+    <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml" />
+    <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="../styles/ie.css" /><![endif]-->
+  </head>
+  <body>
+    <div id="body">
+      <div id="text">
+	<h1>Sucha's Blog ~ Archive for May, 2018</h1>
+	<!-- Page published by Emacs Wiki begins here -->
+<h2><a id="p0">18年5月1日 周二 22:30</a></h2>
+
+<h3>m_dnscnt 和 lua-web</h3>
+
+<p>
+前一阵子写了一个 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a>，一个并发多个 DNS 请求的客户端、库接口。
+
+</p>
+
+<p>
+有这个需求的原因，在于系统提供的 DNS 请求是一个同步接口，开始请求后，得
+等着 DNS 结束才能走下一步。
+
+</p>
+
+<p>
+这带来两个问题，第一个问题是，如果我同时有 3 个 DNS 请求，总共花费的时间，
+是这 3 个请求加起来的总和；第二个问题是，因为底层的网络库是异步的，不能
+因为 DNS 请求是同步的，就将整个循环给阻塞住，因此实际是多开了线程才能用
+好这个 DNS 请求接口，也因此多了一个 STM 同步操作。
+
+</p>
+
+<p>
+并发、异步的 DNS 请求库，则没有这个问题。
+
+</p>
+
+<p>
+当我将 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a> 以源代码接口的形式用到了 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 上去后，感觉服务端 DNS
+请求加快了不少，毕竟之前得一个一个顺序请求 DNS，现在则是同时请求多个，总
+的花费时间大大缩短了。
+
+</p>
+
+<p>
+另外呢，也将这 DNS 以库的形式用到了 <a href="https://github.com/lalawue/lua-web">lua-web</a> 上去。以库的形式加入 lua-web
+的原因是，<a href="https://github.com/lalawue/m_net">m_net</a> 本身已经用库的方式提供了 Lua 绑定，无法在同一个库里面暴
+露接口给 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a> 使用。所以 lua-web 底层使用了两份 m_net 代码，其中一个是
+单独用于 DNS 请求的。
+
+</p>
+
+<p>
+这样 lua-web 就支持了 HTTP request，之前不支持域名，只支持 IP，现在则没
+有这个问题了。
+
+</p>
+
+<p>
+而在架构上，HTTP 层的支持算是完整了，如果以 web-framework 的要求看的话，
+后续还需要 HTML 的支持。如果还需要加上一点，那就是 HTTPS 的支持，以及
+websocket。HTTP/2 呢，就算了，那完全是另外一个东西。
+
+</p>
+
+<p>
+还有，这些个东西，往后再说吧，目前的目标，并不是做一个 production-ready
+的东东，而只是做一个类似教学用的工具，做个小巧，但五脏六腑清晰明了，可以
+一眼看穿，但又确实可用的东西。
+
+</p>
+
+<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2018-05.html#p0">Permalink</a> </h4>
+
+<p>
+<!-- date: 2018-05-01T22:30:30+0800 -->
+
+</p>
+
+<!-- Page published by Emacs Wiki ends here -->
+<div id="foot">2004-<script language="javascript">var d = new
+	Date();document.write(d.getFullYear())</script> &copy;
+	Sucha. Powered by EmacsWikiJournal.
+</div>
+</div><!-- sidebar -->
+  <div id="sidebar">
+      <p class="header">Here</p>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="index.html">Front</a></li>
+        <li><a href="../scratch/ThisSite.html">This Site</a></li>
+        <li><a href="../live/AboutMe.html">About Me</a></li>
+        <li><a href="../cs/EmacsWikiJournal.html">Emacs Wiki Journal</a></li>
+      </ul>
+
+      <p class="header">Calendar</p>
+      <div class="calendar"><table><caption>May 2018</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td><a title="m_dnscnt 和 lua-web" href="2018-05.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr><tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr><tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr><tr><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
+
+      <p class="header">Search</p><!-- Bing Search -->
+      <form id="searchform" method="get" action="http://cn.bing.com/search" >
+	<p><input id="searchtext" type="text" name="q" value="" /></p>
+	<p><input type="hidden" name="ie" value="utf-8" /></p>
+	<p><input type="hidden" name="oe" value="utf-8" /></p>
+	<p><input type="hidden" name="hl" value="zh-CN" /></p>
+	<p><input type="hidden" name="domains" value="suchang.net" /></p>
+	<p><input name="si" type="hidden" value="suchang.net" /></p>
+	<p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
+      </form>
+
+      
+      <p class="header">Feeds &#38; Contact</p>
+        <ul>
+          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.net/blog/rss.xml">RSS</a></li>
+          <li><a href="mailto:suchaaa@gmail.com">Mail me</a></li>
+        </ul>
+
+      <p class="header">Categories</p>
+
+      <ul>
+        <li><a href="CategoryLinux.html">GNU/Linux</a></li>
+        <li><a href="CategoryProgramming.html">Programming</a></li>
+        <li><a href="CategoryLife.html">Life &#38; essay</a></li>
+        <li><a href="CategoryReading.html">Reading</a></li>
+	<li><a href="CategoryThisSite.html">This Site</a></li>
+        <li><a href="CategoryMisc.html">Misc</a></li>
+      </ul>
+
+      <p class="header">Links</p>
+      <ul>
+      <li><a href="http://blog.csdn.net/g9yuayon/">G9</a></li>
+        <li><a href="http://mrjamie.cc/">Jamie</a></li>
+        <li><a href="http://www.ftchinese.com/column/007000002">朝九晚五</a></li>
+        <li><a href="http://blog.codingnow.com/">CloudWu</a></li>
+        <li><a href="http://ditu.google.cn/maps?hl=zh-CN&ll=22.626687,110.186691&spn=0.101883,0.15398&t=h&brcurrent=3,0x36adc425dfd47083:0xd77004f2b5f175d6,0,0x36adb6981be5ba57:0xbb22df1016a0dd2e%3B5,0,0&z=13">Yulin in Google Maps</a></li>
+      </ul>
+
+      <p class="header">Archives</p>
+      <div class="archive_links"><ul><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div>
+
+    </div><!-- sidebar -->
+   </div> <!-- body -->
+  </body>
+</html>
