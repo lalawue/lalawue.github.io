@@ -9,73 +9,41 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>2018-05-01T22:57:28+0800</pubDate>
+    <pubDate>2018-06-09T01:15:26+0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>m_dnscnt 和 lua-web</title>
-      <guid>http://suchang.net/blog/2018-05.html#p0</guid>
-      <pubDate>2018-05-01T22:30:30+0800</pubDate>
+      <title>老笔记本换 CMOS 电池 & Nexus 7 换 USB 尾插</title>
+      <guid>http://suchang.net/blog/2018-06.html#p0</guid>
+      <pubDate>2018-06-09T00:58:15+0800</pubDate>
       <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
+      <category>CategoryMisc</category>
       <description><![CDATA[<p>
-前一阵子写了一个 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a>，一个并发多个 DNS 请求的客户端、库接口。
+这台笔记本是工作还不到半年，信用卡下来之后，透支买的，那块 CMOS 电池到现
+在已经撑过了 10 年。最开始是作为开发用的机器，后来慢慢淡出，最后是安装了
+Linux 变成不常开机的服务器。
 
 </p>
 
 <p>
-有这个需求的原因，在于系统提供的 DNS 请求是一个同步接口，开始请求后，得
-等着 DNS 结束才能走下一步。
+最近是烦了那开机后必响的 BB，琢磨着应该是电池的问题，淘宝 ¥15 了一排
+CR2032，百度了一下 BIOS 电池的位置，当然是开腔才能具体位置，换了之后其实
+还是会响，需要重新设置一下 BIOS 时间才行。
 
 </p>
 
 <p>
-这带来两个问题，第一个问题是，如果我同时有 3 个 DNS 请求，总共花费的时间，
-是这 3 个请求加起来的总和；第二个问题是，因为底层的网络库是异步的，不能
-因为 DNS 请求是同步的，就将整个循环给阻塞住，因此实际是多开了线程才能用
-好这个 DNS 请求接口，也因此多了一个 STM 同步操作。
+Neus 7 是 12 年的一代，当时是因为分辨率才下定了觉醒，这个价格这个分辨率
+是可以的，因为是给家里人用，电量变得越来越不济，后面干脆是 mini USB 口接
+触不良，充不上电了。
 
 </p>
 
 <p>
-并发、异步的 DNS 请求库，则没有这个问题。
-
-</p>
-
-<p>
-当我将 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a> 以源代码接口的形式用到了 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 上去后，感觉服务端 DNS
-请求加快了不少，毕竟之前得一个一个顺序请求 DNS，现在则是同时请求多个，总
-的花费时间大大缩短了。
-
-</p>
-
-<p>
-另外呢，也将这 DNS 以库的形式用到了 <a href="https://github.com/lalawue/lua-web">lua-web</a> 上去。以库的形式加入 lua-web
-的原因是，<a href="https://github.com/lalawue/m_net">m_net</a> 本身已经用库的方式提供了 Lua 绑定，无法在同一个库里面暴
-露接口给 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a> 使用。所以 lua-web 底层使用了两份 m_net 代码，其中一个是
-单独用于 DNS 请求的。
-
-</p>
-
-<p>
-这样 lua-web 就支持了 HTTP request，之前不支持域名，只支持 IP，现在则没
-有这个问题了。
-
-</p>
-
-<p>
-而在架构上，HTTP 层的支持算是完整了，如果以 web-framework 的要求看的话，
-后续还需要 HTML 的支持。如果还需要加上一点，那就是 HTTPS 的支持，以及
-websocket。HTTP/2 呢，就算了，那完全是另外一个东西。
-
-</p>
-
-<p>
-还有，这些个东西，往后再说吧，目前的目标，并不是做一个 production-ready
-的东东，而只是做一个类似教学用的工具，做个小巧，但五脏六腑清晰明了，可以
-一眼看穿，但又确实可用的东西。
+同样是淘宝，同样是 ¥15，只是 Nexus 7 不好打开外壳，费了一点劲；还有就是
+螺丝都太小了，华强北 ¥25 的小工具盒太勉强，当然最后还是换了。
 
 </p>
 
