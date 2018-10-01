@@ -9,135 +9,46 @@
     <title>Sucha's Blog</title>
     <link>http://suchang.net/blog/index.html</link>
     <description>linux, emacs, programming, live and essay</description>
-    <pubDate>2018-06-24T11:55:10+0800</pubDate>
+    <pubDate>2018-10-01T10:43:04+0800</pubDate>
     <generator>emacs-wiki-journal</generator>
     <language>zh-CN</language>
     <dc:creator>suchaaa@gmail.com (sucha)</dc:creator>
 
     <item>
-      <title>Timer、FastLZ & Erasure Codec</title>
-      <guid>http://suchang.net/blog/2018-06.html#p1</guid>
-      <pubDate>2018-06-24T10:53:56+0800</pubDate>
+      <title>山竹和 NHL 比赛</title>
+      <guid>http://suchang.net/blog/2018-09.html#p0</guid>
+      <pubDate>2018-09-23T15:55:41+0800</pubDate>
       <dc:creator>sucha</dc:creator>
-      <category>CategoryProgramming</category>
+      <category>CategoryLife</category>
       <description><![CDATA[<p>
-上次说到<a href="../blog/2017-09.html#p0">网络库的&#32;timer</a>，总觉得直接塞入网络库不是个好主意，一方面不是所有
-的程序都需要 timer 来协助，另外一方面 timer 用途其实更广泛，可以放到更底
-层的逻辑里。
+没想到第一次看 NHL 比赛是在现场，体育馆里里外外感觉有一半都是外国人；比
+赛相当激烈，场面火爆，也许带着厚重防具的原因吧，动作都很大，有那么一两次
+双方对峙裁判介入才消停；攻防转换极快，换人就那么翻过围栏 N 上 N 下，都不
+用停表的；技术犯规要关小黑屋罚时间，枫叶国火焰队有一次两人被关小黑屋，三
+防五那个被动。
 
 </p>
 
 <p>
-实际是将其实现在 <a href="https://github.com/lalawue/m_foundation/blob/master/src/model/m_timer.h">m_foundation</a> 里了，接口提供创建多个 timer 序列，往具体
-某个序列加入 timer 及其回调的时候，保证有序，这样每次 update timer 列表，
-可以直接检查排在最前面的 timer 是否超时，不需要检查全部；另外，如果到期
-时间冲突，解决的办法是开链表，同个到期时间的 timer 可以都排在一起。
+还有比赛中打着打着杆子就飞了是真的，过了好一阵裁判才看到捡起送回去了，这
+杆子应该不便宜。
 
 </p>
 
 <p>
-保证有序的方案算法是使用 skiplist，时间复杂度为 O(log2n)。
+夏天在冰凉的室内看这个是蛮爽的，虽然买的是偏僻的山顶票，因为人不多，留中
+间风景好的地方去了；入场出场在地铁站还有摆渡车接送其实没有很麻烦。
 
 </p>
 
 <p>
-另外，虽然是 timer，但实际设计是不考虑时间单位的，时间单位都由外面提供，
-外部在 update timer 时，同时更新最新的时间单位就好；使用了 64bit 来表示
-时间单位，表达空间应该足够了。
+那天阳光明媚，是深圳几周以来难得的好天气。只是第二天台风过境，横扫了这一
+切。
 
 </p>
 
 <p>
-<a href="https://github.com/ariya/FastLZ">FastLZ</a> 是个有很长时间未更新的库，这里的压缩，将其放在了 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 这一层，
-与 <a href="https://github.com/xtaci/kcptun">kcptun</a> 不同。主要是看到了 snappy 用的 C++，包含太多文件，效果未必必
-FastLZ 好多少，因为数据量少，CPU 耗费也不大，所以就没有采用。
-
-</p>
-
-<p>
-其实后来还看到更好的 <a href="https://github.com/lz4/lz4">lz4</a>，没有更换的原因是，实际跑起来，大部分都是 HTTPS，
-这些压缩其实绝大部分用不上。
-
-</p>
-
-<p>
-FastLZ 最少需要使用 66 byte，感觉放在 UDP 长度 14xx 的 playout 里，太浪
-费了，是没有放到 <a href="https://github.com/lalawue/m_kcptun">m_kcptun</a> 的考虑之一。
-
-</p>
-
-<p>
-还有另外一点是，不能压缩的数据在跑 compress 的时候，返回的长度要比实际来
-源更长，这个时候可以果断抛弃不压缩，在 m_tunnel 协议里，有命令字可以区分
-这段 data 是否需要解压，这样对协议双方来说，至少有一方可以少走一次
-decompress 了，而传输数据量可以保证最少。
-
-</p>
-
-<p>
-粗看了一下，lz4 没有说压缩时最少需要多少字节，以及 dest buffer 需要比src
-大多少，貌似需要探测，这点不如 FastLZ；另外，snappy 及 lz4 的解压速度是
-亮点，但实际上对于数据量少的，没啥影响；就 CPU 耗费以及压缩率来看，折衷
-方案更好的是 <a href="https://github.com/facebook/zstd">zstd</a>，可这个不是单线程的，代码量复杂度都会上去太多，不好管
-理。
-
-</p>
-
-<p>
-Erasure Codec 用的是 Reed-Solomon，当然不是最新最先进几乎触摸到香浓极限
-的算法。本来找到一个可用的，但是太耗 CPU 了，最后是找到一个使用 Cauthy
-码的 <a href="https://github.com/catid/cm256">cm256</a>，网络上传输太不确定，TCP 仅保证了传输次序，内容校验有限，如果
-上层发现数据错误，要么抛错误，要么重新传输，后者意味着又得重新发一次数据，
-以及来回的时间耗费，不够经济。
-
-</p>
-
-<p>
-另外，如果链路上一定会发生错误，就需要 Erasure Codec 了，要不会一直失败。
-最后是使用了 payload 较高的 RS(11, 2)，接近经典的 RS(239, 16)，由于协议
-本身也需要保证，因此 Erasure Codec 放到了最底层，UDP 之上直接装载。
-
-</p>
-
-<p>
-多个协议下来，UDP 14xx 实际可以使用的数据量，payload 就更少了，也是没办
-法。
-
-</p>
-
-]]></description>
-    </item>
-
-    <item>
-      <title>老笔记本换 CMOS 电池 & Nexus 7 换 USB 尾插</title>
-      <guid>http://suchang.net/blog/2018-06.html#p0</guid>
-      <pubDate>2018-06-09T00:58:15+0800</pubDate>
-      <dc:creator>sucha</dc:creator>
-      <category>CategoryMisc</category>
-      <description><![CDATA[<p>
-这台笔记本是工作还不到半年，信用卡下来之后，透支买的，那块 CMOS 电池到现
-在已经撑过了 10 年。最开始是作为开发用的机器，后来慢慢淡出，最后是安装了
-Linux 变成不常开机的服务器。
-
-</p>
-
-<p>
-最近是烦了那开机后必响的 BB，琢磨着应该是电池的问题，淘宝 ¥15 了一排
-CR2032，百度了一下 BIOS 电池的位置，当然是开腔才能具体位置，换了之后其实
-还是会响，需要重新设置一下 BIOS 时间才行。
-
-</p>
-
-<p>
-Neus 7 是 12 年的一代，当时是因为分辨率才下定了觉醒，这个价格这个分辨率
-是可以的，因为是给家里人用，电量变得越来越不济，后面干脆是 mini USB 口接
-触不良，充不上电了。
-
-</p>
-
-<p>
-同样是淘宝，同样是 ¥15，只是 Nexus 7 不好打开外壳，费了一点劲；还有就是
-螺丝都太小了，华强北 ¥25 的小工具盒太勉强，当然最后还是换了。
+<a href="https://weibo.com/tv/v/GAATlaWND?fid=1034:4287216193624511">Video&#32;Link</a>
 
 </p>
 
