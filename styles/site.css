@@ -114,7 +114,13 @@ pre {
     overflow: auto;
 }
 
-pre.example {
+/* <code> in <pre> tag */
+pre code {
+    font-family: sans-serif;
+}
+
+/* pre.exmaple */
+pre[ lang = example ] {
     color: black;
     background-color: #fcfff3;
     border: 1px solid #5a5a5a;
@@ -278,14 +284,22 @@ hr { display: none; } /* footnotes */
 
 /* Source tag , more to see "emacs-wiki-srctag.el" */
 
-pre.source {
+/* pre.source */
+pre[ lang = source ] {
     color: black;
     background-color: #f4fffe;
     border: 1px solid #5a5a5a;
     font-family: "Courier New", monospace;
     white-space: pre;
     overflow: auto;
+    text-indent: 0px;
 }
+
+pre[ lang = source ] code {
+    font-family: "Courier New", monospace;
+    text-indent: 0px;    
+}
+
 .builtin           { color: #7580d5; }
 .comment           { color: #a02200; }
 .doc               { color: #a02200; }

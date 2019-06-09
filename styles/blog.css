@@ -112,9 +112,15 @@ pre {
     overflow: auto;
 }
 
-pre.example {
+/* <code> in <pre> tag */
+pre code {
+    font-family: sans-serif;
+}
+
+/* pre.exmaple */
+pre[ lang = example ] {
     color: black;
-    background-color: #fffff0;
+    background-color: #fcfff3;
     border: 1px solid #5a5a5a;
     white-space: pre;
     overflow: auto;
@@ -141,13 +147,6 @@ h1 {
 }
 
 h2 {
-    color: #6d88cd;
-    margin-top: 5.6em;
-    margin-bottom: 1.5em;
-    font-size: .9em;
-}
-
-h3 {
     color: #135680;
     margin-top: .7em;
     margin-bottom: .7em;
@@ -155,14 +154,7 @@ h3 {
     font-size: 1.5em;
 }
 
-h4 {
-    color: silver;
-    margin-top: 1em;
-    font-size: .9em;
-    font-weight: normal;
-}
-
-h5 {
+h3 {
     color: #976217;
     margin-top: 1em;
     margin-bottom: .8em;
@@ -170,6 +162,25 @@ h5 {
     font-weight: bold;
     font-size: 1em;
 }
+
+/* origin h2 */
+div.date {
+    color: #6d88cd;
+    margin-top: 5.6em;
+    margin-bottom: 1.5em;
+    font-size: .9em;
+    font-weight: bold;    
+}
+
+/* origin h4 */
+div.category {
+    color: silver;
+    margin-top: 1em;
+    font-size: .9em;
+    font-weight: normal;
+}
+
+
 
 em {
     font-style: italic;
@@ -192,25 +203,28 @@ a:hover {
     text-decoration: underline;
 }
 
-h2 a {
+/* origin h2 */
+div.date a {
     color: #6d88cd;
     background-color: transparent;
     text-decoration: none;
 }
 
-h2 a:hover {
+div.date a:hover {
     color: #6d88cd;
     background-color: transparent;
     text-decoration: none;
 }
 
-h4 a {
+/* origin h4 */
+div.category a {
     color: #53afba;
     color: silver;
     text-align: right;
 }
 
-h4 a:hover {
+/* h4 */
+div.category a:hover {
     background-color: transparent;
 }
 
@@ -342,13 +356,22 @@ hr { display: none; } /* Footnote */
 
 /* Source tag , more to see "emacs-wiki-srctag.el" */
 
-pre.source {
+/* pre.source */
+pre[ lang = source ] {
     color: black;
     background-color: #f4fffe;
     border: 1px solid #5a5a5a;
     font-family: "Courier New", monospace;
     white-space: pre;
+    overflow: auto;
+    text-indent: 0px;
 }
+
+pre[ lang = source ] code {
+    font-family: "Courier New", monospace;
+    text-indent: 0px;    
+}
+
 .builtin           { color: #7580d5; }
 .comment           { color: #a02200; }
 .doc               { color: #a02200; }
