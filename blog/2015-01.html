@@ -3,211 +3,103 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
   <head>
     <title>Sucha's Blog - Archive for January, 2015</title>
-    <meta name="generator" content="emacs-wiki-journal.el" />
+    <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
     <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, elisp" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml" />
     <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="../styles/ie.css" /><![endif]-->
   </head>
   <body>
     <div id="body">
       <div id="text">
-	<h1>Sucha's Blog ~ Archive for January, 2015</h1>
-	<!-- Page published by Emacs Wiki begins here -->
-<h2><a id="p2">15年1月30日 周五 12:42</a></h2>
-
-<h3>有关 GLFW</h3>
-
-<p>
-这段时间做的项目是使用 GLFW 来做跨平台的播放器，大体上框架已经好了，音视
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for January, 2015</h1>
+<p><a id="p2"></a></p>
+<div class="date">15年1月30日 周五 12:42</div>
+<h2>有关 GLFW</h2>
+<p>这段时间做的项目是使用 GLFW 来做跨平台的播放器，大体上框架已经好了，音视
 频也同步了，大概花了快两周时间，然后也是今天才知道 cocos2dx 3.x 系列是用
 glfw 来做 opengl 窗口管理的，我是没有继续深究了，不过因为看到这个，忽然
-有种我选得没错的感觉。
-
-</p>
-
-<p>
-GLFW 横跨 Mac/Win/Linux 三个平台，提供基于 OpenGL 渲染窗口，消息机制，这
+有种我选得没错的感觉。</p>
+<p>GLFW 横跨 Mac/Win/Linux 三个平台，提供基于 OpenGL 渲染窗口，消息机制，这
 点很不错，大体上统一了三个平台基础 OpenGL 的创建，销毁，以及鼠标、键盘消
-息。
-
-</p>
-
-<p>
-我之前因为想学习 OpenGL，看到的很多国内教程都是 glut 来入门，而且还是
+息。</p>
+<p>我之前因为想学习 OpenGL，看到的很多国内教程都是 glut 来入门，而且还是
 OpenGL 2.x 系列的 API，实际上，现在都已经是 3.x 系列的 API 了，当然系统
-总是向下兼容的，老的 API 也能用就是。
-
-</p>
-
-<p>
-若是现在开始涉及到桌面 OpenGL 部分的，强烈推荐呀。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-01.html#p2">Permalink</a> </h4>
-
-<p>
+总是向下兼容的，老的 API 也能用就是。</p>
+<p>若是现在开始涉及到桌面 OpenGL 部分的，强烈推荐呀。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-01.html#p2">Permalink</a></div>
 <!-- date: 2015-01-30T12:42:25+0800 -->
-
-</p>
-
-<h2><a id="p1">15年1月15日 周四 01:34</a></h2>
-
-<h3>获取默认网卡的 IP 地址</h3>
-
-<p>
-目前在做一个简单的服务端程序，需要客户端发现服务端的 IP 地址，然后请求链
+<p><a id="p1"></a></p>
+<div class="date">15年1月15日 周四 01:34</div>
+<h2>获取默认网卡的 IP 地址</h2>
+<p>目前在做一个简单的服务端程序，需要客户端发现服务端的 IP 地址，然后请求链
 接。发现部分是用 UDP 的广播来做了，但是服务端获取 IP 地址部分，遇到了问
-题。
-
-</p>
-
-<p>
-服务端里面 TCP bind 时，地址是可以为 INADDR_ANY 的，意味着不管是哪个网络
+题。</p>
+<p>服务端里面 TCP bind 时，地址是可以为 INADDR_ANY 的，意味着不管是哪个网络
 过来的数据，只要路由到系统，端口对应上，我的服务端程序就可以 accept。看
 起来美好，但是流程上走不通，这时候程序其实是不知道 IP 包是从哪个网卡过来
 的，所以即便接收到了客户端的 UDP 广播请求，也仍然无法发送可以连接的 IP
 地址给客户端，因为从系统里面获取地址的 getsockname() 获取的其实是之前
-bind 的地址，也就是 &#34;0.0.0.0&#34;。
-
-</p>
-
-<p>
-路由都已经通了，但却无法获取路由过的网卡 IP 地址。如果这一切都只能通过之
-前的 bind 来显式地指定只接收某个网络过来的包，确实是太折腾了。
-
-</p>
-
-<p>
-简单点，不如就是用系统默认网卡的 IP 地址好了，至少系统保证这个是最为可用
-的地址。
-
-</p>
-
-<p>
-MacOS 下获取系统网络设备名称以及地址跟 Linux 下的相似，都是 getifaddrs()，
+bind 的地址，也就是 &quot;0.0.0.0&quot;。</p>
+<p>路由都已经通了，但却无法获取路由过的网卡 IP 地址。如果这一切都只能通过之
+前的 bind 来显式地指定只接收某个网络过来的包，确实是太折腾了。</p>
+<p>简单点，不如就是用系统默认网卡的 IP 地址好了，至少系统保证这个是最为可用
+的地址。</p>
+<p>MacOS 下获取系统网络设备名称以及地址跟 Linux 下的相似，都是 getifaddrs()，
 搜到了一篇中文介绍；然后获取系统默认网卡的信息，我是从 stackoverflow 上
-面搜到的。
-
-</p>
-
+面搜到的。</p>
 <ul>
-<li><a href="http://www.cnblogs.com/sammei/p/3955679.html">getifaddrs</a>
-</li>
-<li><a href="http://stackoverflow.com/questions/4872196/how-to-get-the-wifi-gateway-address-on-the-iphone">How&#32;to&#32;get&#32;the&#32;WIFI&#32;gateway&#32;address&#32;on&#32;the&#32;iPhone?</a>
-</li>
+<li><a href="http://www.cnblogs.com/sammei/p/3955679.html">getifaddrs</a></li>
+<li><a href="http://stackoverflow.com/questions/4872196/how-to-get-the-wifi-gateway-address-on-the-iphone">How to get the WIFI gateway address on the iPhone?</a></li>
 </ul>
-
-<p>
-这样，bind 的时候仍然可以为 INADDR_ANY，客户端 UDP 广播请求的时候，服务
+<p>这样，bind 的时候仍然可以为 INADDR_ANY，客户端 UDP 广播请求的时候，服务
 端大方发送可连接的 IP 地址。扯远点，复杂点的情况，多个网卡，多个异构网络，
 服务端可以根据具体的请求发送不同的 IP 地址，只要能路由过来，都可以
-accept。
-
-</p>
-
-<p>
-大概就是这个意思了吧。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-01.html#p1">Permalink</a> </h4>
-
-<p>
+accept。</p>
+<p>大概就是这个意思了吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-01.html#p1">Permalink</a></div>
 <!-- date: 2015-01-15T01:34:41+0800 -->
-
-</p>
-
-<h2><a id="p0">15年1月3日 周六 11:19</a></h2>
-
-<h3>HTTP Downloader</h3>
-
-<p>
-忙了两天多那个 <a href="https://github.com/lalawue/http_downloader">HTTP&#32;Downloader</a>，原来只是想实现一个 keep-alive 的连接的
+<p><a id="p0"></a></p>
+<div class="date">15年1月3日 周六 11:19</div>
+<h2>HTTP Downloader</h2>
+<p>忙了两天多那个 <a href="https://github.com/lalawue/http_downloader">HTTP Downloader</a>，原来只是想实现一个 keep-alive 的连接的
 socket，当时也想到这个东西不会简单，因为一方面底层的是 low level 的
-socket，另外一方面呢，需要处理一层 http 协议，还有一个 dns。
-
-</p>
-
-<p>
-后来是因为找到了 dns 的代码，就开工了，才发现复杂呀，一方面 c 的部分我觉
-得我大意了，编码不够小心，各种折腾。
-
-</p>
-
-<p>
-另外就是 c 的 string 库太不好用了，所以不得不封装了一个，至少得有 split
-这个函数吧，没有的话啥都不用玩了。
-
-</p>
-
-<p>
-其实大概一天不到基本的 http get 已经完成了，只是代码太糟糕，我觉得需要改
-进一下，最主要的就是 string 库，于是昨天折腾了快一天呀，代码清晰了很多。
-
-</p>
-
-<p>
-这个 string 库是有 gc 的，从 head 操作产生的其他 object，都会随着 head
+socket，另外一方面呢，需要处理一层 http 协议，还有一个 dns。</p>
+<p>后来是因为找到了 dns 的代码，就开工了，才发现复杂呀，一方面 c 的部分我觉
+得我大意了，编码不够小心，各种折腾。</p>
+<p>另外就是 c 的 string 库太不好用了，所以不得不封装了一个，至少得有 split
+这个函数吧，没有的话啥都不用玩了。</p>
+<p>其实大概一天不到基本的 http get 已经完成了，只是代码太糟糕，我觉得需要改
+进一下，最主要的就是 string 库，于是昨天折腾了快一天呀，代码清晰了很多。</p>
+<p>这个 string 库是有 gc 的，从 head 操作产生的其他 object，都会随着 head
 的 destroy 而 destory。新建 head 的 interface 就那么几个，很有限，所以其
-实可以在开始复杂操作时新建 head，之后后清除掉那个入口的 head。
-
-</p>
-
-<p>
-新建 head 的接口除了 malloc 一段 cstring，还可以 map 一段 cstring 地址给
+实可以在开始复杂操作时新建 head，之后后清除掉那个入口的 head。</p>
+<p>新建 head 的接口除了 malloc 一段 cstring，还可以 map 一段 cstring 地址给
 它作为操作的空间，这时候内部标记 clone，就是这个 mstring 的 cstr 地址不
 是自己保存的，之后的 destroy 不用释放这个空间，对于像 http head 或者
-body 的分析时，这个就很有用了。
-
-</p>
-
-<p>
-由于新建 mstring 的空间其实是堆上的，对于各种小操作时产生的 mstring，不
+body 的分析时，这个就很有用了。</p>
+<p>由于新建 mstring 的空间其实是堆上的，对于各种小操作时产生的 mstring，不
 大好，还不如 cloudwu 那个栈上的方式，栈上的方式新建轻松，而且没有碎片的
-产生。
-
-</p>
-
-<p>
-不过呢，就是得随时注意，这些栈上的对象何时销毁，需要的时候需要转成堆上的
-对象。
-
-</p>
-
-<p>
-我有个想法，其实这些小碎片，不如申请一个专用的堆来操作，比如这个堆绑定在
+产生。</p>
+<p>不过呢，就是得随时注意，这些栈上的对象何时销毁，需要的时候需要转成堆上的
+对象。</p>
+<p>我有个想法，其实这些小碎片，不如申请一个专用的堆来操作，比如这个堆绑定在
 head 的 allocator 上，从 head 产生的所有 object 都是用这个 allocator，这
 样就避免了大量的小对象，对于内存碎片的控制是有益的，特别是对于那种 map
 cstring 过来的对象，因为本身 cstring 空间是不用释放的，这时候就很有用了，
-因为 mstring 自己控制用的结构，空间占用不大。
-
-</p>
-
-<p>
-不过呢，新建的 heap 多大才有用而又不至于浪费，那就又是另外一回事了，以及
-这个接口如何提供的问题，这个想法还得斟酌一下。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-01.html#p0">Permalink</a> </h4>
-
-<p>
+因为 mstring 自己控制用的结构，空间占用不大。</p>
+<p>不过呢，新建的 heap 多大才有用而又不至于浪费，那就又是另外一回事了，以及
+这个接口如何提供的问题，这个想法还得斟酌一下。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-01.html#p0">Permalink</a></div>
 <!-- date: 2015-01-03T11:19:57+0800 -->
-
-</p>
-
-<!-- Page published by Emacs Wiki ends here -->
+<!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
-	Sucha. Powered by EmacsWikiJournal.
+	Sucha. Powered by MarkdownProjectCompositor.
 </div>
 </div><!-- sidebar -->
   <div id="sidebar">
@@ -220,9 +112,6 @@ cstring 过来的对象，因为本身 cstring 空间是不用释放的，这时
         <li><a href="../cs/EmacsWikiJournal.html">Emacs Wiki Journal</a></li>
       </ul>
 
-      <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>January 2015</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td><a title="HTTP Downloader" href="2015-01.html#p0">3</a></td></tr><tr><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr><tr><td>11</td><td>12</td><td>13</td><td>14</td><td><a title="获取默认网卡的 IP 地址" href="2015-01.html#p1">15</a></td><td>16</td><td>17</td></tr><tr><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr><tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td><a title="有关 GLFW" href="2015-01.html#p2">30</a></td><td>31</td></tr></table></div>
-
       <p class="header">Search</p><!-- Bing Search -->
       <form id="searchform" method="get" action="http://cn.bing.com/search" >
 	<p><input id="searchtext" type="text" name="q" value="" /></p>
@@ -234,10 +123,8 @@ cstring 过来的对象，因为本身 cstring 空间是不用释放的，这时
 	<p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
       </form>
 
-      
-      <p class="header">Feeds &#38; Contact</p>
+      <p class="header">Contact</p>
         <ul>
-          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.net/blog/rss.xml">RSS</a></li>
           <li><a href="mailto:suchaaa@gmail.com">Mail me</a></li>
         </ul>
 
@@ -261,10 +148,7 @@ cstring 过来的对象，因为本身 cstring 空间是不用释放的，这时
         <li><a href="http://ditu.google.cn/maps?hl=zh-CN&ll=22.626687,110.186691&spn=0.101883,0.15398&t=h&brcurrent=3,0x36adc425dfd47083:0xd77004f2b5f175d6,0,0x36adb6981be5ba57:0xbb22df1016a0dd2e%3B5,0,0&z=13">Yulin in Google Maps</a></li>
       </ul>
 
-      <p class="header">Archives</p>
-      <div class="archive_links"><ul><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div>
-
-    </div><!-- sidebar -->
+      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
    </div> <!-- body -->
   </body>
 </html>

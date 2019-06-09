@@ -3,161 +3,82 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
   <head>
     <title>Sucha's Blog - Archive for June, 2018</title>
-    <meta name="generator" content="emacs-wiki-journal.el" />
+    <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
     <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, elisp" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml" />
     <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="../styles/ie.css" /><![endif]-->
   </head>
   <body>
     <div id="body">
       <div id="text">
-	<h1>Sucha's Blog ~ Archive for June, 2018</h1>
-	<!-- Page published by Emacs Wiki begins here -->
-<h2><a id="p1">18年6月24日 周日 10:53</a></h2>
-
-<h3>Timer、FastLZ & Erasure Codec</h3>
-
-<p>
-上次说到<a href="../blog/2017-09.html#p0">网络库的&#32;timer</a>，总觉得直接塞入网络库不是个好主意，一方面不是所有
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for June, 2018</h1>
+<p><a id="p1"></a></p>
+<div class="date">18年6月24日 周日 10:53</div>
+<h2>Timer、FastLZ &amp; Erasure Codec</h2>
+<p>上次说到<a href="../blog/2017-09.html#p0">网络库的 timer</a>，总觉得直接塞入网络库不是个好主意，一方面不是所有
 的程序都需要 timer 来协助，另外一方面 timer 用途其实更广泛，可以放到更底
-层的逻辑里。
-
-</p>
-
-<p>
-实际是将其实现在 <a href="https://github.com/lalawue/m_foundation/blob/master/src/model/m_timer.h">m_foundation</a> 里了，接口提供创建多个 timer 序列，往具体
+层的逻辑里。</p>
+<p>实际是将其实现在 <a href="https://github.com/lalawue/m_foundation/blob/master/src/model/m_timer.h">m_foundation</a> 里了，接口提供创建多个 timer 序列，往具体
 某个序列加入 timer 及其回调的时候，保证有序，这样每次 update timer 列表，
 可以直接检查排在最前面的 timer 是否超时，不需要检查全部；另外，如果到期
-时间冲突，解决的办法是开链表，同个到期时间的 timer 可以都排在一起。
-
-</p>
-
-<p>
-保证有序的方案算法是使用 skiplist，时间复杂度为 O(log2n)。
-
-</p>
-
-<p>
-另外，虽然是 timer，但实际设计是不考虑时间单位的，时间单位都由外面提供，
+时间冲突，解决的办法是开链表，同个到期时间的 timer 可以都排在一起。</p>
+<p>保证有序的方案算法是使用 skiplist，时间复杂度为 O(log2n)。</p>
+<p>另外，虽然是 timer，但实际设计是不考虑时间单位的，时间单位都由外面提供，
 外部在 update timer 时，同时更新最新的时间单位就好；使用了 64bit 来表示
-时间单位，表达空间应该足够了。
-
-</p>
-
-<p>
-<a href="https://github.com/ariya/FastLZ">FastLZ</a> 是个有很长时间未更新的库，这里的压缩，将其放在了 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 这一层，
+时间单位，表达空间应该足够了。</p>
+<p><a href="https://github.com/ariya/FastLZ">FastLZ</a> 是个有很长时间未更新的库，这里的压缩，将其放在了 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 这一层，
 与 <a href="https://github.com/xtaci/kcptun">kcptun</a> 不同。主要是看到了 snappy 用的 C++，包含太多文件，效果未必必
-FastLZ 好多少，因为数据量少，CPU 耗费也不大，所以就没有采用。
-
-</p>
-
-<p>
-其实后来还看到更好的 <a href="https://github.com/lz4/lz4">lz4</a>，没有更换的原因是，实际跑起来，大部分都是 HTTPS，
-这些压缩其实绝大部分用不上。
-
-</p>
-
-<p>
-FastLZ 最少需要使用 66 byte，感觉放在 UDP 长度 14xx 的 playout 里，太浪
-费了，是没有放到 <a href="https://github.com/lalawue/m_kcptun">m_kcptun</a> 的考虑之一。
-
-</p>
-
-<p>
-还有另外一点是，不能压缩的数据在跑 compress 的时候，返回的长度要比实际来
+FastLZ 好多少，因为数据量少，CPU 耗费也不大，所以就没有采用。</p>
+<p>其实后来还看到更好的 <a href="https://github.com/lz4/lz4">lz4</a>，没有更换的原因是，实际跑起来，大部分都是 HTTPS，
+这些压缩其实绝大部分用不上。</p>
+<p>FastLZ 最少需要使用 66 byte，感觉放在 UDP 长度 14xx 的 playout 里，太浪
+费了，是没有放到 <a href="https://github.com/lalawue/m_kcptun">m_kcptun</a> 的考虑之一。</p>
+<p>还有另外一点是，不能压缩的数据在跑 compress 的时候，返回的长度要比实际来
 源更长，这个时候可以果断抛弃不压缩，在 m_tunnel 协议里，有命令字可以区分
 这段 data 是否需要解压，这样对协议双方来说，至少有一方可以少走一次
-decompress 了，而传输数据量可以保证最少。
-
-</p>
-
-<p>
-粗看了一下，lz4 没有说压缩时最少需要多少字节，以及 dest buffer 需要比src
+decompress 了，而传输数据量可以保证最少。</p>
+<p>粗看了一下，lz4 没有说压缩时最少需要多少字节，以及 dest buffer 需要比src
 大多少，貌似需要探测，这点不如 FastLZ；另外，snappy 及 lz4 的解压速度是
 亮点，但实际上对于数据量少的，没啥影响；就 CPU 耗费以及压缩率来看，折衷
 方案更好的是 <a href="https://github.com/facebook/zstd">zstd</a>，可这个不是单线程的，代码量复杂度都会上去太多，不好管
-理。
-
-</p>
-
-<p>
-Erasure Codec 用的是 Reed-Solomon，当然不是最新最先进几乎触摸到香浓极限
+理。</p>
+<p>Erasure Codec 用的是 Reed-Solomon，当然不是最新最先进几乎触摸到香浓极限
 的算法。本来找到一个可用的，但是太耗 CPU 了，最后是找到一个使用 Cauthy
 码的 <a href="https://github.com/catid/cm256">cm256</a>，网络上传输太不确定，TCP 仅保证了传输次序，内容校验有限，如果
 上层发现数据错误，要么抛错误，要么重新传输，后者意味着又得重新发一次数据，
-以及来回的时间耗费，不够经济。
-
-</p>
-
-<p>
-另外，如果链路上一定会发生错误，就需要 Erasure Codec 了，要不会一直失败。
+以及来回的时间耗费，不够经济。</p>
+<p>另外，如果链路上一定会发生错误，就需要 Erasure Codec 了，要不会一直失败。
 最后是使用了 payload 较高的 RS(11, 2)，接近经典的 RS(239, 16)，由于协议
-本身也需要保证，因此 Erasure Codec 放到了最底层，UDP 之上直接装载。
-
-</p>
-
-<p>
-多个协议下来，UDP 14xx 实际可以使用的数据量，payload 就更少了，也是没办
-法。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2018-06.html#p1">Permalink</a> </h4>
-
-<p>
+本身也需要保证，因此 Erasure Codec 放到了最底层，UDP 之上直接装载。</p>
+<p>多个协议下来，UDP 14xx 实际可以使用的数据量，payload 就更少了，也是没办
+法。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2018-06.html#p1">Permalink</a></div>
 <!-- date: 2018-06-24T10:53:56+0800 -->
-
-</p>
-
-<h2><a id="p0">18年6月9日 周六 00:58</a></h2>
-
-<h3>老笔记本换 CMOS 电池 & Nexus 7 换 USB 尾插</h3>
-
-<p>
-这台笔记本是工作还不到半年，信用卡下来之后，透支买的，那块 CMOS 电池到现
+<p><a id="p0"></a></p>
+<div class="date">18年6月9日 周六 00:58</div>
+<h2>老笔记本换 CMOS 电池 &amp; Nexus 7 换 USB 尾插</h2>
+<p>这台笔记本是工作还不到半年，信用卡下来之后，透支买的，那块 CMOS 电池到现
 在已经撑过了 10 年。最开始是作为开发用的机器，后来慢慢淡出，最后是安装了
-Linux 变成不常开机的服务器。
-
-</p>
-
-<p>
-最近是烦了那开机后必响的 BB，琢磨着应该是电池的问题，淘宝 ¥15 了一排
+Linux 变成不常开机的服务器。</p>
+<p>最近是烦了那开机后必响的 BB，琢磨着应该是电池的问题，淘宝 ¥15 了一排
 CR2032，百度了一下 BIOS 电池的位置，当然是开腔才能具体位置，换了之后其实
-还是会响，需要重新设置一下 BIOS 时间才行。
-
-</p>
-
-<p>
-Neus 7 是 12 年的一代，当时是因为分辨率才下定了觉醒，这个价格这个分辨率
+还是会响，需要重新设置一下 BIOS 时间才行。</p>
+<p>Neus 7 是 12 年的一代，当时是因为分辨率才下定了觉醒，这个价格这个分辨率
 是可以的，因为是给家里人用，电量变得越来越不济，后面干脆是 mini USB 口接
-触不良，充不上电了。
-
-</p>
-
-<p>
-同样是淘宝，同样是 ¥15，只是 Nexus 7 不好打开外壳，费了一点劲；还有就是
-螺丝都太小了，华强北 ¥25 的小工具盒太勉强，当然最后还是换了。
-
-</p>
-
-<h4><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2018-06.html#p0">Permalink</a> </h4>
-
-<p>
+触不良，充不上电了。</p>
+<p>同样是淘宝，同样是 ¥15，只是 Nexus 7 不好打开外壳，费了一点劲；还有就是
+螺丝都太小了，华强北 ¥25 的小工具盒太勉强，当然最后还是换了。</p>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2018-06.html#p0">Permalink</a></div>
 <!-- date: 2018-06-09T00:58:15+0800 -->
-
-</p>
-
-<!-- Page published by Emacs Wiki ends here -->
+<!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
-	Sucha. Powered by EmacsWikiJournal.
+	Sucha. Powered by MarkdownProjectCompositor.
 </div>
 </div><!-- sidebar -->
   <div id="sidebar">
@@ -170,9 +91,6 @@ Neus 7 是 12 年的一代，当时是因为分辨率才下定了觉醒，这个
         <li><a href="../cs/EmacsWikiJournal.html">Emacs Wiki Journal</a></li>
       </ul>
 
-      <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>June 2018</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td></td><td></td><td></td><td></td><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td><a title="老笔记本换 CMOS 电池 & Nexus 7 换 USB 尾插" href="2018-06.html#p0">9</a></td></tr><tr><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr><tr><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td></tr><tr><td><a title="Timer、FastLZ & Erasure Codec" href="2018-06.html#p1">24</a></td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td></tr></table></div>
-
       <p class="header">Search</p><!-- Bing Search -->
       <form id="searchform" method="get" action="http://cn.bing.com/search" >
 	<p><input id="searchtext" type="text" name="q" value="" /></p>
@@ -184,10 +102,8 @@ Neus 7 是 12 年的一代，当时是因为分辨率才下定了觉醒，这个
 	<p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
       </form>
 
-      
-      <p class="header">Feeds &#38; Contact</p>
+      <p class="header">Contact</p>
         <ul>
-          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.net/blog/rss.xml">RSS</a></li>
           <li><a href="mailto:suchaaa@gmail.com">Mail me</a></li>
         </ul>
 
@@ -211,10 +127,7 @@ Neus 7 是 12 年的一代，当时是因为分辨率才下定了觉醒，这个
         <li><a href="http://ditu.google.cn/maps?hl=zh-CN&ll=22.626687,110.186691&spn=0.101883,0.15398&t=h&brcurrent=3,0x36adc425dfd47083:0xd77004f2b5f175d6,0,0x36adb6981be5ba57:0xbb22df1016a0dd2e%3B5,0,0&z=13">Yulin in Google Maps</a></li>
       </ul>
 
-      <p class="header">Archives</p>
-      <div class="archive_links"><ul><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div>
-
-    </div><!-- sidebar -->
+      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
    </div> <!-- body -->
   </body>
 </html>

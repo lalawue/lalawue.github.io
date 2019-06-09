@@ -3,98 +3,54 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
   <head>
     <title>Sucha's Blog - Archive for December, 2014</title>
-    <meta name="generator" content="emacs-wiki-journal.el" />
+    <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
     <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, elisp" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml" />
     <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="../styles/ie.css" /><![endif]-->
   </head>
   <body>
     <div id="body">
       <div id="text">
-	<h1>Sucha's Blog ~ Archive for December, 2014</h1>
-	<!-- Page published by Emacs Wiki begins here -->
-<h2><a id="p6">14年12月29日 周一 10:22</a></h2>
-
-<h3>My First Mac App - TcBrowserMac</h3>
-
-<p>
-开始练习 Mac App 的编写，与 iOS App 有许多不同，昨天花了一天时间，山寨了
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for December, 2014</h1>
+<p><a id="p6"></a></p>
+<div class="date">14年12月29日 周一 10:22</div>
+<h2>My First Mac App - TcBrowserMac</h2>
+<p>开始练习 Mac App 的编写，与 iOS App 有许多不同，昨天花了一天时间，山寨了
 一个 TcBrowser，一个筛选算法题目的小软件，作者博客页面
-<a href="http://zh.lucida.me/blog/top-code-offline-browser/">Top&#32;Coder算法题目浏览器</a>。
-
-</p>
-
-<p>
-也许是我没有深入开发的原因，感觉不再像 iOS 一样，需要多个 View
+<a href="http://zh.lucida.me/blog/top-code-offline-browser/">Top Coder算法题目浏览器</a>。</p>
+<p>也许是我没有深入开发的原因，感觉不再像 iOS 一样，需要多个 View
 Controller 了，使得我一开始就考虑模块划分的问题，虽然这个软件是个小工具
-而已。
-
-</p>
-
-<p>
-然后考虑像 win 一样，可以在文件夹下面打开访问当前文件夹的目录，由于 Mac
+而已。</p>
+<p>然后考虑像 win 一样，可以在文件夹下面打开访问当前文件夹的目录，由于 Mac
 是打包成 bundle 来跑的，界面上的 app 其实是个文件夹，所以我之前整的方法
-都不对，需要通过 [[NSBundle mainBundle] bundlePath] 来获取。
-
-</p>
-
-<p>
-然后 StoryBoard 方面，由于软件是个窗口，所以大小是可变的，一开始就得考虑
+都不对，需要通过 [[NSBundle mainBundle] bundlePath] 来获取。</p>
+<p>然后 StoryBoard 方面，由于软件是个窗口，所以大小是可变的，一开始就得考虑
 自动布局的问题，Apple 文档那边对于自动布局长篇大论不说，还有一个用于自动
-布局的 DSL，足够复杂了，昨天时间有限，我是没有看透。
-
-</p>
-
-<p>
-实际是用 StoryBoard 点击 nib 后 Editor -> Resolve Auto Layout Issues 上
-面的 Add Missing Constraints 来做的，每添加一个控件，就要 Add 一次。
-
-</p>
-
-<p>
-然后感觉还跟控件添加的顺序有关系，Xcode 会猜测这个控件到底是对齐那一边，
+布局的 DSL，足够复杂了，昨天时间有限，我是没有看透。</p>
+<p>实际是用 StoryBoard 点击 nib 后 Editor -&gt; Resolve Auto Layout Issues 上
+面的 Add Missing Constraints 来做的，每添加一个控件，就要 Add 一次。</p>
+<p>然后感觉还跟控件添加的顺序有关系，Xcode 会猜测这个控件到底是对齐那一边，
 依据的是 superview 还是哪个 view，这些 constraints 在 inspector 里面几乎
 不能配置，我本来一个 webview 靠右是要左对齐的，然后右边让它跟着
 superview 无限扩展，可是如果给弄成右对齐就改不了了，反正我是没弄懂怎么改，
-所以我只好把 constraints 删除又添加一遍。
-
-</p>
-
-<p>
-然后是 tableview，与 iOS 也有些不同，没有了 cell 的概念，取而代之的是
+所以我只好把 constraints 删除又添加一遍。</p>
+<p>然后是 tableview，与 iOS 也有些不同，没有了 cell 的概念，取而代之的是
 NSView，没有了 index，而是一个 NSTableColumn 的结构，table column 的
 identifier 可以设置，重用时也是依据这些 identifier。不过 column 的
-header title 我折腾了不少时间，然后是宽度也是通过 column 设置的。
-
-</p>
-
-<p>
-跟 iOS 一样，只需要设置两个函数就可以让数据上来了，一个是
-numberOfRowsInTableView，一个是 viewForTableColumn。
-
-</p>
-
-<p>
-最后是软件图标的问题，感觉与 iOS 也不一样，也许是我之前没有那么正规军的
+header title 我折腾了不少时间，然后是宽度也是通过 column 设置的。</p>
+<p>跟 iOS 一样，只需要设置两个函数就可以让数据上来了，一个是
+numberOfRowsInTableView，一个是 viewForTableColumn。</p>
+<p>最后是软件图标的问题，感觉与 iOS 也不一样，也许是我之前没有那么正规军的
 原因。我是想要 Dock 上面自定义图标，谷歌到的方法也只是动态设置的而已，关
-闭的时候很明显会显示回默认的那个。
-
-</p>
-
-<p>
-实际上呢，需要设置的方法在 <a href="https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html#//apple_ref/doc/uid/TP40012302-CH7-SW3">Apple&#32;Doc&#32;-&#32;Optimizing&#32;for&#32;High&#32;Resolution</a>，
-具体是需要下面几个大小的图标，然后放到 icon_name.iconset 这个文件夹下面
-
-</p>
-
-<pre class="example">icon_16x16.png
+闭的时候很明显会显示回默认的那个。</p>
+<p>实际上呢，需要设置的方法在 <a href="https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html#//apple_ref/doc/uid/TP40012302-CH7-SW3">Apple Doc - Optimizing for High Resolution</a>，
+具体是需要下面几个大小的图标，然后放到 icon_name.iconset 这个文件夹下面</p>
+<pre lang="example"><code>icon_16x16.png
 icon_16x16@2x.png
 icon_32x32.png
 icon_32x32@2x.png
@@ -104,144 +60,62 @@ icon_256x256.png
 icon_256x256@2x.png
 icon_512x512.png
 icon_512x512@2x.png
-</pre>
-
-<p>
-终端下使用命令
-
-</p>
-
-<pre class="source">$ iconutil -c icns icon_name.iconset
-</pre>
-
-
- 来生成，然后拖到工程文件里面就好了，默认就是那个图标了，这个也折腾了不
-<blockquote>
-<p>
- 少时间 ，第一个 Mac App 终于完成了，地址在这里 <a href="http://pan.baidu.com/s/1sjv3gNN">TcBrowserMac</a>，密码是宇宙终极答案。
-
-</p>
-</blockquote>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p6">Permalink</a> </h4>
-
-<p>
+</code></pre>
+<p>终端下使用命令</p>
+<pre lang="source"><code>$ iconutil -c icns icon_name.iconset
+</code></pre>
+<p>来生成，然后拖到工程文件里面就好了，默认就是那个图标了，这个也折腾了不
+少时间 ，第一个 Mac App 终于完成了，地址在这里 <a href="http://pan.baidu.com/s/1sjv3gNN">TcBrowserMac</a>，密码是宇宙终极答案。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p6">Permalink</a></div>
 <!-- date: 2014-12-29T10:22:03+0800 -->
-
-</p>
-
-<h2><a id="p5">14年12月27日 周六 17:58</a></h2>
-
-<h3>ObjC Animation</h3>
-
-<p>
-其实去年在做那个 App 的时候就有使用过简单的动画，接口是 UIView 的
-animateWithDuration，只是平移了一下 view。
-
-</p>
-
-<p>
-今天学到的 iOS 的动画，分成几个部分，分别是针对 view 的，针对 controller
+<p><a id="p5"></a></p>
+<div class="date">14年12月27日 周六 17:58</div>
+<h2>ObjC Animation</h2>
+<p>其实去年在做那个 App 的时候就有使用过简单的动画，接口是 UIView 的
+animateWithDuration，只是平移了一下 view。</p>
+<p>今天学到的 iOS 的动画，分成几个部分，分别是针对 view 的，针对 controller
 的过渡动画，还有就是自由度很高的交互动画，交互动画其实可以看成是最简单的
-游戏了。
-
-</p>
-
-<p>
-针对 view 的动画除了我之前用的 animateWithDuration 方法，其实 view 的很
+游戏了。</p>
+<p>针对 view 的动画除了我之前用的 animateWithDuration 方法，其实 view 的很
 多属性都是可以更改数值然后交给系统去实现动作的，只需要创建 animation 设
-置动画属性，然后使用 view 的 layer 实体 addAnimation 就好。
-
-</p>
-
-<p>
-view 中的 layer 需要说一下，为了实现动画，有多个副本，一个是表示最终状态
+置动画属性，然后使用 view 的 layer 实体 addAnimation 就好。</p>
+<p>view 中的 layer 需要说一下，为了实现动画，有多个副本，一个是表示最终状态
 的（model layer），一个是表示的是当前的（presentation layer），
-presentation 是专门用来显示动画的，结束后就被设成了 model 的状态。
-
-</p>
-
-<p>
-后面例子的还用画图实现了一个动画，画图部分就纯是 CPU 来计算了。另外一个
+presentation 是专门用来显示动画的，结束后就被设成了 model 的状态。</p>
+<p>后面例子的还用画图实现了一个动画，画图部分就纯是 CPU 来计算了。另外一个
 部分是 controller 的转场动画，例子比我之前的平移复杂了一些，用了系统给出
-的 delegate 接口来设置，总之这也是可以自定义的。
-
-</p>
-
-<p>
-还有最后的可交互动画，实际上就跟游戏没啥区别了，动画部分的数值需要不断根
+的 delegate 接口来设置，总之这也是可以自定义的。</p>
+<p>还有最后的可交互动画，实际上就跟游戏没啥区别了，动画部分的数值需要不断根
 据用户的交互来获取、计算，然后设置具体的显示，这些计算实际上是在显示驱动
-的每一帧间隔里面做的。
-
-</p>
-
-<p>
-cocos2dx 的底层部分也是通过 display link 来驱动实现每一帧的画图与计算，
+的每一帧间隔里面做的。</p>
+<p>cocos2dx 的底层部分也是通过 display link 来驱动实现每一帧的画图与计算，
 然后用户的输入是通过 UIView 的 UIKeyInput delegate 来做的，而不像这个例
 子通过手势控件 recognizer 来做的， cocos2dx 的方式更灵活一些，不过两者对
-于动画显示、操作最底层的部分是相似的。
-
-</p>
-
-<p>
-没想到两者后底层部分的驱动结构其实是一样的，display link 与 run loop。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p5">Permalink</a> </h4>
-
-<p>
+于动画显示、操作最底层的部分是相似的。</p>
+<p>没想到两者后底层部分的驱动结构其实是一样的，display link 与 run loop。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p5">Permalink</a></div>
 <!-- date: 2014-12-27T17:58:25+0800 -->
-
-</p>
-
-<h2><a id="p4">14年12月25日 周四 22:16</a></h2>
-
-<h3>ObjC Core Data</h3>
-
-<p>
-Core Data 市面上的文章太多，不管是中文还是英文，所以打算以自己的理解从简
-描述。
-
-</p>
-
-<p>
-先从上到下、从大到小理解概念。关键的概念其实只有 4 个：
-
-</p>
-
+<p><a id="p4"></a></p>
+<div class="date">14年12月25日 周四 22:16</div>
+<h2>ObjC Core Data</h2>
+<p>Core Data 市面上的文章太多，不管是中文还是英文，所以打算以自己的理解从简
+描述。</p>
+<p>先从上到下、从大到小理解概念。关键的概念其实只有 4 个：</p>
 <ul>
-<li>NSManagedModel：数据模型，数据的结构
-</li>
-<li>NSManagedModelContext：具体存取增删数据的接口
-</li>
+<li>NSManagedModel：数据模型，数据的结构</li>
+<li>NSManagedModelContext：具体存取增删数据的接口</li>
 <li>NSPersistentStoreCoordinator：连接 context 与 persistent store 的中间
-   件
-</li>
-<li>NSPersistentStore：数据库，具体的文件
-</li>
+件</li>
+<li>NSPersistentStore：数据库，具体的文件</li>
 </ul>
-
-<p>
-如果还要简约，那概念上只需要关注 model 跟 store 就可以了，一个是 schema，
-模型结构，比如一张表，另一个是数据库，具体到文件。
-
-</p>
-
-<p>
-描述概念间相互关系的图表网上太多，我简略看了一下接口，了解到的是目前 8.1
+<p>如果还要简约，那概念上只需要关注 model 跟 store 就可以了，一个是 schema，
+模型结构，比如一张表，另一个是数据库，具体到文件。</p>
+<p>描述概念间相互关系的图表网上太多，我简略看了一下接口，了解到的是目前 8.1
 的 SDK下，一个 context 对应一个 model 和一个 coordinator，一个
-coordinator 可以连接多个 store，相互的关系可以脑补了吧。
-
-</p>
-
-<p>
-下面的代码只要建立一个 TestCoreData 的头文件调用一下最下面的 test 就可以
-编译跑了，粗看有点多，其实分开函数看就好了，函数名很直白了。
-
-</p>
-
-<pre class="source">@interface UserInfo : NSManagedObject
+coordinator 可以连接多个 store，相互的关系可以脑补了吧。</p>
+<p>下面的代码只要建立一个 TestCoreData 的头文件调用一下最下面的 test 就可以
+编译跑了，粗看有点多，其实分开函数看就好了，函数名很直白了。</p>
+<pre lang="source"><code>@interface UserInfo : NSManagedObject
 @property (nonatomic,copy) NSString *name;
 @property (nonatomic,copy) NSNumber *uid;
 @end
@@ -262,7 +136,7 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。
                                create:YES
                                 error:&amp;error];
     if (durl == nil) {
-        NSLog(@"Fail to create document dir:%@", [error localizedDescription]);
+        NSLog(@&quot;Fail to create document dir:%@&quot;, [error localizedDescription]);
         return nil;
     }
     return durl;
@@ -274,19 +148,19 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。
     
     // create the entity
     NSEntityDescription *infoEntity = [[NSEntityDescription alloc] init];
-    [infoEntity setName:@"UserInfo"];
-    [infoEntity setManagedObjectClassName:@"UserInfo"];
+    [infoEntity setName:@&quot;UserInfo&quot;];
+    [infoEntity setManagedObjectClassName:@&quot;UserInfo&quot;];
     
     [moModel setEntities:[NSArray arrayWithObject:infoEntity]];
     
     // add the attribute
     NSAttributeDescription *nameAttr = [[NSAttributeDescription alloc] init];
-    [nameAttr setName:@"name"];
+    [nameAttr setName:@&quot;name&quot;];
     [nameAttr setAttributeType:NSStringAttributeType];
     [nameAttr setOptional:NO];
     
     NSAttributeDescription *uidAttr = [[NSAttributeDescription alloc] init];
-    [uidAttr setName:@"uid"];
+    [uidAttr setName:@&quot;uid&quot;];
     [uidAttr setAttributeType:NSInteger32AttributeType];
     [uidAttr setOptional:NO];
     
@@ -296,8 +170,8 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。
     
     // add localization dictionary
     NSMutableDictionary *localDict = [NSMutableDictionary dictionary];
-    [localDict setObject:@"name" forKey:@"Property/name/Entity/UserInfo"];
-    [localDict setObject:@"uid" forKey:@"Property/uid/Entity/UserInfo"];
+    [localDict setObject:@&quot;name&quot; forKey:@&quot;Property/name/Entity/UserInfo&quot;];
+    [localDict setObject:@&quot;uid&quot; forKey:@&quot;Property/uid/Entity/UserInfo&quot;];
     
     [moModel setLocalizationDictionary:localDict];
     
@@ -313,13 +187,13 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。
     [moMOC setPersistentStoreCoordinator:co];
     
     NSString *store_type = NSBinaryStoreType; // NSSQLiteStoreType
-    NSString *store_filename = [NSString stringWithFormat:@"storeExample.bin"];
+    NSString *store_filename = [NSString stringWithFormat:@&quot;storeExample.bin&quot;];
     
     NSError *error = nil;
     NSURL *store_url = [[self createStoreDir]
            URLByAppendingPathComponent:store_filename];
     
-    NSLog(@"store url: %@", [store_url absoluteString]);
+    NSLog(@&quot;store url: %@&quot;, [store_url absoluteString]);
 
     NSPersistentStore *pstore = [co addPersistentStoreWithType:store_type
                                                  configuration:nil
@@ -327,7 +201,7 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。
                                                        options:nil
                                                          error:&amp;error];
     if (pstore == nil) {
-        NSLog(@"Fail to create persistence store %@", [error localizedDescription]);
+        NSLog(@&quot;Fail to create persistence store %@&quot;, [error localizedDescription]);
         return nil;
     }
     return moMOC;
@@ -339,14 +213,14 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。
     NSManagedObjectContext *moMOC = [self createModelObjectContext:moModel];
     
     NSEntityDescription *infoEntity =
-          [[moModel entitiesByName] objectForKey:@"UserInfo"];
+          [[moModel entitiesByName] objectForKey:@&quot;UserInfo&quot;];
     
     // insert
     int i;
     for (i=0; i&lt;10; i++) {
         UserInfo *info = [[UserInfo alloc] initWithEntity:infoEntity
                            insertIntoManagedObjectContext:moMOC];
-        info.name = [NSString stringWithFormat:@"n%d", i];
+        info.name = [NSString stringWithFormat:@&quot;n%d&quot;, i];
         info.uid = [NSNumber numberWithInt:i];
     }
     
@@ -354,105 +228,70 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。
     NSError *error = nil;
     [moMOC save:&amp;error];
     if (error) {
-        NSLog(@"Fail to save: %@", [error localizedDescription]);
+        NSLog(@&quot;Fail to save: %@&quot;, [error localizedDescription]);
         return false;
     }
-    
-#if 1
+    &lt;a id=&quot;if&quot;&gt;&lt;/a&gt;
+ 1
     // query &amp; delete
     NSFetchRequest *req = [[NSFetchRequest alloc] init];
     [req setEntity:infoEntity];
     
     NSSortDescriptor *sdesc = 
-          [[NSSortDescriptor alloc] initWithKey:@"uid" ascending:YES];
+          [[NSSortDescriptor alloc] initWithKey:@&quot;uid&quot; ascending:YES];
     [req setSortDescriptors:[NSArray arrayWithObject:sdesc]];
     
     NSArray *ary = [moMOC executeFetchRequest:req error:&amp;error];
     if (error &amp;&amp; (ary==nil)) {
-        NSLog(@"Fail to fetch object: %@", [error localizedDescription]);
+        NSLog(@&quot;Fail to fetch object: %@&quot;, [error localizedDescription]);
         return false;
     }
     for (UserInfo *info in ary) {
-        NSLog(@"user info name:%@, uid:%d", info.name, [info.uid intValue]);
+        NSLog(@&quot;user info name:%@, uid:%d&quot;, info.name, [info.uid intValue]);
         [moMOC deleteObject:info];
     }
 
     // save again
     [moMOC save:&amp;error];
     if (error) {
-        NSLog(@"Fail to save: %@", [error localizedDescription]);
+        NSLog(@&quot;Fail to save: %@&quot;, [error localizedDescription]);
         return false;
-    }
-#endif
+    }&lt;a id=&quot;endif&quot;&gt;&lt;/a&gt;
+
     return true;
 }
 @end
-</pre>
-
-
-更具体细节的东西，比如 Predicates、搜索结果的缓存，可以需要的时候再细查
-了，有了重要概念、框架的支撑，往下往细里面走就好办了吧。
-
-</p>
-
-<p>
-明天玩玩新的东西。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p4">Permalink</a> </h4>
-
-<p>
+</code></pre>
+<p>更具体细节的东西，比如 Predicates、搜索结果的缓存，可以需要的时候再细查
+了，有了重要概念、框架的支撑，往下往细里面走就好办了吧。</p>
+<p>明天玩玩新的东西。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p4">Permalink</a></div>
 <!-- date: 2014-12-25T22:16:40+0800 -->
-
-</p>
-
-<h2><a id="p3">14年12月24日 周三 15:29</a></h2>
-
-<h3>NSThread、NSRunLoop、GCD、__block</h3>
-
-<p>
-因为想求职 Objective-C 开发的原因，被问到了一些很基础的问题，而我做 iOS
-App 已经是一年以前的事情，且也没有那么系统地学习过，所以就慢慢把这些补齐。
-
-</p>
-
-<p>
-我是从 POSIX 的 pthread 入门了解多线程的，用过 mutex 这些临界区保护的方
-法，对于 Mac Objective-C 这边的多线程，对应的是 NSThread。
-
-</p>
-
-<p>
-建立多线程是为了同步做一些事情，不影响界面的响应等等，这些事情要么是纯计
+<p><a id="p3"></a></p>
+<div class="date">14年12月24日 周三 15:29</div>
+<h2>NSThread、NSRunLoop、GCD、__block</h2>
+<p>因为想求职 Objective-C 开发的原因，被问到了一些很基础的问题，而我做 iOS
+App 已经是一年以前的事情，且也没有那么系统地学习过，所以就慢慢把这些补齐。</p>
+<p>我是从 POSIX 的 pthread 入门了解多线程的，用过 mutex 这些临界区保护的方
+法，对于 Mac Objective-C 这边的多线程，对应的是 NSThread。</p>
+<p>建立多线程是为了同步做一些事情，不影响界面的响应等等，这些事情要么是纯计
 算的，要么是各种事件的处理，对于这些事件的检测以及处理，Objective-C 是放
 到 NSRunLoop 里面去的，感觉跟满足了 select 以及 epoll 条件下的大括号块差
-不多吧。
-
-</p>
-
-<p>
-NSRunLoop 就是一个内部循环的结构，一定是从属于某个线程的，要么是属于主线
-程，要么是属于自己创建的线程。
-
-</p>
-
-<p>
-下面的例子是建立了一个 NSRunLoop 响应一秒一次的 NSTimer，这个 NSRunLoop
-是跑在一个单独的线程（非主线程）里的。
-
-</p>
-
-<pre class="source">- (void)timer_entry:(NSTimer*)t
+不多吧。</p>
+<p>NSRunLoop 就是一个内部循环的结构，一定是从属于某个线程的，要么是属于主线
+程，要么是属于自己创建的线程。</p>
+<p>下面的例子是建立了一个 NSRunLoop 响应一秒一次的 NSTimer，这个 NSRunLoop
+是跑在一个单独的线程（非主线程）里的。</p>
+<pre lang="source"><code>- (void)timer_entry:(NSTimer*)t
 {
-    NSLog(@"timer is main thread %d", [NSThread isMainThread]);
+    NSLog(@&quot;timer is main thread %d&quot;, [NSThread isMainThread]);
 }
 
 static int _newThreadAborted;
 
 - (void)thread_entry:(id)param
 {
-    NSLog(@"enter thread");
+    NSLog(@&quot;enter thread&quot;);
     @autoreleasepool {
         NSTimer *t = [NSTimer timerWithTimeInterval:1
                                               target:self
@@ -463,310 +302,147 @@ static int _newThreadAborted;
         [r addTimer:t forMode:NSDefaultRunLoopMode];
         while (!_newThreadAborted) {
             [r runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-            NSLog(@"should not reach here until loop ending");
+            NSLog(@&quot;should not reach here until loop ending&quot;);
         }
-        NSLog(@"thread aborted");
+        NSLog(@&quot;thread aborted&quot;);
     }
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
     
-    NSLog(@"is main thread %d", [NSThread isMainThread]);
+    NSLog(@&quot;is main thread %d&quot;, [NSThread isMainThread]);
     
     NSThread *t = [[NSThread alloc] initWithTarget:self selector:@selector(thread_entry:) object:nil];
     [t start];
 }
-</pre>
-
-
-上面的例子 NSRunLoop 添加了一个 NSTimer 事件源，同样的可以添加其他的事件
+</code></pre>
+<p>上面的例子 NSRunLoop 添加了一个 NSTimer 事件源，同样的可以添加其他的事件
 源，比如鼠标、键盘的，这样就可以在某个线程的 NSRunLoop 里面处理具体的事
-情了，且不影响主线程。
-
-</p>
-
-<p>
-如果 NSRunLoop 里面 while 了一个死循环，这个线程就做不了其他事情了。如果
+情了，且不影响主线程。</p>
+<p>如果 NSRunLoop 里面 while 了一个死循环，这个线程就做不了其他事情了。如果
 这个 NSRunLoop 是在主线程里面，界面就会卡住，一个 NSThread 里面只能有一
-个 NSRunLoop，新建立的线程会在调用获取 NSRunLoop 的时候创建。
-
-</p>
-
-<p>
-而 GCD （Grand Central Dispatch） 我觉得中文网络上面的信息挺不错的，也许
+个 NSRunLoop，新建立的线程会在调用获取 NSRunLoop 的时候创建。</p>
+<p>而 GCD （Grand Central Dispatch） 我觉得中文网络上面的信息挺不错的，也许
 也是因为自己之前已经使用了不少了吧，也因为使用的简单，所以当时的项目里面
-也让我不需要去关注 NSThread 跟 NSRunLoop 了。
-
-</p>
-
-<p>
-具体的使用其实就是构建一个闭包函数，跟 Lua 里面的闭包效果一样，所以这样
-的函数也可以作为值传递了。
-
-</p>
-
-<p>
-比较需要注意的是栈上的闭包函数与堆上的闭包函数的区别，其生命周期是不一样
-的。
-
-</p>
-
-<p>
-另外就是闭包内部访问外部的变量值，若是栈上的变量，则是取建立闭包时的值，
+也让我不需要去关注 NSThread 跟 NSRunLoop 了。</p>
+<p>具体的使用其实就是构建一个闭包函数，跟 Lua 里面的闭包效果一样，所以这样
+的函数也可以作为值传递了。</p>
+<p>比较需要注意的是栈上的闭包函数与堆上的闭包函数的区别，其生命周期是不一样
+的。</p>
+<p>另外就是闭包内部访问外部的变量值，若是栈上的变量，则是取建立闭包时的值，
 若无 __block 修饰，则是建立闭包函数时拷贝到闭包结构里面的值，这个变量在
 闭包内部与外部已经没有文法上的联系了，具体表现就是闭包内部修改不影响外面
-的变量，外部的修改不影响闭包内部同名的变量。
-
-</p>
-
-<p>
-若加了 __block 修饰，则在文法上面，两者是联系在一起的，闭包内部以及上下
+的变量，外部的修改不影响闭包内部同名的变量。</p>
+<p>若加了 __block 修饰，则在文法上面，两者是联系在一起的，闭包内部以及上下
 文可以访问到的地方都可以修改，具体的存储地址呢则看闭包是放在栈上还是堆上
-了，也就是这个变量实际是跟随闭包的变量。
-
-</p>
-
-<p>
-对了，其实还有全局区的闭包，我觉得只要区别不是栈上的闭包就好了。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p3">Permalink</a> </h4>
-
-<p>
+了，也就是这个变量实际是跟随闭包的变量。</p>
+<p>对了，其实还有全局区的闭包，我觉得只要区别不是栈上的闭包就好了。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p3">Permalink</a></div>
 <!-- date: 2014-12-24T15:29:33+0800 -->
-
-</p>
-
-<h2><a id="p2">14年12月10日 周三 21:47</a></h2>
-
-<h3>OpenGL 3.3 under MacOS (2)</h3>
-
-<p>
-终于查明原因了，并不是 GLFW 不堪用的问题，而是需要在 glGenBuffers 之前，
-先跑下面：
-
-</p>
-
-<pre class="source">    glGenVertexArrays(1, &amp;vaoHandle);
+<p><a id="p2"></a></p>
+<div class="date">14年12月10日 周三 21:47</div>
+<h2>OpenGL 3.3 under MacOS (2)</h2>
+<p>终于查明原因了，并不是 GLFW 不堪用的问题，而是需要在 glGenBuffers 之前，
+先跑下面：</p>
+<pre lang="source"><code>    glGenVertexArrays(1, &amp;vaoHandle);
     glBindVertexArray(vaoHandle);
-</pre>
-
-
-当然，那些诸如 &#60;Learning Modern 3D Graphics Programming&#62; 的书上面是没有
-这两句代码的。
-
-</p>
-
-<p>
-蛋疼呀。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p2">Permalink</a> </h4>
-
-<p>
+</code></pre>
+<p>当然，那些诸如 &lt;Learning Modern 3D Graphics Programming&gt; 的书上面是没有
+这两句代码的。</p>
+<p>蛋疼呀。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p2">Permalink</a></div>
 <!-- date: 2014-12-10T21:47:14+0800 -->
-
-</p>
-
-<h2><a id="p1">14年12月9日 周二 19:42</a></h2>
-
-<h3>OpenGL 3.3 under MacOS</h3>
-
-<p>
-其实我想说的是在黑苹果下的情况，一般阿婆是只打开 OpenGL 2.1 而已的，用
+<p><a id="p1"></a></p>
+<div class="date">14年12月9日 周二 19:42</div>
+<h2>OpenGL 3.3 under MacOS</h2>
+<p>其实我想说的是在黑苹果下的情况，一般阿婆是只打开 OpenGL 2.1 而已的，用
 X11 XQuartz 或者 GLEW，都无法使用 OpenGL 3.3 的，对于我这个初学者来说，
-想从 Modern OpenGL 入门，痛苦不堪。
-
-</p>
-
-<p>
-首先，还是先确认黑苹果在硬件上能够支持的 OpenGL API 版本吧，App Store 上
+想从 Modern OpenGL 入门，痛苦不堪。</p>
+<p>首先，还是先确认黑苹果在硬件上能够支持的 OpenGL API 版本吧，App Store 上
 下载 OpenGL Extensions Viewer 来确认硬件情况，比如我的是 GeForce 310，是
-能够支持到 OpenGL 3.3 Core 的。
-
-</p>
-
-<p>
-剩下的就是驱动问题了，谷歌得到的结果是建议用新的 GLFW 而不是 GLUT 或者
+能够支持到 OpenGL 3.3 Core 的。</p>
+<p>剩下的就是驱动问题了，谷歌得到的结果是建议用新的 GLFW 而不是 GLUT 或者
 GLEW 来做，GLFW 在 MacOS 下默认也只打开 OpenGL 2.1 而已，听说要这样才能
-打开 3.3 的 Core：
-
-</p>
-
-<pre class="source"><span class="keyword">static</span> <span class="type">void</span> <span class="function-name">using_opengl_version_330</span>(<span class="type">void</span>) {
+打开 3.3 的 Core：</p>
+<pre lang="source"><code>static void using_opengl_version_330(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 }
-</pre>
-
-
-设置完之后，我就按教程走了，但是，又出现了意外的情况，在我的黑苹果上面，
-#version 330 的 shader 源码都编译链接过了，但就是没有显示，窗口里面都是
+</code></pre>
+<p>设置完之后，我就按教程走了，但是，又出现了意外的情况，在我的黑苹果上面，<a id="version"></a>
+330 的 shader 源码都编译链接过了，但就是没有显示，窗口里面都是
 黑的。总之 OpenGL 2.1 可以，3.3 就是不行。即便 glClear 颜色显示 OK，loop
-循环也有走。
-
-</p>
-
-<p>
-又不甘心使用 OpenGL 2.1 呢，只好救助于 Apple 原生的系统接口看看了，还好
+循环也有走。</p>
+<p>又不甘心使用 OpenGL 2.1 呢，只好救助于 Apple 原生的系统接口看看了，还好
 谷歌查到了不错的东西 <a href="https://developer.apple.com/library/mac/samplecode/GLEssentials/Introduction/Intro.html">GLEssentials</a>，是官方提供的 Objective-C 使用 OpenGL
-3.3 API 编程的例子。
-
-</p>
-
-<p>
-立马左上角的 "Download Sample Code"，XCode 打开工程瞬间编译完成，看了一
+3.3 API 编程的例子。</p>
+<p>立马左上角的 &quot;Download Sample Code&quot;，XCode 打开工程瞬间编译完成，看了一
 下接口以及 Shader，确认是使用 OpenGL 3.3 接口无疑，demo 也挺高大上的，果
-然官方的东西就是妥妥的。
-
-</p>
-
-<p>
-之前依靠跨平台各种库、以及过时的库起步，加上黑苹果的原因吧，缓慢起步。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p1">Permalink</a> </h4>
-
-<p>
+然官方的东西就是妥妥的。</p>
+<p>之前依靠跨平台各种库、以及过时的库起步，加上黑苹果的原因吧，缓慢起步。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p1">Permalink</a></div>
 <!-- date: 2014-12-09T19:42:30+0800 -->
-
-</p>
-
-<h2><a id="p0">14年12月1日 周一 22:53</a></h2>
-
-<h3>实践了一个 JPEG 解码器</h3>
-
-<p>
-为了更好地了解 JPEG 的解码过程，实践了一个 JPEG 解码器，放到个人 github
-上面了，<a href="http://github.com/lalawue/jpeg_dec">http://github.com/lalawue/jpeg_dec</a>.
-
-</p>
-
-<p>
-参考了不少中英文资料，更多的是中文的，marker 的部分倒是看了 itu-81 的图表。
-
-</p>
-
-<p>
-不需要用 shadowsocks 翻墙技能，仅靠百度到的中文博客歪歪斜斜排版杂乱不堪
-的文章，其实也能从无到有实践一个 JPEG 解码器。
-
-</p>
-
-<p>
-也参考了不少 nanojpeg 的代码以及处理流程，最复杂的部分，在我看来是霍夫曼
-编码的生成，是自己理解得不好，数据结构课上面的霍夫曼编码部分忘得差不多了。
-
-</p>
-
-<p>
-而 nanojpeg 包括 public domain 的 c++ jpegd 实现的霍夫曼码，其生成我感觉
+<p><a id="p0"></a></p>
+<div class="date">14年12月1日 周一 22:53</div>
+<h2>实践了一个 JPEG 解码器</h2>
+<p>为了更好地了解 JPEG 的解码过程，实践了一个 JPEG 解码器，放到个人 github
+上面了，<a href="http://github.com/lalawue/jpeg_dec">http://github.com/lalawue/jpeg_dec</a>.</p>
+<p>参考了不少中英文资料，更多的是中文的，marker 的部分倒是看了 itu-81 的图表。</p>
+<p>不需要用 shadowsocks 翻墙技能，仅靠百度到的中文博客歪歪斜斜排版杂乱不堪
+的文章，其实也能从无到有实践一个 JPEG 解码器。</p>
+<p>也参考了不少 nanojpeg 的代码以及处理流程，最复杂的部分，在我看来是霍夫曼
+编码的生成，是自己理解得不好，数据结构课上面的霍夫曼编码部分忘得差不多了。</p>
+<p>而 nanojpeg 包括 public domain 的 c++ jpegd 实现的霍夫曼码，其生成我感觉
 都不明晰，所以花了不少时间。这个部分倒是中文的某些博客写得很清楚，虽然这
-些博客其实也是不知道从哪里抄的（未必是博主第一手资料，且有些还无来源）。
-
-</p>
-
-<p>
-实现了霍夫曼表后，接下来的困难是 IDCT 的部分，看了几个解码库的，包括
-libjpeg 的，README 里面写得明明白白：
-
-</p>
-
+些博客其实也是不知道从哪里抄的（未必是博主第一手资料，且有些还无来源）。</p>
+<p>实现了霍夫曼表后，接下来的困难是 IDCT 的部分，看了几个解码库的，包括
+libjpeg 的，README 里面写得明明白白：</p>
 <pre>
 If you think that you know about DCT-based JPEG after reading this book,
 then you are in delusion.
 </pre>
-
-<p>
-所以就不琢磨了，说不好都是优化过的代码，调试出来的，不是给人看的，这部分
-直接来自 nanojpeg，是一个整型使用位移调整精度的 IDCT 算法，传说的 AA&N
+<p>所以就不琢磨了，说不好都是优化过的代码，调试出来的，不是给人看的，这部分
+直接来自 nanojpeg，是一个整型使用位移调整精度的 IDCT 算法，传说的 AA&amp;N
 算法，如 libjpeg 里面的，没有看得很明白，其实 jpgd c++ 用的跟 libjpeg 一
-样，有用到浮点就是。
-
-</p>
-
-<p>
-然后是一些细节问题，估计看 ITU-81 里面也难看得明白，比如霍夫曼的 VLC 部
+样，有用到浮点就是。</p>
+<p>然后是一些细节问题，估计看 ITU-81 里面也难看得明白，比如霍夫曼的 VLC 部
 分其实我是根据 nanojpeg 的输出比对排错的、IDCT 的部分也是；还有读到
 0xffd9 后补齐 bits 的问题，都补 binary 1；以及每个 component 的 dc
-restart interval 问题等等。
-
-</p>
-
-<p>
-八卦一下，Mac 下面预览导出的 jpeg 图片，霍夫曼表是一个 DHT segment 带一
-个的，PS 则是一个 DHT segment 带多个的。
-
-</p>
-
-<p>
-前人也总结了太多有关 JPEG 结构、解码所需要的知识，这里不重复了，评论下看
-到的一些源码吧。
-
-</p>
-
-<p>
-首先目前自己实现的是一个仅支持 Baseline DCT、H1V1 chroma sampling、YCbCr
+restart interval 问题等等。</p>
+<p>八卦一下，Mac 下面预览导出的 jpeg 图片，霍夫曼表是一个 DHT segment 带一
+个的，PS 则是一个 DHT segment 带多个的。</p>
+<p>前人也总结了太多有关 JPEG 结构、解码所需要的知识，这里不重复了，评论下看
+到的一些源码吧。</p>
+<p>首先目前自己实现的是一个仅支持 Baseline DCT、H1V1 chroma sampling、YCbCr
 色彩的 JPEG decoder。其实绝大部分的 JPEG 都是 Baseline、H1V1 的，Gray
-Scale 其实要比 YCbCr 的简单，再看看后续要不要加上。
-
-</p>
-
-<p>
-nanojpeg 为了实现的简单，资源都全部先申请，包括输出的图片缓冲，亮点是为
+Scale 其实要比 YCbCr 的简单，再看看后续要不要加上。</p>
+<p>nanojpeg 为了实现的简单，资源都全部先申请，包括输出的图片缓冲，亮点是为
 了霍夫曼解码的方便，每个霍夫曼表开了个 1^16 条目的数组，将最多 256 个实
 际变长码 map 到里面去，这种 LUT 的时间效率没得说了，它自己也介绍说解码时
 间上面只比 libjpeg 慢一点点（不支持多线程）。不过空间使用率到了这个地步，
-为啥不像下面的解码库一样，对 YUV 转 RGB 也先做 LUT 呢。
-
-</p>
-
-<p>
-而 jpgd c++ 是个 public domain 的解码库，看了一下作者，之前在 Valve 呢，
+为啥不像下面的解码库一样，对 YUV 转 RGB 也先做 LUT 呢。</p>
+<p>而 jpgd c++ 是个 public domain 的解码库，看了一下作者，之前在 Valve 呢，
 现在项目合并到了 JPEG encoder 里面去，最后的更新是 2012 年的。其霍夫曼变
 长码是将常用的长度小于 8 bits 的 VLC map 到一个 1^8 的空间里面去，剩下的
 放到一个 512 大小的空间里面进行二次查询，两个 LUT 加上一个顺序查找的空间
-（应该是顺序查找的吧，命名为 tree 的）。
-
-</p>
-
-<p>
-小于 7 bits 的变长码，一次 lookup 就可以定位，超过 7 bits，则需要一个个
-bits 来顺序检测并跳转查找了。
-
-</p>
-
-<p>
-jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个空间消耗很
+（应该是顺序查找的吧，命名为 tree 的）。</p>
+<p>小于 7 bits 的变长码，一次 lookup 就可以定位，超过 7 bits，则需要一个个
+bits 来顺序检测并跳转查找了。</p>
+<p>jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个空间消耗很
 小，比 nanojpeg 丧心病狂的 1^16 LUT 空间少了 N 个数量级，且效率很显著，
-特别是当图片变大，像素越来越多的时候。
-
-</p>
-
-<p>
-后续有时间，我也想弄一个稍微改进点的霍夫曼变长码检测方法、以及 YUV 转RGB
+特别是当图片变大，像素越来越多的时候。</p>
+<p>后续有时间，我也想弄一个稍微改进点的霍夫曼变长码检测方法、以及 YUV 转RGB
 的 LUT，目前霍夫曼编码部分是完全按照位数长度从小到大顺序检测的，非常非常
-耗时，只是作为一个样例来理解的话，倒还好。
-
-</p>
-
-<h4><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p0">Permalink</a></h4>
-
-<p>
+耗时，只是作为一个样例来理解的话，倒还好。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2014-12.html#p0">Permalink</a></div>
 <!-- date: 2014-12-01T22:53:41+0800 -->
-
-</p>
-
-<!-- Page published by Emacs Wiki ends here -->
+<!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
-	Sucha. Powered by EmacsWikiJournal.
+	Sucha. Powered by MarkdownProjectCompositor.
 </div>
 </div><!-- sidebar -->
   <div id="sidebar">
@@ -779,9 +455,6 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
         <li><a href="../cs/EmacsWikiJournal.html">Emacs Wiki Journal</a></li>
       </ul>
 
-      <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>December 2014</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td><a title="实践了一个 JPEG 解码器" href="2014-12.html#p0">1</a></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td><td><a title="OpenGL 3.3 under MacOS" href="2014-12.html#p1">9</a></td><td><a title="OpenGL 3.3 under MacOS (2)" href="2014-12.html#p2">10</a></td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td><a title="NSThread、''''NSRunLoop、GCD、__block" href="2014-12.html#p3">24</a></td><td><a title="ObjC Core Data" href="2014-12.html#p4">25</a></td><td>26</td><td><a title="ObjC Animation" href="2014-12.html#p5">27</a></td></tr><tr><td>28</td><td><a title="My First Mac App - ''''TcBrowserMac" href="2014-12.html#p6">29</a></td><td>30</td><td>31</td></tr></table></div>
-
       <p class="header">Search</p><!-- Bing Search -->
       <form id="searchform" method="get" action="http://cn.bing.com/search" >
 	<p><input id="searchtext" type="text" name="q" value="" /></p>
@@ -793,10 +466,8 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
 	<p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
       </form>
 
-      
-      <p class="header">Feeds &#38; Contact</p>
+      <p class="header">Contact</p>
         <ul>
-          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.net/blog/rss.xml">RSS</a></li>
           <li><a href="mailto:suchaaa@gmail.com">Mail me</a></li>
         </ul>
 
@@ -820,10 +491,7 @@ jpgd c++ 的最大亮点，在于将 YUV 转 RGB 的部分，做了 LUT。这个
         <li><a href="http://ditu.google.cn/maps?hl=zh-CN&ll=22.626687,110.186691&spn=0.101883,0.15398&t=h&brcurrent=3,0x36adc425dfd47083:0xd77004f2b5f175d6,0,0x36adb6981be5ba57:0xbb22df1016a0dd2e%3B5,0,0&z=13">Yulin in Google Maps</a></li>
       </ul>
 
-      <p class="header">Archives</p>
-      <div class="archive_links"><ul><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div>
-
-    </div><!-- sidebar -->
+      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
    </div> <!-- body -->
   </body>
 </html>

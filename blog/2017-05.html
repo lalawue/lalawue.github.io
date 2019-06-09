@@ -3,251 +3,171 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
   <head>
     <title>Sucha's Blog - Archive for May, 2017</title>
-    <meta name="generator" content="emacs-wiki-journal.el" />
+    <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html" />
     <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, elisp" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml" />
     <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="../styles/ie.css" /><![endif]-->
   </head>
   <body>
     <div id="body">
       <div id="text">
-	<h1>Sucha's Blog ~ Archive for May, 2017</h1>
-	<!-- Page published by Emacs Wiki begins here -->
-<h2><a id="p0">17年5月7日 周日 10:36</a></h2>
-
-<h3>安装黑苹果 10.12 macOS Sierra</h3>
-
-<p>
-想想距离上次安装已经有一年多了，这次升级安装，原因是之前查到 10.11 下对
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for May, 2017</h1>
+<p><a id="p0"></a></p>
+<div class="date">17年5月7日 周日 10:36</div>
+<h2>安装黑苹果 10.12 macOS Sierra</h2>
+<p>想想距离上次安装已经有一年多了，这次升级安装，原因是之前查到 10.11 下对
 GTX 1060 无法支持，这是个太大的硬伤。考虑到之前几次升级安装，也还算顺利，
 这次没多想就开干了，但这次巨蛋疼，来来回回花了近三天时间，通了一次宵才搞
-定。
-
-</p>
-
-<p>
-这次黑苹果安装，把 Clover 的普通安装、启动引导安装，EFI 系统分区，系统安
-装盘，DSDT，相关工具的使用，以及这个版本安装的其他坑弄清楚了一些。
-
-</p>
-
-<p>
-回头想想，如果要达到一个类似 Windows 安装流程那样顺利的安装，需要了解上
+定。</p>
+<p>这次黑苹果安装，把 Clover 的普通安装、启动引导安装，EFI 系统分区，系统安
+装盘，DSDT，相关工具的使用，以及这个版本安装的其他坑弄清楚了一些。</p>
+<p>回头想想，如果要达到一个类似 Windows 安装流程那样顺利的安装，需要了解上
 面的这些概念才行，然后还需要用到下面列出来的工具，要不然，随便碰到一点现
-象，就不知道该怎么办了，那就难了。
-
-</p>
-
-<p>
-比如所谓的懒人版，应该是加了一些驱动吧，但我觉得在普适性上面，也还是会挑
+象，就不知道该怎么办了，那就难了。</p>
+<p>比如所谓的懒人版，应该是加了一些驱动吧，但我觉得在普适性上面，也还是会挑
 硬件的，苹果的系统，本来就没有考虑过这一点，从需要第三方的引导器如 Clover，
-以及需要 DSDT 来看就知道了。
-
-</p>
-
-<p>
-还有，我之所以不用懒人版，还是担心安全性的问题。
-
-</p>
-
-<h5>一、安装前提</h5>
-
+以及需要 DSDT 来看就知道了。</p>
+<p>还有，我之所以不用懒人版，还是担心安全性的问题。</p>
+<h3>一、安装前提</h3>
 <ul>
-<li>PC macOS 独立硬盘安装，支持 64 位的硬件，支持 UEFI 启动的主板
-</li>
-<li>需要设置 BIOS，需要插拔独立显卡
-</li>
+<li>PC macOS 独立硬盘安装，支持 64 位的硬件，支持 UEFI 启动的主板</li>
+<li>需要设置 BIOS，需要插拔独立显卡</li>
 <li>不懂我说啥的同学，非 64 位硬件非 UEFI 的同学，其他非独立硬盘想双系统
-   的同学，这里帮不了你了
-</li>
+的同学，这里帮不了你了</li>
 </ul>
-
-<h5>二、需要的工具</h5>
-
-<p>
-下面列出需要的工具，但一些工具需要在 macOS 下运行，只有 Windows 的考虑下
-其他替代工具吧，需要的工具有：
-
-</p>
-
+<h3>二、需要的工具</h3>
+<p>下面列出需要的工具，但一些工具需要在 macOS 下运行，只有 Windows 的考虑下
+其他替代工具吧，需要的工具有：</p>
 <ul>
-<li>MaciASL.app，用于生成 DSDT 描述文件
+<li>
+<p>MaciASL.app，用于生成 DSDT 描述文件</p>
 </li>
-<li>Clover Configurator.app，用于配置 Clover，以及挂载 EFI 分区
+<li>
+<p>Clover Configurator.app，用于配置 Clover，以及挂载 EFI 分区</p>
 </li>
-<li>最新版的 Clover，到 sourceForge 下就好
+<li>
+<p>最新版的 Clover，到 sourceForge 下就好</p>
 </li>
-<li>AGDPfix.app，用于解决部分 SMBIOS 接 Nvidia 显卡后启动显示黑屏的问题，
-   有其他的替代方案，可通过搜这个 app 看看（这个驱动独立显卡，安装后使用
-   的）
+<li>
+<p>AGDPfix.app，用于解决部分 SMBIOS 接 Nvidia 显卡后启动显示黑屏的问题，
+有其他的替代方案，可通过搜这个 app 看看（这个驱动独立显卡，安装后使用
+的）</p>
 </li>
 </ul>
-
-<p>
-另外，需要一个 8G 或者更大容量的 U 盘，以及需要对主板 BIOS 进行以下设置：
-
-</p>
-
+<p>另外，需要一个 8G 或者更大容量的 U 盘，以及需要对主板 BIOS 进行以下设置：</p>
 <ul>
-<li>Secure Boot disable
-</li>
-<li>AHCI enable
-</li>
-<li>UEFI enable（可以选择 UEFI、legacy 都支持）
-</li>
-<li>XHCI SmartAuto
-</li>
-<li>XHCI/EHCI handoff enable
-</li>
-<li>设置 U 盘启动优先级最高
-</li>
+<li>Secure Boot disable</li>
+<li>AHCI enable</li>
+<li>UEFI enable（可以选择 UEFI、legacy 都支持）</li>
+<li>XHCI SmartAuto</li>
+<li>XHCI/EHCI handoff enable</li>
+<li>设置 U 盘启动优先级最高</li>
 </ul>
-
-<p>
-上面的设置来源于外文网站，我自己也是这么设置的，那些懒人版都没有这个说明
-的。由于对部分开关不了解，所以这里不展开描述。
-
-</p>
-
-<p>
-我自己电脑的大概信息是 3 个硬盘，一个单用于 Windows，一个单用于 macOS 的
+<p>上面的设置来源于外文网站，我自己也是这么设置的，那些懒人版都没有这个说明
+的。由于对部分开关不了解，所以这里不展开描述。</p>
+<p>我自己电脑的大概信息是 3 个硬盘，一个单用于 Windows，一个单用于 macOS 的
 最新版本（就是这次准备安装的），一个是备份启动的 macOS 系统（10.11.6），
 只有这个不是 SSD，也分区用于存数据资料。上面的 BIOS 设置，对 Windows 系
-统没有影响。
-
-</p>
-
-<h5>三、准备资源</h5>
-
-<p>
-这里列一下大概需要准备的资源，创建硬件描述表 DSDT，准备安装用的 U 盘
-
-</p>
-
+统没有影响。</p>
+<h3>三、准备资源</h3>
+<p>这里列一下大概需要准备的资源，创建硬件描述表 DSDT，准备安装用的 U 盘</p>
 <ul>
-<li>10.12 macOS Sierra 原版安装盘，并创建系统安装 U 盘
+<li>
+<p>10.12 macOS Sierra 原版安装盘，并创建系统安装 U 盘</p>
 </li>
-<li>最新版的 Clover，先给系统安装 U 盘创建 Clover 启动，务必在安装界面勾
-   选自定（customize），选择安装启动引导以及 Drivers64UEFI 下
-   的OsxAptioFixDrv-64
+<li>
+<p>最新版的 Clover，先给系统安装 U 盘创建 Clover 启动，务必在安装界面勾
+选自定（customize），选择安装启动引导以及 Drivers64UEFI 下
+的OsxAptioFixDrv-64</p>
 </li>
-<li>使用 MaciASL.app 生成 DSDT，并编译，遇到编译不过的问题，将这一行或这
-   一块删除，直到通过编译，保存为 AML 二进制文件
+<li>
+<p>使用 MaciASL.app 生成 DSDT，并编译，遇到编译不过的问题，将这一行或这
+一块删除，直到通过编译，保存为 AML 二进制文件</p>
 </li>
-<li>使用 Clover Configurator.app 挂载 U 盘的 EFI 分区（请注意不是当前启动
-   macOS 的 EFI 分区），将 DSDT 描述文件放到 EFI/ACPI/patched 以及
-   origin 下面
+<li>
+<p>使用 Clover Configurator.app 挂载 U 盘的 EFI 分区（请注意不是当前启动
+macOS 的 EFI 分区），将 DSDT 描述文件放到 EFI/ACPI/patched 以及
+origin 下面</p>
 </li>
-<li>下载最新版的 FakeSMC.kext 放到 U 盘 EFI/CLOVER/kexts/Others 下面，
-   kexts 目录下如果还有其他文件夹的，建议将 10.12 文件夹下面的也拷贝到
-   Others，然后删除掉除 Others 的其他，要不每次升级系统都得拷贝一遍，麻烦
+<li>
+<p>下载最新版的 FakeSMC.kext 放到 U 盘 EFI/CLOVER/kexts/Others 下面，
+kexts 目录下如果还有其他文件夹的，建议将 10.12 文件夹下面的也拷贝到
+Others，然后删除掉除 Others 的其他，要不每次升级系统都得拷贝一遍，麻烦</p>
 </li>
-<li>使用 Clover Configurator.app 配置 U 盘 EFI 分区下的 config.plist，
-   boot 下面的 verbose、x86_64、xcpm、kext-dev-mode=1、nv_disable=1 勾选；
-   SMBIOS 里面点魔术棒选个跟当前硬件配置差不多的就好；还有 Kernel 下的
-   AppleRTC 勾选；或者用你当前 Clover 的配置也行，但是要去掉独立显卡的选
-   项
+<li>
+<p>使用 Clover Configurator.app 配置 U 盘 EFI 分区下的 config.plist，
+boot 下面的 verbose、x86_64、xcpm、kext-dev-mode=1、nv_disable=1 勾选；
+SMBIOS 里面点魔术棒选个跟当前硬件配置差不多的就好；还有 Kernel 下的
+AppleRTC 勾选；或者用你当前 Clover 的配置也行，但是要去掉独立显卡的选
+项</p>
 </li>
-<li>关闭保存 Clover Configurator.app 并推出 U 盘 EFI 分区
+<li>
+<p>关闭保存 Clover Configurator.app 并推出 U 盘 EFI 分区</p>
 </li>
 </ul>
-
-<h5>四、安装流程</h5>
-
-<p>
-先说一下大概的流程，U 盘启动安装，遇到问题增添 U 盘 EFI 分区的 kext，安
-装后修复部分 SMBIOS 下的黑屏问题。
-
-</p>
-
+<h3>四、安装流程</h3>
+<p>先说一下大概的流程，U 盘启动安装，遇到问题增添 U 盘 EFI 分区的 kext，安
+装后修复部分 SMBIOS 下的黑屏问题。</p>
 <ol>
-<li>如果有像我这样 Nvidia GTX 1060 显卡的，先把显卡拔掉，BIOS 设置使用 Intel
-    内置显卡
+<li>
+<p>如果有像我这样 Nvidia GTX 1060 显卡的，先把显卡拔掉，BIOS 设置使用 Intel
+内置显卡</p>
 </li>
-<li>BIOS 设置 U 盘启动优先级最高，使用 U 盘 Clover 启动安装，如果没有
-    kext 挂掉，kernel panic，那么可以走到安装界面；选择盘符抹盘安装
+<li>
+<p>BIOS 设置 U 盘启动优先级最高，使用 U 盘 Clover 启动安装，如果没有
+kext 挂掉，kernel panic，那么可以走到安装界面；选择盘符抹盘安装</p>
 </li>
-<li>安装顺利完成，使用 U 盘引导并启动到新版系统，先驱动起网卡，然后下载
-    Nvidia 的 web 驱动安装，并使用 AGDPfix.app 修正部分 SMBIOS 设置的黑
-    屏问题
+<li>
+<p>安装顺利完成，使用 U 盘引导并启动到新版系统，先驱动起网卡，然后下载
+Nvidia 的 web 驱动安装，并使用 AGDPfix.app 修正部分 SMBIOS 设置的黑
+屏问题</p>
 </li>
-<li>使用 Clover 给新版系统安装启动引导，将之前 U 盘的 EFI 分区内容拷贝到
-    新系统的 EFI 分区，修改 config.plist，去掉 nv_disable=1，加入
-    nvidiaweb 支持（请看这一节的最后），保存并推出 EFI 分区
+<li>
+<p>使用 Clover 给新版系统安装启动引导，将之前 U 盘的 EFI 分区内容拷贝到
+新系统的 EFI 分区，修改 config.plist，去掉 nv_disable=1，加入
+nvidiaweb 支持（请看这一节的最后），保存并推出 EFI 分区</p>
 </li>
-<li>关机下电，将 Nvidia 独立显卡插回主板，修改 BIOS 的启动顺序
+<li>
+<p>关机下电，将 Nvidia 独立显卡插回主板，修改 BIOS 的启动顺序</p>
 </li>
-<li>顺利启动新系统，安装结束；其他 kext 安装、声卡、网卡驱动安装，Clover
-    默认启动项请搜索其他吧
+<li>
+<p>顺利启动新系统，安装结束；其他 kext 安装、声卡、网卡驱动安装，Clover
+默认启动项请搜索其他吧</p>
 </li>
 </ol>
-
-<p>
-有关 nvidiaweb 驱动的支持，需要使用文本编辑器编辑 config.plist，在
-SystemParameters key 下添加：
-
-</p>
-
-<pre class="example">	&lt;key&gt;SystemParameters&lt;/key&gt;
+<p>有关 nvidiaweb 驱动的支持，需要使用文本编辑器编辑 config.plist，在
+SystemParameters key 下添加：</p>
+<pre lang="source"><code>	&lt;key&gt;SystemParameters&lt;/key&gt;
 	&lt;dict&gt;
                 ... 其他配置 ...
         	&lt;key&gt;NvidiaWeb&lt;/key&gt;
         	&lt;true/&gt;
 	&lt;/dict&gt;
-</pre>
-
-<h5>五、kernel panic、黑屏问题</h5>
-
-<p>
-这里的 kernel panic 出现在安装第 2. 步，我也遇到过，看看是什么 kext 引起
-的，将其更新或删除就好，一般有了 DSDT 后，对硬件的描述应该不成问题了。
-
-</p>
-
-<p>
-Clover 可以修改启动参数，在 Option 里面，选择启动参数，enter 后修改，一
-般是增加减少 -v，nv_disable=1，-x，-f 之类的。
-
-</p>
-
-<p>
-黑屏问题看外文参考资料是因为 SMBIOS 设置，苹果针对 OEM 单独做的处理，请
-看下面的英文参考资料。
-
-</p>
-
-<h5>六、参考资料</h5>
-
-<p>
-参考外文资料比较好，比如 www.tonymacx86.com
-
-</p>
-
+</code></pre>
+<h3>五、kernel panic、黑屏问题</h3>
+<p>这里的 kernel panic 出现在安装第 2. 步，我也遇到过，看看是什么 kext 引起
+的，将其更新或删除就好，一般有了 DSDT 后，对硬件的描述应该不成问题了。</p>
+<p>Clover 可以修改启动参数，在 Option 里面，选择启动参数，enter 后修改，一
+般是增加减少 -v，nv_disable=1，-x，-f 之类的。</p>
+<p>黑屏问题看外文参考资料是因为 SMBIOS 设置，苹果针对 OEM 单独做的处理，请
+看下面的英文参考资料。</p>
+<h3>六、参考资料</h3>
+<p>参考外文资料比较好，比如 www.tonymacx86.com</p>
 <ul>
-<li><a href="https://www.tonymacx86.com/threads/good-news-for-x99-10-11-haswell-e-el-capitan.178425/page-4#post-1151520">Clover&#32;设置及黑屏问题</a>
-</li>
-<li><a href="https://www.tonymacx86.com/threads/black-screen-with-macpro-6-1-or-imac-15-or-imac-17-system-definition.183113/">Black&#32;Screen&#32;with&#32;MacPro&#32;6&#44;1&#32;or&#32;iMac&#32;15&#32;or&#32;iMac&#32;17&#32;System&#32;Definition</a>
-</li>
+<li><a href="https://www.tonymacx86.com/threads/good-news-for-x99-10-11-haswell-e-el-capitan.178425/page-4#post-1151520">Clover 设置及黑屏问题</a></li>
+<li><a href="https://www.tonymacx86.com/threads/black-screen-with-macpro-6-1-or-imac-15-or-imac-17-system-definition.183113/">Black Screen with MacPro 6,1 or iMac 15 or iMac 17 System Definition</a></li>
 </ul>
-
-<h4><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2017-05.html#p0">Permalink</a> </h4>
-
-<p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2017-05.html#p0">Permalink</a></div>
 <!-- date: 2017-05-07T10:36:03+0800 -->
-
-</p>
-
-<!-- Page published by Emacs Wiki ends here -->
+<!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
-	Sucha. Powered by EmacsWikiJournal.
+	Sucha. Powered by MarkdownProjectCompositor.
 </div>
 </div><!-- sidebar -->
   <div id="sidebar">
@@ -260,9 +180,6 @@ Clover 可以修改启动参数，在 Option 里面，选择启动参数，enter
         <li><a href="../cs/EmacsWikiJournal.html">Emacs Wiki Journal</a></li>
       </ul>
 
-      <p class="header">Calendar</p>
-      <div class="calendar"><table><caption>May 2017</caption><thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead><tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td><a title="安装黑苹果 10.12 macOS Sierra" href="2017-05.html#p0">7</a></td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr><tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr><tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr><tr><td>28</td><td>29</td><td>30</td><td>31</td></tr></table></div>
-
       <p class="header">Search</p><!-- Bing Search -->
       <form id="searchform" method="get" action="http://cn.bing.com/search" >
 	<p><input id="searchtext" type="text" name="q" value="" /></p>
@@ -274,10 +191,8 @@ Clover 可以修改启动参数，在 Option 里面，选择启动参数，enter
 	<p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
       </form>
 
-      
-      <p class="header">Feeds &#38; Contact</p>
+      <p class="header">Contact</p>
         <ul>
-          <li><a id="rss_feeds" title="RSS订阅" href="http://suchang.net/blog/rss.xml">RSS</a></li>
           <li><a href="mailto:suchaaa@gmail.com">Mail me</a></li>
         </ul>
 
@@ -301,10 +216,7 @@ Clover 可以修改启动参数，在 Option 里面，选择启动参数，enter
         <li><a href="http://ditu.google.cn/maps?hl=zh-CN&ll=22.626687,110.186691&spn=0.101883,0.15398&t=h&brcurrent=3,0x36adc425dfd47083:0xd77004f2b5f175d6,0,0x36adb6981be5ba57:0xbb22df1016a0dd2e%3B5,0,0&z=13">Yulin in Google Maps</a></li>
       </ul>
 
-      <p class="header">Archives</p>
-      <div class="archive_links"><ul><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div>
-
-    </div><!-- sidebar -->
+      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
    </div> <!-- body -->
   </body>
 </html>

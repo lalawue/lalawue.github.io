@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - CategoryProgramming</title>
+    <title>Sucha's Blog - Archive for June, 2019</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -16,214 +16,50 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Category Programming</h1>
-<h2>2018.06</h2>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for June, 2019</h1>
+<p><a id="p0"></a></p>
+<div class="date">18年6月10日 周日 11:59</div>
+<h2>更换 Markdown Engine 为 cmark-gfm</h2>
+<p>将本地 Markdown 渲染引擎换成了 <a href="https://github.com/github/cmark-gfm">cmark-gfm</a>，在这个基础上建立了类 EmacsWikiMode 的工程生成工具
+<a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a>。</p>
+<p>之前这个主页包括博客，是 2004 年底因为好奇 Wiki 语法而搭建起来的本地 HTML 文件，后来又学会了使用 FTP 上传免费的空间，绑定二级域名。</p>
+<p>接着又学会了如何买域名，大学时代迷恋 Unix、Linux、Emacs 等等这一切对于普通人来说奇奇怪怪的东西，除了头脑发热在学校 BBS 上各种水文，
+还在这里分门别类做了记录，慢慢的东西就多起来了。</p>
+<p>这十多年间，不变的是，我得使用 Emacs 作为一个所见所得的编辑器，通过
+<a href="https://github.com/lalawue/emacs-wiki-mode">EmacsWikiMode</a> 来写 Markdown，
+为此自己在这个 mode 之上建立了 <a href="https://github.com/lalawue/emacs-wiki-journal">EmacsWikiJournal</a> 来专门写博客，基本上，
+<a href="../scratch/EmacsWiki.html">这个过程还是很方便的</a>。</p>
+<p>Markdown 最初的语法，都来自于 JOHN GRUBER 在 2004 年的
+<a href="https://daringfireball.net/projects/markdown/syntax">Markdown: Syntax</a>。</p>
+<p>因为 EmacsWikiMode 引用得早吧，所以在此之上，构建了很多独特的功能，比如自动生成目录摘要，比如将 Markdown 组织为各个工程，使用不同的配置文件头、
+文件尾来生成 HTML，这样不同目录下的 HTML 可以使用不同的 CSS。而且，不同工程之间还可以很方便的引用。以及各种语法的高亮，将其输出为 HTML 文件。</p>
+<p>也是蛮早，我就想着将博客的文件按照 YYYY-MM 这样组织，可以经受时间推移的考验，可是没想到，最大的不确定性，来自于 Emacs 的支持。</p>
+<p>一方面，EmacsWikiMode 早就年久失修，maintainer 在 N 年以前，就构建了一个叫做 muse 的工程另起炉灶了。而 Emacs 社区本身，转到了 OrgMode 这一条路上
+面，再说，其实一直都有 OutlineMode 可以用，也还勉勉强强。</p>
+<p>加上外面各种 Markdown 桌面软件，网页端工具提供方便的界面，EmacsWikiMode 早就没有人用了，而我自己使用的频次也是越拉越少。</p>
+<p>可悲的是，随着 Emacs 版本更新，大概在 version 24 的时候，EmacsWikiMode 在使用上就各种问题，version 25 之后，几乎无法生成了。</p>
+<p>虽然是低频使用，但考虑到需要很长时间的支持，emacs-lisp 这种语言就得花费很多时间去维护，其作为 Emacs 环境编程工具，功能接口变动较大，
+如果是 C 等等语言、库变动少的，基本上靠着 POSIX Like 的系统接口，维护成本可以很低。当然效率是另外一方面的加分吧。</p>
+<p>所以，替换 Markdown 的 renderinig engine，随着 Emacs 上 EmacsWikiMode 的可用性变得迫切起来，最终来了这次大改。</p>
+<p>因为之前 EmacsWikiMode 功能丰富，加上自救对于 cmark 还不熟悉，所以功能上有取舍。另外之前为了在上面构建 EmacsWikiJournal，其实在 HTML 文件结构上
+面，以及 Markdown 的语法上面，都有一些不妥的地方，这里一并修改过来了。</p>
+<p>先说一些缺失的：</p>
 <ul>
-<li>18年6月24日 周日 10:53 <a href="2018-06.html#p1">Timer、FastLZ &amp; Erasure Codec</a></li>
+<li>不再支持生成 table 了，原来的 table 都是从 HTML 层面拷贝过来的</li>
+<li>没有区分各种语言的语法高亮了<sup><a href="#fn1">1</a></sup></li>
+<li>博客没有侧边栏的 calendar 了</li>
 </ul>
-<h2>2018.05</h2>
+<p>一些依旧支持，并做了改进的：</p>
 <ul>
-<li>18年5月1日 周二 22:30 <a href="2018-05.html#p0">m_dnscnt 和 lua-web</a></li>
+<li>支持工程间的引用</li>
+<li>支持生成目录摘要</li>
+<li>支持 footnote</li>
+<li>博客里面良好的 HTML 标题结构、date、category 语法<sup><a href="#fn2">2</a></sup></li>
+<li>动态生成 WelcomePage、Category 内容</li>
 </ul>
-<h2>2018.03</h2>
-<ul>
-<li>18年3月5日 周一 00:06 <a href="2018-03.html#p1">m_net 支持 FreeBSD</a></li>
-</ul>
-<h2>2017.09</h2>
-<ul>
-<li>17年9月5日 周二 00:59 <a href="2017-09.html#p0">有关 m_net 跨平台的小型网络库</a></li>
-</ul>
-<h2>2017.08</h2>
-<ul>
-<li>17年8月6日 周日 13:34 <a href="2017-08.html#p0">m_kcptun</a></li>
-</ul>
-<h2>2017.06</h2>
-<ul>
-<li>17年6月25日 周日 00:30 <a href="2017-06.html#p0">m_tunnel 支持 epoll/kqueue</a></li>
-</ul>
-<h2>2017.04</h2>
-<ul>
-<li>17年4月16日 周日 22:52 <a href="2017-04.html#p1">m_tunnel 支持 Win7</a></li>
-</ul>
-<h2>2017.03</h2>
-<ul>
-<li>17年3月18日 周六 10:43 <a href="2017-03.html#p0">Git 二三事</a></li>
-</ul>
-<h2>2016.05</h2>
-<ul>
-<li>16年5月4日 周三 00:50 <a href="2016-05.html#p0">稳定版的 m_tunnel</a></li>
-</ul>
-<h2>2015.12</h2>
-<ul>
-<li>15年12月9日 周三 23:41 <a href="2015-12.html#p0">类 Shadowsocks 的 sock5 proxy － m_tunnel</a></li>
-</ul>
-<h2>2015.09</h2>
-<ul>
-<li>15年9月15日 周二 23:40 <a href="2015-09.html#p0">Cross platform HTTP server</a></li>
-</ul>
-<h2>2015.03</h2>
-<ul>
-<li>15年3月7日 周六 23:41 <a href="2015-03.html#p1">[iOS] 被逼的 VFL</a></li>
-<li>15年3月7日 周六 23:22 <a href="2015-03.html#p0">播放器使用 OpenAL 需要注意的</a></li>
-</ul>
-<h2>2015.02</h2>
-<ul>
-<li>15年2月28日 周六 23:44 <a href="2015-02.html#p1">IUP &amp; vs2012</a></li>
-<li>15年2月14日 周六 00:38 <a href="2015-02.html#p0">[iOS] dispatch_after</a></li>
-</ul>
-<h2>2015.01</h2>
-<ul>
-<li>15年1月30日 周五 12:42 <a href="2015-01.html#p2">有关 GLFW</a></li>
-<li>15年1月15日 周四 01:34 <a href="2015-01.html#p1">获取默认网卡的 IP 地址</a></li>
-<li>15年1月3日 周六 11:19 <a href="2015-01.html#p0">HTTP Downloader</a></li>
-</ul>
-<h2>2014.12</h2>
-<ul>
-<li>14年12月29日 周一 10:22 <a href="2014-12.html#p6">My First Mac App - TcBrowserMac</a></li>
-<li>14年12月27日 周六 17:58 <a href="2014-12.html#p5">ObjC Animation</a></li>
-<li>14年12月25日 周四 22:16 <a href="2014-12.html#p4">ObjC Core Data</a></li>
-<li>14年12月24日 周三 15:29 <a href="2014-12.html#p3">NSThread、NSRunLoop、GCD、__block</a></li>
-<li>14年12月10日 周三 21:47 <a href="2014-12.html#p2">OpenGL 3.3 under MacOS (2)</a></li>
-<li>14年12月9日 周二 19:42 <a href="2014-12.html#p1">OpenGL 3.3 under MacOS</a></li>
-<li>14年12月1日 周一 22:53 <a href="2014-12.html#p0">实践了一个 JPEG 解码器</a></li>
-</ul>
-<h2>2014.02</h2>
-<ul>
-<li>14年2月28日 周五 15:08 <a href="2014-02.html#p0">玩了一下 2D 骨骼动画</a></li>
-</ul>
-<h2>2014.01</h2>
-<ul>
-<li>14年1月4日 周六 15:04 <a href="2014-01.html#p1">更方便简洁的 Upload Script</a></li>
-<li>14年1月1日 周三 02:34 <a href="2014-01.html#p0">快速关闭远程 server 的 expect 脚本</a></li>
-</ul>
-<h2>2013.11</h2>
-<ul>
-<li>13年11月2日 周六 23:19 <a href="2013-11.html#p0">Bash 下统计文件行数</a></li>
-</ul>
-<h2>2013.10</h2>
-<ul>
-<li>13年10月10日 周四 18:08 <a href="2013-10.html#p0">搭建 git 认证服务端、wiki知识系统</a></li>
-</ul>
-<h2>2013.08</h2>
-<ul>
-<li>13年8月27日 周二 23:47 <a href="2013-08.html#p2">TexturePacker 图片打包工具</a></li>
-<li>13年8月12日 周一 14:26 <a href="2013-08.html#p1">在C/C++/Objc中快速定位当前文件内的函数</a></li>
-<li>13年8月11日 周日 21:44 <a href="2013-08.html#p0">在头文件与源代码之间快速跳转</a></li>
-</ul>
-<h2>2013.06</h2>
-<ul>
-<li>13年6月13日 周四 14:54 <a href="2013-06.html#p0">[iOS] 为 App 提供打开邮件附件的支持</a></li>
-</ul>
-<h2>2013.03</h2>
-<ul>
-<li>13年3月26日 周二 21:19 <a href="2013-03.html#p0">吐槽一下 iOS 的 NSMutableURLRequest 和 cookie 方案</a></li>
-</ul>
-<h2>2012.10</h2>
-<ul>
-<li>12年10月3日 周三 11:59 <a href="2012-10.html#p0">Emacs 的正则表达式替换</a></li>
-</ul>
-<h2>2012.06</h2>
-<ul>
-<li>12年6月13日 周三 11:02 <a href="2012-06.html#p0">视频同编同解驱动</a></li>
-</ul>
-<h2>2012.03</h2>
-<ul>
-<li>12年3月09日 周五 23:37 <a href="2012-03.html#p1">当GCC找不到内建的头文件</a></li>
-</ul>
-<h2>2010.11</h2>
-<ul>
-<li>10年11月6日 周六 11:41 <a href="2010-11.html#p2">Emacs-Wiki-Journal 配置更新</a></li>
-</ul>
-<h2>2009.01</h2>
-<ul>
-<li>1月1日 周四 00:01 <a href="2009-01.html#p0">俄罗斯方块游戏</a></li>
-</ul>
-<h2>2008.12</h2>
-<ul>
-<li>12月14日 周日 18:29 <a href="2008-12.html#p0">Google Sitemap Generator</a></li>
-</ul>
-<h2>2008.11</h2>
-<ul>
-<li>11月16日 周日 22:19 <a href="2008-11.html#p1">Emacs 高亮</a></li>
-</ul>
-<h2>2008.06</h2>
-<ul>
-<li>6月8日 周日 22:40 <a href="2008-06.html#p1">GTAGS 和 company-mode</a></li>
-</ul>
-<h2>2008.04</h2>
-<ul>
-<li>4月13日 周日 01:43 <a href="2008-04.html#p2">Emacs-Wiki-Journal 更新</a></li>
-<li>4月12日 周六 01:18 <a href="2008-04.html#p1">Emacs-Wiki-Journal with Emacs23</a></li>
-</ul>
-<h2>2008.03</h2>
-<ul>
-<li>3月23日 周日 23:17 <a href="2008-03.html#p0">CSCOPE 和 GTAGS</a></li>
-</ul>
-<h2>2007.03</h2>
-<ul>
-<li>3月22日 周四 23:04 <a href="2007-03.html#p4">Smart compile command</a></li>
-</ul>
-<h2>2006.08</h2>
-<ul>
-<li>8月14日 周一 17:45 <a href="2006-08.html#p6">emacs-wiki-journal 又有更新</a></li>
-<li>8月7日 周一 16:50 <a href="2006-08.html#p4">Emacs-Wiki-Journal 更新</a></li>
-<li>8月7日 周一 16:14 <a href="2006-08.html#p2">Uploadscript v1.04</a></li>
-</ul>
-<h2>2006.07</h2>
-<ul>
-<li>7月1日 周六 13:43 <a href="2006-07.html#p0">小型 UNIX 磁盘文件系统</a></li>
-</ul>
-<h2>2006.05</h2>
-<ul>
-<li>5月5日 周五 02:41 <a href="2006-05.html#p0">修改了 emacs-wiki-journal 里的 rss feed 格式</a></li>
-</ul>
-<h2>2006.04</h2>
-<ul>
-<li>4月6日 周四 09:39 <a href="2006-04.html#p1">自定义 Emacs-Wiki-Journal 首页记录数目</a></li>
-</ul>
-<h2>2006.03</h2>
-<ul>
-<li>3月20日 周一 22:39 <a href="2006-03.html#p7">用 Emacs 与 SQLite 交互</a></li>
-</ul>
-<h2>2006.01</h2>
-<ul>
-<li>1月19日 周四 15:01 <a href="2006-01.html#p5">New uploadscript</a></li>
-</ul>
-<h2>2005.12</h2>
-<ul>
-<li>12月22日 周四 22:37 <a href="2005-12.html#p9">汇编课程设计</a></li>
-</ul>
-<h2>2005.11</h2>
-<ul>
-<li>11月13日 周日 12:30 <a href="2005-11.html#p7">Simple mp3 playback</a></li>
-<li>11月12日 周六 00:53 <a href="2005-11.html#p4">修改了 Emacs-Wiki-Journal 里增加条目部分</a></li>
-<li>11月11日 周五 13:18 <a href="2005-11.html#p3">为什么发布文件会出错</a></li>
-</ul>
-<h2>2005.09</h2>
-<ul>
-<li>9月11日 周日 09:41 <a href="2005-09.html#p4">“无损”的文本剪切</a></li>
-</ul>
-<h2>2005.08</h2>
-<ul>
-<li>8月31日 周三 16:58 <a href="2005-08.html#p10">&quot;修复&quot; emacs-wiki-journal-category-alist 函数</a></li>
-<li>8月9日 周二 22:32 <a href="2005-08.html#p0">Hack emacs-wiki-journal.el</a></li>
-</ul>
-<h2>2005.05</h2>
-<ul>
-<li>2005-05-20, 星期五 <a href="2005-05.html#p12">一个 Emacs 的日记本函数</a></li>
-<li>2005-05-16, 星期一 <a href="2005-05.html#p9">循环&quot;包涵于&quot;递归？</a></li>
-<li>2005-05-12, 星期四 <a href="2005-05.html#p8">递归--程序设计的方法与艺术 ?</a></li>
-<li>2005-05-05, 星期四 <a href="2005-05.html#p3">满世界地找 rss generater</a></li>
-<li>2005-05-03, 星期二 <a href="2005-05.html#p2">Upload shell script v1.2</a></li>
-</ul>
-<h2>2005.04</h2>
-<ul>
-<li>2005-04-29, 星期五 <a href="2005-04.html#p7">事情复杂了~</a></li>
-</ul>
-<h2>2005.01</h2>
-<ul>
-<li>2005-01-07, 星期五 <a href="2005-01.html#p2">挤时间编了个 script</a></li>
-</ul>
+<p><sup>[<a id="fn1">1</a>]</sup> <a href="../images/elisp_highlight_syntax.jpg">emacs-lisp 语法高亮图</a><br />
+<sup>[<a id="fn2">2</a>]</sup> <a href="../images/md_cmark_syntax.jpg">新的博客结构</a></p>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2019-06.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
