@@ -17,8 +17,108 @@
     <div id="body">
       <div id="text">
 	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1>
+<p><a id="p1"></a></p>
+<div class="date">18年6月10日 周一 22:26</div>
+<h2>MarkdownProjectCompositor</h2>
+<p>这里介绍一下 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a> 对源文件的组织方式、处理流程，以及一些针对 Markdown 语法的扩展功能，最后说一下配置细节。</p>
+<h3>源文件组织方式</h3>
+<p>可以参考配置文件<sup><a href="#fnc1">1</a></sup>，定义了源文件目录、生成目录，同时定义了多个源文件子目录为 proj 工程目录，每个 proj 工程目录可以自定义不同 proj prepare 函数，每个源文件的 body 预处理函数、header 及 footer 样式。</p>
+<p>这样可以有效处理主页源码、以及博客源码，处理各自不同的扩展语法，在 compostor 这一层，关注流程及数据传递，具体的扩展功能，是通过配置文件中复杂的功能函数来实现的。</p>
+<p>在 proj 这一层，主要是获取子目录下的所有文件，交给 prepare 函数动态插入、删除文件，为接下来内容的动态生成做准备。</p>
+<h3>处理流程</h3>
+<p>每个 Markdown 文件的 rendering 过程，被分为 4 个阶段，分别是 body 预处理生成中间文件，输出 header、中间文件 rendering、输出 footer 后组成生成文件。</p>
+<p><strong>1. body 源码预处理</strong></p>
+<p>首先读取 Markdown 的源文件内容，将其作为参数传递给配置文件中某个 proj 定义的 body 函数做预处理，在这里用户可以处理自定义的标签，将其转为各种 Markdown rendering engine 支持的标准格式后，将内容交给 compositor 写入中间文件。</p>
+<p><strong>2. header 生成文件头</strong></p>
+<p>可以在这里区分不同的 proj，插入不同内容的文件头，比如主页的，博客的文件头，带上不同的样式表，同样支持动态生成内容。</p>
+<p><strong>3. rendering 中间文件</strong></p>
+<p>使用配置的 markdown rendering engine 处理这个中间文件，将生成内容添加到生成文件中。</p>
+<p><strong>4. footer 生成文件尾</strong></p>
+<p>这里类似 header 函数。</p>
+<h3>语法扩展</h3>
+<p>其实<a href="../blog/2019-06.html#p0">上篇博文</a>的最后有介绍，这里介绍语法，注意为了不被解析，用了 \</p>
+<ul>
+<li>支持工程间的引用</li>
+</ul>
+<pre lang="source"><code>[这篇文章]\(blog\#2019-06\#p1)
+</code></pre>
+<ul>
+<li>生成文件内标题深度为 4 的目录摘要，例子是 <a href="../slack/SlackBook.html">Slackware Linux Essentials</a> 的本页目录</li>
+</ul>
+<pre lang="source"><code>\#\content 4
+</code></pre>
+<ul>
+<li>支持 footnote，看本文最后的配置文件标注</li>
+</ul>
+<pre lang="source"><code>这里有个标注[Desc]\(#fn1)
+...
+[Desc]\(#fn1)：解释这个标注
+</code></pre>
+<ul>
+<li>博客 proj 里面良好的 HTML 标题结构、date、category 语法，这些是</li>
+</ul>
+<pre lang="source"><code> #date 18年6月10日 周一 22:26
+ #category Programming
+</code></pre>
+<ul>
+<li>博客 proj 里动态生成 WelcomePage、Category 页面内容<br />
+无法举例了，&gt;_&lt;</li>
+</ul>
+<h3>配置、使用细节</h3>
+<p>配置文件会使用 lua 的 dofile() 函数加载，返回类似的 table 就好，所以配置文件可以非常复杂，大大扩展 Markdown 语法。</p>
+<p>使用方法如下，可选参数 PROJ_BASE_DIR，当 confg.lua 中的 source、build 配置为相对路径时可以使用，如果有跨平台写 Markdown 同学，应该需要这个吧。</p>
+<pre lang="source"><code>$ lua MarkdownProjectCompositor.lua config.lua [PROJ_BASE_DIR]
+</code></pre>
+<p>基本的配置下面有，注意 proj 中含有 res = true 的，意味着仅仅列举文件，但不做生成，用于上述扩展语法中做 proj 间的引用。</p>
+<p>prepare 函数上面有介绍，当 proj 的 files 被填充后，会跑一次；body 用于生成临时源文件，自定义的语法在这里做转换，其他函数都有介绍过了。</p>
+<p>最后的 user 不是必须的，但如果扩展了语法之类的，那可能就需要用到了，在 config 中带上，后面确保可以引用到。</p>
+<p>最后的最后，当然是用生成当前主页、及博客的 <a href="https://github.com/lalawue/homepage/blob/master/misc/config.lua">config.lua</a> 来压轴。</p>
+<p><sup>[<a id="fnc1">1</a>]</sup> config example:</p>
+<pre lang="source"><code>local config = {
+   source = &quot;/Markdown/Source/Path&quot;, -- will be modified by compositor
+   bulid = &quot;/Html/Output/Path&quot;,      -- will be modified by compositor
+   suffix = &quot;.html&quot;,                 -- output suffix
+   program = &quot;cmark-gfm&quot;,            -- program used
+   params = &quot; -t html --unsafe --github-pre-lang &quot;,    -- params
+   tmpfile = &quot;/tmp/MarkdownProjectCompositorTempFile&quot;, -- temp file
+   projs = {
+      {
+         res = true,      -- resouces dir, when true do not build output
+         dir = &quot;SourceSubPath&quot;,
+         files = {
+            -- file names filled by compositor
+         },
+         prepare = function( config, proj )
+            -- prepare proj, sort/insert/delete proj files to be processed by cmark
+         end,
+         body = function( config, proj, filename, content )
+            -- return modified source content before cmark process
+         end,
+         header = function( config, porj, filename )
+            -- return content append in dest head
+         end,
+         footer = function( config, proj, filename )
+            -- return content append in dest tail
+         end,
+      },
+   },
+   -- user defines below
+   user = {
+      readFile = function( path )
+      end,
+      writeFile = function( path, content )
+      end,
+      siteHeader = function( config, proj, filename )
+      end,
+      siteFooter = function( config, proj, filename )
+      end,
+   },
+}
+return config
+</code></pre>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="index.html#p1">Permalink</a></div>
 <p><a id="p0"></a></p>
-<div class="date">18年6月10日 周日 11:59</div>
+<div class="date">18年6月09日 周日 23:59</div>
 <h2>更换 Markdown Engine 为 cmark-gfm</h2>
 <p>将本地 Markdown 渲染引擎换成了 <a href="https://github.com/github/cmark-gfm">cmark-gfm</a>，在这个基础上建立了类 EmacsWikiMode 的工程生成工具
 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a>。</p>
@@ -248,22 +348,6 @@ websocket。HTTP/2 呢，就算了，那完全是另外一个东西。</p>
 是速度要比用 USB 口传输慢了许多，好处是之前的 USB 口其实接触很不稳定，经
 常跑不起来，所以其实我也不太想用这个备份的移动硬盘。</p>
 <div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="index.html#p0">Permalink</a></div>
-<p><a id="p0"></a></p>
-<div class="date">18年1月1日 周一 23:56</div>
-<h2>电影芳华</h2>
-<p>今天安利家人电影，被迫接收了十几分钟的评论，脑袋要炸，下次不能随便安利了。</p>
-<p>我评五分的电影被家人跟战狼2并列，说当时能进文工团的都不是普通人，且军分
-区的子弟都能进部队，部队条件也很好。</p>
-<p>所以影片表现的是当时极好的条件了，相比呢故事比较一般，都是普通的小事，戏
-剧性不够，还不如我们普通人的生活。</p>
-<p>我认同最后一点，可也许导演是故意的呢，毕竟整个主线是表现那个时代的风貌，
-里面的任何人都不能被聚焦太多。而整个大的故事框架，是在类纪录片平静的语调
-里展开的，基调是不能大褒大贬，这也就限制了里面人物的戏剧表现力了吧。</p>
-<p>里面的很多镜头挺美的，有很多现场感很强烈的手持镜头，小可惜是开头那个镜头
-没有一镜到底，另外画面风格被特殊处理为那种胶片的风格（也许就是胶片机拍的
-吧），小缺点是里面的艺术表现被拔高了，毕竟这是文艺片而不是纪录片吧。</p>
-<p>总的来说，比战狼2给我的观后感更为强烈，评分也就更高了。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="index.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
