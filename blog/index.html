@@ -16,7 +16,17 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">18年6月10日 周一 22:26</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">19年6月15日 周六 13:18</div>
+<h2>WelcomePage 的生成</h2>
+<p>之前博客首页 WelcomePage 的生成，是在 proj 的 prepare 阶段，通过获取最新月份数据，动态产生内容，之后通过 body 函数提供给 <a href="https://github.com/github/cmark-gfm">cmark-gfm</a> 来生成最终的 html。</p>
+<p>这里带来的问题是，对应的 Permalink 是不准确的，指向到首页去了。</p>
+<p>为了解决这个问题，只好在全部内容生成之后，再搜集首页需要的数据；另外一种解决的办法，是用在语法上对首页的 Permalink 做特别处理，但这样太复杂了。</p>
+<p>最后，是给 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a> 中每个 proj 处理完所有 files 后，增加一个 after 处理函数，可以在最后，对生成内容做采集。</p>
+<p>这样，首页的 Permalink 指向才是准确的。</p>
+<p>还有，现在用 <a href="https://github.com/jbt/markdown-editor">markdown-editor</a> 来写感觉很不错啊，<a href="../images/markdown_editor.jpg">有图为例</a>。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-06.html#p2">Permalink</a></div>
+
+<div class="date">19年6月10日 周一 22:26</div>
 <h2>MarkdownProjectCompositor</h2>
 <p>这里介绍一下 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a> 对源文件的组织方式、处理流程，以及一些针对 Markdown 语法的扩展功能，最后说一下配置细节。</p>
 <h3>源文件组织方式</h3>
@@ -116,7 +126,7 @@ return config
 </code></pre>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-06.html#p1">Permalink</a></div>
 
-<div class="date">18年6月09日 周日 23:59</div>
+<div class="date">19年6月09日 周日 23:59</div>
 <h2>更换 Markdown Engine 为 cmark-gfm</h2>
 <p>将本地 Markdown 渲染引擎换成了 <a href="https://github.com/github/cmark-gfm">cmark-gfm</a>，在这个基础上建立了类 EmacsWikiMode 的工程生成工具
 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a>。</p>
@@ -325,27 +335,6 @@ websocket。HTTP/2 呢，就算了，那完全是另外一个东西。</p>
 <p>其实不用修改啥，想着其实还不如支持大端需要修改的东西多，可是目前没有平台
 跑大端，所以这个想法等实际需要后再说吧。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2018-03.html#p1">Permalink</a></div>
-
-<div class="date">18年3月4日 周日 23:53</div>
-<h2>开始接触 FreeBSD</h2>
-<p>过年在家发现了两台旧电脑，是之前给家人安装新电脑后，各种拆装后剩下的，清
-点了一下，CPU 是 I3 2300 之类的，主板华擎，内存 4G DDR3，这个配置感觉还
-是可以的，MicroATX 架构，就想着不如搬到深圳，搭一台 FreeBSD 学习一下。</p>
-<p>还带上了大学时就开始服役的 80G 希捷硬盘，由于是 IDE 口，这个硬盘没条件在
-家测试了，其他部件包括电源，正常跑起了 BIOS。</p>
-<p>到深圳后，只需要淘宝一个不带电源支持 MicroATX 的小机箱，大概 70 块这样，
-因为忘记电源线，因此多破费了 20 块，不到 100 机器就可以跑起来了，感觉还
-可以。</p>
-<p>计划之外的是，那个 80G IDE 接上了淘宝的 IDE 转 SATA 小板，还是没法使用；
-还好手头有一个 320G 的 USB 移动硬盘，说是用来备份的移动硬盘，可是很少使
-用，年龄也很大了，10 年买的。</p>
-<p>于是拆了硬盘盒，欣喜地看到了 SATA 口，愉快接上吧。</p>
-<p>FreeBSD 的安装很傻瓜，我唯一不理解的是分区，貌似不能像我在 Linux 那样
-给 home 单独分区，这样随便我折腾系统都没关系了。</p>
-<p>pkg install 用起来也很溜，开了 samba 后，同样可以当成一台备份服务器，就
-是速度要比用 USB 口传输慢了许多，好处是之前的 USB 口其实接触很不稳定，经
-常跑不起来，所以其实我也不太想用这个备份的移动硬盘。</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2018-03.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script language="javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
