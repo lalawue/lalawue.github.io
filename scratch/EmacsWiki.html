@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Homepage - Emacs wiki</title>
+    <title>Sucha's Homepage - Wiki & Markdown</title>
     <meta http-equiv="Content-Type" content=" text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
     <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs" />
@@ -14,29 +14,33 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Homepage ~ Emacs wiki</h1>
-<h2>Emacs-wiki</h2>
-<p>什么是 <a href="http://baike.baidu.com/view/737.htm">Wiki</a> ？</p>
-<p>而 EmacsWiki 则是建立在 Wiki 语法基础之上的一个文档发布工具，它除了可以进行普通的文档编辑之外，还可以很方便的基于 wiki 的文法在各个文档之间建立连接，并生成多种文档发布格式，比如 html 之类的等等。</p>
-<p>它的主页地址是 <a href="https://www.emacswiki.org/emacs/EmacsWikiMode">EmacsWiki</a>，跟 EmacsWiki 相似但是功能更为强大的文档管理发布工具是<a href="https://www.emacswiki.org/emacs/EmacsMuse">EmacsMuse</a>，它们的维护者是同一个人。</p>
-<h3>使用 emacs-wiki 建立网站</h3>
-<p>如果你想编写网页或是 html 文件，并符合以下几点：</p>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Homepage ~ Wiki &amp; Markdown</h1>
+<p>什么是 <a href="http://baike.baidu.com/view/737.htm">Wiki</a>，什么是 <a href="https://baike.baidu.com/item/markdown">Markdown</a>？</p>
+<p>Markdown 最初的语法，都来自于 JOHN GRUBER 在 2004 年的 <a href="https://daringfireball.net/projects/markdown/syntax">Markdown: Syntax</a>。</p>
+<h2>CommonMark</h2>
+<p>继续介绍的 <a href="http://commonmark.org/">CommonMark</a> 是一种 Markdown 标准，已经发展多年，相比下面年久失修的 EmacsWiki 方言，更为成熟稳定。
+而本站在 2019 年 06 月之后，改为使用 GitHub 版本的 CommonMark 方言 <a href="https://github.com/github/cmark-gfm">cmark-gfm</a> 来维护。</p>
+<h2>EmacsWiki</h2>
+<p>回到上面说的 EmacsWiki，则是建立在 Wiki 语法基础之上的一个文档发布工具，它除了可以进行普通的文档编辑之外，
+还可以很方便的基于 wiki 的文法在各个文档之间建立连接，并生成多种文档发布格式，比如 html 之类的等等。</p>
+<p>不过 EmacsWikiMode 早已经年久失修，没有人维护了，我留了一个具有纪念意义的<a href="https://github.com/lalawue/emacs-wiki-mode">版本</a>。</p>
+<h3>cmark-gfm 2019 截图 under macOS</h3>
+<p>有时候用 <a href="https://github.com/jbt/markdown-editor">markdown-editor</a> 来写，有时候用 Emacs 来写</p>
 <ul>
-<li>仅仅编写简单的文字，不需要复杂的效果</li>
-<li>比较高效地管理这些文件，简单地实现对文件的添加、修改等</li>
+<li>
+<p><a href="../images/markdown_editor.jpg">使用 markdown-editor 的截图</a></p>
+</li>
+<li>
+<p><a href="../images/md_cmark_syntax.jpg">使用 Emacs 的截图</a></p>
+</li>
 </ul>
-<p>如果满足以上两点，用 Emacs + EmacsWiki 建站或管理自己的 html 文件对你来说蛮合适。</p>
-<p>Emacs-wiki 用了很简单的语法来实现简单 html 的编写，特别适合需要编写相对大量文字的用户（如果是软件文档，显然 DocBook 更为合适）。</p>
-<p>想象一下，输入 html 里的分段、连接图象、外部连接、内部连接等等这些元素有多麻烦。这些东西虽然不复杂，但是当我们思考问题的时候，却花了很多的时间来处理这些琐碎的事情，是很折腾人的。</p>
-<p>借助于 emacs-wiki 简单的语法，我们可以花更多的时间来思考我们所真正关心的
-东西。</p>
-<h3>截图 2018 under macOS</h3>
+<h3>EmacsWiki 2018 截图 under macOS</h3>
 <p>  <img src="../images/emacs-wiki-2018.png" alt="2018" /></p>
-<h3>截图 2004 under Linux</h3>
+<h3>EmacsWiki 2004 截图 under Linux</h3>
 <p>  <img src="../images/emacs-wiki.png" alt="2004" /></p>
 <!-- Page published by cmark-gfm ends here -->
       <div id="foot">
-	2004-<script language="javascript">var d = new
+	2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
 	Sucha. Powered by MarkdownProjectCompositor.
       </div><!-- foot -->
@@ -48,7 +52,6 @@
 	  <li><a href="index.html">Front</a></li>
 	  <li><a href="../scratch/ThisSite.html">This Site</a></li>
 	  <li><a href="../live/AboutMe.html">About Me</a></li>
-	  <li><a href="../scratch/EmacsWiki.html">Emacs Wiki</a></li>
 	</ul>
 	<p class="header">Categories</p>
 	<ul>
