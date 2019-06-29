@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Homepage - EmacsProgrammingEnv</title>
+    <title>Sucha's Homepage - Emacs Programming Environment</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
     <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
@@ -14,12 +14,12 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><ul>
-<li>完善 EMACS 的编程环境</li>
-</ul>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Homepage ~ Emacs Programming Environment</h1>
+<h2>完善 EMACS 的编程环境</h2>
 <p>最近更新：2014-01-12</p>
-<contents depth="3">
-<p>** 简介</p>
+<dl class="contents"><dt class="contents"><a href="#sec-1">简介</a></dt><dd><dl class="contents"><dt class="contents"><a href="#sec-2">direx 以及 popwin 的配置</a></dt><dt class="contents"><a href="#sec-3">fiplr 的配置</a></dt><dt class="contents"><a href="#sec-4">其他有关编程环境的设置</a></dt></dl></dd><dt class="contents"><a href="#sec-5">问题及建议</a></dt></dl>
+<p><a id="sec-1"></a></p>
+<h3>简介</h3>
 <p>与许多使用 emacs 的童鞋一样，我也喜欢折腾并不断完善围绕 emacs 的工作、编
 程环境，尝试一些新鲜的 elisp 包，根据需要选择纳入自己的 load-path 里。</p>
 <p>平时工作面对的是散落在各个文件夹下的工程源码，所以对目录文件的搜索、访问、
@@ -32,18 +32,20 @@ github 上也蛮受欢迎的。</p>
 C-g 或者other-window 跳到别的窗口时自动关闭它。</p>
 <p>fiplr 用来模糊搜索工程目录的文件，它会从当前目录一直搜索到拥有 .git、.svn
 的顶层目录，对于需要定位工程文件却又不知道其具体位置的时候非常有用。</p>
-<p>*** direx 以及 popwin 的配置</p>
+<p><a id="sec-2"></a></p>
+<h4>direx 以及 popwin 的配置</h4>
 <p>direx 可以跟 popwin 结合起来，这也是作者推荐的，</p>
-<src type="elisp">
-(require 'popwin)
+<pre lang="source"><code>(require 'popwin)
 (popwin-mode 1)
 ;; (setq popwin:popup-window-position 'right)
 ;; (setq popwin:popup-window-width 0.5)
-<p>(require 'direx)
+
+(require 'direx)
 (push '(direx:direx-mode :position left :width 30 :dedicated t)
-popwin:special-display-config)</p>
-<p>(global-set-key (kbd &quot;C-x C-j&quot;) 'direx:jump-to-directory-other-window)
-</src></p>
+     popwin:special-display-config)
+
+(global-set-key (kbd &quot;C-x C-j&quot;) 'direx:jump-to-directory-other-window)
+</code></pre>
 <p>上面的配置是使用 C-x C-j 将目录树窗口开在左边，30 个字符宽度，C-g 就可以
 关闭。</p>
 <p>popwin 默认弹出窗口在 bottom，高度 15，维护了一个special-display-config
@@ -57,127 +59,133 @@ direx 的优缺点我感觉挺明显的，优点是可以一目了然地看到�
 必要时我可以移动到那个目录再看文件）；缺点是无法对目录编辑，只能打开文件。</p>
 <p>这个时候我只能求助于 dired 模式，不过 dired 模式中 i 展开子目录后收不回
 来，且平铺的方式模块关系不明显。目前是两个一起使用。</p>
-<p>popwin、direx 可以从作者的 github 主页上下载 https://github.com/m2ym，
+<p>popwin、direx 可以从作者的 github 主页上下载 <a href="https://github.com/m2ym">https://github.com/m2ym</a>，
 popwin 下还有不少相关插件，有需要的童鞋可以看看，这里不做介绍了。</p>
-<p>*** fiplr 的配置</p>
+<p><a id="sec-3"></a></p>
+<h4>fiplr 的配置</h4>
 <p>fiplr 依赖 grizzl 包来做底层的模糊搜索引擎，不过我们不需要对 grizzl 做配
 置，只需要配置 fiplr：</p>
-<src type="elisp">
-(require 'fiplr)
-(setq fiplr-root-markers '(".git" ".svn"))
+<pre lang="source"><code>(require 'fiplr)
+(setq fiplr-root-markers '(&quot;.git&quot; &quot;.svn&quot;))
 (setq fiplr-ignored-globs 
-    '((directories (".git" ".svn"))
-      (files ("*.jpg" "*.png" "*.zip" "*~"))))
-<p>(global-set-key (kbd &quot;C-x f&quot;) 'fiplr-find-file)
-</src></p>
+    '((directories (&quot;.git&quot; &quot;.svn&quot;))
+      (files (&quot;*.jpg&quot; &quot;*.png&quot; &quot;*.zip&quot; &quot;*~&quot;))))
+
+(global-set-key (kbd &quot;C-x f&quot;) 'fiplr-find-file)
+</code></pre>
 <p>设置搜索到顶层目录，遇到拥有 .git 或 .svn 的目录时停止，忽略
 .jpg、.png、.zip 以及后缀有 ~ 的文件，忽略 .git、.svn 目录，并绑定 &quot;C-x
 f&quot; 为搜索命令。</p>
 <p>fiplr 命令启动后会对所有工程文件做一次 cache，然后底部弹出小窗提示用户键
 入需要搜索的文件名，并实时显示匹配结果；如果新添了文件需要更新 cache，
 C-c r 清空一下当前 cache 就好了。</p>
-<p>grizzl 请访问这里下载，https://github.com/d11wtq/grizzl
-fiplr 请访问这里下载，https://github.com/d11wtq/fiplr</p>
-<p>*** 其他有关编程环境的设置</p>
+<ul>
+<li>grizzl 请访问这里下载，<a href="https://github.com/d11wtq/grizzl">https://github.com/d11wtq/grizzl</a></li>
+<li>fiplr 请访问这里下载，<a href="https://github.com/d11wtq/fiplr">https://github.com/d11wtq/fiplr</a></li>
+</ul>
+<p><a id="sec-4"></a></p>
+<h4>其他有关编程环境的设置</h4>
 <p>除了以上的配置包，我还有不少其他编程环境相关的配置，感觉平时挺有用的，这
 些都是我从一些个人博客、论坛或者 emacswiki.org 等地方搜刮来的，具体出处
 已经无法提供了。</p>
-<ul>
-<li>同目录下的头文件与源文件的快速跳转，适用于 C/C++/ObjC，我将其绑定在 M-[ 以及 M-]。</li>
-</ul>
-<src type="elisp">
-;; jump between source and header file
+<p><strong>1.</strong> 同目录下的头文件与源文件的快速跳转，适用于 C/C++/ObjC，我将其绑定在 M-[ 以及 M-]。</p>
+<pre lang="source"><code>;; jump between source and header file
 (defun c-base-mode-in-header-file ()
   (let* ((filename (buffer-file-name))
-         (extension (car (last (split-string filename "\\.")))))
-    (string= "h" extension)))
-<p>(defun c-base-mode-file-jump-to-extension (extension)
-(let* ((filename (buffer-file-name))
-(file-components (append (butlast (split-string filename
-&quot;\.&quot;))
-(list extension)))
-(filepath (mapconcat 'identity file-components &quot;.&quot;)))
-(if (file-readable-p filepath)
-(find-file filepath)
-nil)))</p>
-<p>;;; Assumes that Header and Source file are in same directory
+         (extension (car (last (split-string filename &quot;\\.&quot;)))))
+    (string= &quot;h&quot; extension)))
+
+(defun c-base-mode-file-jump-to-extension (extension)
+  (let* ((filename (buffer-file-name))
+         (file-components (append (butlast (split-string filename
+                                                         &quot;\\.&quot;))
+                                  (list extension)))
+         (filepath (mapconcat 'identity file-components &quot;.&quot;)))
+    (if (file-readable-p filepath)
+        (find-file filepath)
+      nil)))
+
+;;; Assumes that Header and Source file are in same directory
 (defun c-base-mode-jump-between-header-source ()
-(interactive)
-(if (c-base-mode-in-header-file)
-(or
-(c-base-mode-file-jump-to-extension &quot;m&quot;)
-(c-base-mode-file-jump-to-extension &quot;mm&quot;)
-(c-base-mode-file-jump-to-extension &quot;c&quot;)
-(c-base-mode-file-jump-to-extension &quot;cc&quot;)
-(c-base-mode-file-jump-to-extension &quot;cpp&quot;))
-(c-base-mode-file-jump-to-extension &quot;h&quot;)))</p>
-<p>(add-hook
-'c-mode-common-hook
-(lambda ()
-(define-key c-mode-base-map (kbd &quot;M-[&quot;) 'c-base-mode-jump-between-header-source)
-(define-key c-mode-base-map (kbd &quot;M-]&quot;) 'c-base-mode-jump-between-header-source))
+  (interactive)
+  (if (c-base-mode-in-header-file)
+      (or
+       (c-base-mode-file-jump-to-extension &quot;m&quot;)
+       (c-base-mode-file-jump-to-extension &quot;mm&quot;)
+       (c-base-mode-file-jump-to-extension &quot;c&quot;)
+       (c-base-mode-file-jump-to-extension &quot;cc&quot;)
+       (c-base-mode-file-jump-to-extension &quot;cpp&quot;))
+    (c-base-mode-file-jump-to-extension &quot;h&quot;)))
+
+(add-hook
+ 'c-mode-common-hook
+ (lambda ()
+   (define-key c-mode-base-map (kbd &quot;M-[&quot;) 'c-base-mode-jump-between-header-source)
+   (define-key c-mode-base-map (kbd &quot;M-]&quot;) 'c-base-mode-jump-between-header-source))
 t)
-</src></p>
-<ul>
-<li>列出当前 buffer 下的所有函数，使用正则表达式匹配的，也许需要配合你对函数名的书写习惯做更改（如 C 中返回类型与函数名不同行），下面的配置适合 C/C++/ObjC/Lua，其实可以很方便地扩充到支持别的语言。</li>
-</ul>
-<src type="elisp">
-;; for Xcode pragma mark, and C/C++ functions
+</code></pre>
+<p><strong>2.</strong> 列出当前 buffer 下的所有函数，使用正则表达式匹配的，也许需要配合你对函数名的书写习惯做更改（如 C 中返回类型与函数名不同行），下面的配置适合 C/C++/ObjC/Lua，其实可以很方便地扩充到支持别的语言。</p>
+<pre lang="source"><code>;; for Xcode pragma mark, and C/C++ functions
 (require 'anything)
 (require 'anything-config)
-<p>(defvar anything-objc-headline
-'((name . &quot;Objective-C Headline&quot;)
-(headline  &quot;^[-+@]\|^#pragma mark\|FIXME&quot;)
-))</p>
-<p>(defvar anything-c-headline
-'((name . &quot;C Headline&quot;)
-(headline  &quot;^[A-Za-z_]+?[ A-Za-z_0-9*]+[A-Za-z_0-9]+?(\|FIXME&quot;)
-))</p>
-<p>(defvar anything-cpp-headline
-'((name . &quot;Cpp Headline&quot;)
-(headline  &quot;^[A-Za-z_]+?[ A-Za-z_:~0-9*]+[A-Za-z_0-9]+?(\|FIXME&quot;)
-))</p>
-<p>(defvar anything-lua-headline
-'((name . &quot;Lua Headline&quot;)
-(headline  &quot;^local \|^function \|[A-Za-z]+?[A-Za-z0-9_.] +{\|FIXME&quot;)
-))</p>
-<p>(defun major-mode-headline ()
-(interactive)
-;; Set to 500 so it is displayed even if all methods are not narrowed down.
-(let ((anything-candidate-number-limit 500))
-(cond
-((eq major-mode 'objc-mode)
-(anything-other-buffer '(anything-objc-headline)
-&quot;<em>ObjC Headline</em>&quot;))
-((eq major-mode 'c++-mode)
-(anything-other-buffer '(anything-cpp-headline)
-&quot;<em>Cpp Headline</em>&quot;))
-((eq major-mode 'c-mode)
-(anything-other-buffer '(anything-c-headline)
-&quot;<em>C Headline</em>&quot;))
-((eq major-mode 'lua-mode)
-(anything-other-buffer '(anything-lua-headline)
-&quot;<em>C Headline</em>&quot;))
-)))</p>
-<p>(add-hook
-'c-mode-common-hook
-(lambda ()
-(define-key c-mode-base-map (kbd &quot;M-i&quot;) 'major-mode-headline))
+
+(defvar anything-objc-headline
+  '((name . &quot;Objective-C Headline&quot;)
+    (headline  &quot;^[-+@]\\|^#pragma mark\\|FIXME&quot;)
+))
+
+(defvar anything-c-headline
+  '((name . &quot;C Headline&quot;)
+    (headline  &quot;^[A-Za-z_]+?[ A-Za-z_0-9\*]+[A-Za-z_0-9]+?(\\|FIXME&quot;)
+))
+
+(defvar anything-cpp-headline
+  '((name . &quot;Cpp Headline&quot;)
+    (headline  &quot;^[A-Za-z_]+?[ A-Za-z_:~0-9\*]+[A-Za-z_0-9]+?(\\|FIXME&quot;)
+))
+
+(defvar anything-lua-headline
+  '((name . &quot;Lua Headline&quot;)
+    (headline  &quot;^local \\|^function \\|[A-Za-z]+?[A-Za-z0-9_.] +\{\\|FIXME&quot;)
+))
+
+(defun major-mode-headline ()
+  (interactive)
+  ;; Set to 500 so it is displayed even if all methods are not narrowed down.
+  (let ((anything-candidate-number-limit 500))
+    (cond
+     ((eq major-mode 'objc-mode) 
+      (anything-other-buffer '(anything-objc-headline)
+                             &quot;*ObjC Headline*&quot;))
+     ((eq major-mode 'c++-mode)
+      (anything-other-buffer '(anything-cpp-headline)
+                             &quot;*Cpp Headline*&quot;))
+     ((eq major-mode 'c-mode)
+      (anything-other-buffer '(anything-c-headline)
+                             &quot;*C Headline*&quot;))
+     ((eq major-mode 'lua-mode)
+      (anything-other-buffer '(anything-lua-headline)
+                             &quot;*C Headline*&quot;))
+     )))
+
+(add-hook
+ 'c-mode-common-hook
+ (lambda ()
+   (define-key c-mode-base-map (kbd &quot;M-i&quot;) 'major-mode-headline))
 t)
-</src></p>
-<ul>
-<li>当对窗口进行分割时（我经常这么做），下面的快捷键可以很方便地调整窗口的大小，(control -) 调整上下窗口的高度，(meta -)调整左右窗口的宽度，感觉挺好用的。</li>
-</ul>
-<src type="elisp">
-(global-set-key [(control -)] 'shrink-window)
+</code></pre>
+<p><strong>3.</strong> 当对窗口进行分割时（我经常这么做），下面的快捷键可以很方便地调整窗口的大小，(control -) 调整上下窗口的高度，(meta -)调整左右窗口的宽度，感觉挺好用的。</p>
+<pre lang="source"><code>(global-set-key [(control -)] 'shrink-window)
 (global-set-key [(control =)] (lambda () (interactive) (shrink-window -1)))
-<p>(global-set-key [(control meta -)] 'shrink-window-horizontally)
+
+(global-set-key [(control meta -)] 'shrink-window-horizontally)
 (global-set-key [(control meta =)] (lambda () (interactive)
-(shrink-window-horizontally -1)))
-</src></p>
+                                     (shrink-window-horizontally -1)))
+</code></pre>
 <p>这两个小函数我将其扔在 https://gist.github.com/lalawue 维护，大家有更新
-的东西不妨去修改一下。</p>
-<p>** 问题及建议</p>
+的东西不妨去修改一下。
+<a id="sec-5"></a></p>
+<h3>问题及建议</h3>
 <p>配置或使用上有问题可以联系我 suchaaa 谷歌，或者给作者的 github 提 issue。</p>
 <p>目前使用 C++/ObjC/Lua 混合编程，使用 etag 代码跳转是个问题，没用过 cedet，
 有相关经验的同学不妨传授一下？</p>
