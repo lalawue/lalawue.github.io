@@ -32,7 +32,7 @@ typedef struct { uint8_t red, green, blue, alpha; } rgba_pixel; //struct 结构�
 
 ffi.C.printf(&quot;Hello %s!&quot;, &quot;world&quot;)
 
-//栈上 struct 结构
+-- 栈上 struct 结构
 local img = ffi.new(&quot;rgbg_pixel[?]&quot;, 3)
 img[0].green = 1
 
