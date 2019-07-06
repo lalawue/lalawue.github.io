@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - Archive for April, 2009</title>
+    <title>Sucha's Blog - Archive for July, 2019</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -16,17 +16,137 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for April, 2009</h1>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for July, 2019</h1>
 <p><a id="p0"></a></p>
-<div class="date">4月8日 周三 22:51</div>
-<h2>SCENE: 25</h2>
-<p>今天还是很热闹的，室友们订了一个蛋糕，晚上等加班的回来，聚在一起吹了蜡
-烛，很久没这样了……</p>
-<p>本来想今晚请客的，可是公司那边事情太多了，一个要好的同事因为加班回不来，
-没办法，这事就拖到周末吧。</p>
-<p>觉得最近的状况不是很好，虽然工作算是完成了，可是在这里已经没有激情了。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2009-04.html#p0">Permalink</a></div>
-<!-- date: 2009-04-08T22:51:57+0800 -->
+<div class="date">19年7月06日 周六 23:55</div>
+<h2>LuaJIT FFI Library</h2>
+<p>学习使用大数库，比如 <a href="https://gmplib.org/">GMP</a>，只是使用起来很糟心，比如大整数运算，先要 mpz_init() 最后回收时是 mpz_clear()，没错就是跟 malloc() 和 free() 一样的。就想着能不能稍微改善下易用性，用 C++ 是可以达到目的的，只是牛刀杀鸡，要走编译才能跑的还是太重了，而且 C++ 我也不熟。</p>
+<p>就想着不如用 Lua 将其封装起来，之前的经验，是得自己写一个跟 Lua 虚拟机交互数据的接口，一个先进后出塞参数的栈，如果是要凑 table，还要复杂些。但如果使用 LuaJIT 的 FFI 库，就方便多了，具体在 BSD 这边是通过 dlsym 打开共享库，在 LuaJIT 脚本声明 C 接口后，通过 FFI 库直接调用。</p>
+<p>能够支持各种 C 的函数接口，比如可变参数，以及各种数据类型，包括可变长度 struct 数据，甚至还有支持 Lua 侧的 gc 对于创建的 cdata 进行 finalizer，让 Lua 的 gc 只管理虚拟机这一侧 C 指针生命周期，API 文档是 <a href="http://luajit.org/ext_ffi_api.html">http://luajit.org/ext_ffi_api.html</a>。</p>
+<h3>基本使用</h3>
+<p>具体点的例子，比如声明并调用函数，创建一个 struct 结构，以及申请、释放内存的官方例子：</p>
+<pre lang="source"><code>local ffi = require(&quot;ffi&quot;)
+
+ffi.cdef[[
+int printf(const char *fmt, ...); //声明并调用标准 C 库函数
+typedef struct { uint8_t red, green, blue, alpha; } rgba_pixel; //struct 结构声明
+]]
+
+ffi.C.printf(&quot;Hello %s!&quot;, &quot;world&quot;)
+
+//栈上 struct 结构
+local img = ffi.new(&quot;rgbg_pixel[?]&quot;, 3)
+img[0].green = 1
+
+-- 创建、并释放外部内存对象
+local p = ffi.gc(ffi.C.malloc(n), ffi.C.free)
+...
+p = nil -- Last reference to p is gone.
+-- GC will eventually run finalizer: ffi.C.free(p)
+</code></pre>
+<h3>调用自定义库</h3>
+<p>如果是自定义库，库路径需加入 LuaJIT 的 package.cpath 中，使用前 ffi.load('myffi') 一下，比如下面的例子看下 ffi.gc 是不是真的有用：</p>
+<pre lang="source"><code>//#include &quot;stdio.h&quot;
+//#include &quot;stdlib.h&quot;
+void* test_malloc(int n) {
+   void *p = malloc(n);
+   printf(&quot;test_malloc %p:%d\n&quot;, p, n);
+   return p;
+}
+
+void test_free(void *p) {
+   printf(&quot;test_free %p\n&quot;, p);
+   free(p);
+}
+</code></pre>
+<p>先在本目录生成一个共享库：</p>
+<pre lang="source"><code>clang -g -o libmyffi.dylib -fpic -shared myffi.c
+</code></pre>
+<p>在 LuaJIT 脚本侧这样使用：</p>
+<pre lang="source"><code>local ffi = require(&quot;ffi&quot;)
+local myffi = ffi.load(&quot;myffi&quot;)
+ffi.cdef[[
+void* test_malloc(int n);
+void test_free(void *p);
+]]
+local p = ffi.gc(myffi.test_malloc(10), myffi.test_free)
+print( p )
+p = nil
+</code></pre>
+<p>会这样输出：</p>
+<pre lang="example"><code>test_malloc 0x7f9962c027c0:10
+cdata&lt;void *&gt;: 0x7f9962c027c0
+test_free 0x7f9962c027c0
+</code></pre>
+<h3>使用 GMP 的例子</h3>
+<p>先试一下 GMP 提供的大整数接口：</p>
+<pre lang="source"><code>local ffi = require(&quot;ffi&quot;)
+local gmp = ffi.load(&quot;gmp&quot;)
+
+ffi.cdef[[
+int printf(const char *fmt, ...);
+
+typedef unsigned long long int	mp_limb_t;
+
+typedef struct
+{
+  int _mp_alloc;		/* Number of *limbs* allocated and pointed
+				   to by the _mp_d field.  */
+  int _mp_size;			/* abs(_mp_size) is the number of limbs the
+				   last field points to.  If _mp_size is
+				   negative this is a negative number.  */
+  mp_limb_t *_mp_d;		/* Pointer to the limbs.  */
+} __mpz_struct;
+
+typedef const __mpz_struct *mpz_srcptr;
+typedef __mpz_struct *mpz_ptr;
+typedef __mpz_struct mpz_t[1];
+
+void __gmpz_init(mpz_ptr);
+int __gmpz_set_str(mpz_ptr, const char *, int);
+void __gmpz_mul(mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+void __gmpz_clear(mpz_ptr);
+int __gmp_printf (const char *, ...);
+]]
+
+ffi.C.printf(&quot;input n1 x %s:\n&quot;, &quot;n2&quot;)
+
+local arg1, arg2 = ...
+if not arg or not arg2 then
+   os.exit(0)
+end
+
+local n1 = ffi.new(&quot;mpz_t&quot;)
+local n2 = ffi.new(&quot;mpz_t&quot;)
+local n3 = ffi.new(&quot;mpz_t&quot;)
+
+gmp.__gmpz_init(n1)
+gmp.__gmpz_init(n2)
+gmp.__gmpz_init(n3)
+
+gmp.__gmpz_set_str(n1, arg1, 10)
+gmp.__gmpz_set_str(n2, arg2, 10)
+
+gmp.__gmpz_mul(n3, n1, n2)
+
+gmp.__gmp_printf(&quot;n1 = %Zd\n&quot;, n1)
+gmp.__gmp_printf(&quot;n2 = %Zd\n&quot;, n2)
+gmp.__gmp_printf(&quot;n1 * n2 = %Zd\n&quot;, n3)
+
+gmp.__gmpz_clear(n1)
+gmp.__gmpz_clear(n2)
+gmp.__gmpz_clear(n3)
+</code></pre>
+<p>输出是：</p>
+<pre lang="example"><code>$ luajit test_ffi.lua 11111111111111111111111 99999999999999999999999999999999
+input n1 x n2:
+n1 = 11111111111111111111111
+n2 = 99999999999999999999999999999999
+n1 * n2 = 1111111111111111111111099999999988888888888888888888889
+</code></pre>
+<p>后面再看下怎么封装 GMP 的接口，毕竟这么使用，只是少了一次编译的时间，接口函数还是太复杂。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-07.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
