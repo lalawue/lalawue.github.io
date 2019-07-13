@@ -16,7 +16,51 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">19年7月06日 周六 23:55</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">19年7月13日 周六 23:34</div>
+<h2>gmp_ffi.lua</h2>
+<p>上周考虑的 GMP LuaJIT FFI 绑定，最后将 GMP 的绝大部分函数接口导了出来变成了 <a href="https://github.com/lalawue/gmp_ffi">gmp_ffi</a>，包括整数、浮点、有理数、随机数，以及格式化输出，除了那些 C 直接输出文件包含 FILE * 的部分，后续也可以考虑将标准 C 库的文件操作函数也一并导出来。</p>
+<p>另外，还将相关的初始化函数，通过 ffi.gc() 跟 finalizer 关联了起来，就不需要自己做相关的清理工作了。</p>
+<p>还有，GMP 的 C 接口，其内部实现，都是带 __gmp 这样前缀的，即便通过 FFI 使用，也很不方便，所以 gmp_ffi 库，将这些接口都重新做了绑定，重命名为类似 mpz_mul() 这样的函数，跟 gmp.h 上通过 C 宏定义出来的接口一样使用。</p>
+<p>有了上面的铺垫，一些好玩的东西可以搞起来，比如粗糙的计算素数的程序 <a href="https://github.com/lalawue/gmp_ffi/blob/master/test_prime.lua">test_prime.lua</a>，比如温习一下 RSA 加解密 <a href="https://github.com/lalawue/gmp_ffi/blob/master/test_rsa.lua">test_rsa.lua</a>，当前的实现是到处抄的，遥望大学时虽有做这个的大习题，但早就忘了，-.-</p>
+<p>贴一下 gmp_ffi.lua 使用的例子吧：</p>
+<pre lang="source"><code>local gmp = require(&quot;gmp_ffi&quot;)
+
+function gmpffi_test()
+   local a = gmp.mpz(11111111111)
+   local b = gmp.mpz(&quot;999999999999999999999999999999999&quot;)
+   local c = gmp.mpz(&quot;99999&quot;)
+   gmp.mpz_mul(a, a, b)
+   --gmp.mpz_set_ui(c, 1)
+   gmp.printf(&quot;mpz: a:%Zd, c sign:&quot;, a)
+   print(string.format(&quot;%d, odd:%s&quot;, gmp.mpz_sgn(c), gmp.mpz_odd(c)))
+   a = gmp.mpz(&quot;ff&quot;, 16)
+   gmp.printf(&quot;mpz: value base %Zx\n&quot;, a)
+
+   a = gmp.mpf(111111111.111111111)
+   b = gmp.mpf(&quot;999999999999999999999999999.99999999999999999999999999999999999&quot;)
+   c = gmp.mpf(&quot;9999&quot;)
+   gmp.mpf_mul(a, a, b)
+   gmp.printf(&quot;mpf: %Ff, c sign:&quot;, a)
+   print(gmp.mpf_sgn(c))
+
+   a = gmp.mpq(111111111, 111111111)
+   b = gmp.mpq(&quot;9999999999999999999999999999999/99999999999999999999999999999999999999&quot;)
+   c = gmp.mpq(0)
+   gmp.mpq_div(a, a, b)
+   gmp.printf(&quot;mpq: %Qx, c sign:&quot;, a)
+   print(gmp.mpq_sgn(c))
+
+   local rt = gmp.randinit()
+   local cs = gmp.cstring(64)
+   gmp.sprintf(cs, &quot;random: %u&quot;, gmp.urandomb_ui(rt, 9999999))
+   print(gmp.tostring(cs))
+end
+
+gmpffi_test()
+</code></pre>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-07.html#p1">Permalink</a></div>
+
+<div class="date">19年7月06日 周六 23:55</div>
 <h2>LuaJIT FFI Library</h2>
 <p>学习使用大数库，比如 <a href="https://gmplib.org/">GMP</a>，只是使用起来很糟心，比如大整数运算，先要 mpz_init() 最后回收时是 mpz_clear()，没错就是跟 malloc() 和 free() 一样的。就想着能不能稍微改善下易用性，用 C++ 是可以达到目的的，只是牛刀杀鸡，要走编译才能跑的还是太重了，而且 C++ 我也不熟。</p>
 <p>就想着不如用 Lua 将其封装起来，之前的经验，是得自己写一个跟 Lua 虚拟机交互数据的接口，一个先进后出塞参数的栈，如果是要凑 table，还要复杂些。但如果使用 LuaJIT 的 FFI 库，就方便多了，具体在 BSD 这边是通过 dlsym 打开共享库，在 LuaJIT 脚本声明 C 接口后，通过 FFI 库直接调用。</p>
@@ -439,11 +483,6 @@ websocket。HTTP/2 呢，就算了，那完全是另外一个东西。</p>
 的东东，而只是做一个类似教学用的工具，做个小巧，但五脏六腑清晰明了，可以
 一眼看穿，但又确实可用的东西。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2018-05.html#p0">Permalink</a></div>
-
-<div class="date">18年3月30日 周五 23:49</div>
-<h2>换回 suchang.net</h2>
-<p>再次换回 <a href="http://suchang.net">suchang.net</a>。</p>
-<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2018-03.html#p3">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;

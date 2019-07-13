@@ -17,6 +17,50 @@
     <div id="body">
       <div id="text">
 	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for July, 2019</h1>
+<p><a id="p1"></a></p>
+<div class="date">19年7月13日 周六 23:34</div>
+<h2>gmp_ffi.lua</h2>
+<p>上周考虑的 GMP LuaJIT FFI 绑定，最后将 GMP 的绝大部分函数接口导了出来变成了 <a href="https://github.com/lalawue/gmp_ffi">gmp_ffi</a>，包括整数、浮点、有理数、随机数，以及格式化输出，除了那些 C 直接输出文件包含 FILE * 的部分，后续也可以考虑将标准 C 库的文件操作函数也一并导出来。</p>
+<p>另外，还将相关的初始化函数，通过 ffi.gc() 跟 finalizer 关联了起来，就不需要自己做相关的清理工作了。</p>
+<p>还有，GMP 的 C 接口，其内部实现，都是带 __gmp 这样前缀的，即便通过 FFI 使用，也很不方便，所以 gmp_ffi 库，将这些接口都重新做了绑定，重命名为类似 mpz_mul() 这样的函数，跟 gmp.h 上通过 C 宏定义出来的接口一样使用。</p>
+<p>有了上面的铺垫，一些好玩的东西可以搞起来，比如粗糙的计算素数的程序 <a href="https://github.com/lalawue/gmp_ffi/blob/master/test_prime.lua">test_prime.lua</a>，比如温习一下 RSA 加解密 <a href="https://github.com/lalawue/gmp_ffi/blob/master/test_rsa.lua">test_rsa.lua</a>，当前的实现是到处抄的，遥望大学时虽有做这个的大习题，但早就忘了，-.-</p>
+<p>贴一下 gmp_ffi.lua 使用的例子吧：</p>
+<pre lang="source"><code>local gmp = require(&quot;gmp_ffi&quot;)
+
+function gmpffi_test()
+   local a = gmp.mpz(11111111111)
+   local b = gmp.mpz(&quot;999999999999999999999999999999999&quot;)
+   local c = gmp.mpz(&quot;99999&quot;)
+   gmp.mpz_mul(a, a, b)
+   --gmp.mpz_set_ui(c, 1)
+   gmp.printf(&quot;mpz: a:%Zd, c sign:&quot;, a)
+   print(string.format(&quot;%d, odd:%s&quot;, gmp.mpz_sgn(c), gmp.mpz_odd(c)))
+   a = gmp.mpz(&quot;ff&quot;, 16)
+   gmp.printf(&quot;mpz: value base %Zx\n&quot;, a)
+
+   a = gmp.mpf(111111111.111111111)
+   b = gmp.mpf(&quot;999999999999999999999999999.99999999999999999999999999999999999&quot;)
+   c = gmp.mpf(&quot;9999&quot;)
+   gmp.mpf_mul(a, a, b)
+   gmp.printf(&quot;mpf: %Ff, c sign:&quot;, a)
+   print(gmp.mpf_sgn(c))
+
+   a = gmp.mpq(111111111, 111111111)
+   b = gmp.mpq(&quot;9999999999999999999999999999999/99999999999999999999999999999999999999&quot;)
+   c = gmp.mpq(0)
+   gmp.mpq_div(a, a, b)
+   gmp.printf(&quot;mpq: %Qx, c sign:&quot;, a)
+   print(gmp.mpq_sgn(c))
+
+   local rt = gmp.randinit()
+   local cs = gmp.cstring(64)
+   gmp.sprintf(cs, &quot;random: %u&quot;, gmp.urandomb_ui(rt, 9999999))
+   print(gmp.tostring(cs))
+end
+
+gmpffi_test()
+</code></pre>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-07.html#p1">Permalink</a></div>
 <p><a id="p0"></a></p>
 <div class="date">19年7月06日 周六 23:55</div>
 <h2>LuaJIT FFI Library</h2>
