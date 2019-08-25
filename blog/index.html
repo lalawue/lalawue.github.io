@@ -16,7 +16,18 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">19年7月13日 周六 23:34</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">19年8月25日 周日 22:50</div>
+<h2>获取天气信息</h2>
+<p>写了几个脚本程序，通过 Lua 的 os.execute() 命令走批处理，下载后解析获取几个大城市的天气信息，再将其存储到 sqlite3 里面。</p>
+<p>忘记之前从哪个博客看到别人搜集了好多 PM2.5 的数据，然后做成了图表，觉得是比较好玩了。</p>
+<p>用的都是快糙猛的方法，比如下载用的就是 curl，用 Lua 做了个配置文件，设置了好几个城市的 URL；解压用的是 gzip，解析用的 gumbo，文件列表依赖 LuaFileSystem，后面这两个其实不太好，因为我使用的系统跨度太大了。</p>
+<p>比如在我的 Ubuntu 12.04.5 LTS 里，gumbo 直接使用 Luarocks 编译不出来，得手工处理，拷贝 .so 库什么的。反而是数据库接口，使用了依赖 LuaJIT FFI 的 lsqlite3 来做数据库的写入更新，这个倒是不错，没有那么多的问题。</p>
+<p>非 LuaJIT 的 Lua C 库，需要不同版本的 Lua 头文件，以及对应的 C 文件来对接 Lua VM 做数据输入输出，蛋疼的是 gumbo，甚至需要 pkg-config 指出 Lua 信息，在上面的 Ubuntu 版本里面，得自己编写 lua.pc 放到 pkgconfig 目录下面。反观 LuaJIT，有了 FFI 后，接入已有的 C 库，轻松太多。</p>
+<p>设置一个小时更新一次，写入到数据库，真的是很无聊。</p>
+<p>今天没时间了，后面粗糙的打算，是 H5 的前端工作，使用 Chart.js 将数据画成折线图，有了 sqlite 后，存储结构统一了，后面读取转成 JSON 应该就好，得看下什么时候有时间了。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-08.html#p0">Permalink</a></div>
+
+<div class="date">19年7月13日 周六 23:34</div>
 <h2>gmp_ffi.lua</h2>
 <p>上周考虑的 GMP LuaJIT FFI 绑定，最后将 GMP 的绝大部分函数接口导了出来变成了 <a href="https://github.com/lalawue/gmp_ffi">gmp_ffi</a>，包括整数、浮点、有理数、随机数，以及格式化输出，除了那些 C 直接输出文件包含 FILE * 的部分，后续也可以考虑将标准 C 库的文件操作函数也一并导出来。</p>
 <p>另外，还将相关的初始化函数，通过 ffi.gc() 跟 finalizer 关联了起来，就不需要自己做相关的清理工作了。</p>
@@ -456,33 +467,6 @@ CR2032，百度了一下 BIOS 电池的位置，当然是开腔才能具体位�
 <p>同样是淘宝，同样是 ¥15，只是 Nexus 7 不好打开外壳，费了一点劲；还有就是
 螺丝都太小了，华强北 ¥25 的小工具盒太勉强，当然最后还是换了。</p>
 <div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2018-06.html#p0">Permalink</a></div>
-
-<div class="date">18年5月1日 周二 22:30</div>
-<h2>m_dnscnt 和 lua-web</h2>
-<p>前一阵子写了一个 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a>，一个并发多个 DNS 请求的客户端、库接口。</p>
-<p>有这个需求的原因，在于系统提供的 DNS 请求是一个同步接口，开始请求后，得
-等着 DNS 结束才能走下一步。</p>
-<p>这带来两个问题，第一个问题是，如果我同时有 3 个 DNS 请求，总共花费的时间，
-是这 3 个请求加起来的总和；第二个问题是，因为底层的网络库是异步的，不能
-因为 DNS 请求是同步的，就将整个循环给阻塞住，因此实际是多开了线程才能用
-好这个 DNS 请求接口，也因此多了一个 STM 同步操作。</p>
-<p>并发、异步的 DNS 请求库，则没有这个问题。</p>
-<p>当我将 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a> 以源代码接口的形式用到了 <a href="https://github.com/lalawue/m_tunnel">m_tunnel</a> 上去后，感觉服务端 DNS
-请求加快了不少，毕竟之前得一个一个顺序请求 DNS，现在则是同时请求多个，总
-的花费时间大大缩短了。</p>
-<p>另外呢，也将这 DNS 以库的形式用到了 <a href="https://github.com/lalawue/lua-web">lua-web</a> 上去。以库的形式加入 lua-web
-的原因是，<a href="https://github.com/lalawue/m_net">m_net</a> 本身已经用库的方式提供了 Lua 绑定，无法在同一个库里面暴
-露接口给 <a href="https://github.com/lalawue/m_dnscnt">m_dnscnt</a> 使用。所以 lua-web 底层使用了两份 m_net 代码，其中一个是
-单独用于 DNS 请求的。</p>
-<p>这样 lua-web 就支持了 HTTP request，之前不支持域名，只支持 IP，现在则没
-有这个问题了。</p>
-<p>而在架构上，HTTP 层的支持算是完整了，如果以 web-framework 的要求看的话，
-后续还需要 HTML 的支持。如果还需要加上一点，那就是 HTTPS 的支持，以及
-websocket。HTTP/2 呢，就算了，那完全是另外一个东西。</p>
-<p>还有，这些个东西，往后再说吧，目前的目标，并不是做一个 production-ready
-的东东，而只是做一个类似教学用的工具，做个小巧，但五脏六腑清晰明了，可以
-一眼看穿，但又确实可用的东西。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2018-05.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;

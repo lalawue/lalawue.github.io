@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - 2019-08</title>
+    <title>Sucha's Blog - Archive for August, 2019</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -16,7 +16,19 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><!-- Page published by cmark-gfm ends here -->
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for August, 2019</h1>
+<p><a id="p0"></a></p>
+<div class="date">19年8月25日 周日 22:50</div>
+<h2>获取天气信息</h2>
+<p>写了几个脚本程序，通过 Lua 的 os.execute() 命令走批处理，下载后解析获取几个大城市的天气信息，再将其存储到 sqlite3 里面。</p>
+<p>忘记之前从哪个博客看到别人搜集了好多 PM2.5 的数据，然后做成了图表，觉得是比较好玩了。</p>
+<p>用的都是快糙猛的方法，比如下载用的就是 curl，用 Lua 做了个配置文件，设置了好几个城市的 URL；解压用的是 gzip，解析用的 gumbo，文件列表依赖 LuaFileSystem，后面这两个其实不太好，因为我使用的系统跨度太大了。</p>
+<p>比如在我的 Ubuntu 12.04.5 LTS 里，gumbo 直接使用 Luarocks 编译不出来，得手工处理，拷贝 .so 库什么的。反而是数据库接口，使用了依赖 LuaJIT FFI 的 lsqlite3 来做数据库的写入更新，这个倒是不错，没有那么多的问题。</p>
+<p>非 LuaJIT 的 Lua C 库，需要不同版本的 Lua 头文件，以及对应的 C 文件来对接 Lua VM 做数据输入输出，蛋疼的是 gumbo，甚至需要 pkg-config 指出 Lua 信息，在上面的 Ubuntu 版本里面，得自己编写 lua.pc 放到 pkgconfig 目录下面。反观 LuaJIT，有了 FFI 后，接入已有的 C 库，轻松太多。</p>
+<p>设置一个小时更新一次，写入到数据库，真的是很无聊。</p>
+<p>今天没时间了，后面粗糙的打算，是 H5 的前端工作，使用 Chart.js 将数据画成折线图，有了 sqlite 后，存储结构统一了，后面读取转成 JSON 应该就好，得看下什么时候有时间了。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-08.html#p0">Permalink</a></div>
+<!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
 	Sucha. Powered by MarkdownProjectCompositor.
