@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - Archive for December, 2015</title>
+    <title>Sucha's Blog - Archive for September, 2019</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -16,30 +16,20 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for December, 2015</h1>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for September, 2019</h1>
 <p><a id="p0"></a></p>
-<div class="date">15年12月9日 周三 23:41</div>
-<h2>类 Shadowsocks 的 sock5 proxy － m_tunnel</h2>
-<p>也是好奇，自己写了一个类似 shadowsocks 的 sock5 proxy，与其协议不一样，
-local 跟 remote 是通过一个 TCP 连接起来的，两边的数据，都通过这个 TCP 连
-接。</p>
-<p>当时这么设计，是觉得，每次一个 TCP 过去，重新握手，认证，是个多么麻烦的
-事情，如果之前已经认证好了，就走一个通道就行了，反正都有加密嘛，不过现在
-看来，也许是麻烦的开端，因为这意味着需要下面的协议内容：</p>
+<div class="date">19年9月22日 周日 09:00</div>
+<h2>安利新手机失败了</h2>
+<p>去年买了一加 6T，然后今年又换了一加 7 Pro，想着把 6T 换给家里人用，之前家里人用的一直是华为。在我看来，一加相比华为，少了一些琐琐碎碎的也许用不到的功能，但是屏幕以及除人像之外的相机，其实是有优势的。</p>
+<p>但是给老爸用了不到半天，就说这个应该怎么传照片、视频呀，他会拍很多的照片、视频，而且还要传到电脑端来保存。</p>
 <ul>
-<li>connect</li>
-<li>data</li>
-<li>close</li>
+<li>方案一，是使用无线的比如爱莫助手，但是 WIFI 传输速度很不理想，而且打包方式的下载其实也不好用</li>
+<li>方案二，尝试使用华为的电脑手机套件——华为手机助手，可是呢，眼看着app安装到了手机上后，一下就又消失了</li>
+<li>方案三，使用应用宝的电脑手机套件——也不知道是不是驱动问题，连接很不稳定，相册内容几乎读不出来</li>
 </ul>
-<p>data 部分就是切割数据，connect 部分意味着异步连接，close 也要保证同步，
-而且任何一方都要关注到底是 server 还是 local 关闭的。</p>
-<p>现在这个软件不太稳定，可是总感觉不是代码上面的问题，而是协议处理上，还需
-要斟酌一下。</p>
-<p>还有，其实如果是使用 shadowsocks 那样每个 local 进来的 tcp 都单独链接，
-其实更容易处理些。</p>
-<p>不扯了，地址是 <a href="https://github.com/lalawue/m_tunnel">https://github.com/lalawue/m_tunnel</a>.</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2015-12.html#p0">Permalink</a></div>
-<!-- date: 2015-12-09T23:41:54+0800 -->
+<p>其实还有复杂一些的比如 MTP 传输，但是对于老人来说，要记住相册目录什么的，相比有电脑套件，只关注相册、视频内容，更直观的方式来操作，真的差了很多。</p>
+<p>所以，最后是安利失败，只好把这台 6T 二手掉吧，新手机应该只会考虑华为了。</p>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2019-09.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
