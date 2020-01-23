@@ -16,7 +16,26 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">19年12月28日 周六 22:09</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年01月24日 周五 01:24</div>
+<h2>MarkdownProjectCompositor 支持 Win 7</h2>
+<p>给家人换了一台性能更好的老笔记本，之前的上网本自然就归我了，赛扬 N3150 4核 4GB 其实不算差，至少现在开着 Chrome 写 Markdown 是很流畅的，然后想着怎么废物利用，比如用来做下载机，但其实我没啥可下载的，用来搞点 Windows 环境下的编程，写点 Markdown 倒是不错。</p>
+<p>然后就想着怎么把之前的工程搬到 Windows 上面来，网络部分的先算了，没有 IOCP 也没啥意思，看来看去，LuaJIT 加上 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a> 是个不错的入口。</p>
+<p>即便如此，这次适配也吃了苦头，赛扬 4G 我是不想用 Visual Studio 了，不管是 2012 还是 2015，下个几 G 编译个几百 K，不值得。就搞了个 MingW64，然后下载了一个 Git。</p>
+<p>依赖有 cmark-gfm 和 LuaJIT，lfs_ffi.lua 看了一下是支持 Windows 的。可是 cmark-gfm 不能直接在 MingW64 下编译，需要 cmake，搞了一个 win 下的 cmake，可不是随随便便就能生成 makefile 了，MingW 环境下需要这样：</p>
+<pre lang="source"><code>mkdir build
+cd build
+cmake -G &quot;MinG Makefiles&quot; ..
+make
+</code></pre>
+<p>你没看错，需要指定生成 MingW 下的 makefile，而且冒号内的关键字不能错哦，这一步浪费了我好几个小时。后面的 make 就很顺利了，虽然赛扬 4G 马力明显不足，磕磕碰碰的最后还是给捣出来了。</p>
+<p>MingW 环境编译的程序只依赖 Windows 原生库，所以蛮小的。接下来的 LuaJIT 编译有了前面的铺垫，很顺利就生成了。</p>
+<p>后面的 2 个小时，浪费在了 compositor 拼接 source 以及生成 html 的过程中，因为在 lua 里面 io.open() 文件时，没有带 b 用二进制的方式，使得在 windows 下换行是 CRLF 的。因为我的 config.lua 也很复杂，WelcomePage 是根据生成的 html 最后做拼接的，这里也要指定用 binary 的方式读写。</p>
+<p>最后我还在 compositor 里面加入了去掉 CRLF 以及 CR 的 dos2unix 开关，把原来 Markdown 里面的多余 CR 都去掉了，毕竟 CR 没啥用，会被 HTML 的 tag 忽略的。这段是确保 MacOS 下生成的 HTML 跟 Windows 下生成的一模一样。</p>
+<p>再搞了一个 publish_html.bat 脚本，配置好 config.lua 以及目录后，一键生成，就可以看着赛扬 4核慢吞吞地做转换了。</p>
+<p>最后把这半天的成果，windows 下的 cmark-gfm、luajit、lfs_ffi.lua，还有一个一键生成脚本，打了一个 zip 包，作为一个 release 发出去了，毕竟不是专业 windows 下的开发，也许以后再换一个 windows 环境，可真的折腾不来了。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p1">Permalink</a></div>
+
+<div class="date">19年12月28日 周六 22:09</div>
 <h2>LWTheme theme/skin manager for iOS8+</h2>
 <p><a href="https://github.com/lalawue/LWTheme">LWTheme</a> 是一个支持 iOS8+ 的主题管理库，目前支持诸如以下 UI 元素的属性如颜色、字体随着主题替换而动态更改：</p>
 <ul>
@@ -231,50 +250,6 @@
 <p>设置一个小时更新一次，写入到数据库，真的是很无聊。</p>
 <p>今天没时间了，后面粗糙的打算，是 H5 的前端工作，使用 Chart.js 将数据画成折线图，有了 sqlite 后，存储结构统一了，后面读取转成 JSON 应该就好，得看下什么时候有时间了。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-08.html#p0">Permalink</a></div>
-
-<div class="date">19年7月13日 周六 23:34</div>
-<h2>gmp_ffi.lua</h2>
-<p>上周考虑的 GMP LuaJIT FFI 绑定，最后将 GMP 的绝大部分函数接口导了出来变成了 <a href="https://github.com/lalawue/gmp_ffi">gmp_ffi</a>，包括整数、浮点、有理数、随机数，以及格式化输出，除了那些 C 直接输出文件包含 FILE * 的部分，后续也可以考虑将标准 C 库的文件操作函数也一并导出来。</p>
-<p>另外，还将相关的初始化函数，通过 ffi.gc() 跟 finalizer 关联了起来，就不需要自己做相关的清理工作了。</p>
-<p>还有，GMP 的 C 接口，其内部实现，都是带 __gmp 这样前缀的，即便通过 FFI 使用，也很不方便，所以 gmp_ffi 库，将这些接口都重新做了绑定，重命名为类似 mpz_mul() 这样的函数，跟 gmp.h 上通过 C 宏定义出来的接口一样使用。</p>
-<p>有了上面的铺垫，一些好玩的东西可以搞起来，比如粗糙的计算素数的程序 <a href="https://github.com/lalawue/gmp_ffi/blob/master/test_prime.lua">test_prime.lua</a>，比如温习一下 RSA 加解密 <a href="https://github.com/lalawue/gmp_ffi/blob/master/test_rsa.lua">test_rsa.lua</a>，当前的实现是到处抄的，遥望大学时虽有做这个的大习题，但早就忘了，-.-</p>
-<p>贴一下 gmp_ffi.lua 使用的例子吧：</p>
-<pre lang="source"><code>local gmp = require(&quot;gmp_ffi&quot;)
-
-function gmpffi_test()
-   local a = gmp.mpz(11111111111)
-   local b = gmp.mpz(&quot;999999999999999999999999999999999&quot;)
-   local c = gmp.mpz(&quot;99999&quot;)
-   gmp.mpz_mul(a, a, b)
-   --gmp.mpz_set_ui(c, 1)
-   gmp.printf(&quot;mpz: a:%Zd, c sign:&quot;, a)
-   print(string.format(&quot;%d, odd:%s&quot;, gmp.mpz_sgn(c), gmp.mpz_odd(c)))
-   a = gmp.mpz(&quot;ff&quot;, 16)
-   gmp.printf(&quot;mpz: value base %Zx\n&quot;, a)
-
-   a = gmp.mpf(111111111.111111111)
-   b = gmp.mpf(&quot;999999999999999999999999999.99999999999999999999999999999999999&quot;)
-   c = gmp.mpf(&quot;9999&quot;)
-   gmp.mpf_mul(a, a, b)
-   gmp.printf(&quot;mpf: %Ff, c sign:&quot;, a)
-   print(gmp.mpf_sgn(c))
-
-   a = gmp.mpq(111111111, 111111111)
-   b = gmp.mpq(&quot;9999999999999999999999999999999/99999999999999999999999999999999999999&quot;)
-   c = gmp.mpq(0)
-   gmp.mpq_div(a, a, b)
-   gmp.printf(&quot;mpq: %Qx, c sign:&quot;, a)
-   print(gmp.mpq_sgn(c))
-
-   local rt = gmp.randinit()
-   local cs = gmp.cstring(64)
-   gmp.sprintf(cs, &quot;random: %u&quot;, gmp.urandomb_ui(rt, 9999999))
-   print(gmp.tostring(cs))
-end
-
-gmpffi_test()
-</code></pre>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-07.html#p1">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -325,7 +300,7 @@ gmpffi_test()
         <li><a href="http://www.google.cn/maps/@22.6273208,110.1513288,15540m/data=!3m1!1e3?hl=zh-CN">Yulin City</a></li>
       </ul>
 
-      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2019-12.html">December 2019</a></li><li><a href="2019-11.html">November 2019</a></li><li><a href="2019-10.html">October 2019</a></li><li><a href="2019-09.html">September 2019</a></li><li><a href="2019-08.html">August 2019</a></li><li><a href="2019-07.html">July 2019</a></li><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
+      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2020-01.html">January 2020</a></li><li><a href="2019-12.html">December 2019</a></li><li><a href="2019-11.html">November 2019</a></li><li><a href="2019-10.html">October 2019</a></li><li><a href="2019-09.html">September 2019</a></li><li><a href="2019-08.html">August 2019</a></li><li><a href="2019-07.html">July 2019</a></li><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
    </div> <!-- body -->
   </body>
 </html>
