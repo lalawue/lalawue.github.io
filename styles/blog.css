@@ -218,13 +218,13 @@ div.date a:hover {
 
 /* origin h4 */
 div.category a {
-    color: #53afba;
     color: silver;
     text-align: right;
 }
 
 /* h4 */
 div.category a:hover {
+    color: black;
     background-color: transparent;
 }
 
