@@ -16,7 +16,38 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年01月24日 周五 01:24</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年01月24日 周五 12::53</div>
+<h2>庆祝在 Windows 下更新本站</h2>
+<p>受益于<a href="../blog/2020-01.html#p0">MarkdownProjectCompositor 支持 Win 7</a>，有了 generator、compositor 的准备，包括 Win 下 Git 的支持，加上我的编辑器是一个浏览器端单文件编辑器，现在可以比较顺利地在 Win 下写 Markdown，并更新博客了。</p>
+<p>老早之前，用 Emacs 做 Markdown 编辑器 + 生成器的时候，也是能够支持 Win 的，当时是用 FTP 上传到网站，改换成 cmark-gfm 后，终于又实现了一次。</p>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2020-01.html#p2">Permalink</a></div>
+
+<div class="date">20年01月24日 周五 12:22</div>
+<h2>m_net 支持 pull-style API</h2>
+<p><a href="https://github.com/lalawue/m_net">m_net</a> 之前只支持设置 callback 方式回调通知，最近的修改是开始支持 pull-style API。弃用 callback 是为了配合 LuaJIT 的使用，因为 LuaJIT 在 C 层 callback Lua，性能非常不好，<a href="https://stackoverflow.com/questions/12329128/luajit-ffi-callback-performance/12435278#12435278">LuaJIT FFI callback performence</a> 有说明，大体上有 x27 slower。</p>
+<p>LuaJIT 官网的相关介绍，也是不推荐 C 层 callback Lua，因为 callback 函数是临时分配生成的，性能不好，而推荐用 pull-style API。</p>
+<p>所谓 pull-style API，就是一个同步操作的含义，call 一次就拿一次数据这样。</p>
+<p>m_net 的修改，是将 callback 这一层，从 C 移到了 Lua 层，Lua 层从 C 层获取事件通知的多个 chann 及其 message，之后在 Lua 层面做 callback，算是避开了从 C callback Lua 这个坑。</p>
+<p>这样子修改之后，跟原来提供非 JIT 的 Lua 接口不一致了，考虑到非 JIT Lua 可选用网络通信模型挺多的，比如老一辈的 LuaSocket，比如 Luvit 之类的，索性我就去掉了非 JIT Lua 的接口支持。</p>
+<p>修改完后，做了一个简单的压测，对所有 accept 的 chann，发送一个 HTML 包裹的 hello，world，设置了 backlog 100，ab 100 个实例 5000 次试验的结果：</p>
+<pre lang="source"><code># ab -c 100 -n 5000 http://127.0.0.1:8080/empty
+
+Concurrency Level:      100
+Time taken for tests:   0.547 seconds
+Complete requests:      5000
+Failed requests:        0
+Total transferred:      530000 bytes
+HTML transferred:       65000 bytes
+Requests per second:    9134.39 [#/sec] (mean)
+Time per request:       10.948 [ms] (mean)
+Time per request:       0.109 [ms] (mean, across all concurrent requests)
+Transfer rate:          945.55 [Kbytes/sec] received
+
+</code></pre>
+<p>感觉还可以。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p1">Permalink</a></div>
+
+<div class="date">20年01月24日 周五 01:24</div>
 <h2>MarkdownProjectCompositor 支持 Win 7</h2>
 <p>给家人换了一台性能更好的老笔记本，之前的上网本自然就归我了，赛扬 N3150 4核 4GB 其实不算差，至少现在开着 Chrome 写 Markdown 是很流畅的，然后想着怎么废物利用，比如用来做下载机，但其实我没啥可下载的，用来搞点 Windows 环境下的编程，写点 Markdown 倒是不错。</p>
 <p>然后就想着怎么把之前的工程搬到 Windows 上面来，网络部分的先算了，没有 IOCP 也没啥意思，看来看去，LuaJIT 加上 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a> 是个不错的入口。</p>
@@ -226,30 +257,6 @@ make
 <p><img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1g7wzrgqvpbj21400u0n71.jpg" width=280> <img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1g7wzricmc6j21400u0gqx.jpg" width=280> <img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1g7wzrjw3h8j20u0140487.jpg" width=200></p>
 <p><img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1g7wzro8798j20u0140jxb.jpg" width=200> <img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1g7wzrsjdt2j21400u0dli.jpg" width=280> <img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1g7wzruyf09j21400u0dlz.jpg" width=280></p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2019-10.html#p0">Permalink</a></div>
-
-<div class="date">19年9月22日 周日 09:00</div>
-<h2>安利新手机失败了</h2>
-<p>去年买了一加 6T，然后今年又换了一加 7 Pro，想着把 6T 换给家里人用，之前家里人用的一直是华为。在我看来，一加相比华为，少了一些琐琐碎碎的也许用不到的功能，但是屏幕以及除人像之外的相机，其实是有优势的。</p>
-<p>但是给老爸用了不到半天，就说这个应该怎么传照片、视频呀，他会拍很多的照片、视频，而且还要传到电脑端来保存。</p>
-<ul>
-<li>方案一，是使用无线的比如爱莫助手，但是 WIFI 传输速度很不理想，而且打包方式的下载其实也不好用</li>
-<li>方案二，尝试使用华为的电脑手机套件——华为手机助手，可是呢，眼看着app安装到了手机上后，一下就又消失了</li>
-<li>方案三，使用应用宝的电脑手机套件——也不知道是不是驱动问题，连接很不稳定，相册内容几乎读不出来</li>
-</ul>
-<p>其实还有复杂一些的比如 MTP 传输，但是对于老人来说，要记住相册目录什么的，相比有电脑套件，只关注相册、视频内容，更直观的方式来操作，真的差了很多。</p>
-<p>所以，最后是安利失败，只好把这台 6T 二手掉吧，新手机应该只会考虑华为了。</p>
-<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2019-09.html#p0">Permalink</a></div>
-
-<div class="date">19年8月25日 周日 22:50</div>
-<h2>获取天气信息</h2>
-<p>写了几个脚本程序，通过 Lua 的 os.execute() 命令走批处理，下载后解析获取几个大城市的天气信息，再将其存储到 sqlite3 里面。</p>
-<p>忘记之前从哪个博客看到别人搜集了好多 PM2.5 的数据，然后做成了图表，觉得是比较好玩了。</p>
-<p>用的都是快糙猛的方法，比如下载用的就是 curl，用 Lua 做了个配置文件，设置了好几个城市的 URL；解压用的是 gzip，解析用的 gumbo，文件列表依赖 LuaFileSystem，后面这两个其实不太好，因为我使用的系统跨度太大了。</p>
-<p>比如在我的 Ubuntu 12.04.5 LTS 里，gumbo 直接使用 Luarocks 编译不出来，得手工处理，拷贝 .so 库什么的。反而是数据库接口，使用了依赖 LuaJIT FFI 的 lsqlite3 来做数据库的写入更新，这个倒是不错，没有那么多的问题。</p>
-<p>非 LuaJIT 的 Lua C 库，需要不同版本的 Lua 头文件，以及对应的 C 文件来对接 Lua VM 做数据输入输出，蛋疼的是 gumbo，甚至需要 pkg-config 指出 Lua 信息，在上面的 Ubuntu 版本里面，得自己编写 lua.pc 放到 pkgconfig 目录下面。反观 LuaJIT，有了 FFI 后，接入已有的 C 库，轻松太多。</p>
-<p>设置一个小时更新一次，写入到数据库，真的是很无聊。</p>
-<p>今天没时间了，后面粗糙的打算，是 H5 的前端工作，使用 Chart.js 将数据画成折线图，有了 sqlite 后，存储结构统一了，后面读取转成 JSON 应该就好，得看下什么时候有时间了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-08.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
