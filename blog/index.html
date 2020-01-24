@@ -55,7 +55,7 @@ Transfer rate:          945.55 [Kbytes/sec] received
 <p>依赖有 cmark-gfm 和 LuaJIT，lfs_ffi.lua 看了一下是支持 Windows 的。可是 cmark-gfm 不能直接在 MingW64 下编译，需要 cmake，搞了一个 win 下的 cmake，可不是随随便便就能生成 makefile 了，MingW 环境下需要这样：</p>
 <pre lang="source"><code>mkdir build
 cd build
-cmake -G &quot;MinG Makefiles&quot; ..
+cmake -G &quot;MinGW Makefiles&quot; ..
 make
 </code></pre>
 <p>你没看错，需要指定生成 MingW 下的 makefile，而且冒号内的关键字不能错哦，这一步浪费了我好几个小时。后面的 make 就很顺利了，虽然赛扬 4G 马力明显不足，磕磕碰碰的最后还是给捣出来了。</p>
