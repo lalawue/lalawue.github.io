@@ -16,7 +16,43 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年5月23日 周六 08:56</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年6月5日 周五 23:56</div>
+<h2>Lua 的缺点</h2>
+<p>在官网的 <a href="https://www.lua.org/about.html">关于 Lua</a> 页面，是这么介绍 Lua 的：</p>
+<pre lang="source"><code>Lua 是一种强大、高效、轻量，可嵌入的脚本语言。支持过程编程，面向对象编程，函数式编程，数据驱动编程，以及数据描述编程（DSL）。
+</code></pre>
+<p>虽然 Lua 官网将自己介绍为脚本语言，但业界对于 Lua 的定位及使用早已超出普通脚本的范围。比如，<a href="https://wowwiki.fandom.com/wiki/Lua">魔兽争霸 3</a>，以及 Adobe 的 <a href="https://www.adobe.io/apis/creativecloud/lightroomclassic.html">Lightmoom</a> 都大量使用了 Lua 来构建桌面程序；在后端组件中大名鼎鼎的 Redis 以及 OpenResty，则将 Lua 作为了内嵌的业务处理语言；而在 github 上 star 数量为 9k 的 <a href="https://github.com/cloudwu/skynet">skynet</a>，则更进一步地将 Lua 定位为了后端的业务逻辑语言。</p>
+<p>虽然 Lua 运行很快，业界的效率标杆 LuaJIT 是所有其他脚本语言用于比对的塔顶，要不然 Redis、OpenResty 怎会将其作为内嵌的扩展方案呢。</p>
+<p>但是 Lua 并没有流行开来，对于一个创建于 1993 年 7 月 28 日的语言来说，缺的应该不是机遇，而是其他的一些东西。</p>
+<p>我也用了不少时间的 Lua，作为一名普通的应用程序开发者，就吐槽一下吧。</p>
+<h3>Lua 是分裂的</h3>
+<p>Lua 是分裂的，不说别的，单就官方版本的 Lua 5.3.5 以及 LuaJIT，其实是两种不同的语言，LuaJIT 定在了 Lua 5.1.5 版本，且大量应用在了 Redis 以及 OpenResty 中。</p>
+<p>而且因为 Lua 的核心很小，大量的功能都用 C 或者 C++ 构建，通过 C API 提供给 Lua 虚拟机调用，但是不同
+的 Lua 版本，其实 C API 差异很大，几乎就是不同的语言。</p>
+<p>很多将 Lua 作为嵌入脚本语言的的桌面程序，将其使用的 Lua 版本固定下来了，其 C API 构建的 Lua 库也都固定了，其他版本的 Lua 可不一定能使用上这个库，而这个提供给 Lua 使用的 C 库，也不是向前向后兼容的。</p>
+<h3>Lua 是无类型的</h3>
+<p>这是一个双刃剑，这里只说不好的方面吧。如果一个变量是从 dofile() 函数中加载的，由于没有类型，我无法知道这个变量的结构里面有哪些东西，在智能补全的 IDE 里面，将导致无法补全内容，也会将错误放到运行时才暴露。</p>
+<h3>Lua 几乎没有官方的功能包</h3>
+<p>由于定为为可嵌入的脚本语言，核心很小，基础的东西缺少太多了，比如</p>
+<ul>
+<li>网络库：官方没有网络库，最出名的 luasocket，其实效率不行的</li>
+<li>图形库：官方没有任何平台的图形库</li>
+<li>数据库：官方没有数据库的连接方案，网络库都没有，这个可以理解了</li>
+<li>数学库：没有高精度的数学库</li>
+</ul>
+<p>仅有的语言核心，只有基本的输入输出，double 精度的数学操作而已。</p>
+<h3>Lua 没有官方的包管理器</h3>
+<p>Lua 没有官方的包管理器，这就导致了社区中好的库，应用实践，无法通过权威的渠道沉淀，并传递开来。随处可见普通的 Lua 用户将长时间将 Lua 作为普通的脚本语言，无法应用上顺手的包，解决眼前的问题。而对于高级一点的用户，也没有权威的渠道，来散播其创意和经验。</p>
+<p>现有的官方的 <a href="http://lua-users.org/wiki/">Lua Users Wiki</a>，真的弱爆了。</p>
+<p>虽然现在业界的 <a href="https://luarocks.org/">LuaRocks</a> 也还不错，但貌似想要在 Windows 上直接应用，不是一件简单的事情。</p>
+<h3>Lua 没有官方的 IDE</h3>
+<p>IDE 是大大降低使用门槛的工具，也是大大提高开发效率的工具，结构化开发，断点调试，这些其他语言 IDE 中都有的东西，在 Lua 官方网站上，你是看不到的。</p>
+<p>我自己倒是使用了 vs-code 配合 sumneko 的 <a href="https://github.com/sumneko/lua-language-server">lua-language-server</a> 插件，之前也看了一下 <a href="https://studio.zerobrane.com/">ZeroBrane</a> IDE，但没有用过。</p>
+<p>--</p>
+<p>话说，喝了不少酒，吐了一下，舒服多了，:)</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-06.html#p0">Permalink</a></div>
+
+<div class="date">20年5月23日 周六 08:56</div>
 <h2>修改 m_net 在 Windows 下使用 ewpoll 作为底层事件通知</h2>
 <p>之前 <a href="https://github.com/lalawue/m_net">m_net</a> 在 Windows 下是使用 select 作为 socket 事件检测接口，效率差是一方面，主要是其他更主要的服务端平台，比如 Linux/FreeBSD，以及开发常用的 MacOS，是另外一套相近的 API。</p>
 <p>比如不管是 epoll 或者 kqueue，通过接口，可以返回一个当前时间片段内有事件发生的 socket 列表，以及 socket 对应的 ptr，用来绑定这个 socket 对应的内部结构。添加、删除 socket 事件列表的方法也相近。</p>
@@ -204,83 +240,6 @@ make
 <p>再搞了一个 publish_html.bat 脚本，配置好 config.lua 以及目录后，一键生成，就可以看着赛扬 4核慢吞吞地做转换了。</p>
 <p>最后把这半天的成果，windows 下的 cmark-gfm、luajit、lfs_ffi.lua，还有一个一键生成脚本，打了一个 zip 包，作为一个 release 发出去了，毕竟不是专业 windows 下的开发，也许以后再换一个 windows 环境，可真的折腾不来了。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p0">Permalink</a></div>
-
-<div class="date">19年12月28日 周六 22:09</div>
-<h2>LWTheme theme/skin manager for iOS8+</h2>
-<p><a href="https://github.com/lalawue/LWTheme">LWTheme</a> 是一个支持 iOS8+ 的主题管理库，目前支持诸如以下 UI 元素的属性如颜色、字体随着主题替换而动态更改：</p>
-<ul>
-<li>UIView 背景色</li>
-<li>CALayer border、shadow CGColor</li>
-<li>CAGradientLayer 开始、结束颜色</li>
-<li>UILabel 字体 family:size、attributed string 前/背景色</li>
-<li>UIImageView imageNamed、tint image color</li>
-<li>UIButton title color、font family:size、image/backgroundImage tingColor</li>
-</ul>
-<p>其他的 UI 元素也可以通过统一的底层接口，以及相关工具类，很容易为其添加相关主题管理属性，为已有的设置项增加换肤功能（其实就其底层提供的数据存储、通知能力来说，完全可以扩展到其他方面，不仅仅是换肤啦）。</p>
-<h3>起因</h3>
-<p>这个想法，起始于一个支持 iOS13 的 Dark mode 工作中，使用到的一款换肤库真的很不好用，需要花一些时间学习如何为不同的主题属性做设置，注意这里的主题属性居然可以有多个设置入口，另外虽然通过 plist 管理但实际使用时却需要通过一个中间工具来映射 key。一开始使用时，只是有点绕脑，后面觉得其接口设计，以及底层存储通知也许可以用更直接的方式。只是相关工作已经接近尾声，而我还需要更多的时间来实验。</p>
-<p>实验的结果，是输出了这个主题管理库，另外为了学习 Swift，专门弄了个 Swift 版本，只不过纯 Swift 其实不支持在 extend 中动态添加存储属性，最后还是得用 @objc 来处理。</p>
-<p>上面说到的这款换肤库，也许是 <a href="https://github.com/wxxsw/SwiftTheme">SwiftTheme</a> 的 ObjC 版本。</p>
-<h3>接口改进</h3>
-<p>说下 <a href="https://github.com/lalawue/LWTheme">LWTheme</a> 的接口改进：：</p>
-<p>设置颜色等主题属性，其实是设置一个不同主题下的映射 key，比如</p>
-<ul>
-<li>设置主题背景色，接口描述是 UIView.lw_backgroundColor = @&quot;ViewBackgroundThemeColorKey&quot;</li>
-<li>设置主题图片名，接口描述是 UIImageView.lw_imageNamed:@&quot;ImageViewThemeImageNamedKey&quot;</li>
-<li>设置主题字体，接口描述是 UILabel.lw_font = @&quot;LabelThemeFontKey&quot;</li>
-<li>设置 UIButton 的 image tint color ，接口描述是 UIButton lw_setImage:image tintColor:@&quot;ButtonThemeTintColorKey&quot; forState:UIControlStateNormal</li>
-<li>设置 Attributed String 的前/背景色，为相关的 NSAttributedStringKey 配置颜色 key 就好，是类似的</li>
-</ul>
-<p>而换主题，或者说换肤时，接口是</p>
-<pre lang="source"><code>LWThemeManager.sharedInstance useMode:LWThemeMode_Light withThemeMap:(NSDictionary *)themeMap
-</code></pre>
-<p>仅仅提供一个设置 NSDictionary 的接口就够了，用户可以自己添加更多的 mode 来区分不同的主题，只是用于业务区分而已，一旦更新 themeMap，就会触发主题替换通知，跟 mode 没有关系。</p>
-<p>仅仅提供设置 NSDictionary 的接口，是因为读取 plist 或者网络数据、或者其他格式序列化数据，比如 KeyArchived 不是这个库的功能，它只管换肤，至于数据来源，跟它一点关系都没有，就应该剥离。</p>
-<h3>主题字典定义</h3>
-<p>各个主题下具体对应的背景色、图片、字体描述，dictionary 记录的格式，或者说内容，大概是这样：</p>
-<p><strong>Light Mode</strong></p>
-<pre lang="source"><code>{
-    @&quot;Color&quot; : {
-                    @&quot;ViewBackgroundThemeColorKey&quot; : @&quot;#FF0000&quot;,
-                    @&quot;ButtonThemeTintColorKey&quot; : @&quot;FF0000&quot;.
-    },
-    @&quot;Image&quot; : {
-                    @&quot;ImageViewThemeImageNamedKey&quot; : &quot;light_image.png&quot;,
-    },
-    @&quot;Font&quot; : {
-                    @&quot;LabelThemeFontKey&quot; : @&quot;_:22&quot;,
-    }
-}
-</code></pre>
-<p><strong>Dark Mode</strong></p>
-<pre lang="source"><code>{
-    @&quot;Color&quot; : {
-                   @&quot;ViewBackgroundThemeColorKey&quot; : @&quot;#00FF00&quot;,
-                   @&quot;ButtonThemeTintColorKey&quot; : @&quot;0000FF&quot;.
-    },
-    @&quot;Image&quot; : {
-                   @&quot;ImageViewThemeImageNamedKey&quot; : &quot;dark_image.png&quot;,
-    },
-    @&quot;Font&quot; : {
-                   @&quot;LabelThemeFontKey&quot; : @&quot;bold:22&quot;,
-    }
-}
-</code></pre>
-<p>会区分颜色、图片名、字体在不同的子 dictionary 下，另外字体的定义是 family:size，下划线表示用 regular，bold、italic、以及其他的font family，需要指定。</p>
-<h3>底层存储、通知实现</h3>
-<p>比如设置 lw_backgroundColor，通过 colorKey 拿到实际的 UIColor 后，会设置到 UIVIew.backgroundColor 中，然后调用下面这个底层接口：</p>
-<pre lang="source"><code>- (void)lw_storeValue:(id)value forSetter:(SEL)setter;
-</code></pre>
-<p>这个接口描述了当主题变化时，会通过 setter 回调，传递 value，一个主题属性对应一个 setter。这样就完成了主题替换重新设置主题属性的功能。因此，实在不理解为何需要一个中间工具来映射，也许其精妙我还 get 不到吧。</p>
-<p>另外，对于 UIButton 这样，设置字体颜色及 state 配对的属性，value 的的取值有考究，比如可以是一个以 state 为 key 的 Dictionary；而诸如设置 UIButton 的 image tint color 接口，会复杂一些，考虑到 color 可以有 alpha channel，这里需要区分 state 保存原来的 image，colorKey，当主题替换时，需要取当前 colorKey 对应的 UIColor 来 tint 原来的 image，避免当前 image 被带 alpha 的 UIColor 污染后，无法复原。</p>
-<p>下面这个接口可以获取 UI 元素存储的主题属性：</p>
-<pre lang="source"><code>- (id)lw_valueForSetter:(SEL)setter;
-</code></pre>
-<h3>核心及扩展</h3>
-<p>可以看到，库的核心是底层的存储、通知实现，这样就支持了 UI 元素为不同的主题属性，仅仅暴露了一个配置主题命名 key 的接口。这两个部分，在主题替换这个前提下，是可以不变的。</p>
-<p>变化的部分是，为不同的 UI 元素，或者同一个 UI 元素，添加主题属性。比如把 CALayer 的 cornerRadius 作为主题属性，当主题变化时，配置不同的 cornerRadius，当然容易就可以实现。</p>
-<p>结语是，只在模拟器上面跑了一下，应该没啥问题吧，:)</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2019-12.html#p1">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -331,7 +290,7 @@ make
         <li><a href="http://www.google.cn/maps/@22.6273208,110.1513288,15540m/data=!3m1!1e3?hl=zh-CN">Yulin City</a></li>
       </ul>
 
-      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2020-05.html">May 2020</a></li><li><a href="2020-04.html">April 2020</a></li><li><a href="2020-02.html">February 2020</a></li><li><a href="2020-01.html">January 2020</a></li><li><a href="2019-12.html">December 2019</a></li><li><a href="2019-11.html">November 2019</a></li><li><a href="2019-10.html">October 2019</a></li><li><a href="2019-09.html">September 2019</a></li><li><a href="2019-08.html">August 2019</a></li><li><a href="2019-07.html">July 2019</a></li><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
+      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2020-06.html">June 2020</a></li><li><a href="2020-05.html">May 2020</a></li><li><a href="2020-04.html">April 2020</a></li><li><a href="2020-02.html">February 2020</a></li><li><a href="2020-01.html">January 2020</a></li><li><a href="2019-12.html">December 2019</a></li><li><a href="2019-11.html">November 2019</a></li><li><a href="2019-10.html">October 2019</a></li><li><a href="2019-09.html">September 2019</a></li><li><a href="2019-08.html">August 2019</a></li><li><a href="2019-07.html">July 2019</a></li><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
    </div> <!-- body -->
   </body>
 </html>
