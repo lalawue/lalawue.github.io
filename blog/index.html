@@ -16,10 +16,83 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年6月5日 周五 23:56</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年6月6日 周六 19:29</div>
+<h2>Lua 的优点</h2>
+<p>接着上一篇 <a href="../blog/2020-06.html#p0">Lua 的缺点</a>，作为平衡，这里补充一下。</p>
+<p>作为一个普普通通，用过 ObjC、C/C++、Java、Swift、Emacs Lisp 的开发者，也是可以把 Lua 的一些好用的方面吹一下的。由于没用过 Python、Ruby、JavaScript，下面的观点未必就是 Lua 对比其他脚本语言鲜明的优点。</p>
+<p>其实呢，我是将 Lua 跟上面所列的编译型、静态类型的语言做对比的，:)</p>
+<h3>Lua 是简单的</h3>
+<p>Lua 是命令式的语言，感觉以 C/C++、Java 起步的同学，学习 Lua 完全没有难度，Lua 语言没有几个关键字，控制结构甚至没有 continue。</p>
+<p>而容器结构，只有一个 table，融合了 Array 以及 HashMap，当然，table 的作用不止于此，后面有更进一步的描述。</p>
+<h3>Lua 很小易于移植</h3>
+<p>Lua 语言只有核心部分，VM 代码只有几万行，是古老的 C89 语法，而且运行期的 VM 内存占用也不多，大概几百 kb 这样。</p>
+<p>这使得 Lua 的编译安装是毫无难度的，支持 C89 的 C 编译器、硬件遍地都是。较少的资源消耗，意味着，在如今的操作系统上，可以大大方方的将几十、几百个 Lua VM 跑起来。</p>
+<p>Lua 的核心还可以配置，将 Number 配置为 32bit 的 Integer，在低端没有浮点数的平台上，也能使用。好早之前，我就在 Rockchip 的的平台上应用上了 Lua，没有浮点数，Number 设置为了 32bit 的 Integer，用得好好的。</p>
+<p>所以，不用担心写的纯 Lua 代码是不是在某些平台跑不起来，不存在的。</p>
+<h3>Lua 很稳定很快</h3>
+<p>Lua 生于 1993 年 7 月 28 日，语言核心早就稳定下来了，工业界早已采用多年。</p>
+<p>LuaJIT 很快很快，可以看一下 LuaJIT-2.0 对比 Lua-5.1.5 版本的效率对比 <a href="http://luajit.org/performance_x86.html">Performance: x86/x64</a>。如今 Redis、OpenResty 标配 LuaJIT 作为内建的脚本支持。</p>
+<h3>Lua 是动态类型的</h3>
+<p>写应用程序的同学都了解，声明一个变量再去声明类型是有多重复，所以最新的 C++、Swift 对于类型都是可以自动推断的了。</p>
+<p>我是觉得对于模块化设计来说，类型只在模块输入、输出的时候才有作用，比如对于输入的数据，我要知道变量的大小和范围，这也是模块对于这个输入参数声明的支持范围。</p>
+<p>但如果真的需要程序关心内存布局的时候，每一个变量需要多大的内存空间，才值得去斟酌，而类型，其实就是内存空间占用的映射。模块内部，既然都是可信的环境，用足够大的内存区域去持有这个变量就行了，这个不影响，反而少了类似 C 这样因为类型转换而截断，导致期望的判断没有成功，引起模块内部错误，不得不抛出异常或者出错，其实毫无必要。</p>
+<p>从另外一方面说，如果有了静态类型，可以控制任何一段程序在变量传递、比较时候的范围，但是当我们需要更高程度的抽象的时候，就又涉及到了如何抽象类型，这又涉及到了模版、范型。感觉又复杂了，也许这是所有静态类型的语言，都绕不过去的一个弯吧。</p>
+<h3>Lua 支持多种编程模式</h3>
+<p>Lua 中可以加载一段 String、一个文件并运行，简单的语法，使得数据描述编程、数据驱动编程是完全可行的。比如我在 Lua 脚本中加载自己，在运行前修改其流程，再运行，是完全可行的。</p>
+<p>Lua 的函数是一等公民，可以实现 <a href="https://blog.csdn.net/yuanlin2008/article/details/8627081">lambada 算子</a>，函数式编程妥妥的没问题。</p>
+<p>Lua 可以实现面向对象编程，上面有提到 table，当在 Lua 里面实现面向对象的时候，对象实例其实就是一个 table，对象的属性只不过是 table 里面的一个 key，函数跟 Number、String 一样可以作为 key 的 value。</p>
+<p>当这样调用对象方法时，table:func(value)，func 默认第一个参数会传递 self，就是对象自己，一个 table，第二个参数才是 value。</p>
+<p>理解 Lua 的面向对象编程，需要了解 Lua 内建的细节了，比如 table 的 __index key 是指找值的时候应该去哪里找，__newindex 则是创建新值的时候应该怎么做。多说一句，如果想 table 是 readonly 的，修改 table 的 __newindex 就对了。</p>
+<p>下面是 Lua 的面向对象编程类定义的一个例子，a = Object.newObject(1), b = Object.newObject(2), a:isEqual(b) 将返回 false。</p>
+<pre lang="source"><code>local Object = {
+    value = 0
+}
+Object.__index = Object
+
+function Object.newObject(value)
+    local obj = setmetatable({}, Object)
+    obj.value = value
+    return obj
+end
+
+function Object:isEqual(obj)
+    return self.value == obj.value
+end
+
+function Object:isGreater(obj)
+    return self.value &gt; obj.value
+end
+
+return Object
+</code></pre>
+<p>更进一步，Lua 的面向对象可以定制 __index 来实现单继承，甚至多继承，实例变量、类变量等，面向对象用这个库就对了 <a href="https://github.com/kikito/middleclass/wiki">kikito/middleclass</a>。</p>
+<h3>Lua 元表</h3>
+<p>话说 table 在 Lua 中占据了中心位置，既是 Array 又是 HashMap，面向对象的时候又是对象实例本身，定义的时候用到了，实例运行期间也用到了。</p>
+<p>table 有这么多的身份，定义不同身份时候的行为，成了关键。在 Lua 里面，table 的 key 怎么寻找，怎么设置新值，两个 table 之间怎么相加、相减等等，是通过定义 table 的 metatable （元表）来实现的。</p>
+<p>面向对象的例子，就用了 Lua 的内建函数 setmetatable，定义了 Object.__index 的行为，限制 key 值应该在哪里寻找。</p>
+<p>这里有一篇 <a href="https://www.runoob.com/lua/lua-metatables.html">Lua 元表</a> 的教程。</p>
+<p>多说两句吧，结合面向对象 Object 的例子，我们定义一下两个 Object 相加的行为：</p>
+<pre lang="source"><code>local Object = {}
+Object.__index = Object
+Object.__add = function(oobj, nobj)
+    oobj.value = oobj.value + nobj.value
+    return oobj
+end
+</code></pre>
+<p>这样，如果 a = Object.newObject(1), b = Object.newObject(2), a = a + b 后，a.value 等于 3。</p>
+<p>话说连 java 都没能实现的运算符重载，Lua 通过 table 的 metatable 实现了。</p>
+<h3>Lua 跟 C 的交互</h3>
+<p>官方 Lua 跟 C 的交互，需要用到 Lua 的 C API 定义 Lua 可以使用的 C 库，在这一层 wrapper 中再调用其他编译、链接进来的其他库，可以看下这篇 <a href="https://blog.csdn.net/AlexWoo0501/article/details/50916037">Lua C API 研究 —— 基础篇</a>，英文的 <a href="https://chsasank.github.io/lua-c-wrapping.html">Exposing C functions to Lua</a>。</p>
+<p>如果用的是 LuaJIT，对于已有 C 库的使用，就方便多了，用到了内建的 ffi 库来声明二进制库中声明的函数接口、用到的结构等，官方教程及例子 <a href="http://luajit.org/ext_ffi_tutorial.html">FFI Tutorial</a>，这里不单独列举了。</p>
+<p>--</p>
+<p>Lua 作为一种简单、稳定、快速的命令式语言，提供高度的抽象，又可以很方便地使用已有的 C 库资源，对于我这种从 C/C++ 起步的程序员来说，相当友好。</p>
+<p>酒醒了，吹一波不为过，:)</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-06.html#p1">Permalink</a></div>
+
+<div class="date">20年6月5日 周五 23:56</div>
 <h2>Lua 的缺点</h2>
 <p>在官网的 <a href="https://www.lua.org/about.html">关于 Lua</a> 页面，是这么介绍 Lua 的：</p>
-<pre lang="source"><code>Lua 是一种强大、高效、轻量，可嵌入的脚本语言。支持过程编程，面向对象编程，函数式编程，数据驱动编程，以及数据描述编程（DSL）。
+<pre lang="source"><code>Lua 是一种强大、高效、轻量，可嵌入的脚本语言。支持过程编程，面向对象编程，函数式编程，数据驱动编程，以及数据描述编程。
 </code></pre>
 <p>虽然 Lua 官网将自己介绍为脚本语言，但业界对于 Lua 的定位及使用早已超出普通脚本的范围。比如，<a href="https://wowwiki.fandom.com/wiki/Lua">魔兽争霸 3</a>，以及 Adobe 的 <a href="https://www.adobe.io/apis/creativecloud/lightroomclassic.html">Lightmoom</a> 都大量使用了 Lua 来构建桌面程序；在后端组件中大名鼎鼎的 Redis 以及 OpenResty，则将 Lua 作为了内嵌的业务处理语言；而在 github 上 star 数量为 9k 的 <a href="https://github.com/cloudwu/skynet">skynet</a>，则更进一步地将 Lua 定位为了后端的业务逻辑语言。</p>
 <p>虽然 Lua 运行很快，业界的效率标杆 LuaJIT 是所有其他脚本语言用于比对的塔顶，要不然 Redis、OpenResty 怎会将其作为内嵌的扩展方案呢。</p>
@@ -30,8 +103,8 @@
 <p>而且因为 Lua 的核心很小，大量的功能都用 C 或者 C++ 构建，通过 C API 提供给 Lua 虚拟机调用，但是不同
 的 Lua 版本，其实 C API 差异很大，几乎就是不同的语言。</p>
 <p>很多将 Lua 作为嵌入脚本语言的的桌面程序，将其使用的 Lua 版本固定下来了，其 C API 构建的 Lua 库也都固定了，其他版本的 Lua 可不一定能使用上这个库，而这个提供给 Lua 使用的 C 库，也不是向前向后兼容的。</p>
-<h3>Lua 是无类型的</h3>
-<p>这是一个双刃剑，这里只说不好的方面吧。如果一个变量是从 dofile() 函数中加载的，由于没有类型，我无法知道这个变量的结构里面有哪些东西，在智能补全的 IDE 里面，将导致无法补全内容，也会将错误放到运行时才暴露。</p>
+<h3>Lua 是动态类型的</h3>
+<p>这是一个双刃剑，这里只说不好的方面吧。如果一个变量是从 dofile() 函数中加载的，由于事先不知道类型，我无法知道这个变量的结构里面有哪些东西，在智能补全的 IDE 里面，将导致无法补全内容，也会将错误放到运行时才暴露。</p>
 <h3>Lua 几乎没有官方的功能包</h3>
 <p>由于定为为可嵌入的脚本语言，核心很小，基础的东西缺少太多了，比如</p>
 <ul>
@@ -47,6 +120,8 @@
 <h3>Lua 没有官方的 IDE</h3>
 <p>IDE 是大大降低使用门槛的工具，也是大大提高开发效率的工具，结构化开发，断点调试，这些其他语言 IDE 中都有的东西，在 Lua 官方网站上，你是看不到的。</p>
 <p>我自己倒是使用了 vs-code 配合 sumneko 的 <a href="https://github.com/sumneko/lua-language-server">lua-language-server</a> 插件，之前也看了一下 <a href="https://studio.zerobrane.com/">ZeroBrane</a> IDE，但没有用过。</p>
+<h3>Lua 不支持多线程</h3>
+<p>Lua 核心很小，C89 语法写成，没有规定运行平台，也就没有多线程支持这一说法了。</p>
 <p>--</p>
 <p>话说，喝了不少酒，吐了一下，舒服多了，:)</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-06.html#p0">Permalink</a></div>
@@ -220,25 +295,6 @@ Transfer rate:          945.55 [Kbytes/sec] received
 </code></pre>
 <p>感觉还可以。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p1">Permalink</a></div>
-
-<div class="date">20年1月24日 周五 01:24</div>
-<h2>MarkdownProjectCompositor 支持 Win 7</h2>
-<p>给家人换了一台性能更好的老笔记本，之前的上网本自然就归我了，赛扬 N3150 4核 4GB 其实不算差，至少现在开着 Chrome 写 Markdown 是很流畅的，然后想着怎么废物利用，比如用来做下载机，但其实我没啥可下载的，用来搞点 Windows 环境下的编程，写点 Markdown 倒是不错。</p>
-<p>然后就想着怎么把之前的工程搬到 Windows 上面来，网络部分的先算了，没有 IOCP 也没啥意思，看来看去，LuaJIT 加上 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a> 是个不错的入口。</p>
-<p>即便如此，这次适配也吃了苦头，赛扬 4G 我是不想用 Visual Studio 了，不管是 2012 还是 2015，下个几 G 编译个几百 K，不值得。就搞了个 MingW64，然后下载了一个 Git。</p>
-<p>依赖有 cmark-gfm 和 LuaJIT，lfs_ffi.lua 看了一下是支持 Windows 的。可是 cmark-gfm 不能直接在 MingW64 下编译，需要 cmake，搞了一个 win 下的 cmake，可不是随随便便就能生成 makefile 了，MingW 环境下需要这样：</p>
-<pre lang="source"><code>mkdir build
-cd build
-cmake -G &quot;MinGW Makefiles&quot; ..
-make
-</code></pre>
-<p>你没看错，需要指定生成 MingW 下的 makefile，而且冒号内的关键字不能错哦，这一步浪费了我好几个小时。后面的 make 就很顺利了，虽然赛扬 4G 马力明显不足，磕磕碰碰的最后还是给捣出来了。</p>
-<p>MingW 环境编译的程序只依赖 Windows 原生库，所以蛮小的。接下来的 LuaJIT 编译有了前面的铺垫，很顺利就生成了。</p>
-<p>后面的 2 个小时，浪费在了 compositor 拼接 source 以及生成 html 的过程中，因为在 lua 里面 io.open() 文件时，没有带 b 用二进制的方式，使得在 windows 下换行是 CRLF 的。因为我的 config.lua 也很复杂，WelcomePage 是根据生成的 html 最后做拼接的，这里也要指定用 binary 的方式读写。</p>
-<p>最后我还在 compositor 里面加入了去掉 CRLF 以及 CR 的 dos2unix 开关，把原来 Markdown 里面的多余 CR 都去掉了，毕竟 CR 没啥用，会被 HTML 的 tag 忽略的。这段是确保 MacOS 下生成的 HTML 跟 Windows 下生成的一模一样。</p>
-<p>再搞了一个 publish_html.bat 脚本，配置好 config.lua 以及目录后，一键生成，就可以看着赛扬 4核慢吞吞地做转换了。</p>
-<p>最后把这半天的成果，windows 下的 cmark-gfm、luajit、lfs_ffi.lua，还有一个一键生成脚本，打了一个 zip 包，作为一个 release 发出去了，毕竟不是专业 windows 下的开发，也许以后再换一个 windows 环境，可真的折腾不来了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
