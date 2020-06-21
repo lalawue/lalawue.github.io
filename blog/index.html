@@ -16,7 +16,28 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年6月6日 周六 19:29</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年6月21日 周日 11:39</div>
+<h2>Text Rank 算法</h2>
+<p><a href="https://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf">TextRank</a> 是一种抽取式自动文摘算法，随便在网上搜一下相关，或者在 github 上面搜一下，介绍都一大把的。可是绝大部分的文章都只是堆 python 然后说要怎么做，也许是我的理解能力问题，在有限的几步里面，不晓得这么做的原因，会感觉很头疼。</p>
+<p>这里尝试从大的方面还原这个算法，然后给出自己的实现，不过感觉自己的实现有些问题，效果没有想象中那么好，不过也总比没有强吧。</p>
+<p>先开始吧。</p>
+<p>TextRank 是一种抽取式的文章摘要算法，其最后的输出内容，都来源于文档本身的句子。这些句子会被算法打分排序，依靠的其实是 <a href="https://google.fandom.com/wiki/PageRank">PageRank</a> 算法。</p>
+<h3>PageRank</h3>
+<p>PageRank 算法原来只是为了描述网页间的重要程度，重要程度的计算，来源于他们间的超链接关系。简单的说，被链接得越多的页面，越重要，跟重要页面有链接的页面，比其他的页面更重要。准确分值的计算，是根据下面的公式来的：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-0d6c3c27eeee373e89b02e57630df6e4_720w.jpg" alt="img" /></p>
+<p>其中，PR(Vi) 表示网页 Vi 的分值，In(Vi) 表示 PR(Vi) 包含的网页集合，Out(Vj) 表示 PR(Vi) 链接出去的网页集合，d 是链接传递系数或者说网页跳转的可能性，常用的值是 0.85。</p>
+<p>可以把这个公式的计算基础描述成一张图，网页就是节点 PR(Vi)，边就是跟 PR(Vi) 有关系的 PR(Vj) 链接集合。</p>
+<p>初始化的时候，各个 PR(Vi) 的分值是不确定的，只有边的链接描述，因此需要迭代计算，比如都给各个 PR(Vi) 初始化为 1，通过公式多轮不断的迭代计算，当各个 PR(Vi) 分值稳定的时候，就是各个网页的 rank 分值。</p>
+<h3>Word Vector</h3>
+<p>如果把上面的 PR(Vi) 当成句子，我们就可以套用 PageRank 公式计算出句子的 rank 值，并提取重要程度高的句子作为文章摘要描述。</p>
+<p>但是如何确定不同的句子有边的联系呢，算法提供了计算句子间相似程度这个标准。相似程度得分可以用比句子更小的单元 word vector 来构建计算基础。这里计算方法除了涉及到中文分词，词的集合外，还可以涉及到分词后词语的组合顺序，这也是为什么叫 word vector 了。</p>
+<p>毕竟只是计算是否有相同的分词，以及甚至考虑分词间顺序，其相似性计算的结果肯定会不同。比如有的用 <a href="https://pathmind.com/wiki/word2vec">word2vec</a>，有的用 <a href="https://nlp.stanford.edu/projects/glove/">GloVe</a>，因为他们对 word vector 的计算方法不同造成。</p>
+<p>这里当然还涉及到使用哪些范畴的语料来构建这个 word vector，这里不详细叙述了，因为网上相关资源就更多了。</p>
+<h3>最后</h3>
+<p>TextRank 算法应该就是上面这些了吧，虽然为了搞清楚查了很久，最后推一把自己堆的 <a href="https://github.com/lalawue/text_rank">text_rank</a>，基于 LuaJIT 和 <a href="https://github.com/thunlp/THULAC">THULAC</a>，随便跑起来，内存就占用了 1 个 G，搞不起搞不起。</p>
+<div class="category"><a href="CategoryStatistics.html">CategoryStatistics</a> / <a href="2020-06.html#p2">Permalink</a></div>
+
+<div class="date">20年6月6日 周六 19:29</div>
 <h2>Lua 的优点</h2>
 <p>接着上一篇 <a href="../blog/2020-06.html#p0">Lua 的缺点</a>，作为平衡，这里补充一下。</p>
 <p>作为一个普普通通，用过 ObjC、C/C++、Java、Swift、Emacs Lisp 的开发者，也是可以把 Lua 的一些好用的方面吹一下的。由于没用过 Python、Ruby、JavaScript，下面的观点未必就是 Lua 对比其他脚本语言鲜明的优点。</p>
@@ -270,31 +291,6 @@ mon_sched -k pid_json [child_name]       kill [group | child] process
 <p>受益于<a href="../blog/2020-01.html#p0">MarkdownProjectCompositor 支持 Win 7</a>，有了 generator、compositor 的准备，包括 Win 下 Git 的支持，加上我的编辑器是一个浏览器端单文件编辑器，现在可以比较顺利地在 Win 下写 Markdown，并更新博客了。</p>
 <p>老早之前，用 Emacs 做 Markdown 编辑器 + 生成器的时候，也是能够支持 Win 的，当时是用 FTP 上传到网站，改换成 cmark-gfm 后，终于又实现了一次。</p>
 <div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2020-01.html#p2">Permalink</a></div>
-
-<div class="date">20年1月24日 周五 12:22</div>
-<h2>m_net 支持 pull-style API</h2>
-<p><a href="https://github.com/lalawue/m_net">m_net</a> 之前只支持设置 callback 方式回调通知，最近的修改是开始支持 pull-style API。弃用 callback 是为了配合 LuaJIT 的使用，因为 LuaJIT 在 C 层 callback Lua，性能非常不好，<a href="https://stackoverflow.com/questions/12329128/luajit-ffi-callback-performance/12435278#12435278">LuaJIT FFI callback performence</a> 有说明，大体上有 x27 slower。</p>
-<p>LuaJIT 官网的相关介绍，也是不推荐 C 层 callback Lua，因为 callback 函数是临时分配生成的，性能不好，而推荐用 pull-style API。</p>
-<p>所谓 pull-style API，就是一个同步操作的含义，call 一次就拿一次数据这样。</p>
-<p>m_net 的修改，是将 callback 这一层，从 C 移到了 Lua 层，Lua 层从 C 层获取事件通知的多个 chann 及其 message，之后在 Lua 层面做 callback，算是避开了从 C callback Lua 这个坑。</p>
-<p>这样子修改之后，跟原来提供非 JIT 的 Lua 接口不一致了，考虑到非 JIT Lua 可选用网络通信模型挺多的，比如老一辈的 LuaSocket，比如 Luvit 之类的，索性我就去掉了非 JIT Lua 的接口支持。</p>
-<p>修改完后，做了一个简单的压测，对所有 accept 的 chann，发送一个 HTML 包裹的 hello，world，设置了 backlog 100，ab 100 个实例 5000 次试验的结果：</p>
-<pre lang="source"><code># ab -c 100 -n 5000 http://127.0.0.1:8080/empty
-
-Concurrency Level:      100
-Time taken for tests:   0.547 seconds
-Complete requests:      5000
-Failed requests:        0
-Total transferred:      530000 bytes
-HTML transferred:       65000 bytes
-Requests per second:    9134.39 [#/sec] (mean)
-Time per request:       10.948 [ms] (mean)
-Time per request:       0.109 [ms] (mean, across all concurrent requests)
-Transfer rate:          945.55 [Kbytes/sec] received
-
-</code></pre>
-<p>感觉还可以。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p1">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -332,15 +328,16 @@ Transfer rate:          945.55 [Kbytes/sec] received
         <li><a href="CategoryLinux.html">GNU/Linux</a></li>
         <li><a href="CategoryProgramming.html">Programming</a></li>
         <li><a href="CategoryLife.html">Life &#38; essay</a></li>
+        <li><a href="CategoryStatistics.html">Statistics</a></li>
         <li><a href="CategoryReading.html">Reading</a></li>
-	<li><a href="CategoryThisSite.html">This Site</a></li>
+	     <li><a href="CategoryThisSite.html">This Site</a></li>
         <li><a href="CategoryMisc.html">Misc</a></li>
       </ul>
 
       <p class="header">Links</p>
       <ul>
         <li><a href="http://blog.csdn.net/g9yuayon/">G9</a></li>
-        <li><a href="http://www.ftchinese.com/column/007000002">朝九晚五</a></li>
+        <li><a href="http://www.ruanyifeng.com/blog/">阮一峰的网络日志</a></li>
         <li><a href="http://blog.codingnow.com/">CloudWu</a></li>
         <li><a href="http://www.google.cn/maps/@22.6273208,110.1513288,15540m/data=!3m1!1e3?hl=zh-CN">Yulin City</a></li>
       </ul>
