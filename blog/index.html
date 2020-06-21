@@ -28,10 +28,13 @@
 <p>其中，PR(Vi) 表示网页 Vi 的分值，In(Vi) 表示 PR(Vi) 包含的网页集合，Out(Vj) 表示 PR(Vi) 链接出去的网页集合，d 是链接传递系数或者说网页跳转的可能性，常用的值是 0.85。</p>
 <p>可以把这个公式的计算基础描述成一张图，网页就是节点 PR(Vi)，边就是跟 PR(Vi) 有关系的 PR(Vj) 链接集合。</p>
 <p>初始化的时候，各个 PR(Vi) 的分值是不确定的，只有边的链接描述，因此需要迭代计算，比如都给各个 PR(Vi) 初始化为 1，通过公式多轮不断的迭代计算，当各个 PR(Vi) 分值稳定的时候，就是各个网页的 rank 分值。</p>
-<h3>Word Vector</h3>
+<h3>Sentence simularity</h3>
 <p>如果把上面的 PR(Vi) 当成句子，我们就可以套用 PageRank 公式计算出句子的 rank 值，并提取重要程度高的句子作为文章摘要描述。</p>
-<p>但是如何确定不同的句子有边的联系呢，算法提供了计算句子间相似程度这个标准。相似程度得分可以用比句子更小的单元 word vector 来构建计算基础。这里计算方法除了涉及到中文分词，词的集合外，还可以涉及到分词后词语的组合顺序，这也是为什么叫 word vector 了。</p>
-<p>毕竟只是计算是否有相同的分词，以及甚至考虑分词间顺序，其相似性计算的结果肯定会不同。比如有的用 <a href="https://pathmind.com/wiki/word2vec">word2vec</a>，有的用 <a href="https://nlp.stanford.edu/projects/glove/">GloVe</a>，因为他们对 word vector 的计算方法不同造成。</p>
+<p>但是如何确定不同的句子有边的联系呢，算法提供了计算句子间相似程度这个标准，使用下面的公式：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-6f2cdbb2e228a23d26ba303c9e958017_720w.jpg" alt="img" /></p>
+<p>其中 wk 是句子 Si 及 Sj 都有的公共词组，分母是词组的数量。当然，也可以用句子的余弦相似度来计算，但是词组本身就得包含向量值了，这些词组，可以称为 word vector。</p>
+<h3>Word Vector</h3>
+<p>词组在中文里涉及到分词，有不同的工具可以用来分词表来构建语料的词向量表，比如有的用 <a href="https://pathmind.com/wiki/word2vec">word2vec</a>，有的用 <a href="https://nlp.stanford.edu/projects/glove/">GloVe</a>。话说，除了上面的模型、算法之外，语料可是相当重要的基础资源呀。</p>
 <p>这里当然还涉及到使用哪些范畴的语料来构建这个 word vector，这里不详细叙述了，因为网上相关资源就更多了。</p>
 <h3>最后</h3>
 <p>TextRank 算法应该就是上面这些了吧，虽然为了搞清楚查了很久，最后推一把自己堆的 <a href="https://github.com/lalawue/text_rank">text_rank</a>，基于 LuaJIT 和 <a href="https://github.com/thunlp/THULAC">THULAC</a>，随便跑起来，内存就占用了 1 个 G，搞不起搞不起。</p>
