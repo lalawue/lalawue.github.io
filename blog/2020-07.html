@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - Archive for October, 2011</title>
+    <title>Sucha's Blog - Archive for July, 2020</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -16,30 +16,21 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for October, 2011</h1>
-<p><a id="p1"></a></p>
-<div class="date">11年10月9日 周日 12:39</div>
-<h2>证书又找到了~~~</h2>
-<p>有一个箱子没检查，囧……</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2011-10.html#p1">Permalink</a></div>
-<!-- date: 2011-10-09T12:39:21+0800 -->
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for July, 2020</h1>
 <p><a id="p0"></a></p>
-<div class="date">11年10月7日 周五 23:01</div>
-<h2>毕业证、学位证弄丢了！！！</h2>
-<p>十一假期刚结束，从玉林回来，不小心又当个电灯泡一直亮到了深圳，半夜车上也
-睡不香，刚下深圳到大牛住处想拿球鞋，突然想起来是该检查一下毕业证、学位证
-在不在才好，这一查就悲剧了，几个袋子翻遍，木有呀……</p>
-<p>怪我七月中旬在福州因为项目悲剧着，而深圳这边又要搬家，所以都是托深圳这边
-的朋友帮弄，但也因我没有想到这一步，稍微粗心一点，麻烦就大了。</p>
-<p>昨晚九点半发的车，到深圳才早上五点不到，时间还太早，小酣一下近六点半，打
-个的回住处肠粉后上楼，睡到了九点半醒了电话辉东，他还在动车上，估计是武
-广，刚从 GW 的婚礼回来，没想到他还要联系老马，而我晚上七点半再次联系他的
-时候老马还在海边没有回来，我急呀……不知道结果咋样。</p>
-<p>网上查了一下，毕业证是可以回学校补个证明，学位证的情况还不清楚，可怜四年
-花了不少钱辛辛苦苦下来，留下来最重要的几张纸却让我不小心弄丢了。</p>
-<p>以后学历证明、工作调动等等都要用到呀，如何是好。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2011-10.html#p0">Permalink</a></div>
-<!-- date: 2011-10-07T23:01:23+0800 -->
+<div class="date">20年7月9日 周四 15:44</div>
+<h2>OpenVPN 配置记录</h2>
+<p>其实考虑过几个比如 ShadowSocks 之类的，但是很不稳定，考虑最后也许还是用 VPN 来得稳妥一些，折腾了半天，终于跑通，先这里随便记录一下吧。</p>
+<p>大概分两个部分，一个是服务端的配置，一个是客户端的配置。</p>
+<ul>
+<li>Ubuntu 下先 apt-get install openvpn</li>
+<li>然后<a href="https://article.itxueyuan.com/pMy1b">生成服务端、客户端的密钥</a>，比如 ca、server key、client key、dh</li>
+<li>接着<a href="http://blog.joylau.cn/2020/05/28/OpenVPN-Config/">服务端软件配置 server.config</a>，其实主要是上述密钥的配置，以及日志等文件位置，以及刚开始试运行时设置日志打印的密度</li>
+<li>还有<a href="https://wiki.deepin.org/wiki/VPN%E6%9C%8D%E5%8A%A1">服务端系统配置</a>， 比如 iptables 配置转发</li>
+<li>最后<a href="http://blog.joylau.cn/2020/05/28/OpenVPN-Config/">客户端软件配置</a>，大体上只是配置服务端 ip 地址，密钥就可以了</li>
+</ul>
+<p>客户端我在 Mac 下用的是 TunnelBlick，速度其实一般，还没长时间使用，后续先观察一阵。</p>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
