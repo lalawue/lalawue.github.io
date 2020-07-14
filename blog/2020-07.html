@@ -17,6 +17,15 @@
     <div id="body">
       <div id="text">
 	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for July, 2020</h1>
+<p><a id="p1"></a></p>
+<div class="date">20年7月14日 周四 11:34</div>
+<h2>GitHub 定义 Repo 语言</h2>
+<p>之前写的 <a href="https://github.com/lalawue/LWTheme">LWTheme</a> 兼顾 Swift/ObjC 语言，GitHub 改版后，在 repo 里面没有语言百分比的显示了。</p>
+<p>搜了一下，可以在 branch 里面定义 .gitattributes 文件，里面这样写</p>
+<pre lang="source"><code>*.swift linguist-language=Swift
+</code></pre>
+<p>自测了一把，网站只会读取 default branch 里面的 .gitattributes，切换其他 branch 没有用。</p>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p1">Permalink</a></div>
 <p><a id="p0"></a></p>
 <div class="date">20年7月9日 周四 15:44</div>
 <h2>OpenVPN 配置记录</h2>
