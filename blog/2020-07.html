@@ -23,8 +23,7 @@
 <p>如果自己有一些信息需要通过点击状态栏图标后获得，或者通过点击状态栏图标启动、关闭的，都可以使用这个工具 <a href="https://getbitbar.com">BitBar</a> 来操作。</p>
 <p>安装好后，只需要定义 plugin 目录，然后在 plugin 目录下加入功能脚本就可以了。脚本其实只关注输出的文本，操作部分其实是通过特殊命令来定义的。</p>
 <p>比如例子中的 refresh.sh，精简后是下面这样：</p>
-<pre lang="source&lt;a"><code>
-if [[ &quot;$1&quot; = &quot;restart&quot; ]]; then
+<pre lang="source"><code>if [[ &quot;$1&quot; = &quot;restart&quot; ]]; then
 osascript &lt;&lt;EOD
 	tell application &quot;BitBar&quot; to quit
 	delay 1
