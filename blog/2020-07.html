@@ -17,8 +17,35 @@
     <div id="body">
       <div id="text">
 	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for July, 2020</h1>
+<p><a id="p2"></a></p>
+<div class="date">20年7月15日 周三 22:38</div>
+<h2>MacOS 下使用 BitBar 在状态栏自定义信息</h2>
+<p>如果自己有一些信息需要通过点击状态栏图标后获得，或者通过点击状态栏图标启动、关闭的，都可以使用这个工具 <a href="https://getbitbar.com">BitBar</a> 来操作。</p>
+<p>安装好后，只需要定义 plugin 目录，然后在 plugin 目录下加入功能脚本就可以了。脚本其实只关注输出的文本，操作部分其实是通过特殊命令来定义的。</p>
+<p>比如例子中的 refresh.sh，精简后是下面这样：</p>
+<pre lang="source&lt;a"><code>
+if [[ &quot;$1&quot; = &quot;restart&quot; ]]; then
+osascript &lt;&lt;EOD
+	tell application &quot;BitBar&quot; to quit
+	delay 1
+	tell application &quot;BitBar&quot; to activate
+EOD
+fi
+
+echo &quot;↻&quot;
+echo &quot;---&quot;
+echo &quot;Refresh Me| terminal=false refresh=true&quot;
+echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
+</code></pre>
+<p>会在状态栏显示一个圆圈刷新，点击后下拉菜单会有 &quot;Refresh Me&quot; 以及 &quot;Restart Bitbar&quot;。</p>
+<ul>
+<li>Refresh Me 是第一项，'|' 后定义功能动作，不新开一个 shell，刷新菜单</li>
+<li>Restart Bitbar 是第二项，bash 定义使用到的脚本或者程序，‘$0' 就是 Bitbar 自己了，参数是 &quot;restart&quot;，其实是关闭然后再重启这个 refresh.sh，简简单单的 bash shell 语法了</li>
+</ul>
+<p>可惜的是我虽然弄懂了一点点如何编写这个 Bitbar 的 plugin 命令，但是通过 Bitbar 控制的程序最后没有符合我的预期，:-(</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2020-07.html#p2">Permalink</a></div>
 <p><a id="p1"></a></p>
-<div class="date">20年7月14日 周四 11:34</div>
+<div class="date">20年7月14日 周二 11:34</div>
 <h2>GitHub 定义 Repo 语言</h2>
 <p>之前写的 <a href="https://github.com/lalawue/LWTheme">LWTheme</a> 兼顾 Swift/ObjC 语言，GitHub 改版后，在 repo 里面没有语言百分比的显示了。</p>
 <p>搜了一下，可以在 branch 里面定义 .gitattributes 文件，里面这样写</p>
