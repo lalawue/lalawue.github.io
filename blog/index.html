@@ -16,7 +16,16 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年7月15日 周三 22:38</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年7月16日 周四 12:04</div>
+<h2>LuaRocks with LuaJIT</h2>
+<p>标准版的 LuaRocks 只有原版的 Lua 可以配套使用，torch 为了让 LuaRocks 能够支持 LuaJIT，修改了一个版本，其实只是修改了编译过程，毕竟 LuaJIT 完整支持 Lua 5.1 的语法。</p>
+<p>torch 的版本支持 LuaJIT 的各个版本，但最新的只到 2.1 beta2。早上我将 LuaJIT 的支持版本升级到了 2.1 beta3，地址是 <a href="https://github.com/lalawue/luajit-rocks">luajit-rocks</a>，然后还发了一个 pull request。但是这个项目有好几年没有更新了，不晓得会不会有 maintainer 会注意到。</p>
+<p>torch 的 luajit 其实还有修改 2 个地方，一个是 string 的 hash 方案，一个加入了交互用的 readline。交互部分明显有改善，而 hash 部分不晓得为什么要这么改，应该也还好吧，反正为了 pull request 这里我是不敢动的。hash 用的是 <a href="https://github.com/amadvance/tommyds">tommy 的方案</a>。</p>
+<p>在 Linux 中编译了一把，顺利通过，后面再看需要安装吧。在自己的 MacBook Pro 上安装好后，install 了 busted 和 moonscript。不得不说，其实是为了试一下 moonscript，硬是找到了 LuaRocks 的 LuaJIT based 方案。</p>
+<p>先用一阵子再说吧。</p>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p3">Permalink</a></div>
+
+<div class="date">20年7月15日 周三 22:38</div>
 <h2>MacOS 下使用 BitBar 在状态栏自定义信息</h2>
 <p>如果自己有一些信息需要通过点击状态栏图标后获得，或者通过点击状态栏图标启动、关闭的，都可以使用这个工具 <a href="https://getbitbar.com">BitBar</a> 来操作。</p>
 <p>安装好后，只需要定义 plugin 目录，然后在 plugin 目录下加入功能脚本就可以了。脚本其实只关注输出的文本，操作部分其实是通过特殊命令来定义的。</p>
@@ -251,33 +260,6 @@ mon_sched -k pid_json [child_name]       kill [group | child] process
 <p>我自测的结果，即便 mon_sched 在当前目录运行配置文件，restart 脚本删除并重新建立这个目录，mon_sched 重新拉起服务的过程中，仍能定位到这个目录，前提当然是目录名称未变。感觉，在文件系统当前目录这一层，也是没有变化的。</p>
 <p>有了这样的加持，方便多了。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-05.html#p0">Permalink</a></div>
-
-<div class="date">20年4月18日 周六 23:48</div>
-<h2>m_net 支持 pull style API 以及 timer</h2>
-<p>意外的是 3 月份居然没写任何东西，那 4 月份就吹吹水吧。</p>
-<h3>pull style API</h3>
-<p>先说 <a href="https://github.com/lalawue/m_net">m_net</a> 为了在跟 LuaJIT 配合使用，改成了 pull style API，因为道听途说 stackoverflow 上的文章 <a href="https://stackoverflow.com/questions/12329128/luajit-ffi-callback-performance">LuaJIT FFI callback performance
-</a>, 从 C 到 LuaJIT 的 callback 性能有很大的损失，大概会慢 27x 倍。</p>
-<p>有了这个指标，修改为 pull style API 也不是难事，只是还想着同时支持 callback style API 来的。因为 pull style 在每个 mnet_poll() 循环，只能有一个事件抛出，但实际上就 socket 的事件来说，是可以多个的。</p>
-<p>比如 chann 有数据读，但同时可写，这两个状态是可以同时存在的。那意味着这次 poll 中可以同时 callback 这两个事件。但在 pull style API 里面无法做到，这个是 API 的限制，但为了在 LuaJIT 中有更好的表现，这个特性只能放弃了。</p>
-<h3>timer</h3>
-<p>记得之前多次提过 timer，比如</p>
-<ul>
-<li><a href="../blog/2018-06.html#p1">Timer、FastLZ &amp; Erasure Codec</a></li>
-<li><a href="../blog/2017-09.html#p0">有关 m_net 跨平台的小型网络库</a></li>
-</ul>
-<p>当然是更早时候看到了 rxi 的 <a href="https://github.com/rxi/dyad">dyad</a>，念念不忘。早先对 timer 需求没有那么大，甚至因为不是简单的 timer 需求，我将 timer 做到了更底层，将时间单位剥离，仅仅认为是一个数值关系、排序的库，虽然名字是叫 timer。</p>
-<p>但一方面，不是所有的 timer 需求都那么复杂，另外，timer 单独出来有时候也很不方便，所以最后，同时因为有了之前实现某种 timer 的经验，我在 m_net 里面内置了一个，当然做了一些限制。</p>
-<ul>
-<li>一个 chann 只能带一个 repeat 类型的 timer，单位是 micro seconds</li>
-<li>timer 事件的优先级最高，这个是因为 pull style API 的限制</li>
-</ul>
-<p>限制 timer 跟 chann 相关，是因为最终要将 timer 的回调做成 chann 的事件回调，或者 pull style API 里面的一个事件源，限制一个的原因也类似，不好在回调里面表示多个，没有那么复杂的需求需要多个，如果有需要，单靠这个 API 其实也是能实现的，比如分割成更小的单位。</p>
-<p>第二个限制，timer 的优先级最高，是因为 mnet_poll() 拉取事件的时候，pull style API 只能有一个事件，这里其实不希望 timer 被调用得很频繁，但如果是被调用，一定不会被其他事件吃掉。</p>
-<p>timer 具体的实现，其实是 skiplist，之前短暂尝试过 array 以及 qsort 配合，但是觉得内存使用上效率不大好，每次 timer fire 时间更新后，都需要做一次排序，array + qsort 的消耗，相比 skiplist 要大。</p>
-<p>github 上拷贝了其他人 MIT LICENSE 的 skiplist，实现也只比 array + qsort 多 60 行而已，何乐而不为呢。</p>
-<p>有了 skiplist 的加持，一个 timer 的更新，消耗只有 O (logn)，感觉还可以了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-04.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
