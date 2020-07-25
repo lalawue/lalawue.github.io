@@ -16,7 +16,38 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年7月16日 周四 12:04</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年7月25日 周四 11:22</div>
+<h2>HTML 的 Content-Type: multipart/form-data</h2>
+<p>研究了一下，Mac 下轮着 Safari、Chrome、FireFox 前后台调通后，这里大概记录一下吧。</p>
+<h3>前端页面 HTML</h3>
+<p>在前端 HTML 的写法是，form 里面指定 enctype 为 &quot;multipart/form-data&quot;，如下</p>
+<pre lang="source"><code>&lt;form class=&quot;cell&quot; action=&quot;&quot; method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    &lt;input type=&quot;file&quot; name=&quot;myfile&quot; /&gt;
+    &lt;input type=&quot;submit&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>后端解析</h3>
+<p>假设在浏览器里面点击 &quot;file&quot; 按钮，选择发送的是一个 PDF 文件，协议上收到是下面这样的，... 是省略：</p>
+<pre lang="source"><code>POST /path HTTP/1.1
+...
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary5WeF4Lu8GyQKEIE5
+Accept-Language: zh-cn
+
+------WebKitFormBoundary5WeF4Lu8GyQKEIE5
+Content-Disposition: form-data; name=&quot;myfile&quot;; filename=&quot;noname.pdf&quot;
+Content-Type: application/pdf
+
+%PDF-1.3
+...
+%%EOF
+
+------WebKitFormBoundary5WeF4Lu8GyQKEIE5--
+</code></pre>
+<p>我自己没有试过多文件，但是从网上资料看，多文件跟单文件不同的是，前面一个 boundary 结束符后，再来一个 boundary 的 Disposition 描述分割，开启下一个数据块的传输。</p>
+<p>代码部分就不贴了，感觉有点挫，考虑了多文件分割，以及需要传递给用户文件名、类型等信息，最后是使用了阶段状态的描述，毕竟后端收到的数据是不定长的输入。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-07.html#p4">Permalink</a></div>
+
+<div class="date">20年7月16日 周四 12:04</div>
 <h2>LuaRocks with LuaJIT</h2>
 <p>标准版的 LuaRocks 只有原版的 Lua 可以配套使用，torch 为了让 LuaRocks 能够支持 LuaJIT，修改了一个版本，其实只是修改了编译过程，毕竟 LuaJIT 完整支持 Lua 5.1 的语法。</p>
 <p>torch 的版本支持 LuaJIT 的各个版本，但最新的只到 2.1 beta2。早上我将 LuaJIT 的支持版本升级到了 2.1 beta3，地址是 <a href="https://github.com/lalawue/luajit-rocks">luajit-rocks</a>，然后还发了一个 pull request。但是这个项目有好几年没有更新了，不晓得会不会有 maintainer 会注意到。</p>
@@ -242,24 +273,6 @@ end
 <p>为了适应这个变化，之前主站、blog 目录的好些自动生成文件的功能都得做调整，毕竟之前只有一层以映射，现在多了一层映射，要配置过来，还好，2 个小时就搞定了。</p>
 <p>话说，着应该是很普遍的功能，为啥之前没有想到呢。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-05.html#p1">Permalink</a></div>
-
-<div class="date">20年5月17日 周日 11:12</div>
-<h2>mon_sched 支持 kill child process</h2>
-<p>mon_shced 升级到了 1.3.4，支持 kill 掉 group process 中的某个 child process，同时也支持单独输出某个 child process 的 pid 到指定目录下。</p>
-<p>先列一下功能：</p>
-<pre lang="source"><code>Usage:
-mon_sched -h                             show help
-mon_sched -v                             show version
-mon_sched -r sched_json                  run group process from config
-mon_sched -s pid_json                    show group and child status
-mon_sched -k pid_json [child_name]       kill [group | child] process
-</code></pre>
-<p>第二个功能先不表，也不知道为啥头脑发热做了第二个功能，说一下第一个功能吧。</p>
-<p>之前 mon_sched 只支持 supervision，后来加了 -k 选项，可以关闭管理的整个 process group，这里只是方便了一点，不用自己再使用 kill 指令安排了。主要的应用场景，是为了在远程控制时，将固定的配置文件名，作为 mon_sched 的参数，让整个 process group 下线。</p>
-<p>加入第一个功能 kill child process 后，结合本来每个 child process 可以配置其 restart 脚本内容这个功能，可以做到让服务更新，之后再重启。由于 mon_sched 没有什么依赖，因此这样的重启可以做到 child process 二进制依赖的切割。</p>
-<p>我自测的结果，即便 mon_sched 在当前目录运行配置文件，restart 脚本删除并重新建立这个目录，mon_sched 重新拉起服务的过程中，仍能定位到这个目录，前提当然是目录名称未变。感觉，在文件系统当前目录这一层，也是没有变化的。</p>
-<p>有了这样的加持，方便多了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-05.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
