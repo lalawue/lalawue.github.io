@@ -75,7 +75,7 @@ Content-Type: application/pdf
 <p>我自己没有试过多文件，但是从网上资料看，多文件跟单文件不同的是，前面一个 boundary 结束符后，再来一个 boundary 的 Disposition 描述分割，开启下一个数据块的传输。</p>
 <p>代码部分就不贴了，感觉有点挫，考虑了多文件分割，以及需要传递给用户文件名、类型等信息，最后是使用了阶段状态的描述，毕竟后端收到的数据是不定长的输入。</p>
 <p>--</p>
-<p>最后还是整了一下代码，在 <a href="https://github.com/lalawue/multipart-formdata-parser">multipart-formdata-parser</a>.</p>
+<p>最后还是整了一下代码，加入了 builder，在 <a href="https://github.com/lalawue/multipart-formdata-lib">multipart-formdata-lib</a>.</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-07.html#p4">Permalink</a></div>
 
 <div class="date">20年7月16日 周四 12:04</div>
