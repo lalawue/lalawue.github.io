@@ -22,7 +22,7 @@
 <p>先说优点，上面两个都是使用 table 来描述先后顺序、大小关系的，缺点是，当有插入、删除发生时，时间效率太慢了。其中 fifo 是使用 table 的 array 实现的，需要在删除元素后，对其他的元素做拷贝迁移，避免空位；而 bianryheap，也是使用使用 table 的 array，当元素位置变动时，采用了冒泡算法，对元素重新排位。</p>
 <p>空间效率是保住了，但就时间效率来说，太不专业了，O(N^2) 的实现，数据量稍微多一点点，时间不能看。</p>
 <p>其实 fifo 算是一种双链表，只是插入是在头尾，算是双链表的特例。双链表下，非头尾的删除发生，时间效率是 O(1) 级别的。其实可以用 table 来描述链表关系，缺点是空间消耗大，为了描述两个相邻元素间的先后顺序，就得用一个 table 实例来做。</p>
-<p>我用 Lua 内建的 table 实做了一把，时间效率是很高效的，空间的话，插入 number，1000W 级别的插入，内存大概 6G。</p>
+<p>我用 Lua 内建的 table 实做了一把，时间效率是很高效的，空间的话，插入 number，10,000,000 级别的插入，内存大概 6G。</p>
 <pre lang="source"><code>-- performance
 push 1000,000, cost 0.393088
 pop  1000,000, cost 0.092984
@@ -63,7 +63,7 @@ void* calloc(size_t count, size_t size);
 void free(void *ptr);
 ]]
 </code></pre>
-<p>以上使用 cdata 描述元素关系已有实做，地址 <a href="https://github.com/lalawue/list.lua">ffi_list.lua</a> 及 <a href="https://github.com/lalawue/ffi_avl.lua">ffi_avl.lua</a>。</p>
+<p>以上使用 cdata 描述元素关系时间效率跟纯 table 时间效率一样，空间效率的话，第一个例子下，内存占用不到 4G，地址 <a href="https://github.com/lalawue/list.lua">ffi_list.lua</a> 及 <a href="https://github.com/lalawue/ffi_avl.lua">ffi_avl.lua</a>。</p>
 <h3>一些问题</h3>
 <p>LuaJIT 下使用 cdata 描述节点关系，遇到了一些问题：</p>
 <ul>
