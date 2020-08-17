@@ -16,7 +16,64 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年8月02日 周日 20:50</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年8月17日 周一 23:32</div>
+<h2>LuaJIT 下的双链表及 AVL 树</h2>
+<p>Lua 描述结构数据方面，只有一种内建结构，就是 table，table 既是 array，又是 hashmap，算是简洁高效的实现，但我们需要一种动态表示元素先后、大小关系的数据结构时，内建的 table 就不合适了，比如常见的 <a href="https://github.com/daurnimator/fifo.lua">fifo</a> 及 <a href="https://github.com/Tieske/binaryheap.lua">binaryheap</a>。</p>
+<p>先说优点，上面两个都是使用 table 来描述先后顺序、大小关系的，缺点是，当有插入、删除发生时，时间效率太慢了。其中 fifo 是使用 table 的 array 实现的，需要在删除元素后，对其他的元素做拷贝迁移，避免空位；而 bianryheap，也是使用使用 table 的 array，当元素位置变动时，采用了冒泡算法，对元素重新排位。</p>
+<p>空间效率是保住了，但就时间效率来说，太不专业了，O(N^2) 的实现，数据量稍微多一点点，时间不能看。</p>
+<p>其实 fifo 算是一种双链表，只是插入是在头尾，算是双链表的特例。双链表下，非头尾的删除发生，时间效率是 O(1) 级别的。其实可以用 table 来描述链表关系，缺点是空间消耗大，为了描述两个相邻元素间的先后顺序，就得用一个 table 实例来做。</p>
+<p>我用 Lua 内建的 table 实做了一把，时间效率是很高效的，空间的话，插入 number，1000W 级别的插入，内存大概 6G。</p>
+<pre lang="source"><code>-- performance
+push 1000,000, cost 0.393088
+pop  1000,000, cost 0.092984
+</code></pre>
+<h3>LuaJIT 下 cdata 的妙用</h3>
+<p>在 C 的双链表实现中，需要将链表节点跟数据结构绑定起来，要么是以链表节点为主，链表节点指向数据结构，或者像 Linux Kernel 里面规范化的双链表实现，链表节点实例，放在数据结构中，通过偏移定位数据起点。</p>
+<p>但是在 Lua 里面做不到这样，不得不使用 value（值）到 node（节点），以及 node 到 value 的两个 table 来做关系映射，再加上相邻两个 value 的顺序关系使用一个 node（table）来实现，也是空间消耗大的原因。</p>
+<p>下面说一下 LuaJIT 的特殊实现。</p>
+<p>LuaJIT 因为有 FFI，可以创建结构化的 cdata 来描述相邻 node 之间的关系，而不需要使用内建的 table，使得可以花费更少的空间代价，比如下面这样来描述双链表的节点关系：</p>
+<pre lang="source"><code>ffi.cdef [[
+struct _cnode {
+    struct _cnode *prev;
+    struct _cnode *next;
+    float key;
+};
+struct _chead {
+    struct _cnode *head;
+    struct _cnode *tail;
+};
+void* calloc(size_t count, size_t size);
+void free(void *ptr);
+]]
+</code></pre>
+<p>特别注明 cdata 是 calloc 出来的，不在 gc 管理范围，因为 C 下面的指针，需要保证指向固定的内存地址。其他跟纯 table 实现的双链表一样，需要两个 table 来维护 value 跟 node之间的映射关系，如上面 struct _cnode 下的 key，其实是用于 node 到 value 的 table 的映射 key，原因下面再说。</p>
+<p>同样的 AVL 树也可以使用 cdata 来维护节点间的大小关系：</p>
+<pre lang="source"><code>ffi.cdef [[
+struct _avl_node {
+    struct _avl_node *left;
+    struct _avl_node *right;
+    struct _avl_node *parent;
+    int height;
+    float key;
+};
+struct _avl_root {
+    struct _avl_node *node;
+};
+void* calloc(size_t count, size_t size);
+void free(void *ptr);
+]]
+</code></pre>
+<p>以上使用 cdata 描述元素关系已有实做，地址 <a href="https://github.com/lalawue/list.lua">ffi_list.lua</a> 及 <a href="https://github.com/lalawue/ffi_avl.lua">ffi_avl.lua</a>。</p>
+<h3>一些问题</h3>
+<p>LuaJIT 下使用 cdata 描述节点关系，遇到了一些问题：</p>
+<ul>
+<li>cdata 做 key 不稳定，string.format(&quot;%p&quot;) 打印出来看 cdata 的值，经过变量传递后，有变化，做 key 的话，导致 node 到 value 的 mapping 找不到 value，所以 cdata 单独带了一个 float 类型的 key</li>
+<li>我设想使用 math.random() 来产生 0 ~ 1 之间的小数做 key，但是在 ffi_list.lua 中，会导致其他的问题，不得不使用了固定小数增长的做法来实现，原因还不清楚，不过我这边自测用的数据范围是 10,000,000 及以上才会出现</li>
+</ul>
+<p>上面的问题，估计还是要设计一些测试用例来定位一下才好，现在先这样吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-08.html#p1">Permalink</a></div>
+
+<div class="date">20年8月02日 周日 20:50</div>
 <h2>做了一个 web 框架：cincau</h2>
 <p>离职后在家呆了一个月，前面两周在休息，后面两周开始忙起来，想着将手头的数据搭一个可视化的网站出来，可以学习一下 web 前端的库之类的，但是呢，想找一个能 sqlite 和 nginx 的 web framework，找到一个感觉还可以的 <a href="https://github.com/sumory/lor">Lor</a>，但是呢，不支持 sqlite，感觉不算是一个 minimalist 的 web framework，就想着不如自己搭建一个吧。</p>
 <p>可是如果搭建，顺便带上自己的 mnet 是肯定的了，当然 nginx 也是要支持的。于是参考了 lor 的不少东西，但更多的其实是自己摸索的，因为时间也比较充足，是先考虑了架构，才开始动手的。</p>
@@ -287,19 +344,6 @@ end
 <p>--</p>
 <p>话说，喝了不少酒，吐了一下，舒服多了，:)</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-06.html#p0">Permalink</a></div>
-
-<div class="date">20年5月23日 周六 08:56</div>
-<h2>修改 m_net 在 Windows 下使用 ewpoll 作为底层事件通知</h2>
-<p>之前 <a href="https://github.com/lalawue/m_net">m_net</a> 在 Windows 下是使用 select 作为 socket 事件检测接口，效率差是一方面，主要是其他更主要的服务端平台，比如 Linux/FreeBSD，以及开发常用的 MacOS，是另外一套相近的 API。</p>
-<p>比如不管是 epoll 或者 kqueue，通过接口，可以返回一个当前时间片段内有事件发生的 socket 列表，以及 socket 对应的 ptr，用来绑定这个 socket 对应的内部结构。添加、删除 socket 事件列表的方法也相近。</p>
-<p>然而 Windows 这边，因为用了线性的 select，内部数据结构映射方面，每次监听前，都得添加事件响应参数，又得单独处理，麻烦了很多。</p>
-<p>后面介绍的这个 <a href="https://github.com/piscisaureus/wepoll">wepoll</a>，是在 Windows 下实现了 epoll 的接口，对那些志在跨平台的网络库来说，简单点只需要面对 epoll、kqueue 的区别就好了，而这两者很相近啊。</p>
-<p>所以稍微修改了一下，m_net 就支持上了，另外还修复了一个大 bug，epoll_wait 接口的参数是 milliseconds 的，而 kqueue 的接口参数是 microseconds 的，fix 了一下。</p>
-<p>然后跑了 test_reconnect、test_rwdata、test_timer 几个端对端的测试程序，完美应用。当然回头又跑了一遍 Linux、FreeBSD、MacOS 的下的端对端测试。</p>
-<p>话说 <a href="https://github.com/piscisaureus/wepoll">wepoll</a> 在 Windows 下使用的也是 IOCP 对应的接口，不过没有使用到多线程，而是使用了 SetFileCompletionNotificationModes 函数取消端口操作完成后的异步通知，然后使用 NtDeviceIoControlFile 来获取端口的完成状态，这样就将异步事件转成同步的了。</p>
-<p>另外一个部分，是将 epoll 相关接口的数据结构映射到 Windows 相关数据结构里面，大概就是这样。</p>
-<p>很想说 NtDeviceIoControlFile 在 bing 上面都搜不到什么中文信息，蛋疼。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-05.html#p3">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
