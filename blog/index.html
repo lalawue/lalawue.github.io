@@ -70,6 +70,10 @@ void free(void *ptr);
 <li>我设想使用 math.random() 来产生 0 ~ 1 之间的小数做 key，但是在 ffi_list.lua 中，会导致其他的问题，不得不使用了固定小数增长的做法来实现，原因还不清楚，不过我这边自测用的数据范围是 10,000,000 及以上才会出现</li>
 </ul>
 <p>上面的问题，估计还是要设计一些测试用例来定位一下才好，现在先这样吧。</p>
+<h3>后记</h3>
+<p>19 号解决了上面遇到的 2 个问题，原因在于 ffi.cdef 使用的 key 宽度是 float，但是 LuaJIT number 的宽度是 double 导致的，我修改 ffi.cdef node 里面的 key 为 double 类型，问题不再出现。</p>
+<p>不过我也有疑问，为何 AVL 这边同样的实现，没有暴露出来问题呢。</p>
+<p>反正现在修改为多轮循环 test 验证了，验证了几千遍，每次是 1000x1000 次的 push、pop，都是正常的了。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-08.html#p1">Permalink</a></div>
 
 <div class="date">20年8月02日 周日 20:50</div>
