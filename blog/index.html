@@ -16,7 +16,19 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年9月19日 周六 23:57</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年9月26日 周六 23:07</div>
+<h2>ffi_bitcask.lua</h2>
+<p>写了一个 bitcask 模型的 key/value store <a href="https://github.com/lalawue/ffi_bitcask.lua">ffi_bitcask.lua</a>。利用了 LuaJIT cdata memory layout 来写每一个 record 前面 timestamp、crc、fid、ksize、vsize 部分，然后接着写入 key 及 value，读取的时候，先读取每个 record 的前面固定部分，得到 kszie 及 vsize 后，再读取 key 及 value。</p>
+<p>ffi_bitcask 的模型，db 目录下有不同的 bucket 目录，bucket 里面可以有相同的 key，bucket 类似于 namespace。每一个 bucket 只有一个活跃文件，所有的 SET/GET/DELETE 操作都是记录，添加到活跃文件末尾。当活跃文件超出阈值后，重新开启一个新的活跃文件，旧的文件是只读的。</p>
+<p>我偷了一个懒，所有的活跃文件写入操作，实际上都有重新打开并添加数据，没有像网上介绍的 bitcask 模型一样，一直保留一个打开的文件指针，也许待后面写入速度影响之后，再做这个修改吧，目前自己使用，吞吐量还没到这个份上。</p>
+<p>由于删除操作也是记录，原有的记录空间重复占用，只有在下次整理文件时才能回收。我觉得这里自己的算法不好，总共读取了两遍。因为先要扫描出来，哪些是需要删除的条目，并按照文件 id 分类，之后再做一次读取，过滤掉删除的条目，将其他不受影响的条目拷贝到一个新的活跃文件中。</p>
+<p>如果有不少删除操作，而许久没有做回收操作，文件目录占用空间比实际使用要多上许多。我自己还加上了将回收后的文件 id 重新利用的逻辑，文件 id 绝对值的增长不会因此影响。</p>
+<p>LuaJIT 的 FFI 定义 cdata，内存 layout 跟 C 是一样的，缺点就是 uint64_t 跟 uint32_t 混用的话，是按照 uint64_t 对齐的，另外 Lua 没有 unsigned number 的说法，如果需要用到这个，需要用到 bit.tobit 函数来做比较了。</p>
+<p>目前 ffi_bitcask 还缺少的是 hint 文件，现在还不影响，后面可以考虑加上去。还有就是回收操作，其实可以每次只扫描新产生的文件就可以了，因为删除操作只会在之前扫面过后，新生成的数据文件中产生，不过这里需要记录哪些是新生成的文件，如果文件 id 只朝一个方向增加的话是挺好办的，但像我这样重复利用已经回收后的文件 id 的话，就不好处理了。</p>
+<p>后面再看看吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-09.html#p1">Permalink</a></div>
+
+<div class="date">20年9月19日 周六 23:57</div>
 <h2>Object Storage 和 Shell 环境变量</h2>
 <p>找了几个 Object Storage 的方案，理想中的可以是去中心化的方案，然而找不到，找到的要么是 IPFS，要么是链圈的，太高大上了。退而求其次，分布式的的方案，就很多了，各大云商家的对象存储，其实蛮便宜的，还有基于 minio 的，基于 Redis Master-Slave 的方案，及其变种的也算一类，还有豆瓣的 <a href="https://github.com/douban/gobeansdb">gobeandb</a>，以及 <a href="https://prologic.github.io/bitraft/">bitraft</a> 和 <a href="https://github.com/zerotier/lf">lf</a>，一个去中心化的 Key/Value Store.</p>
 <p>因为有云服务器了，单独又开对象存储不大值得，因为需要存的东西不多，只是希望至少是分布式的，多个保全而已；minio 的方案，在分布式使用到时候，需要占用单独的磁盘，这个只好放弃了；Redis 及其变种 SSDB 之类的，底层 levelDB，或者占用内存多的放弃了，因为读写的频率很低，而且需要跟其他程序一起占用小排量的云服务器；gobeandb 犹犹豫豫很想用，但需要单独使用一个 goproxy 来分流感觉不大值得，接口是 memcached 的，手头也没有立即能用的解析器；bitraft 试用了一下，感觉最为接近，接口是 Redis 的，但是，无法基于不同数据中心做同步，我的两台云服务器位于不同的服务商它居然无法连接，就不说他默认 value 只有 64k 了；lf 一样没有趁手的接口，而且感觉不好配置。</p>
@@ -253,79 +265,6 @@ echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
 <h3>最后</h3>
 <p>TextRank 算法应该就是上面这些了吧，虽然为了搞清楚查了很久，最后推一把自己堆的 <a href="https://github.com/lalawue/text_rank">text_rank</a>，基于 LuaJIT 和 <a href="https://github.com/thunlp/THULAC">THULAC</a>，随便跑起来，内存就占用了 1 个 G，搞不起搞不起。</p>
 <div class="category"><a href="CategoryStatistics.html">CategoryStatistics</a> / <a href="2020-06.html#p2">Permalink</a></div>
-
-<div class="date">20年6月6日 周六 19:29</div>
-<h2>Lua 的优点</h2>
-<p>接着上一篇 <a href="../blog/2020-06.html#p0">Lua 的缺点</a>，作为平衡，这里补充一下。</p>
-<p>作为一个普普通通，用过 ObjC、C/C++、Java、Swift、Emacs Lisp 的开发者，也是可以把 Lua 的一些好用的方面吹一下的。由于没用过 Python、Ruby、JavaScript，下面的观点未必就是 Lua 对比其他脚本语言鲜明的优点。</p>
-<p>其实呢，我是将 Lua 跟上面所列的编译型、静态类型的语言做对比的，:)</p>
-<h3>Lua 是简单的</h3>
-<p>Lua 是命令式的语言，感觉以 C/C++、Java 起步的同学，学习 Lua 完全没有难度，Lua 语言没有几个关键字，控制结构甚至没有 continue。</p>
-<p>而容器结构，只有一个 table，融合了 Array 以及 HashMap，当然，table 的作用不止于此，后面有更进一步的描述。</p>
-<h3>Lua 很小易于移植</h3>
-<p>Lua 语言只有核心部分，VM 代码只有几万行，是古老的 C89 语法，而且运行期的 VM 内存占用也不多，大概几百 kb 这样。</p>
-<p>这使得 Lua 的编译安装是毫无难度的，支持 C89 的 C 编译器、硬件遍地都是。较少的资源消耗，意味着，在如今的操作系统上，可以大大方方的将几十、几百个 Lua VM 跑起来。</p>
-<p>Lua 的核心还可以配置，将 Number 配置为 32bit 的 Integer，在低端没有浮点数的平台上，也能使用。好早之前，我就在 Rockchip 的的平台上应用上了 Lua，没有浮点数，Number 设置为了 32bit 的 Integer，用得好好的。</p>
-<p>所以，不用担心写的纯 Lua 代码是不是在某些平台跑不起来，不存在的。</p>
-<h3>Lua 很稳定很快</h3>
-<p>Lua 生于 1993 年 7 月 28 日，语言核心早就稳定下来了，工业界早已采用多年。</p>
-<p>LuaJIT 很快很快，可以看一下 LuaJIT-2.0 对比 Lua-5.1.5 版本的效率对比 <a href="http://luajit.org/performance_x86.html">Performance: x86/x64</a>。如今 Redis、OpenResty 标配 LuaJIT 作为内建的脚本支持。</p>
-<h3>Lua 是动态类型的</h3>
-<p>写应用程序的同学都了解，声明一个变量再去声明类型是有多重复，所以最新的 C++、Swift 对于类型都是可以自动推断的了。</p>
-<p>我是觉得对于模块化设计来说，类型只在模块输入、输出的时候才有作用，比如对于输入的数据，我要知道变量的大小和范围，这也是模块对于这个输入参数声明的支持范围。</p>
-<p>但如果真的需要程序关心内存布局的时候，每一个变量需要多大的内存空间，才值得去斟酌，而类型，其实就是内存空间占用的映射。模块内部，既然都是可信的环境，用足够大的内存区域去持有这个变量就行了，这个不影响，反而少了类似 C 这样因为类型转换而截断，导致期望的判断没有成功，引起模块内部错误，不得不抛出异常或者出错，其实毫无必要。</p>
-<p>从另外一方面说，如果有了静态类型，可以控制任何一段程序在变量传递、比较时候的范围，但是当我们需要更高程度的抽象的时候，就又涉及到了如何抽象类型，这又涉及到了模版、范型。感觉又复杂了，也许这是所有静态类型的语言，都绕不过去的一个弯吧。</p>
-<h3>Lua 支持多种编程模式</h3>
-<p>Lua 中可以加载一段 String、一个文件并运行，简单的语法，使得数据描述编程、数据驱动编程是完全可行的。比如我在 Lua 脚本中加载自己，在运行前修改其流程，再运行，是完全可行的。</p>
-<p>Lua 的函数是一等公民，可以实现 <a href="https://blog.csdn.net/yuanlin2008/article/details/8627081">lambada 算子</a>，函数式编程妥妥的没问题。</p>
-<p>Lua 可以实现面向对象编程，上面有提到 table，当在 Lua 里面实现面向对象的时候，对象实例其实就是一个 table，对象的属性只不过是 table 里面的一个 key，函数跟 Number、String 一样可以作为 key 的 value。</p>
-<p>当这样调用对象方法时，table:func(value)，func 默认第一个参数会传递 self，就是对象自己，一个 table，第二个参数才是 value。</p>
-<p>理解 Lua 的面向对象编程，需要了解 Lua 内建的细节了，比如 table 的 __index key 是指找值的时候应该去哪里找，__newindex 则是创建新值的时候应该怎么做。多说一句，如果想 table 是 readonly 的，修改 table 的 __newindex 就对了。</p>
-<p>下面是 Lua 的面向对象编程类定义的一个例子，a = Object.newObject(1), b = Object.newObject(2), a:isEqual(b) 将返回 false。</p>
-<pre lang="source"><code>local Object = {
-    value = 0
-}
-Object.__index = Object
-
-function Object.newObject(value)
-    local obj = setmetatable({}, Object)
-    obj.value = value
-    return obj
-end
-
-function Object:isEqual(obj)
-    return self.value == obj.value
-end
-
-function Object:isGreater(obj)
-    return self.value &gt; obj.value
-end
-
-return Object
-</code></pre>
-<p>更进一步，Lua 的面向对象可以定制 __index 来实现单继承，甚至多继承，实例变量、类变量等，面向对象用这个库就对了 <a href="https://github.com/kikito/middleclass/wiki">kikito/middleclass</a>。</p>
-<h3>Lua 元表</h3>
-<p>话说 table 在 Lua 中占据了中心位置，既是 Array 又是 HashMap，面向对象的时候又是对象实例本身，定义的时候用到了，实例运行期间也用到了。</p>
-<p>table 有这么多的身份，定义不同身份时候的行为，成了关键。在 Lua 里面，table 的 key 怎么寻找，怎么设置新值，两个 table 之间怎么相加、相减等等，是通过定义 table 的 metatable （元表）来实现的。</p>
-<p>面向对象的例子，就用了 Lua 的内建函数 setmetatable，定义了 Object.__index 的行为，限制 key 值应该在哪里寻找。</p>
-<p>这里有一篇 <a href="https://www.runoob.com/lua/lua-metatables.html">Lua 元表</a> 的教程。</p>
-<p>多说两句吧，结合面向对象 Object 的例子，我们定义一下两个 Object 相加的行为：</p>
-<pre lang="source"><code>local Object = {}
-Object.__index = Object
-Object.__add = function(oobj, nobj)
-    oobj.value = oobj.value + nobj.value
-    return oobj
-end
-</code></pre>
-<p>这样，如果 a = Object.newObject(1), b = Object.newObject(2), a = a + b 后，a.value 等于 3。</p>
-<p>话说连 java 都没能实现的运算符重载，Lua 通过 table 的 metatable 实现了。</p>
-<h3>Lua 跟 C 的交互</h3>
-<p>官方 Lua 跟 C 的交互，需要用到 Lua 的 C API 定义 Lua 可以使用的 C 库，在这一层 wrapper 中再调用其他编译、链接进来的其他库，可以看下这篇 <a href="https://blog.csdn.net/AlexWoo0501/article/details/50916037">Lua C API 研究 —— 基础篇</a>，英文的 <a href="https://chsasank.github.io/lua-c-wrapping.html">Exposing C functions to Lua</a>。</p>
-<p>如果用的是 LuaJIT，对于已有 C 库的使用，就方便多了，用到了内建的 ffi 库来声明二进制库中声明的函数接口、用到的结构等，官方教程及例子 <a href="http://luajit.org/ext_ffi_tutorial.html">FFI Tutorial</a>，这里不单独列举了。</p>
-<p>--</p>
-<p>Lua 作为一种简单、稳定、快速的命令式语言，提供高度的抽象，又可以很方便地使用已有的 C 库资源，对于我这种从 C/C++ 起步的程序员来说，相当友好。</p>
-<p>酒醒了，吹一波不为过，:)</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-06.html#p1">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
