@@ -16,7 +16,103 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年9月26日 周六 23:07</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年9月29日 周一 18:25</div>
+<h2>Rust(1)</h2>
+<p>开始学习 Rust，从 <a href="https://github.com/lalawue/rustlings">rustlings</a> 入手，可以看中文版的 <a href="https://kaisery.github.io/trpl-zh-cn/">Rust 程序设计语言</a>。看了两天书，边看边写习题，完全当成一门新语言来学，内容太厚重了，而且对于我自己已有的经验来说，跟我以往了解的语言，大不一样。</p>
+<p>其实 Rust 无需垃圾回收的<a href="https://kaisery.github.io/trpl-zh-cn/ch04-00-understanding-ownership.html">所有权</a>（borrow）部分，为了防止多线程竞态条件的部分，有 C/C++/Java 多线程经验的话，是很好理解的。Rust 虽然也有指针，以我的理解，因为编译器可以确切知道具体引用情况，是不需要多写 *p 这样的了。</p>
+<p>深入骨髓的不同，从编译器、语言设计角度来说，是模式匹配、None、trait、宏，字符串、迭代器。</p>
+<h3>模式匹配</h3>
+<p>模式匹配不仅仅只是 match 关键字，及其控制流，从 let 到 if let 都有模式匹配的影子，如下</p>
+<pre lang="source"><code>let tup = (500, 6.4, 1);
+let (x, y, z) = tup;
+</code></pre>
+<p>上面就是元组的模式匹配，如果数量或类型对应不上，编译期就抛错误。而 if let 是为了简写 match 出现的。因为 Rust 自己的错误处理机制，其实大量用了 if let 或者 match，所以模式匹配一定会遇到的。</p>
+<p>Rust 这里还深入提到了一点，有些模式匹配必须成功，程序才能编译通过，比如上面的例子，下面 Some(T) 在其实也是模式匹配，是可以接受匹配失败的。</p>
+<h3>None</h3>
+<p>跟很多语言不同，Rust 的 None 不算是一个值，而是一种状态，是我的感觉。下面两个是语言固定了的，一定会遇到</p>
+<pre lang="source"><code>enum Result&lt;T, E&gt; {
+    Ok(T),
+    Err(E),
+}
+
+pub enum Option&lt;T&gt; {
+    /// No value
+    None,
+    /// Some value `T`
+    Some(T),
+}
+</code></pre>
+<p>Result 用于表明结果是否正确，正确的使用 Ok(T) 返回，错误的用 Err(E) 返回，具体的值需要解包才能使用。Option 表示要么有值，要么没有值，Option::None 没有别的作用，就只是表明没有值而已，如果是 Some(T) 返回的，也是需要解包才能用具体的值。</p>
+<p>Lua 的 nil 是 false 含义，还能塞入 table 表示 array 终结，ObjC 的 nil 也是 false 的含义，还能初始化指针，C 里面的 NULL 同理，Java 里面的 null 也是经常用来比较的，还容易引发 NullPointerException，反正是一个大量使用的合理值，新世代的 C++ 我不了解了，但 Rust 不一样，None 就是没有值，是一个枚举定义，我们经常使用且想见到的是 Some(T) 包裹的值。</p>
+<h3>trait</h3>
+<p>Rust 没有继承，跟 C++/Java 不同，其实鼓励使用组合来完成功能，认为两个不同实例拥有继承关系，因此隐含了大量重复的代码是危险的行为。trait 跟接口很像，但 Java 的 interface 还可以定义函数行为，Rust 这里就不可以了。而且 Rust 教程里面也不会使用 interface 这样已有的词汇来描述 trait，因为 Rust 还有非常严格的类型系统，如果需要做容器的话，会用到很多 trait 提供的能力，比如 Box dyn 之类的。</p>
+<pre lang="source"><code>trait AppendBar {
+    fn append_bar(self) -&gt; Self;
+}
+
+impl AppendBar for String {
+    //Add your code here
+    fn append_bar(mut self) -&gt; Self {
+        self = self + &amp;&quot;Bar&quot;.to_string();
+        self
+    }
+}
+</code></pre>
+<p>上面为 String 增加了 append_bar 的接口，添加固定的 &quot;Bar&quot; 后缀。</p>
+<p>因为 Rust 的编译器需要在编译期知道所有变量的大小，对于容器来说，是通过 Box 包裹来描述。Rust 为了实现零成本的抽象，泛型的处理实际上很多时候是编译期展开的，只有一些特殊的情况才是运行期动态决定的，这里我了解不深，先略过。</p>
+<h3>宏</h3>
+<p>Rust 的宏跟 C/C++ 的 define 完全不同，因为不懂 C++ 的 template，所以也回答不上是否拥有 template 这么强大的元编程能力。同样作为元编程，能力强是真的，这个部分我还看不大懂，大概了解到，Rust 宏在 AST 构建完成后才展开，能捕捉下面这些元素</p>
+<pre lang="source"><code>item: an item, like a function, struct, module, etc.
+block: a block (i.e. a block of statements and/or an expression, surrounded by braces)
+stmt: a statement
+pat: a pattern
+expr: an expression
+ty: a type
+ident: an identifier
+path: a path (e.g. foo, ::std::mem::replace, transmute::&lt;_, int&gt;, …)
+meta: a meta item; the things that go inside #[...] and #![...] attributes
+tt: a single token tree
+</code></pre>
+<p>举个例子，下面 vec! 宏捕捉了 expr，push 每个 x</p>
+<pre lang="source"><code>let v: Vec&lt;u32&gt; = vec![1, 2, 3];
+&lt;a id=&quot;[macro_export]&quot;&gt;&lt;/a&gt;
+
+macro_rules! vec {
+    ( $( $x:expr ),* ) =&gt; {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($x);
+            )*
+            temp_vec
+        }
+    };
+}
+</code></pre>
+<p>例子都来自 <a href="https://danielkeep.github.io/tlborm/book/README.html">The Little Book of Rust Macros</a></p>
+<h3>字符串</h3>
+<p>Rust 内建了 str 类型，表示字符串的纸面含义，是输入字符串原来的值，String 是一个 std 类，内部是 UTF-8 编码的字符串，char 在 Rust 实现是 4 个字节的 UNICODE。</p>
+<p>做习题的时候，经常性的 String::From(&quot;abc&quot;) 或者 a.to_string()，习题里面的 char 倒是很少用。</p>
+<p>感觉字符串在哪一种语言都不是一个简单的事情，现在都是全球化了，考虑字符串是一种输入，可能是任何一种语言，因此其长度、分割、排版显示都不是小事情。</p>
+<h3>迭代器</h3>
+<p>Rust 中每种容器都有迭代器，即便是 (0..10) 表示 0 - 9，(0..=10) 表示 0 - 10，可以下面这样用</p>
+<pre lang="source"><code>pub fn factorial(num: u64) -&gt; u64 {
+    if num &lt;= 0 {
+        0
+    } else {
+        (1..=num).fold(1, |acc, x| acc * x)
+    }
+}
+
+assert_eq!(24, factorial(4));
+</code></pre>
+<p>上面的斐波那契数列计算，没有用到多余的变量，没有用到 for、while、loop 和递归，只用了 Rust 里面的 fold 累加器，其他的还有 sum、filter、map 等，还有，上面忘了说的，expression 放到最后，就直接返回计算的值了。</p>
+<p>--</p>
+<p>举了好几个跟我之前了解的编程语言大不相同的例子，其实除此之外，还有不少，一些是我还不了解的，比如生命周期，比如 unsafe pointer，生命周期的描述是可以根据一些 trait 控制来改变的。Rust 性能优先，还考虑能高效调用 C 接口，unsafe pointer 是在 Rust 的借用模型、寿命周期外，自己控制程序的行为，毕竟需要调用 C 的接口等等。性能优先，因此零成本抽象、宏等等都是在这个基础上展开的，动态的部分不能说没有，只能说场景很少了。</p>
+<p>这两天的心得，大概是这样吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-09.html#p1">Permalink</a></div>
+
+<div class="date">20年9月26日 周六 23:07</div>
 <h2>ffi_bitcask.lua</h2>
 <p>写了一个 bitcask 模型的 key/value store <a href="https://github.com/lalawue/ffi_bitcask.lua">ffi_bitcask.lua</a>。利用了 LuaJIT cdata memory layout 来写每一个 record 前面 timestamp、crc、fid、ksize、vsize 部分，然后接着写入 key 及 value，读取的时候，先读取每个 record 的前面固定部分，得到 kszie 及 vsize 后，再读取 key 及 value。</p>
 <p>ffi_bitcask 的模型，db 目录下有不同的 bucket 目录，bucket 里面可以有相同的 key，bucket 类似于 namespace。每一个 bucket 只有一个活跃文件，所有的 SET/GET/DELETE 操作都是记录，添加到活跃文件末尾。当活跃文件超出阈值后，重新开启一个新的活跃文件，旧的文件是只读的。</p>
@@ -241,30 +337,6 @@ echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
 </ul>
 <p>客户端我在 Mac 下用的是 TunnelBlick，速度其实一般，还没长时间使用，后续先观察一阵。</p>
 <div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p0">Permalink</a></div>
-
-<div class="date">20年6月21日 周日 11:39</div>
-<h2>Text Rank 算法</h2>
-<p><a href="https://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf">TextRank</a> 是一种抽取式自动文摘算法，随便在网上搜一下相关，或者在 github 上面搜一下，介绍都一大把的。可是绝大部分的文章都只是堆 python 然后说要怎么做，也许是我的理解能力问题，在有限的几步里面，不晓得这么做的原因，会感觉很头疼。</p>
-<p>这里尝试从大的方面还原这个算法，然后给出自己的实现，不过感觉自己的实现有些问题，效果没有想象中那么好，不过也总比没有强吧。</p>
-<p>先开始吧。</p>
-<p>TextRank 是一种抽取式的文章摘要算法，其最后的输出内容，都来源于文档本身的句子。这些句子会被算法打分排序，依靠的其实是 <a href="https://google.fandom.com/wiki/PageRank">PageRank</a> 算法。</p>
-<h3>PageRank</h3>
-<p>PageRank 算法原来只是为了描述网页间的重要程度，重要程度的计算，来源于他们间的超链接关系。简单的说，被链接得越多的页面，越重要，跟重要页面有链接的页面，比其他的页面更重要。准确分值的计算，是根据下面的公式来的：</p>
-<p><img src="https://pic1.zhimg.com/80/v2-0d6c3c27eeee373e89b02e57630df6e4_720w.jpg" alt="img" /></p>
-<p>其中，PR(Vi) 表示网页 Vi 的分值，In(Vi) 表示 PR(Vi) 包含的网页集合，Out(Vj) 表示 PR(Vi) 链接出去的网页集合，d 是链接传递系数或者说网页跳转的可能性，常用的值是 0.85。</p>
-<p>可以把这个公式的计算基础描述成一张图，网页就是节点 PR(Vi)，边就是跟 PR(Vi) 有关系的 PR(Vj) 链接集合。</p>
-<p>初始化的时候，各个 PR(Vi) 的分值是不确定的，只有边的链接描述，因此需要迭代计算，比如都给各个 PR(Vi) 初始化为 1，通过公式多轮不断的迭代计算，当各个 PR(Vi) 分值稳定的时候，就是各个网页的 rank 分值。</p>
-<h3>Sentence simularity</h3>
-<p>如果把上面的 PR(Vi) 当成句子，我们就可以套用 PageRank 公式计算出句子的 rank 值，并提取重要程度高的句子作为文章摘要描述。</p>
-<p>但是如何确定不同的句子有边的联系呢，算法提供了计算句子间相似程度这个标准，使用下面的公式：</p>
-<p><img src="https://pic4.zhimg.com/80/v2-6f2cdbb2e228a23d26ba303c9e958017_720w.jpg" alt="img" /></p>
-<p>其中 wk 是句子 Si 及 Sj 都有的公共词组，分母是词组的数量。当然，也可以用句子的余弦相似度来计算，但是词组本身就得包含向量值了，这些词组，可以称为 word vector。</p>
-<h3>Word Vector</h3>
-<p>词组在中文里涉及到分词，有不同的工具可以用来分词表来构建语料的词向量表，比如有的用 <a href="https://pathmind.com/wiki/word2vec">word2vec</a>，有的用 <a href="https://nlp.stanford.edu/projects/glove/">GloVe</a>。话说，除了上面的模型、算法之外，语料可是相当重要的基础资源呀。</p>
-<p>这里当然还涉及到使用哪些范畴的语料来构建这个 word vector，这里不详细叙述了，因为网上相关资源就更多了。</p>
-<h3>最后</h3>
-<p>TextRank 算法应该就是上面这些了吧，虽然为了搞清楚查了很久，最后推一把自己堆的 <a href="https://github.com/lalawue/text_rank">text_rank</a>，基于 LuaJIT 和 <a href="https://github.com/thunlp/THULAC">THULAC</a>，随便跑起来，内存就占用了 1 个 G，搞不起搞不起。</p>
-<div class="category"><a href="CategoryStatistics.html">CategoryStatistics</a> / <a href="2020-06.html#p2">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
