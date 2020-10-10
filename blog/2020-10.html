@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - Archive for February, 2013</title>
+    <title>Sucha's Blog - Archive for October, 2020</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -16,23 +16,13 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for February, 2013</h1>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for October, 2020</h1>
 <p><a id="p0"></a></p>
-<div class="date">13年2月18日 周一 13:09</div>
-<h2>高中毕业十年</h2>
-<p>今天下午去买回深圳的大巴票，大厅出来后碰到了高一室友，脸我是一眼认出，他
-人胖了不少，但是名字却记不起来了。</p>
-<p>寒暄了几句，他问我去哪里，我说 SZ，17 号的票，然后问他，他说去成都，我就
-问大学是在那边吗，他说是在重庆。我心想好远呀，没问他具体是怎么过去的。</p>
-<p>反复思索到家，仍然记不起来，发了微博、说说，还回忆起了高一寝室时他的具体
-床位，几个同学网上争论了一下，还是没有结论。</p>
-<p>想上网易同学录，当年都用这个联系同学来的，结果却登录不上，还好我留在网易
-相册里的有扫描照片，把全家福抠出来给同学看，才又记起。</p>
-<p>因为高二分班，他去了重点班，所以后面就没什么联系了。</p>
-<p>感叹一下十年前火爆的网易同学录，现在连页面都没有了，当年的联系方式，也都
-随着烟消云散，当年上传的照片，那些勾起回忆的点滴，就这样没了。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2013-02.html#p0">Permalink</a></div>
-<!-- date: 2013-02-18T13:09:06+0800 -->
+<div class="date">20年10月11日 周二 02:12</div>
+<h2>DNS service 重构</h2>
+<p>将 rpc_framework 中 <a href="https://github.com/lalawue/rpc_framework/tree/master/apps/service_dns">service_dns</a> 网络层的控制从 C 层移到了 Lua 层，C 层只负责 UDP 包的数据拼接、解包，将代码统一到了 <a href="https://github.com/lalawue/m_dnsutils">m_dnsutils</a> 里。</p>
+<p>在减少了大量 C 跟 Lua 的交互后，两者算是各自做了自己擅长的方面，自测后的效果也不错。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-10.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
