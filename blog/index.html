@@ -16,7 +16,20 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年10月21日 周三 20:51</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年10月26日 周一 22:48</div>
+<h2>《在故宫寻找苏东坡》</h2>
+<p>一直很喜欢苏东坡的词，不记得在哪里看到了推荐，就买了这本书。</p>
+<p>这本书随着苏东坡的一生展开，考取功名、入仕、被贬，然后其诗词的变化，心境的变化，所写词在当时心境的解读等等。</p>
+<p>考取功名、入仕在前面几章，不表。</p>
+<p>被贬是因为文字狱，经历了生死，但苏东坡并未因此颓废不堪，像陶渊明一样淡泊修仙，远离尘世，相反他一直在入世，只是不再朝中爭功名了（精神小伙爭儒家正统）。</p>
+<p>被贬到黄州后，俸禄不够养活全家，不得不把自己当成农民，在县城东边买了一块地自给自足，并自称东坡居士。种植、收成、酿酒，看到黄州人民不爱吃猪肉，猪肉很便宜，又自创了东坡肉。这一切充满了泥土间的汗水、快乐，满是人世的酸甜，虽然消瘦了许多，但却是脚踏实地的。</p>
+<p>随着王安石新政停摆（老皇帝驾崩），新皇帝又将苏东坡等老臣请上了朝，但是快乐很短暂，很快又因为写诗词的影响被贬。</p>
+<p>即便如此，短暂的就职，也给杭州留下了疏通后的西湖，淤泥堆成了白堤。然后是一路向南的贬职，最远到了海南岛。当时海南岛都还是原住民，以当时的条件，过了海就当成是半个死囚了，当时那边连书都没有，这是他最痛苦的地方。</p>
+<p>书籍里面对于苏东坡诗词画的介绍，结合当时环境、心境的分析太细腻了，我表达不出来，对比在其时代之前相同的主题，认为其自创了一派，在表达，艺术以及美的结合上，大大拓展了延伸的范围。</p>
+<p>最悲哀的是，作者认为诗、词的顶峰在千年以前，自从苏东坡之后，就没有诗、词的达人了，至少没有那种高度的。</p>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2020-10.html#p2">Permalink</a></div>
+
+<div class="date">20年10月21日 周三 20:51</div>
 <h2>ffi_gccload 在 Lua 中动态加载 C Source</h2>
 <p>不晓得从哪里搜到了这个库 <a href="https://github.com/javierguerragiraldez/lua-tcc">lua-tcc</a>，可以在 Lua 运行期间，通过 one pass 的 TCC 动态加载 C 代码，让 Lua 的控制可以更深入底层，甚至可以在 Lua 中进行 C 的编程。</p>
 <p>可惜这个项目距离久远，TCC 在 MacOS 下面编译也成问题，意味着通用性欠佳，挺可惜的。不过有了这个想法后，想着不通过 TCC，用 GCC、Clang 其实也可以的嘛，于是就有了 <a href="https://github.com/lalawue/ffi_gccload">ffi_gccload</a>。</p>
@@ -337,32 +350,6 @@ Content-Type: application/pdf
 <p>在 Linux 中编译了一把，顺利通过，后面再看需要安装吧。在自己的 MacBook Pro 上安装好后，install 了 busted 和 moonscript。不得不说，其实是为了试一下 moonscript，硬是找到了 LuaRocks 的 LuaJIT based 方案。</p>
 <p>先用一阵子再说吧。</p>
 <div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p3">Permalink</a></div>
-
-<div class="date">20年7月15日 周三 22:38</div>
-<h2>MacOS 下使用 BitBar 在状态栏自定义信息</h2>
-<p>如果自己有一些信息需要通过点击状态栏图标后获得，或者通过点击状态栏图标启动、关闭的，都可以使用这个工具 <a href="https://getbitbar.com">BitBar</a> 来操作。</p>
-<p>安装好后，只需要定义 plugin 目录，然后在 plugin 目录下加入功能脚本就可以了。脚本其实只关注输出的文本，操作部分其实是通过特殊命令来定义的。</p>
-<p>比如例子中的 refresh.sh，精简后是下面这样：</p>
-<pre lang="source"><code>if [[ &quot;$1&quot; = &quot;restart&quot; ]]; then
-osascript &lt;&lt;EOD
-	tell application &quot;BitBar&quot; to quit
-	delay 1
-	tell application &quot;BitBar&quot; to activate
-EOD
-fi
-
-echo &quot;↻&quot;
-echo &quot;---&quot;
-echo &quot;Refresh Me| terminal=false refresh=true&quot;
-echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
-</code></pre>
-<p>会在状态栏显示一个圆圈刷新，点击后下拉菜单会有 &quot;Refresh Me&quot; 以及 &quot;Restart Bitbar&quot;。</p>
-<ul>
-<li>Refresh Me 是第一项，'|' 后定义功能动作，不新开一个 shell，刷新菜单</li>
-<li>Restart Bitbar 是第二项，bash 定义使用到的脚本或者程序，‘$0' 就是 Bitbar 自己了，参数是 &quot;restart&quot;，其实是关闭然后再重启这个 refresh.sh，简简单单的 bash shell 语法了</li>
-</ul>
-<p>可惜的是我虽然弄懂了一点点如何编写这个 Bitbar 的 plugin 命令，但是通过 Bitbar 控制的程序最后没有符合我的预期，:-(</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2020-07.html#p2">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
