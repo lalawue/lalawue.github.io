@@ -16,7 +16,43 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年12月13日 周四 22:38</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年1月24日 周日 22:52</div>
+<h2>Swift(2)</h2>
+<p>又写了一个多月的 Swift，除了刚开始时的修修补补，慢慢扩展到页面框架部分，不过这个部分我还是不够熟悉，一部分在于我还是沿用项目之前的 ViewModel，另外一部分，很多业务细节还没能深入理解。</p>
+<p>虽然这次的标题是 Swift(2)，实际内容大部分是 RxSwift 及 ViewController 的结合，以及一些 UI 层级的实践心得。</p>
+<h3>页面框架</h3>
+<p>先说一下我们的网络层，搭建了类似 Moya 的网络层框架，基本上是够用了，但相比之前用的 Model 网络层，这里浅浅的封装，就不会有单独的 model 管理器了。简洁是简洁了很多，但是数据层面转换和粘合就得在 ViewController 处理，带来了 ViewController 的膨胀。比如因为用了 RxSwift，同一份数据，有时需要多次 transform，subscribe，这些可都在 ViewController 里面。</p>
+<p>我曾经想过这些代码放在 ViewModel 里面会不会好一些，但我上次也许也有提到，这里的 ViewModel，更像是一个 Driver.System 的状态机，初始状态是 initial，之后是 Signal -&gt; Driver 的状态切换，通过一个 reduce 函数检查 ViewModel 绑定的 struct 结构来判断到底应该 loading、setResult 还是其他，如果弄懂了这个，页面的状态处理就很清晰了。</p>
+<p>只是这个 ViewModel 只负责将 app 外的数据，transform 为页面状态数据，不涉及到 UI element 数据的 transform，这是跟之前 ViewModel 的区别。ViewModel 带回来的页面状态数据，最终会在 ViewController 中 transform 并 binding、drive UI element，这个过程有时需要做很多的粘合工作，流程也会相当复杂。</p>
+<p>另外，UI 层级方面，已有较为复杂的页面，通常 UI View 就好几层，一层一层的 UIStackView 包裹里面的自定义子 view，将需要传递的数据链路，通过 binder 传递出来，即便是 View，都跟 RxSwift 框架直接绑定了。</p>
+<p>说一下对这个的理解，我觉得是没必要，因为这个 binder 或者 driver，其实都只算是单向的数据传递，传递出来的时候用就好，传递进去的时候，感觉其实没那么必要的了。</p>
+<p>以上提到的，觉得最复杂的还是 ViewModel 及其 Driver.System，基本上抄了几遍，这段时间除了 K 线 ViewController 没有修改过，其他页面多少接触了一点。</p>
+<p>目前的页面框架工作得还可以，通用性也还行，只是觉得业务复杂度还是太靠近 ViewController 了。而且当前的框架，ViewController 绑定 TableView 被封装得很厚重，仅支持单种 cell 的 TableView，不知道当时这个模版构建的时候是怎么想的。</p>
+<p>还有 TableView 的 DataSource，依赖了 RxDataSource，在 TableView 上，其实不支持 HeaderView 的数据流绑定，还得用回系统提供的 delegate 方式，不伦不类的，还不如全部都用系统的方式呢，因为这个模版框架，将 createCell 的部分，dataSOurce 的数据创建部分，放在了 TableViewCell 里面，这个我是非常不认同的。</p>
+<p>我总觉得 Cell 有复用的可能，两者结合不应该那么紧密，即便有 protocol 作为粘合，有时候还是觉得抽象过了，没必要。</p>
+<ul>
+<li>业务强依赖 RxSwift，不够纯粹，不适合封装带给非 RxSwift 的第三方使用了</li>
+<li>页面状态处理优秀，但带来未解决的问题，是业务复杂度又堆积到了 ViewController，除了 VC 臃肿之外，还有就是其实没有业务子 View 的划分，因为其输入输出都在 ViewController，边界不明确</li>
+<li>TableView 的页面模版虽然能处理当前业务的问题，但设计之初未考虑到各种其他情况，不够灵活</li>
+</ul>
+<p>这段时间还将 Carthage 的库切换到了静态库上，模拟器运行节省了不少时间，但这个改进在真机上几乎觉察不出来。</p>
+<p>做了这部分的心得是，我们依赖的第三方库实在是太多了，这也造成了我们启动慢，因为打包好的 App 就有 150M+。比如我们的数据库，为何要用 Realm 呢，是因为 ORM 方便吗，还是因为它更快，总觉得还不如用系统提供的 SQLite3 好了，或者浅浅地封装一层一层，比如 GRDB 就好。</p>
+<p>因为这个库太大了，打包的时候都可以看到打的慢。</p>
+<h3>UI 层级</h3>
+<p>学习使用 UIStackView，其实这个我在几年前就有做了一个基于 frame 计算的 StackView 框架，可惜是公司财产，不能开源出来（显然我也没有源码）。</p>
+<p>UIStackView 使用有些前提，一方面需要 addArrangedView 添加进来，但是如果只是删除 ArrangedView，其实还在 subviews 里面。</p>
+<p>另一方面，每个 view 需要有自己的 size，以及 hugging、compress 优先级，要不感觉最后计算宽度大小的时候，总是不准确。</p>
+<p>还有学会了在 tableview 的 header view 上面放置复杂的 UI 层级，这个 tableView 的 header view，不支持 AutoLayout，只能是指定 frame 高度。</p>
+<p>但是呢，又能通过将这个 view systemLayoutSizeFittingSize 拿到高度，设置给 frame 来确定这个 tableview header view 的高度。</p>
+<p>还有 table view 的 cell 是可以不指定高度的，通过 AutoLayout 计算出来，但是呢，collection view 不可以。</p>
+<p>这段时间因为对这些 UI 规则不熟悉，浪费了很多时间，有时想着，还不如我来设置 frame 呢，工作早就做完了。</p>
+<p>另外，复杂一点的首页等等 ViewController，各种 NSLayout warning，见怪不怪，设置符合 AutoLayout 的规则，太难了。</p>
+<p>哦，对了，我们有两套 layout 的库，一个是 SnapKit，一个是 TinyConstraint，常常是混用的状态，真的有点混乱。</p>
+<p>--</p>
+<p>大概先这样吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-01.html#p0">Permalink</a></div>
+
+<div class="date">20年12月13日 周四 22:38</div>
 <h2>Swift(1)</h2>
 <p>ObjC 我挺熟悉的，但切换到 Swift 的路并不顺利，虽然我之前写过一个结合 Swift + ObjC 运行时的换肤库 <a href="https://github.com/lalawue/LWTheme">LWTheme</a>，现在看来，确实是相当 ObjC 呀。</p>
 <p>写了一点点商业 Swift 代码后，我现在还不能说我熟悉 Swift 了，Swift 内容太多了，特别是 Enum 以及带泛型的 Protocol，抽象能力太强了。</p>
@@ -60,6 +96,48 @@ print(seq)
 <p>--</p>
 <p>潦草的先这样吧。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-12.html#p0">Permalink</a></div>
+
+<div class="date">20年11月9日 周一 16:02</div>
+<h2>JavaScript(1)</h2>
+<p>学习了一下 javascript，使用的是 <a href="https://wangdoc.com/javascript/index.html">JavaScript 教程</a>，基础的 ES5，包含的内容可太丰富了。</p>
+<p>跟其他语言的差别，主要在语法、面向对象，基础库和运行环境这几个部分。</p>
+<h3>语法</h3>
+<p>语法部分，'==' 可真够让人头疼的，为了比较会自动转换类型，所以教程建议直接使用 ‘===’ 进行严格比较。</p>
+<p>相对高级的语言，都有 &lt;&lt; 和 &gt;&gt;，甚至 &gt;&gt;&gt; 操作符，可惜了，Lua 5.1 比如 LuaJIT 并没有这么好用的操作符，只能通过 bit 库来使用，或者塞给 C 代码处理吧。</p>
+<p>JS 里面的 null 和 undefined 也得注意一下，它们几乎是一样的，除了 null 在 Number(null) 时为 0，而 Number(undefined) 为 NaN。</p>
+<h3>面向对象</h3>
+<p>这里一开始让我挺头疼的，比如原型对象及继承关系。</p>
+<p>对比 C++/Java 的面向对象实现都隐藏在语言核心运行时里面，通过语法‘类’来实现继承，在类里面写构造函数，描述继承关系。且 C++ 因为是零成本抽象，极端强调运行时性能，继承、面向对象的逻辑在编译期几乎都解决了，只留下了动态派发给运行时处理。Java 有反射，任何时候都能拿到其继承关系，其所有的类都继承自 Object。两者作为静态语言，在运行时无法动态修改继承关系。</p>
+<p>JS 虽然跟 Java 一样所有类都继承自 Object，但其继承的语言特性，是通过原型对象来实现的，运行时可以访问。原型对象就是类的 prototype 属性，构造函数则是 prototype.constructor，因为有 new 关键字的存在，定义一个新类，只需要定义构造函数就好了，比如</p>
+<pre lang="source"><code>function Car(color) {
+    this.color = color;
+    console.log(&quot;color:&quot; + color);
+}
+
+var car = new Car(&quot;white&quot;);
+</code></pre>
+<p>会输出 'color:white&quot;。如果定义 Bus 继承 Car 是这么实现的：</p>
+<pre lang="source"><code>function Bus(color) {
+    Car.call(this, color);
+}
+Bus.prototype = Object.create(Car.prototype)
+Bus.prototype.constructor = Bus
+
+var bus = new Bus(&quot;red&quot;)
+</code></pre>
+<p>将输出 'color:red'，如果需要在运行时修改类的继承关系，propotype 和 prototype.constructor 必须同时修改。</p>
+<p>感觉原型对象这个词，在继承关系上，跟 Objective-C 的类对象有一点像，不过实际表现及使用，千差万别。</p>
+<p>对比 Lua 实现面向对象，感觉还是有一点像的，不过 Lua 里面实现面向对象，继承关系，需要了解的可太多了，需要了解 Lua 的元表（metatable）才好。</p>
+<h3>基础库和运行环境</h3>
+<p>作为一个动态脚本语言，JS 的基础库和运行环境挺丰富的，作为 Web 端统治性的语言，运行环境包含对 HTML DOM 的操作，以及浏览器环境，这两个部分我还没怎么看呢。</p>
+<p>作为后端语言，基于 Node.js 事件驱动、非阻塞式 I/O 模型，极大降低了后端开发的难度，不过 Node 下的运行环境，我还没怎么接触。</p>
+<p>虽然 JS 是单线程的 VM，但是 HTML 5 及 Node 都实践了其多线程交互的方式，也有了不同领域下的解决方案，其成熟程度，丰富程度，对比 Lua 可要好太多了。</p>
+<p>引擎部分，标准桌面、后端用的是 Chrome V8，嵌入式应该用的是其他方案。现在已经有了前后兼容的 ES5、ES6 标准，貌似 ES7 也快要出来了。</p>
+<p>--</p>
+<p>总的来说，JS 是一门比较完善，还在不断渐进式发展，且考虑兼容性的编程语言，慢慢的将变成桌面应用编程语言，部分后端编程语言，可不再是脚本语言了。</p>
+<p>相比 Go，JS 是动态类型，也不是静态编译的；相比 Lua，语言成熟度，库的丰富程度，应用范围都好好很多，没有 Lua 目的是宿主语言的累赘，虽然 Lua 还有速度上的优势。</p>
+<p>而且，学会 JS 的好处可是，前端通吃，后端独立。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p2">Permalink</a></div>
 
 <div class="date">20年11月5日 周四 09:49</div>
 <h2>go_bitcask</h2>
@@ -401,84 +479,6 @@ assert_eq!(24, factorial(4));
 <p>后来发现，是接受推送，拉起服务的 service，没有使用到包含最新区分不同云服务商的 shell 变量，所以 fork 后拉起来的服务，自然就缺少这个 shell 变量了；手动启动正常，是因为 SSH 进去后每次都读取最新的 bash 配置。</p>
 <p>囧啊。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-09.html#p0">Permalink</a></div>
-
-<div class="date">20年8月17日 周一 23:32</div>
-<h2>LuaJIT 下的双链表及 AVL 树</h2>
-<p>Lua 描述结构数据方面，只有一种内建结构，就是 table，table 既是 array，又是 hashmap，算是简洁高效的实现，但我们需要一种动态表示元素先后、大小关系的数据结构时，内建的 table 就不合适了，比如常见的 <a href="https://github.com/daurnimator/fifo.lua">fifo</a> 及 <a href="https://github.com/Tieske/binaryheap.lua">binaryheap</a>。</p>
-<p>先说优点，上面两个都是使用 table 来描述先后顺序、大小关系的，缺点是，当有插入、删除发生时，时间效率太慢了。其中 fifo 是使用 table 的 array 实现的，需要在删除元素后，对其他的元素做拷贝迁移，避免空位；而 bianryheap，也是使用使用 table 的 array，当元素位置变动时，采用了冒泡算法，对元素重新排位。</p>
-<p>空间效率是保住了，但就时间效率来说，太不专业了，O(N^2) 的实现，数据量稍微多一点点，时间不能看。</p>
-<p>其实 fifo 算是一种双链表，只是插入是在头尾，算是双链表的特例。双链表下，非头尾的删除发生，时间效率是 O(1) 级别的。其实可以用 table 来描述链表关系，缺点是空间消耗大，为了描述两个相邻元素间的先后顺序，就得用一个 table 实例来做。</p>
-<p>我用 Lua 内建的 table 实做了一把，时间效率是很高效的，空间的话，插入 number，10,000,000 级别的插入，内存大概 6G。</p>
-<pre lang="source"><code>-- performance
-push 1000,000, cost 0.393088
-pop  1000,000, cost 0.092984
-</code></pre>
-<p>在 C 的双链表实现中，需要将链表节点跟数据结构绑定起来，要么是以链表节点为主，链表节点指向数据结构，或者像 Linux Kernel 里面规范化的双链表实现，链表节点实例，放在数据结构中，通过偏移定位数据起点。</p>
-<p>但是在 Lua 里面做不到这样，不得不使用 value（值）到 node（节点），以及 node 到 value 的两个 table 来做关系映射，再加上相邻两个 value 的顺序关系使用一个 node（table）来实现，也是空间消耗大的原因。</p>
-<h3>LuaJIT 下 cdata 的妙用</h3>
-<p>LuaJIT 因为有 FFI，可以创建结构化的 cdata 来描述相邻 node 之间的关系，而不需要使用内建的 table，使得可以花费更少的空间代价，比如下面这样来描述双链表的节点关系：</p>
-<pre lang="source"><code>ffi.cdef [[
-struct _cnode {
-    struct _cnode *prev;
-    struct _cnode *next;
-    float key;
-};
-struct _chead {
-    struct _cnode *head;
-    struct _cnode *tail;
-};
-void* calloc(size_t count, size_t size);
-void free(void *ptr);
-]]
-</code></pre>
-<p>特别注明 cdata 是 calloc 出来的，不在 gc 管理范围，因为 C 下面的指针，需要保证指向固定的内存地址。其他跟纯 table 实现的双链表一样，需要两个 table 来维护 value 跟 node之间的映射关系，如上面 struct _cnode 下的 key，其实是用于 node 到 value 的 table 的映射 key，原因下面再说。</p>
-<p>同样的 AVL 树也可以使用 cdata 来维护节点间的大小关系：</p>
-<pre lang="source"><code>ffi.cdef [[
-struct _avl_node {
-    struct _avl_node *left;
-    struct _avl_node *right;
-    struct _avl_node *parent;
-    int height;
-    float key;
-};
-struct _avl_root {
-    struct _avl_node *node;
-};
-void* calloc(size_t count, size_t size);
-void free(void *ptr);
-]]
-</code></pre>
-<p>以上使用 cdata 描述元素关系时间效率跟纯 table 时间效率一样，空间效率的话，第一个例子下，内存占用不到 4G，地址 <a href="https://github.com/lalawue/list.lua">ffi_list.lua</a> 及 <a href="https://github.com/lalawue/ffi_avl.lua">ffi_avl.lua</a>。</p>
-<h3>一些问题</h3>
-<p>LuaJIT 下使用 cdata 描述节点关系，遇到了一些问题：</p>
-<ul>
-<li>cdata 做 key 不稳定，string.format(&quot;%p&quot;) 打印出来看 cdata 的值，经过变量传递后，有变化，做 key 的话，导致 node 到 value 的 mapping 找不到 value，所以 cdata 单独带了一个 float 类型的 key</li>
-<li>我设想使用 math.random() 来产生 0 ~ 1 之间的小数做 key，但是在 ffi_list.lua 中，会导致其他的问题，不得不使用了固定小数增长的做法来实现，原因还不清楚，不过我这边自测用的数据范围是 10,000,000 及以上才会出现</li>
-</ul>
-<p>上面的问题，估计还是要设计一些测试用例来定位一下才好，现在先这样吧。</p>
-<h3>后记</h3>
-<p>19 号解决了上面遇到的 2 个问题，原因在于 ffi.cdef 使用的 key 宽度是 float，但是 LuaJIT number 的宽度是 double 导致的，我修改 ffi.cdef node 里面的 key 为 double 类型，问题不再出现。</p>
-<p>不过我也有疑问，为何 AVL 这边同样的实现，没有暴露出来问题呢。</p>
-<p>反正现在修改为多轮循环 test 验证了，验证了几千遍，每次是 1000x1000 次的 push、pop，都是正常的了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-08.html#p1">Permalink</a></div>
-
-<div class="date">20年8月02日 周日 20:50</div>
-<h2>做了一个 web 框架：cincau</h2>
-<p>离职后在家呆了一个月，前面两周在休息，后面两周开始忙起来，想着将手头的数据搭一个可视化的网站出来，可以学习一下 web 前端的库之类的，但是呢，想找一个能 sqlite 和 nginx 的 web framework，找到一个感觉还可以的 <a href="https://github.com/sumory/lor">Lor</a>，但是呢，不支持 sqlite，感觉不算是一个 minimalist 的 web framework，就想着不如自己搭建一个吧。</p>
-<p>可是如果搭建，顺便带上自己的 mnet 是肯定的了，当然 nginx 也是要支持的。于是参考了 lor 的不少东西，但更多的其实是自己摸索的，因为时间也比较充足，是先考虑了架构，才开始动手的。</p>
-<p>没有浪费之前买的 goodnote 5，用来构思框架了，画了大概 5 个页面，大的模块上，跟 lor 一样，分为基础库，以及具体的项目代码。基础库在 /usr/local/cincau，用来生成基本的 demo 项目，本身包含了所有 proj 用到的的基础库。对上面的简单业务逻辑，封装 engine 层，不区分为 mnet 或者是 nginx，但实际上这两者一定是要区分开的，除非是静态的文件。</p>
-<p>基础库里面，细分为 engine 层、router、MVC 逻辑、database、POST 的解析、HTTP Request 这几个部分，其中 MVC 中 view 的 rendering 用了 leafo 的 <a href="https://github.com/leafo/etlua">etlua</a>，这其实是基于 openresty 的 lapis 的一个模版库。database 不出意外，我只考虑了 sqlite3，就是 minimalist 的 web framework，等有需要，在考虑 mysql、postgresql 之类的，毕竟这两者，没有基于 mnet 的接口，只有基于 nginx 的。</p>
-<p>在 goodnotes 5 上面花了 3、4 天这样，其实上面这么多细节，都是在完成整个项目后，回头才细化出来的。在草图出来以后，框架搭建花了大概一周，mnet 是基于 ffi_mnet.lua 以及 hyperparser 的回调，拿到 http 数据结构层。而 nginx 是 content_by_lua_file 来驱动的。</p>
-<p>然后还继续花了 3、4 天来完善框架细节，比如 POST 以及 HTTP request 的那一套，以及基于这个框架，写了一个 demo project，支持 ment、nginx，包含静态页面、mock 的 model，以及 post x-www-urlencoded 和 multipart/form-data 这几个部分。</p>
-<p>该放地址了：<a href="https://github.com/lalawue/cincau">cincau</a>，话说之前也断断续续做过半个 web framework，现在终于点连成了线，水到渠成了。</p>
-<p>goodnote 5 画出来的框架图：</p>
-<img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9xgx85j20h00m00sv.jpg" width=360>
-<img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9xi8koj20h00m00t3.jpg" width=360>
-<img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9xq6k9j20h00m03yz.jpg" width=360>
-<img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9y00d1j20h00m0aam.jpg" width=360>
-<img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9xlayej20h00m00t2.jpg" width=360>
-<img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9xzu40j20h00m0t93.jpg" width=360>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-08.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -530,7 +530,7 @@ void free(void *ptr);
         <li><a href="http://www.google.cn/maps/@22.6273208,110.1513288,15540m/data=!3m1!1e3?hl=zh-CN">Yulin City</a></li>
       </ul>
 
-      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2020-12.html">December 2020</a></li><li><a href="2020-11.html">November 2020</a></li><li><a href="2020-10.html">October 2020</a></li><li><a href="2020-09.html">September 2020</a></li><li><a href="2020-08.html">August 2020</a></li><li><a href="2020-07.html">July 2020</a></li><li><a href="2020-06.html">June 2020</a></li><li><a href="2020-05.html">May 2020</a></li><li><a href="2020-04.html">April 2020</a></li><li><a href="2020-02.html">February 2020</a></li><li><a href="2020-01.html">January 2020</a></li><li><a href="2019-12.html">December 2019</a></li><li><a href="2019-11.html">November 2019</a></li><li><a href="2019-10.html">October 2019</a></li><li><a href="2019-09.html">September 2019</a></li><li><a href="2019-08.html">August 2019</a></li><li><a href="2019-07.html">July 2019</a></li><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
+      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2021-01.html">January 2021</a></li><li><a href="2020-12.html">December 2020</a></li><li><a href="2020-11.html">November 2020</a></li><li><a href="2020-10.html">October 2020</a></li><li><a href="2020-09.html">September 2020</a></li><li><a href="2020-08.html">August 2020</a></li><li><a href="2020-07.html">July 2020</a></li><li><a href="2020-06.html">June 2020</a></li><li><a href="2020-05.html">May 2020</a></li><li><a href="2020-04.html">April 2020</a></li><li><a href="2020-02.html">February 2020</a></li><li><a href="2020-01.html">January 2020</a></li><li><a href="2019-12.html">December 2019</a></li><li><a href="2019-11.html">November 2019</a></li><li><a href="2019-10.html">October 2019</a></li><li><a href="2019-09.html">September 2019</a></li><li><a href="2019-08.html">August 2019</a></li><li><a href="2019-07.html">July 2019</a></li><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
    </div> <!-- body -->
   </body>
 </html>
