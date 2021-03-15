@@ -19,7 +19,7 @@
 	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for March, 2021</h1>
 <p><a id="p1"></a></p>
 <div class="date">21年3月15日 周一 22:27</div>
-<h2>PinLayyout 及 StackViewLayout</h2>
+<h2>PinLayout 及 StackViewLayout</h2>
 <p>虽然现在 iOS 开发几乎全部都是使用 AutoLayout 了，诸如 OC 时代的 Masonry 或者 Swift 时代的 Snapit，或者 TinyConstraint，但其实基于 frame layout 还是有一些可以介绍的，就比如 <a href="https://github.com/layoutBox/PinLayout">PinLayout</a> 以及 <a href="https://github.com/layoutBox/StackViewLayout">StackViewLayout</a>。</p>
 <p>这里注意 StackViewLayout 在 dev 分支下才有内容，另外官方的 StackViewLayout 其实有循环引用，我提了一个 pull request，解决了循环引用，并加入了 distribution 的方案，估计没人看了。</p>
 <p>PinLayout 很有意思，做为 UIView 的一个计算属性，chainable 方式不断接下来描述这个 layout 的位置、大小，最后在 deinit 的时候，才真正将传递进来的 UIView 进行设置，设置的属性是 center 及 bounds。</p>
