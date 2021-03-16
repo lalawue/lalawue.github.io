@@ -16,7 +16,19 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年3月15日 周一 22:27</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年3月16日 周二 21:04</div>
+<h2>PageEventBus 实践心得</h2>
+<p>在这次重构中实践了一把上个月说到的 <a href="../blog/2021-02.html#p0">PageEventBus</a>，说到重构，其实只完成了一半，但是目前的心得，感觉是挺不错的。</p>
+<p>因为页面交互很多，然后 UI 层次也比较复杂，有了 PageEventBus 后，少了很多传递数据的逻辑，一些有 UI 层次的 view，比如各种 StackView 包裹的有复杂业务功能的 view，不需要单独开业务参数接口了，整洁，同样的相关 view model 也不需要单独开业务接口了，整洁哈。</p>
+<p>因为是在 didMovedToWindow 时候才去找 superview 持有的 bus，之前担心许多 view 下来会不会有什么影响，但实际上需要 findBus 的 view model 没有很多，所以 UI 绘制效率一点都不影响，况且只有第一次需要通过 next responder 来找，找到后就挂接上了，稳得很。</p>
+<p>不过也有在之前没有考虑好的，比如 view controller 这个部分，因为 page model 继承于 view model，对于 controller 及 controller 上的 view 是 unowned let 的方式，意味着初始化的时候，就开始访问 controller 及其 view 了，这很不好。</p>
+<p>因为 controller 的 view 不应该那么早被导入到内存，一般都在实际需要展示前再让它加载到内存，所以实际上 page model 没法完全独立于 controller，需要在 controller viewDidLoad 后才进行初始化。</p>
+<p>所以这算个小遗憾吧，我现在的做法是，做一个可选闭包，在 viewDidLoad 里面执行，确保有了 viewDiDLoad 后，才初始化 page model，这样就好很多了，估计后面会改到 BlockViewController 里面做例子。</p>
+<p>另外，还有些遗憾的点是，不复杂的业务，实际上根本用不到这个 event bus；还有就是，如果需要在不同的业务 controller 之间做数据传递，当前的 PageEventBus 又不可以拓展，比如没有相关路由的接口，可以连接两个不同的 event bus。</p>
+<p>连接两个不同的 event bus，有时候还是很必要的，当然这个完全可以交给系统的 notification 来完成，但是接口感觉又麻烦了一点，后续感觉可以在这点上继续推进的，虽然现在的工程不一定能够用上，缺少实践心得还是感觉稍微有点不爽。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p2">Permalink</a></div>
+
+<div class="date">21年3月15日 周一 22:27</div>
 <h2>PinLayout 及 StackViewLayout</h2>
 <p>虽然现在 iOS 开发几乎全部都是使用 AutoLayout 了，诸如 OC 时代的 Masonry 或者 Swift 时代的 Snapit，或者 TinyConstraint，但其实基于 frame layout 还是有一些可以介绍的，就比如 <a href="https://github.com/layoutBox/PinLayout">PinLayout</a> 以及 <a href="https://github.com/layoutBox/StackViewLayout">StackViewLayout</a>。</p>
 <p>这里注意 StackViewLayout 在 dev 分支下才有内容，另外官方的 StackViewLayout 其实有循环引用，我提了一个 pull request，解决了循环引用，并加入了 distribution 的方案，估计没人看了。</p>
@@ -421,12 +433,6 @@ result  7
 <p>有了上面这套，虽然相比 TCC 速度慢一点（毕竟 TCC 是 one pass 就出成果的），但是胜在兼容性号，修改一下后，估计 Windows 下面也是能跑的。</p>
 <p>往后可以在服务端拿到 C 代码，捣鼓以下就能用到客户端上面了，或者一些少量使用 C 操作更方面的逻辑，结合放在 Lua 中作为源代码发布出去，使用的时候，先编译加载动态库，也是一个方案。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-10.html#p1">Permalink</a></div>
-
-<div class="date">20年10月11日 周二 02:12</div>
-<h2>DNS service 重构</h2>
-<p>将 rpc_framework 中 <a href="https://github.com/lalawue/rpc_framework/tree/master/apps/service_dns">service_dns</a> 网络层的控制从 C 层移到了 Lua 层，C 层只负责 UDP 包的数据拼接、解包，将代码统一到了 <a href="https://github.com/lalawue/m_dnsutils">m_dnsutils</a> 里。</p>
-<p>在减少了大量 C 跟 Lua 的交互后，两者算是各自做了自己擅长的方面，自测后的效果也不错。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-10.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
