@@ -16,7 +16,16 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年3月16日 周二 21:04</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年3月24日 周三 22:22</div>
+<h2>PageEventBus 大改动</h2>
+<p>上一周，<a href="https://gitee.com/lalawue/PageEventBus">PageEventBus</a> 第一次用在了其他场景，让我不得不重新思考了一下使用 responder chain 隐含传递、关联 event bus 的优势、劣势，最后决定是将这个重要的特性去掉。</p>
+<p>先说一下问题，使用了系统 UISearchViewController，然后使用了 result view controller，但是 result view controler 无法通过 responder chain 拿到 event bus，猜测是 search view controller 使用了其他的 window，或是其他的问题。</p>
+<p>这样的话，估计如果有应用到其他的一些系统类，使用 responder chain 来拿到 event bus 这种想法，也是行不通的。</p>
+<p>于是，做成了一个中心化的架构，默认使用带类型的 event bus 做 key，将新建立的 bus 缓存到一个中心节点中，其他同样类型的 event bus，通过查询中心节点，就能拿到 bus，然后 bus retain count +1，最后当所有持有 bus 的实例销毁后，这个类型的 bus 也会被自动销毁掉的。</p>
+<p>这样的修改，对于单页面是没问题的，但是对于使用同样的事件类型，但具有多个实例，在不同的 UI 层次上，需要区分 bus 的情况，就需要特别处理一下了。这个时候，需要修改 agent 中默认的 event bus name，来建立多个不同的 event bus 实例。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p3">Permalink</a></div>
+
+<div class="date">21年3月16日 周二 21:04</div>
 <h2>PageEventBus 实践心得</h2>
 <p>在这次重构中实践了一把上个月说到的 <a href="../blog/2021-02.html#p0">PageEventBus</a>，说到重构，其实只完成了一半，但是目前的心得，感觉是挺不错的。</p>
 <p>因为页面交互很多，然后 UI 层次也比较复杂，有了 PageEventBus 后，少了很多传递数据的逻辑，一些有 UI 层次的 view，比如各种 StackView 包裹的有复杂业务功能的 view，不需要单独开业务参数接口了，整洁，同样的相关 view model 也不需要单独开业务接口了，整洁哈。</p>
@@ -390,49 +399,6 @@ fmt.Println(&quot;dog is&quot;, dog.Name())
 <p>书籍里面对于苏东坡诗词画的介绍，结合当时环境、心境的分析太细腻了，我表达不出来，对比在其时代之前相同的主题，认为其自创了一派，在表达，艺术以及美的结合上，大大拓展了延伸的范围。</p>
 <p>最悲哀的是，作者认为诗、词的顶峰在千年以前，自从苏东坡之后，就没有诗、词的达人了，至少没有那种高度的。</p>
 <div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2020-10.html#p2">Permalink</a></div>
-
-<div class="date">20年10月21日 周三 20:51</div>
-<h2>ffi_gccload 在 Lua 中动态加载 C Source</h2>
-<p>不晓得从哪里搜到了这个库 <a href="https://github.com/javierguerragiraldez/lua-tcc">lua-tcc</a>，可以在 Lua 运行期间，通过 one pass 的 TCC 动态加载 C 代码，让 Lua 的控制可以更深入底层，甚至可以在 Lua 中进行 C 的编程。</p>
-<p>可惜这个项目距离久远，TCC 在 MacOS 下面编译也成问题，意味着通用性欠佳，挺可惜的。不过有了这个想法后，想着不通过 TCC，用 GCC、Clang 其实也可以的嘛，于是就有了 <a href="https://github.com/lalawue/ffi_gccload">ffi_gccload</a>。</p>
-<p>流程变成了这样，将 C Source String 导入到一个源文件里面，通过 GCC 编译得到动态库，使用 ffi.load() 加载进来，并通过 ffi.cdef 声明接口，就可以使用了。</p>
-<p>其实就是将 C 的编译、链接过程给固定了就好，如下的代码：</p>
-<pre lang="source"><code>local config = require(&quot;ffi_gccload&quot;).new()
-
--- like ffi.cdef
-config:addSourceDef([[
-    int print_name(void);
-    int add_num(int a, int b); 
-]])
-local p = config:loadSourceString([[&lt;a id=&quot;include&quot;&gt;&lt;/a&gt;
- &lt;stdio.h&gt;
-int print_name(void) {
-    printf(&quot;Hello, world\n&quot;);
-    return 0;
-}
-int add_num(int a, int b) {
-    return a * 2 + b;
-}
-]])
-if p then
-    p.print_name()
-    local a, b = ...
-    a, b = a and tonumber(a) or 0, b and tonumber(b) or 0
-    print(&quot;result&quot;, p.add_num(a, b))
-else
-    print(&quot;failed to load&quot;)
-end
-</code></pre>
-<p>生成一个动态编译配置，会输出</p>
-<pre lang="source"><code>$ lua test.lua 2 3
-Hello, world
-result  7
-</code></pre>
-<p>其实是将编译产生的中间 .so 放在临时目录，加载后其实就可以删除掉这个 so 了，这在 MacOS 以及 Linux 应该都是可以的。</p>
-<p>上面生成的动态编译配置，其实可以加入 include、libary 的 path 以及 lib name，已经越来越像一个 build 系统了，其实就是类似的。</p>
-<p>有了上面这套，虽然相比 TCC 速度慢一点（毕竟 TCC 是 one pass 就出成果的），但是胜在兼容性号，修改一下后，估计 Windows 下面也是能跑的。</p>
-<p>往后可以在服务端拿到 C 代码，捣鼓以下就能用到客户端上面了，或者一些少量使用 C 操作更方面的逻辑，结合放在 Lua 中作为源代码发布出去，使用的时候，先编译加载动态库，也是一个方案。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-10.html#p1">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
