@@ -16,7 +16,51 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年3月24日 周三 22:22</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年3月25日 周四 20:33</div>
+<h2>Swift AVL Tree 和 SortedDictionary</h2>
+<p>苹果的 Collection 集合类型，我是找不到链表和树的，至于为什么，也许是底层封装好后，上层透露出来给大伙用，就不用担心了吧。</p>
+<p>实际上没有那么美好，举个例子，一个不断更新的整数序列，新进来的整数有可能是做插入，或删除（比如元素不存在，就插入，存在就删除），且每次更新完后，都取最小的几个数字做输出，也就是一个不断求 Least(N) 的可变序列，这样的需求应该不难理解。</p>
+<p>如果用苹果提供的数据结构，应该怎么做呢，不管是用 Array、Set 或是 Dictionary，最后的输出，总是免不了做一个 O(N * LogN) 的 sorted，其实我只是取最小的几个而已，这个全局的 sort 未免太奢侈了。</p>
+<p>即便 Dictionary 是类似红黑树这样的结构（当然不是），对于所有元素 sorted，拿到所有元素的排序，再取 prefix，其实也是不必要的。</p>
+<p>上面的需求，是我抄袭 skywind3000 miniavl 的原因，我将其翻译到了 Swift，然后呢，跟 Mutable Dictionary 结合，就变成了 <a href="https://github.com/lalawue/SwiftSortedDictionary">SwiftSortedDictionary</a>，AVL 树在 <a href="https://github.com/lalawue/SwiftAvlTree">SwiftAvlTree</a>。</p>
+<p>分析一下吧，AVL 树的插入、删除，查找都是 O(LogN)，不过因为有 Dictionary 的加持，查找相关节点其实只需要 O(1)，所以删除、查找变成了 O(1)，当然删除比较特别，也就是做两、三个旋转而已，算 O(1) 了。</p>
+<p>最后 Least(N) 的排序是交给 AVL 树来做的，一个闭包循环，加入一个表示序列进度的 index，一个可以控制结束的 inout 修饰的 stop 参数，就行了。</p>
+<p>下面是测试的环境，我是在一台 i5 的老 MacOS 上测试的，基数是 256，添加了 512 个数，每次添加取 Least 16，同样的逻辑，循环了 10 次，结果对比如下：</p>
+<ul>
+<li>Apple Swift version 4.0.3 (swiftlang-900.0.74.1 clang-900.0.39.2)</li>
+<li>Target: x86_64-apple-macosx10.9</li>
+</ul>
+<pre lang="source"><code>with amount:256 addition:512 prefix:16 loop:10
+
+Test Dicionary:
+round 1: 111ms, avg: 111ms
+round 2: 109ms, avg: 110ms
+round 3: 109ms, avg: 110ms
+round 4: 109ms, avg: 109ms
+round 5: 109ms, avg: 109ms
+round 6: 109ms, avg: 109ms
+round 7: 109ms, avg: 109ms
+round 8: 108ms, avg: 109ms
+round 9: 109ms, avg: 109ms
+round 10: 112ms, avg: 109ms
+
+Test SortedDicionary:
+round 1: 21ms, avg: 21ms
+round 2: 18ms, avg: 19ms
+round 3: 18ms, avg: 19ms
+round 4: 19ms, avg: 19ms
+round 5: 19ms, avg: 19ms
+round 6: 19ms, avg: 19ms
+round 7: 19ms, avg: 19ms
+round 8: 19ms, avg: 19ms
+round 9: 19ms, avg: 19ms
+round 10: 19ms, avg: 19ms
+</code></pre>
+<p>当然现实中使用也是有收益的，负责的一个不具名的项目，因为要做上述类似的逻辑，之前单独使用 dictionary 结构做插入、删除，最后 sorted 函数在 time profile 排前面，使用了 sorted dictionary 后，耗时在 profile 中是完全看不到了。</p>
+<p>不过就我负责的那个项目来说，因为还有其他的问题如频繁 UI 刷新以及 layout 的制约，肉眼可见的观感的改进不明显，但从 time profile 的结果来看，是有改进的，算达到了预期吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p4">Permalink</a></div>
+
+<div class="date">21年3月24日 周三 22:22</div>
 <h2>PageEventBus 大改动</h2>
 <p>上一周，<a href="https://gitee.com/lalawue/PageEventBus">PageEventBus</a> 第一次用在了其他场景，让我不得不重新思考了一下使用 responder chain 隐含传递、关联 event bus 的优势、劣势，最后决定是将这个重要的特性去掉。</p>
 <p>先说一下问题，使用了系统 UISearchViewController，然后使用了 result view controller，但是 result view controler 无法通过 responder chain 拿到 event bus，猜测是 search view controller 使用了其他的 window，或是其他的问题。</p>
@@ -386,19 +430,6 @@ fmt.Println(&quot;dog is&quot;, dog.Name())
 <p>但是 Java 多年来的基础建设都很好，不管是 JVM 还是 IDE，我用过最好的 IDE 就是 Java 的，太省心了。但是另一方面，Java 的交付、部署应该是没有 Go 的简单，至少也是有 JVM 版本的，而 Go 真的就是统一交付了。</p>
 <p>Go 席卷了互联网，Docker 及云的基础建设就是明证，Java 瓜分了剩下的很大一块，接着是 Python 的简易运维，C++ 是核心中的核心，不晓得这个分布是不是当前占有率的反映。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p0">Permalink</a></div>
-
-<div class="date">20年10月26日 周一 22:48</div>
-<h2>《在故宫寻找苏东坡》</h2>
-<p>一直很喜欢苏东坡的词，不记得在哪里看到了推荐，就买了这本书。</p>
-<p>这本书随着苏东坡的一生展开，考取功名、入仕、被贬，然后其诗词的变化，心境的变化，所写词在当时心境的解读等等。</p>
-<p>考取功名、入仕在前面几章，不表。</p>
-<p>被贬是因为文字狱，经历了生死，但苏东坡并未因此颓废不堪，像陶渊明一样淡泊修仙，远离尘世，相反他一直在入世，只是不再朝中爭功名了（精神小伙爭儒家正统）。</p>
-<p>被贬到黄州后，俸禄不够养活全家，不得不把自己当成农民，在县城东边买了一块地自给自足，并自称东坡居士。种植、收成、酿酒，看到黄州人民不爱吃猪肉，猪肉很便宜，又自创了东坡肉。这一切充满了泥土间的汗水、快乐，满是人世的酸甜，虽然消瘦了许多，但却是脚踏实地的。</p>
-<p>随着王安石新政停摆（老皇帝驾崩），新皇帝又将苏东坡等老臣请上了朝，但是快乐很短暂，很快又因为写诗词的影响被贬。</p>
-<p>即便如此，短暂的就职，也给杭州留下了疏通后的西湖，淤泥堆成了白堤。然后是一路向南的贬职，最远到了海南岛。当时海南岛都还是原住民，以当时的条件，过了海就当成是半个死囚了，当时那边连书都没有，这是他最痛苦的地方。</p>
-<p>书籍里面对于苏东坡诗词画的介绍，结合当时环境、心境的分析太细腻了，我表达不出来，对比在其时代之前相同的主题，认为其自创了一派，在表达，艺术以及美的结合上，大大拓展了延伸的范围。</p>
-<p>最悲哀的是，作者认为诗、词的顶峰在千年以前，自从苏东坡之后，就没有诗、词的达人了，至少没有那种高度的。</p>
-<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2020-10.html#p2">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
