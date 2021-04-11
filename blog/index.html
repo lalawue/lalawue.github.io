@@ -16,7 +16,31 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年4月02日 周五 20:55</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年4月11日 周日 21:23</div>
+<h2>iOS 的异步刷新</h2>
+<p>技术细节大概描述一下就好，因为网上能搜到的内容蛮多的，这里主要说一下工作中涉及到的方面。</p>
+<p>项目之前因为要 0.5 秒刷新一下部分界面，主要是数据更新，涉及到文字、以及用于标记数值程度的背景色。之前的负责人估计第一版用的是 UILabel，或者就是直接用了脸书的 Texture，就为了更新这一小块内容，居然用了 Texture，不可思议。</p>
+<p>整个页面除了这里，应该也有其他的原因，反正有点卡，在 i7 32G 的 14.4 模拟器上，CPU 占用率大概 20%，其他部分算法的原因，在这个范围 -+4% 浮动。</p>
+<p>我用 instrument 的 time profile 看了一下，Texture 的 layout 部分占了大头，因为需要更新标记数值程度的背景色，因此 cell node 整个 layout 更新，因为又是 RxSwift drive 了整个 table view items，所以实际上是整个 table view node 不停 layout 更新了。</p>
+<p>即便 Texture 用的是 Yoga，但是就这两个变更点的更新，用得着 layout 整个 table view node 吗。</p>
+<p>于是上周搜索了一下异步更新的方案，基本上就是 CPU 方案 vs GPU 方案，CPU 方案其实就是 Core Graphics，UIKit 其实就是 CPU 的，而 Core Animation 是 GPU 的，比如 CATextLayer、CAShapeLayer、CAGradientLayer，而且 CALayer 有 drawsAsynchronously 这个属性，设置为 true 后，就是异步线程刷新，文档建议自己试试看。</p>
+<p>那么方案差不多出来了，选用 GPU 的方案，固定 frame，数据 drive 比如背景色，只更新相关 cell 背景 layer 的 frame，打开异步线程刷新，这样 layout 的负载会低一些。</p>
+<p>另外实操后发现，CATextLayer 其实能力是比较有限的，跟 UILabel 有很大不同</p>
+<ul>
+<li>没有自动多行的概念，需要设置 warp 属性，不过当前项目也不需要多行就是</li>
+<li>绘图 origin 固定是 (0,0)，意味着没有默认的 vertical 居中的效果</li>
+<li>font 属性是 CTFont，这个需要 CTFontCreateWithName 从 UIFont 拿 font name 再创建</li>
+<li>font size 还是单独的，我是从 UIFont 的 pointSize 设置过去了</li>
+<li>水平居左、中、右跟 UILabel 是类似的了</li>
+</ul>
+<p>因为需要配置 CTFont，以及自己计算行高后做 vertical center，于是再封装了一层普通 CALayer，将 UIFont 暴露出来，以及默认 vertical center，这个项目暂时不需要 vertical 的其他配置，就先不做这个部分的可选项了。</p>
+<p>标记数值变化的背景色更新，用的就是普通的 CALayer，因为 frame 设置后，本来就有 tween 补间动画，只是配置颜色输入时不是 UIColor，而是 CGColor 罢了。</p>
+<p>类似 tableview 的 UI 框架部分，用了之前介绍的 StackViewLayout，cell view 可以是任何的普通 view，不一定是需要同一种 view，只要支持 sizeToFits 就可以自动配置行高了。</p>
+<p>配置了 rx 数据接口后，塞数据进去也很方便，上述的修改，在 i7 32G 的 14.4 模拟器上，CPU 降了大概 8%，在 6 plus 上降了有 10% 多。</p>
+<p>是属于比较明显的改进了。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-04.html#p1">Permalink</a></div>
+
+<div class="date">21年4月02日 周五 20:55</div>
 <h2>iOS 14 NavigationBar</h2>
 <p>工程在我进公司之前就遇到了这样的问题，导航栏左右 bar item 在 iOS 13 是好好的，但在 iOS 14 上面，从一级页面 push 进入到二级页面，进入到三级页面，或者从二级页面 pop 到一级页面，都会往中间跳动缩进一下，再回归到正常位置。</p>
 <p>这种跳动感觉很突兀，很别扭，但是很难定位原因。新建 demo 工程自己试了一下，iOS 14 下是没问题的，我们有用一些第三方库，其中 QMUI 是涉及比较广的 UI 库，但用 QMUI 官方的 demo 试了一下，iOS 14 下也是好好的。</p>
@@ -176,7 +200,7 @@ round 10: 19ms, avg: 19ms
 <p>话说这一整套限定的东西还是很多的，我准备使用 event bus 来传递 view model，view model 内部还是使用 RxSwift 来做业务绑定，view model 带 disposeBag，或者使用 view 的 disposeBag 也是可以的。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-02.html#p0">Permalink</a></div>
 
-<div class="date">20年1月24日 周日 22:52</div>
+<div class="date">21年1月24日 周日 22:52</div>
 <h2>Swift(2)</h2>
 <p>又写了一个多月的 Swift，除了刚开始时的修修补补，慢慢扩展到页面框架部分，不过这个部分我还是不够熟悉，一部分在于我还是沿用项目之前的 ViewModel，另外一部分，很多业务细节还没能深入理解。</p>
 <p>虽然这次的标题是 Swift(2)，实际内容大部分是 RxSwift 及 ViewController 的结合，以及一些 UI 层级的实践心得。</p>
@@ -298,58 +322,6 @@ var bus = new Bus(&quot;red&quot;)
 <p>相比 Go，JS 是动态类型，也不是静态编译的；相比 Lua，语言成熟度，库的丰富程度，应用范围都好好很多，没有 Lua 目的是宿主语言的累赘，虽然 Lua 还有速度上的优势。</p>
 <p>而且，学会 JS 的好处可是，前端通吃，后端独立。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p2">Permalink</a></div>
-
-<div class="date">20年11月5日 周四 09:49</div>
-<h2>go_bitcask</h2>
-<p>学习了 Go 后要使用，实践的第一个程序是 <a href="https://github.com/lalawue/go_bitcask">go_bitcask</a>。其逻辑大部分源于 <a href="https://github.com/lalawue/ffi_bitcask.lua">ffi_bitcask.lua</a>。</p>
-<p>但在 Go 这个版本中，因为一直开关读写文件效率比较低，所以做了一层抽象优化，将文件的读写抽象到了 DataFile 里面，其中，读的部分使用了 mmap，写的时候只保留一个活跃文件，一直追加写，也兼顾当前活跃文件的读，待到关闭数据库的时候才做 Sync()，并关闭文件。</p>
-<p>在我的 16 年 MacBook Pro 版本 10.15.7 中，Go 1.13.4 读写文件极慢，LuaJIT FFI 版本用了不到 0.2 秒完成的测试，在 Go 这边需要 2 秒，太夸张了。</p>
-<p>试了一下在云端 Linux 上面，效果好了很多，大概需要 0.2 秒，但 LuaJIT FFI 版本只需要 0.02 秒</p>
-<p>LuaJIT FFI 版本的 bitcask</p>
-<pre lang="source"><code>$ time luajit test/test_bitcask.lua
-PASS Bucket
-PASS Set/Get
-PASS Delete
-PASS GC
-
-real    0m0.021s
-user    0m0.011s
-sys     0m0.008s
-</code></pre>
-<p>Go 版本我编译后才测试的</p>
-<pre lang="source"><code>$ time ./test
-using database: {Path:/tmp/go_bitcask BucketName:0 DataFileSize:512}
-Pass Bucket
-PASS Set/Get
-PASS Delete
-PASS GC
-
-real    0m0.234s
-user    0m0.004s
-sys     0m0.030s
-</code></pre>
-<p>也许 Go 启动准备需要不少时间吧，或者是我实现的问题。</p>
-<p>在 Go 版本中，我同样是使用了 struct map 到内存的方式来表示一条 record，然后一次性读取 key 及 value，再 slice 切割为 key 和 value。</p>
-<p>映射的代码如下，感觉也没什么呀</p>
-<pre lang="source"><code>// map recordinfo to bytes
-func recordInfoToBytes(ri *recordInfo) []byte {
-        var x reflect.SliceHeader
-        x.Len = int(recordSize)
-        x.Cap = int(recordSize)
-        x.Data = uintptr(unsafe.Pointer(ri))
-        retBytes := *(*[]byte)(unsafe.Pointer(&amp;ri))
-        return retBytes[:recordSize]
-}
-
-// map byte to recordinfo
-func bytesToRecordInfo(b []byte) *recordInfo {
-        return (*recordInfo)(unsafe.Pointer((*reflect.SliceHeader)(unsafe.Pointer(&amp;b)).Data))
-}
-</code></pre>
-<p>也许完全运行起来以后，Go 的速度才会又继续上去吧，我 pprof 的结果，是 system call 占用时间最多，其中 Set 是占用很多的，其次是 GC，但是 GC 不常用，这个倒没什么关系。</p>
-<p>Set 占用多，感觉说不过去呀，因为就检测如果有重复 key，做了 remove，然后再 set 新的 key/value，两次 system call write 函数。</p>
-<p>也许 Go 版本真的应该做完整一些，将写的操作单独一个 goroutine，并且做 LSM 操作，将读写都 encode/decode 起来，再做一层抽象才好吧，但是目前这个算是简单版本，不打算再做这一层了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p1">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
