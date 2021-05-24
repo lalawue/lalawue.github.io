@@ -16,7 +16,51 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年4月11日 周日 21:23</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年5月24日 周一 22:10</div>
+<h2>编写 VSCode Extension</h2>
+<p>如果只是搭一个框架，VSCode Extension 的编写没有想象中那么无从入手，照着文档 <a href="https://www.cnblogs.com/liuxianan/p/vscode-plugin-overview.html">VSCode插件开发全攻略</a> 一步一步往下学就是了。</p>
+<p>其实我的要求有 2 个</p>
+<ul>
+<li>语法高亮（syntax highlight）</li>
+<li>侧边栏的大纲（outline）</li>
+</ul>
+<p>至于 language server 的支持，自然是不敢想的。</p>
+<h3>语法高亮</h3>
+<p>先说语法高亮吧，用不到 typescript 编程，只需要会正则就好，但是这个正则的规则，是跟 TextMate 一样的，<a href="https://macromates.com/manual/en/regular_expressions">文档在这里</a>。</p>
+<p>这个正则默认是行匹配的，不会跨行，如果需要跨行，就需要设置 begin、end capture，另外，这个正则匹配，在设置的时候，就需要制定高亮颜色，偏偏 VSCode 提供的几种高亮颜色其实不怎么够用，我是想抄 EmmyLua 的一些高亮，比如全局变量的高亮，没学会人家是怎么搞的。</p>
+<p>一些实践来的经验</p>
+<ul>
+<li>多个匹配的话，后面的匹配会覆盖前面的匹配，颜色覆盖</li>
+<li>默认是包含匹配，如果不想包含，将需要匹配的放在前面、后面，用 (?&lt;=CAPTURE)、(?=CAPTURE) 包起来</li>
+<li>在支持跨行的 begin、end 匹配中，end 匹配可以用上 begin 匹配到的，比如下面这个可以匹配 Lua 的长字符串，比如 [==[ ANY THING ]==]，= 的个数是对称的</li>
+</ul>
+<pre lang="source"><code>&quot;strings_long&quot;: {
+	&quot;name&quot;: &quot;string.quoted.single.name&quot;,
+	&quot;begin&quot;: &quot;\\[(=*)\\[&quot;,
+	&quot;end&quot;: &quot;\\]\\1\\]&quot;,
+	&quot;patterns&quot;: [
+		{
+			&quot;name&quot;: &quot;constant.character.escape.name&quot;,
+			&quot;match&quot;: &quot;\\\\.&quot;
+		}
+	]
+}
+</code></pre>
+<h3>侧边栏大纲</h3>
+<p>这个需要 typescript 编程了，我的 typescript 小学生水平都可以搞出来 outline，想必是不难的。</p>
+<p>先吐槽一下，typescript 是要编译成 javascript 才能用的，另外有引入库的话，记得 npm install，否则会像我一样，浪费了大量的时间在这些基础上面。</p>
+<p>outline 其实已经是 language server 的范畴了，只不过我们简单处理，将这个抽象借口部署在本地，就是简单的文本处理就好。</p>
+<p>不贴代码了，反正可以在网上找到大量的的例子，比如一个行处理，split 空格拿到 token 关键字的 LS，其实不堪用，但是我是没办法，暂时先这么用着了，毕竟海没学会更好的处理方法。</p>
+<p>然后呢，最外层的循环用的是变量 i，我是刚开始不小心，里面一层小循环也用变量 i 了，然后这个 typescript 停不下来了，也是无语，没有语法 scope 的吗，难过。</p>
+<p>分析 token 语法的结构，是提供给 VSCode 一个带层次的 node 列表，首层是 outline 第一级，如果需要二级的画，比如 class node 里面再塞入 funciton、property 之类的，就是在这个一级 node 的 children 列表里面塞入 node，VSCode 就会帮你将这个 outline 画出来。</p>
+<p>对了，这些 node 需要指定类型，比如是 class，还是 function，还是 field，其实还有很多，property，namescope 之类的，但是实话说，只有前面这 3 个是比较好看的，其他的应该是我比较少见，不明白这些个 icon 是想干嘛。</p>
+<p>有了上面这些基础，我也终于理解了好些 Lua extension 为何只用上面这 3 个 outline 类型了，另外，我还知道了为何这些 Lua extension 列出了一大堆 local 变量，明明更重要的应该是全局变量呀。</p>
+<p>有个坑必须要说一下。</p>
+<p>不晓得是不是 outline 默认了一个 node 就是一行的原因，同一行塞入多个 node，会造成接下来的行拿不到内容，我猜测是我小学生水平的 typescript 哪里搞错了，但具体到底是哪里，目前无从知晓。</p>
+<p>先这样吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-05.html#p0">Permalink</a></div>
+
+<div class="date">21年4月11日 周日 21:23</div>
 <h2>iOS 的异步刷新</h2>
 <p>技术细节大概描述一下就好，因为网上能搜到的内容蛮多的，这里主要说一下工作中涉及到的方面。</p>
 <p>项目之前因为要 0.5 秒刷新一下部分界面，主要是数据更新，涉及到文字、以及用于标记数值程度的背景色。之前的负责人估计第一版用的是 UILabel，或者就是直接用了脸书的 Texture，就为了更新这一小块内容，居然用了 Texture，不可思议。</p>
@@ -280,48 +324,6 @@ print(seq)
 <p>--</p>
 <p>潦草的先这样吧。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-12.html#p0">Permalink</a></div>
-
-<div class="date">20年11月9日 周一 16:02</div>
-<h2>JavaScript(1)</h2>
-<p>学习了一下 javascript，使用的是 <a href="https://wangdoc.com/javascript/index.html">JavaScript 教程</a>，基础的 ES5，包含的内容可太丰富了。</p>
-<p>跟其他语言的差别，主要在语法、面向对象，基础库和运行环境这几个部分。</p>
-<h3>语法</h3>
-<p>语法部分，'==' 可真够让人头疼的，为了比较会自动转换类型，所以教程建议直接使用 ‘===’ 进行严格比较。</p>
-<p>相对高级的语言，都有 &lt;&lt; 和 &gt;&gt;，甚至 &gt;&gt;&gt; 操作符，可惜了，Lua 5.1 比如 LuaJIT 并没有这么好用的操作符，只能通过 bit 库来使用，或者塞给 C 代码处理吧。</p>
-<p>JS 里面的 null 和 undefined 也得注意一下，它们几乎是一样的，除了 null 在 Number(null) 时为 0，而 Number(undefined) 为 NaN。</p>
-<h3>面向对象</h3>
-<p>这里一开始让我挺头疼的，比如原型对象及继承关系。</p>
-<p>对比 C++/Java 的面向对象实现都隐藏在语言核心运行时里面，通过语法‘类’来实现继承，在类里面写构造函数，描述继承关系。且 C++ 因为是零成本抽象，极端强调运行时性能，继承、面向对象的逻辑在编译期几乎都解决了，只留下了动态派发给运行时处理。Java 有反射，任何时候都能拿到其继承关系，其所有的类都继承自 Object。两者作为静态语言，在运行时无法动态修改继承关系。</p>
-<p>JS 虽然跟 Java 一样所有类都继承自 Object，但其继承的语言特性，是通过原型对象来实现的，运行时可以访问。原型对象就是类的 prototype 属性，构造函数则是 prototype.constructor，因为有 new 关键字的存在，定义一个新类，只需要定义构造函数就好了，比如</p>
-<pre lang="source"><code>function Car(color) {
-    this.color = color;
-    console.log(&quot;color:&quot; + color);
-}
-
-var car = new Car(&quot;white&quot;);
-</code></pre>
-<p>会输出 'color:white&quot;。如果定义 Bus 继承 Car 是这么实现的：</p>
-<pre lang="source"><code>function Bus(color) {
-    Car.call(this, color);
-}
-Bus.prototype = Object.create(Car.prototype)
-Bus.prototype.constructor = Bus
-
-var bus = new Bus(&quot;red&quot;)
-</code></pre>
-<p>将输出 'color:red'，如果需要在运行时修改类的继承关系，propotype 和 prototype.constructor 必须同时修改。</p>
-<p>感觉原型对象这个词，在继承关系上，跟 Objective-C 的类对象有一点像，不过实际表现及使用，千差万别。</p>
-<p>对比 Lua 实现面向对象，感觉还是有一点像的，不过 Lua 里面实现面向对象，继承关系，需要了解的可太多了，需要了解 Lua 的元表（metatable）才好。</p>
-<h3>基础库和运行环境</h3>
-<p>作为一个动态脚本语言，JS 的基础库和运行环境挺丰富的，作为 Web 端统治性的语言，运行环境包含对 HTML DOM 的操作，以及浏览器环境，这两个部分我还没怎么看呢。</p>
-<p>作为后端语言，基于 Node.js 事件驱动、非阻塞式 I/O 模型，极大降低了后端开发的难度，不过 Node 下的运行环境，我还没怎么接触。</p>
-<p>虽然 JS 是单线程的 VM，但是 HTML 5 及 Node 都实践了其多线程交互的方式，也有了不同领域下的解决方案，其成熟程度，丰富程度，对比 Lua 可要好太多了。</p>
-<p>引擎部分，标准桌面、后端用的是 Chrome V8，嵌入式应该用的是其他方案。现在已经有了前后兼容的 ES5、ES6 标准，貌似 ES7 也快要出来了。</p>
-<p>--</p>
-<p>总的来说，JS 是一门比较完善，还在不断渐进式发展，且考虑兼容性的编程语言，慢慢的将变成桌面应用编程语言，部分后端编程语言，可不再是脚本语言了。</p>
-<p>相比 Go，JS 是动态类型，也不是静态编译的；相比 Lua，语言成熟度，库的丰富程度，应用范围都好好很多，没有 Lua 目的是宿主语言的累赘，虽然 Lua 还有速度上的优势。</p>
-<p>而且，学会 JS 的好处可是，前端通吃，后端独立。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p2">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -373,7 +375,7 @@ var bus = new Bus(&quot;red&quot;)
         <li><a href="http://www.google.cn/maps/@22.6273208,110.1513288,15540m/data=!3m1!1e3?hl=zh-CN">Yulin City</a></li>
       </ul>
 
-      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2021-04.html">April 2021</a></li><li><a href="2021-03.html">March 2021</a></li><li><a href="2021-02.html">February 2021</a></li><li><a href="2021-01.html">January 2021</a></li><li><a href="2020-12.html">December 2020</a></li><li><a href="2020-11.html">November 2020</a></li><li><a href="2020-10.html">October 2020</a></li><li><a href="2020-09.html">September 2020</a></li><li><a href="2020-08.html">August 2020</a></li><li><a href="2020-07.html">July 2020</a></li><li><a href="2020-06.html">June 2020</a></li><li><a href="2020-05.html">May 2020</a></li><li><a href="2020-04.html">April 2020</a></li><li><a href="2020-02.html">February 2020</a></li><li><a href="2020-01.html">January 2020</a></li><li><a href="2019-12.html">December 2019</a></li><li><a href="2019-11.html">November 2019</a></li><li><a href="2019-10.html">October 2019</a></li><li><a href="2019-09.html">September 2019</a></li><li><a href="2019-08.html">August 2019</a></li><li><a href="2019-07.html">July 2019</a></li><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
+      <p class="header">Archives</p><div class="archive_links"><ul><li><a href="2021-05.html">May 2021</a></li><li><a href="2021-04.html">April 2021</a></li><li><a href="2021-03.html">March 2021</a></li><li><a href="2021-02.html">February 2021</a></li><li><a href="2021-01.html">January 2021</a></li><li><a href="2020-12.html">December 2020</a></li><li><a href="2020-11.html">November 2020</a></li><li><a href="2020-10.html">October 2020</a></li><li><a href="2020-09.html">September 2020</a></li><li><a href="2020-08.html">August 2020</a></li><li><a href="2020-07.html">July 2020</a></li><li><a href="2020-06.html">June 2020</a></li><li><a href="2020-05.html">May 2020</a></li><li><a href="2020-04.html">April 2020</a></li><li><a href="2020-02.html">February 2020</a></li><li><a href="2020-01.html">January 2020</a></li><li><a href="2019-12.html">December 2019</a></li><li><a href="2019-11.html">November 2019</a></li><li><a href="2019-10.html">October 2019</a></li><li><a href="2019-09.html">September 2019</a></li><li><a href="2019-08.html">August 2019</a></li><li><a href="2019-07.html">July 2019</a></li><li><a href="2019-06.html">June 2019</a></li><li><a href="2018-11.html">November 2018</a></li><li><a href="2018-09.html">September 2018</a></li><li><a href="2018-06.html">June 2018</a></li><li><a href="2018-05.html">May 2018</a></li><li><a href="2018-03.html">March 2018</a></li><li><a href="2018-01.html">January 2018</a></li><li><a href="2017-12.html">December 2017</a></li><li><a href="2017-09.html">September 2017</a></li><li><a href="2017-08.html">August 2017</a></li><li><a href="2017-06.html">June 2017</a></li><li><a href="2017-05.html">May 2017</a></li><li><a href="2017-04.html">April 2017</a></li><li><a href="2017-03.html">March 2017</a></li><li><a href="2017-02.html">February 2017</a></li><li><a href="2016-10.html">October 2016</a></li><li><a href="2016-05.html">May 2016</a></li><li><a href="2016-01.html">January 2016</a></li><li><a href="2015-12.html">December 2015</a></li><li><a href="2015-11.html">November 2015</a></li><li><a href="2015-10.html">October 2015</a></li><li><a href="2015-09.html">September 2015</a></li><li><a href="2015-08.html">August 2015</a></li><li><a href="2015-07.html">July 2015</a></li><li><a href="2015-06.html">June 2015</a></li><li><a href="2015-05.html">May 2015</a></li><li><a href="2015-03.html">March 2015</a></li><li><a href="2015-02.html">February 2015</a></li><li><a href="2015-01.html">January 2015</a></li><li><a href="2014-12.html">December 2014</a></li><li><a href="2014-05.html">May 2014</a></li><li><a href="2014-04.html">April 2014</a></li><li><a href="2014-03.html">March 2014</a></li><li><a href="2014-02.html">February 2014</a></li><li><a href="2014-01.html">January 2014</a></li><li><a href="2013-12.html">December 2013</a></li><li><a href="2013-11.html">November 2013</a></li><li><a href="2013-10.html">October 2013</a></li><li><a href="2013-09.html">September 2013</a></li><li><a href="2013-08.html">August 2013</a></li><li><a href="2013-07.html">July 2013</a></li><li><a href="2013-06.html">June 2013</a></li><li><a href="2013-05.html">May 2013</a></li><li><a href="2013-04.html">April 2013</a></li><li><a href="2013-03.html">March 2013</a></li><li><a href="2013-02.html">February 2013</a></li><li><a href="2013-01.html">January 2013</a></li><li><a href="2012-12.html">December 2012</a></li><li><a href="2012-11.html">November 2012</a></li><li><a href="2012-10.html">October 2012</a></li><li><a href="2012-08.html">August 2012</a></li><li><a href="2012-07.html">July 2012</a></li><li><a href="2012-06.html">June 2012</a></li><li><a href="2012-05.html">May 2012</a></li><li><a href="2012-04.html">April 2012</a></li><li><a href="2012-03.html">March 2012</a></li><li><a href="2012-02.html">February 2012</a></li><li><a href="2012-01.html">January 2012</a></li><li><a href="2011-12.html">December 2011</a></li><li><a href="2011-11.html">November 2011</a></li><li><a href="2011-10.html">October 2011</a></li><li><a href="2011-09.html">September 2011</a></li><li><a href="2011-08.html">August 2011</a></li><li><a href="2011-04.html">April 2011</a></li><li><a href="2011-02.html">February 2011</a></li><li><a href="2011-01.html">January 2011</a></li><li><a href="2010-12.html">December 2010</a></li><li><a href="2010-11.html">November 2010</a></li><li><a href="2010-09.html">September 2010</a></li><li><a href="2009-07.html">July 2009</a></li><li><a href="2009-06.html">June 2009</a></li><li><a href="2009-05.html">May 2009</a></li><li><a href="2009-04.html">April 2009</a></li><li><a href="2009-02.html">February 2009</a></li><li><a href="2009-01.html">January 2009</a></li><li><a href="2008-12.html">December 2008</a></li><li><a href="2008-11.html">November 2008</a></li><li><a href="2008-10.html">October 2008</a></li><li><a href="2008-09.html">September 2008</a></li><li><a href="2008-08.html">August 2008</a></li><li><a href="2008-07.html">July 2008</a></li><li><a href="2008-06.html">June 2008</a></li><li><a href="2008-05.html">May 2008</a></li><li><a href="2008-04.html">April 2008</a></li><li><a href="2008-03.html">March 2008</a></li><li><a href="2008-02.html">February 2008</a></li><li><a href="2008-01.html">January 2008</a></li><li><a href="2007-10.html">October 2007</a></li><li><a href="2007-07.html">July 2007</a></li><li><a href="2007-06.html">June 2007</a></li><li><a href="2007-05.html">May 2007</a></li><li><a href="2007-04.html">April 2007</a></li><li><a href="2007-03.html">March 2007</a></li><li><a href="2007-02.html">February 2007</a></li><li><a href="2007-01.html">January 2007</a></li><li><a href="2006-12.html">December 2006</a></li><li><a href="2006-11.html">November 2006</a></li><li><a href="2006-10.html">October 2006</a></li><li><a href="2006-09.html">September 2006</a></li><li><a href="2006-08.html">August 2006</a></li><li><a href="2006-07.html">July 2006</a></li><li><a href="2006-06.html">June 2006</a></li><li><a href="2006-05.html">May 2006</a></li><li><a href="2006-04.html">April 2006</a></li><li><a href="2006-03.html">March 2006</a></li><li><a href="2006-02.html">February 2006</a></li><li><a href="2006-01.html">January 2006</a></li><li><a href="2005-12.html">December 2005</a></li><li><a href="2005-11.html">November 2005</a></li><li><a href="2005-10.html">October 2005</a></li><li><a href="2005-09.html">September 2005</a></li><li><a href="2005-08.html">August 2005</a></li><li><a href="2005-07.html">July 2005</a></li><li><a href="2005-06.html">June 2005</a></li><li><a href="2005-05.html">May 2005</a></li><li><a href="2005-04.html">April 2005</a></li><li><a href="2005-03.html">March 2005</a></li><li><a href="2005-02.html">February 2005</a></li><li><a href="2005-01.html">January 2005</a></li><li><a href="2004-12.html">December 2004</a></li><li><a href="2004-11.html">November 2004</a></li><li><a href="2004-10.html">October 2004</a></li><li><a href="2004-09.html">September 2004</a></li></ul></div></div><!-- sidebar -->
    </div> <!-- body -->
   </body>
 </html>
