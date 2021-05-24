@@ -30,7 +30,7 @@
 <h3>语法高亮</h3>
 <p>先说语法高亮吧，用不到 typescript 编程，只需要会正则就好，但是这个正则的规则，是跟 TextMate 一样的，<a href="https://macromates.com/manual/en/regular_expressions">文档在这里</a>。</p>
 <p>这个正则默认是行匹配的，不会跨行，如果需要跨行，就需要设置 begin、end capture，另外，这个正则匹配，在设置的时候，就需要指定<a href="https://macromates.com/manual/en/language_grammars">高亮颜色</a>，偏偏 VSCode 提供的几种高亮颜色其实不怎么够用，我是想抄 EmmyLua 的一些高亮，比如全局变量的高亮，没学会人家是怎么搞的。</p>
-<p>一些实践来的经验</p>
+<p>一些实践来的经验：</p>
 <ul>
 <li>多个匹配的话，后面的匹配会覆盖前面的匹配，颜色覆盖</li>
 <li>默认是包含匹配，如果不想包含，将需要匹配的放在前面、后面，用 (?&lt;=CAPTURE)、(?=CAPTURE) 包起来</li>
