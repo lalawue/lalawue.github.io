@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - Archive for December, 2012</title>
+    <title>Sucha's Blog - Archive for July, 2021</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -16,19 +16,55 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for December, 2012</h1>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for July, 2021</h1>
 <p><a id="p0"></a></p>
-<div class="date">12年12月1日 周六 22:04</div>
-<h2>做梦的艺术</h2>
-<p>作者是卡斯塔尼达，讲述了一位学者跟一位术士学习成为 nagaul 的过程，他们通
-过梦境拥有了超乎寻常的体验及能力，进入了更为真实而宽广的世界。</p>
-<p>这本书的内容和情节让我惊讶甚至震撼，已经很久没有一本书或是电影能让我沉迷
-其中，令人对事情的进展产生期待，而又充满了未知的恐惧，读到最后，我是全身
-鸡皮疙瘩起来，有点怕怕呀。</p>
-<p>要能拍成电影多好，感觉要比盗梦空间强太多了，盗梦空间的情节我都可以推测出
-来，但是这本书不可以。</p>
-<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2012-12.html#p0">Permalink</a></div>
-<!-- date: 2012-12-01T22:04:33+0800 -->
+<div class="date">21年7月11日 周日 12:08</div>
+<h2>PinStacView</h2>
+<p>目前工程主要使用 AutoLayout，但一些复杂页面上面，先不说各种约束优先级的问题，单单就因为约束不对造成的约束失败，在 debug console 里面打印一大堆，都不好定位在哪里，别说去修复了。</p>
+<p>总觉得大部分的场景，其实使用固定 frame 的 layout 就足够了，不需要那么复杂，于是我在工程里面引进了 <a href="../blog/2021-03.html#p1">PinLayout</a>。</p>
+<p>因为使用 PinLayout 构建复杂页面确实太辛苦，其只用于搭建不复杂的元素，之前使用的是 StackViewLayout，但测试反馈问题比较多，我自己也发现，不大稳定，偶尔还有 crash，毕竟这个库是未完成的状态，然后还自带内存泄漏。</p>
+<p>于是就想着自己写一个，毕竟 StackViewLayout 也用了这么久，接口已经蛮熟悉的了，而在功能上面，需要的又不多。</p>
+<p>于是就有了 <a href="https://gitee.com/lalawue/PinStackView">PinStacView</a>，这个库相比 PinStackLayout 来说，简单很多，其实只有一个文件，另外，其处理流程上也是很简单的。</p>
+<h3>配置</h3>
+<ul>
+<li>区分主轴 axis 和垂直于主轴的 cross axis，axis 可以为 horizontal 或者 vertical</li>
+<li>cross axis 用于配置 alignment，可以是 start、center、end、stretch</li>
+<li>区分沿主轴长度是自动增长的为 auto style，否则为 fixed style，默认是 fixed style</li>
+<li>接着是 axis 上的分布 distribution，可以是 start、end、equal，其中 equal 对应这 UIStackView 的 distribution equal，每个 item 平均分布</li>
+<li>spacing 是 item 之间的间距</li>
+<li>padding 之后才是 layout 的内容区域</li>
+</ul>
+<p>最后增加了一个 autoSizeChangedCallback 的回调函数，如果 style 设置为了 auto，PinStackView 在 axis 上的长度由其 item 动态长度计算得到，每次对 bounds 有更改，都会 callback 通知。</p>
+<p>另外上面的设置其实隐含了一些前提，在 fixed style 时，PinStackView 的大小是外部设置的，此时才有 start、end、equal 这些 distribution；而在 auto style 下，只有 start distribution，其实很好理解。</p>
+<h3>管理接口</h3>
+<p>下面是管理 view 的接口，添加、插入都会返回 PinStackItemInfo</p>
+<ul>
+<li>addItem() 添加管理 view，返回 PinStackItemInfo，这个接口独立于 addSubview()，通过 addSubview() 添加的，没有绑定 itemInfo，不会自动 layout</li>
+<li>insertItem() 用于插入管理 view，同样返回 PinStackItemInfo</li>
+<li>removeItem() 删除管理 view，同时从 subviews 里面删除</li>
+<li>markDirty()，其实就是 setNeedsLayout()</li>
+</ul>
+<h3>item 配置</h3>
+<p>对于每个管理 view，在添加、插入的时候，都绑定了一个 PinStackItemInfo 用来描述其 layout 信息，下面的接口都可以进行链式配置</p>
+<ul>
+<li>top()、bottom()、left()、right() 用于配置 margin，在非 equal distribution 时，这些 margin 会和 spacing 累加，可以实现其中的某个元素间距不同；在 equal 时，可以调整其位置</li>
+<li>width()、height()、size() 用于配置大小，其中 size() 优先级最高，其次是 width() 和 height()</li>
+<li>alignSelf()，独立于总的 cross axis 的配置，可以单独设置某个 view 的 alignment</li>
+<li>grow()，当设置为 fixed style 的时候，这个值可以对剩余空间进行分配；同样的，如果剩余空间不足，这个值也用于 shrink</li>
+</ul>
+<p>上面第二点，如果设置了 alignment 或者 alignSelf 为 stretch，会覆盖 item 在 cross axis 的长度</p>
+<h3>计算流程</h3>
+<p>建议看代码吧，其实没啥好说的，fxied style 下面，equal 就是平均 axis 的长度，start、end 的计算是最复杂的，因为可以带 grow()，需要先计算固定长度的，后面再分配动态长度的。</p>
+<p>auto style 其实相对好计算，计算完所有管理 view 沿着 axis 的长度后，对比 PinStackView 在 axis 的长度，有变化的话就修改 PinStackView 的长度，然后 callback。说一下 callback，这个通知，可以回调到外部依赖 PinStackView frame 的地方，重新设定相关的 layout。</p>
+<p>这个当然有可能造成 layout 的循环，之前的 StackViewLayout 就有这样的场景，我在这里将这个依赖交给了用户，用户自己来控制。</p>
+<p>PinStackView 里面对于管理 view 的宽高计算是一个焦点，代码在 calcViewSize() 里面</p>
+<ul>
+<li>优先 size() 的设置，如果有设置就直接返回</li>
+<li>接着调用 view 的 sizeThatFits()，再看 width() 和 hegith() 是否覆盖了 sizeThatFits() 的配置</li>
+<li>最后看 width、height 是否超过了外部 padding 后的宽、高</li>
+</ul>
+<p>将 StackViewLayout 换成 PinStackView 后，循环 layout 的场景不再出现，layout 也挺正常的，但是公司人员变动太大，貌似这个需求测完了，但上线遥遥无期，再说吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
