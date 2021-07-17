@@ -38,12 +38,12 @@
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p1">Permalink</a></div>
 
 <div class="date">21年7月11日 周日 12:08</div>
-<h2>PinStacView</h2>
+<h2>PinStackView</h2>
 <p>目前工程主要使用 AutoLayout，但一些复杂页面上面，先不说各种约束优先级的问题，单单就因为约束不对造成的约束失败，在 debug console 里面打印一大堆，都不好定位在哪里，别说去修复了。</p>
 <p>总觉得大部分的场景，其实使用固定 frame 的 layout 就足够了，不需要那么复杂，于是我在工程里面引进了 <a href="../blog/2021-03.html#p1">PinLayout</a>。</p>
 <p>因为使用 PinLayout 构建复杂页面确实太辛苦，其只用于搭建不复杂的元素，之前使用的是 StackViewLayout，但测试反馈问题比较多，我自己也发现，不大稳定，偶尔还有 crash，毕竟这个库是未完成的状态，然后还自带内存泄漏。</p>
 <p>于是就想着自己写一个，毕竟 StackViewLayout 也用了这么久，接口已经蛮熟悉的了，而在功能上面，需要的又不多。</p>
-<p>于是就有了 <a href="https://gitee.com/lalawue/PinStackView">PinStacView</a>，这个库相比 PinStackLayout 来说，简单很多，其实只有一个文件，另外，其处理流程上也是很简单的。</p>
+<p>于是就有了 <a href="https://gitee.com/lalawue/PinStackView">PinStackView</a>，这个库相比 PinStackLayout 来说，简单很多，其实只有一个文件，另外，其处理流程上也是很简单的。</p>
 <h3>配置</h3>
 <ul>
 <li>区分主轴 axis 和垂直于主轴的 cross axis，axis 可以为 horizontal 或者 vertical</li>
