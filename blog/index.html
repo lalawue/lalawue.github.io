@@ -16,7 +16,28 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年7月11日 周日 12:08</div>
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年7月17日 周六 21:10</div>
+<h2>定制 UINavigationBar 的转场动画</h2>
+<p>最近 app UI 改版，交互设计师给出了 UINavigationController 下 Push／Pop 的转场动画，Push 的时候，fromView 会被缓慢往左推，toView 往左慢慢全部盖住 fromView，盖住之前，fromView 大概往左侧移动了 1/3 个页面；Pop 的时候则相反。</p>
+<p>单单这样的转场动画是容易实现的，网上的教程一大堆，但难点在 UINavigationBar 也需要实现同样的交互。问题是 UINavigationBar 的动画是系统提供的，UIViewController 仅仅提供左、右、中的 CustomView，而且就我们的 App 来说，首页是隐藏的，在二级页面才会显示出来。由于 UINavigationBar 是系统管理的，转场动画的框架是没有对 UINavigationBar 提供支持的，得自己做。</p>
+<p>网上搜索了一下，美团的技术博客提供了思路，具体我用的方案，在 iOS 14 模拟器上验证了蛮久，加上一些调试，如下：</p>
+<p>Push 时，对 fromView 的 UINavigationBar 截图；如果是 hidden 状态则不用截图。toView 的 NavigationBar 是假的，但却是用真的 UINavigationBarItem 来构建的，真的 UINavigationBar，系统还未开始绘制呢。假的 NavigationBar 使用了 UINavigationBarItem 的 leftBarItem、rightBarItem 和 titleView 或者 title string。</p>
+<p>这里需要注意将 fromViewController 上面对真的 UINavigationBarItem 的链接进行切断，比如 titleView 给他设置一个空的 UIView，leftBarItems、rightBarItems 给设置空的数组来填充。</p>
+<p>fromView 截图的 UINavigationBar 按照转场动画的时长 Push 到左侧，toView 带的假的 NavigationBar 则从右侧 Push 进来，等动画结束，将 UINavigationBarItem 上的数据再拿给 fromViewController 使用，将假的 NavigationBar removeFromSuperview。</p>
+<p>Pop 的时候需要区分是按返回按钮的 Pop，还是全局右划可中断的 interactive Pop。</p>
+<p>先说简单的按返回按钮的 Pop，fromView 在对 UINavigationBar 截图后往右，toView 带着截图的 NavigationBar 出来，等动画结束，截图 NavigationBar removeFromSuperview 就好，这里比较简单。</p>
+<p>可中断的 interactive Pop 复杂一些，举例我们用的是 <a href="https://github.com/forkingdog/FDFullscreenPopGesture">FDFullscreenPopGesture</a>，它其实是截获系统提供的全局右划返回功能。但系统的全局右划返回，当 UINavigationBar 的 backItem 被设置为 nil 等时候，是不起作用的。这个库是拿到系统手势检测 view，添加手势，检测到后调用系统的全局右划返回接口，发起是可中断的右划返回动画。</p>
+<p>这个库暴露出来的检测手势 gesture 实例，我们后面会用到。</p>
+<p>可中断的全局右划返回 Pop 跟直接调用 UINavigationController 的 popViewController 很不一样，由于动画可以中断，因此需要在 fromView 上建立假的 NavigationBar，截图就好。</p>
+<p>手势的开始，来自于监听上面说到的 gesture 的 target action，可以监听 begin、change、end 事件，并计算右滑的百分比，用于调整截图 NavigationBar 跟随 fromView。难点来了，手势结束的时候，实际上右划动画也许结束，也许会中断返回，具体会如何，其实是系统判定的，我们并不知道后面动画要怎么样的，包括时长多久也都不知道，因此这里，需要建立一个跟踪机制，我用的是 DisplayLink 来做的，模拟器上看，比较跟手，但是太极端的情况，也会偶尔拉跨。</p>
+<p>另外上面说到的假的 NavigationBar 将 UINavigationBarItem 给真的 UINavigationBar 时，其实会闪一下；以及截图 NavigationBar 的时机，实际上比转场动画要早，也就是截图代码不能放在转场动画开始的地方，那个地方才截图的话，太晚了。</p>
+<p>因此需要在 UINavigationController 的 push、pop 接口地方做截图，另外全局右划的可中断 pop，截图是在手势开始的 begin，因为流程是 begin 开始后，才会调用到 UINavigationController 的 pop。</p>
+<p>太多细节细节，不现场调试根本说不清楚，也不晓得会不会在后面的系统更新中变化，这里大体说了思路，以及需要注意的地方。</p>
+<p>当然上面也提到过最后的效果，其实蛮不错的，</p>
+<p>说一下前提，如果 UINavigationBar 设置了 translant 且真的用上了半透的话，效果应该是不行的，因为系统真实的 UINavigationBar 动画在底下会动，得实际遮住才行，因此这套东西，我是觉得只能用在非 translant 的场景下，当然，如果只是设置了 translant，但实际上又带了 opaque 的背景，仅仅是为了带一丢丢高斯模糊背景的话，是没问题的。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p1">Permalink</a></div>
+
+<div class="date">21年7月11日 周日 12:08</div>
 <h2>PinStacView</h2>
 <p>目前工程主要使用 AutoLayout，但一些复杂页面上面，先不说各种约束优先级的问题，单单就因为约束不对造成的约束失败，在 debug console 里面打印一大堆，都不好定位在哪里，别说去修复了。</p>
 <p>总觉得大部分的场景，其实使用固定 frame 的 layout 就足够了，不需要那么复杂，于是我在工程里面引进了 <a href="../blog/2021-03.html#p1">PinLayout</a>。</p>
@@ -276,44 +297,6 @@ round 10: 19ms, avg: 19ms
 <p>对比一下，李得胜在回答斯诺对印度的看法时，说”印度不经过土地革命，是永远不会实现独立的“。当然印度在 1947 年就独立了，不过应该是类似国民党上台一样吧，代表的是大地主、大资产阶级的利益，现在种性、各地利益分割就可以看到，显然生产力远未得到解放。</p>
 <p>估计是年龄大了吧，现在都喜欢看这样的书了。</p>
 <div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2021-03.html#p0">Permalink</a></div>
-
-<div class="date">21年2月16日 周二 18:24</div>
-<h2>Swift(3) - PageEventBus</h2>
-<p>春节在家，继续思考了一下业务上的一些痛点，并做了整理，趁春节期间的空闲，搞了一个改善页面内通讯，限定 UI 及业务逻辑绑定关系的库 <a href="https://github.com/lalawue/PageEventBus">PageEventBus</a>。</p>
-<p>先说一下之前在业务上觉得不爽的点：</p>
-<ul>
-<li>页面内非常多的输入组件、点击开关，以及可改变当前页面显示内容的可选项</li>
-<li>这些点击开关、可选项的变化会导致页面展示内容的变化，以及输入组件的刷新，以及精度展示的配置</li>
-<li>这些点击开关、可选项、显示内容、输入组件可能处于页面内各种不同层级的 UI 中，比如可以是 child view controller 等</li>
-</ul>
-<p>说一下之前的处理方法，使用 RxSwift，各种不管 UI 层级多深的 binder、controlProperty、controlEvent，都透过多层 UI，传递到业务 view controller 这一层来做绑定，带来的问题，有以下几个</p>
-<ul>
-<li>业务 view controller 急速膨胀</li>
-<li>穿透用的 UI 层级，不得不写 controlEvent、binder，但实际上是其 subviews 进行处理</li>
-<li>当业务变化时，每一层涉及到的 UI、业务 view controller 都要做出修改</li>
-<li>UI 绑定了业务，复用很难</li>
-</ul>
-<p>基于上面的问题，我有了一些思考，希望有下面这样的东西</p>
-<ul>
-<li>UI 跟业务分离，业务逻辑能够操作 UI，UI 独立可复用</li>
-<li>具体的业务可以分割到不同的业务单元处理，接收消息，可以将处理结果传递出来</li>
-<li>当业务需求变化时，希望不会因为输入、输出参数的变化，而修改 UI</li>
-</ul>
-<p>就想着能否用上一个页面内的总线，将参数通过总线传递，这样可以对抗业务需求上导致的参数变化，比如 view model 可以接收总线消息，也可以发送消息，有了总线后，可以不需要关心 UI 层级了，也没有参数需要透传了。</p>
-<p>另外，UI 的输入、输出抽象到业务逻辑 view model 的输入、输出，可以认为 view 持有了 view model，view model 持有 unowned view 的不可变引用；对于 view controller，也可以相应的持有 page model。这样，UI 总是可以复用的，而 view model，才处理实际业务，如果多个业务本身可以抽象到更高的层级，那么显然 view model 也是可以做到的。</p>
-<p>还加上改进的一点，由于上面接收、发送事件的角色都在系统展示树上，可以利用 responder chain 链，在 view didMoveToWindow 或者 controller viewDidAppear 的时机，做事件总线的绑定，意味着总线本身都不需要传递，可以自动连接上。</p>
-<p>上面的一些思考，加上春节空余时间的实践，就是上面说到的 <a href="https://github.com/lalawue/PageEventBus">PageEventBus</a>。</p>
-<p>一些代码上的具体实践：</p>
-<ul>
-<li>基类是 BlockEventAgent&lt;E,R&gt;，泛型的两个参数，一个是输入类型，一个是输出类型，可以用 enum 分类限定</li>
-<li>BlockEventAgent 拥有名字，当它们接收到消息，返回处理结果的时候，可以知道是谁返回的</li>
-<li>BlockEventBus 很简单，添加 agent、以及给各个 agent 发送消息，搜集结果并返回给调用方</li>
-<li>BlockViewModel&lt;V:UIView,E,R&gt; 泛型限定了具体操作的 view，创建的时候就需要输入 view 实例，其生命周期小于等于 view</li>
-<li>BlockPageModel&lt;C:UIViewController,V:UIView,E,R&gt; 绑定了 view controller，可以选择生成 event bus，或者使用已有的</li>
-<li>BlockView 和 BlockViewContnroller 都加入了在 didMoveToWindow 或 viewDidAppear 激活搜索已有 event bus 的逻辑</li>
-</ul>
-<p>话说这一整套限定的东西还是很多的，我准备使用 event bus 来传递 view model，view model 内部还是使用 RxSwift 来做业务绑定，view model 带 disposeBag，或者使用 view 的 disposeBag 也是可以的。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-02.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
