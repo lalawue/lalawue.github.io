@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
   <head>
-    <title>Sucha's Blog - Archive for April, 2007</title>
+    <title>Sucha's Blog - Archive for August, 2021</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
@@ -16,38 +16,91 @@
   <body>
     <div id="body">
       <div id="text">
-	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for April, 2007</h1>
-<p><a id="p1"></a></p>
-<div class="date">4月26日 周四 14:13</div>
-<h2>消逝的时间</h2>
-<p>火箭连胜两场，曼联击败了 AC，还有一拖再拖的毕设终于在今早上彻底敲定了题目，
-为庆祝室友们复试的胜利归来和我顺利找到了工作而举行的面向班级的庆祝会，还
-有室友们准备明天上路的早已安排好的访乡活动……所有的这一切，都在五一前的一
-周内完成。</p>
-<p>呵呵，这个紧张的安排。</p>
-<p>明天回玉林，车票已经买好。今年火车提速后方便了很多，到广州的时间大概是早
-上 9 点，这样到家的车票就好买多了，不用像往常那样中午抢票，还得时时担心着
-能不能当天到。</p>
-<p>其实回家也尽是一些琐碎的事情，希望不会拖太长的时间。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2007-04.html#p1">Permalink</a></div>
-<!-- date: 2007-04-26T14:13:37+0800 -->
+	<!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for August, 2021</h1>
 <p><a id="p0"></a></p>
-<div class="date">4月12日 周四 19:49</div>
-<h2>SCENE: 23</h2>
-<p>这一个星期都在忙找工作的事情，连生日都没有好好准备，不过紧张了这么久，终
-于等到了好消息，拿到了 offer，自己满意的工作。</p>
-<p>下面就该准备毕设了，因为不能去实习，所以一些工作方面的基本知识也得好好准
-备，希望去到公司之后能够比较快地融入其中。说到毕设，现在变成了让人头疼的
-问题，说好 5 号出题目，结果因为老师太忙拖到了 10 号，今天已经是 12 号了，
-还是没有消息，邮件、短信都没有回复，接下来电话应该是必不可少的了。</p>
-<p>找工作从最初的完全陌生，也没太在意从而错过了很好的机会，让我吃了不少苦头，
-一直忙到了现在，然后慢慢地反省，认识，终于了解，并且很认真地去准备。重新
-上路之后，经历了不少宣讲会，也得到了一些笔试，面试的机会，甚至到了南京去
-面试。可是因为形势的原因，这个时候，来学校招人的公司已经不多，所以心里虽
-急，也没有办法。庆幸后来机会还是有的，现在也终于搞定了。</p>
-<p>寝室里面大部分兄弟都定下来了，“开题报告”也该提上日程，就等人齐了。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2007-04.html#p0">Permalink</a></div>
-<!-- date: 2007-04-12T19:49:46+0800 -->
+<div class="date">21年8月31日 周二 22:37</div>
+<h2>lua-html-tags</h2>
+<p>上周才知道 <a href="https://stackblitz.com/">StackBlitz</a> 的在线代码编辑工具，是一个 React JS 编辑器，包括了自动导入的包管理等功能，React 这边随便编辑修改页面添加变量，右侧的页面瞬间刷新，看着这样的前端开发实在太香了。相比之下，虽然 Swift 开发还有类型信息，但是为了上真机跑起来，还得编译链接，老费劲了。</p>
+<p>其中 React 将页面和逻辑都放到一起的做法，感觉挺好的。</p>
+<p>因为之前做了一个 <a href="https://github.com/lalawue/cincau">Cincau</a> web 框架，用了 <a href="https://github.com/leafo/etlua">etlua</a> 做模版渲染引擎，发现其实还是要写很多的 HTML，而且之前的做法是将模版和实际的逻辑页面分开、model 分开，为了搭建一个页面，心智经常要顾及太多文件，再加上我搭建的多页面跳转的 demo，router 加上各个页面、model、template，真的让人头大。</p>
+<p>但为此将模版文件放到业务逻辑里面，又感觉太啰嗦了。</p>
+<p>就想找一个将 HTML tag 和 Lua 结合起来的描述语言，其实看过一些短小的，后来看到较大的是这个 <a href="https://github.com/bungle/lua-resty-tags">lua-resty-tags</a>，但是这个使用的时候需要建立 tags 描述的，非开箱即用感觉不够专业呀。</p>
+<p>我描述一下自己的需求吧</p>
+<ul>
+<li>基本的 HTML tags</li>
+<li>可以自定义 tags</li>
+<li>支持 attributes 等</li>
+<li>不影响当前 _ENV 和 fenv</li>
+<li>可以 include 文件</li>
+</ul>
+<p>最终是自己摸索着建立了一个 <a href="https://github.com/lalawue/lua-html-tags">lua-html-tags</a>，这些 tags 实际上都是 Lua function，因为 Lua 语法的关系，function 可以不加括号接受一个 string 和 table 作为参数，让之前相对简洁的 HTML 描述得以实现。</p>
+<p>简单描述一下实现逻辑：</p>
+<ul>
+<li>因为需要包裹在特定的 _ENV 和 fenv，所以页面描述是用 function 包裹返回的</li>
+<li>返回的最外层是一个 table</li>
+<li>里面的每一项如果不是 function 或者 table，就转成 string 输出</li>
+<li>如果是 table 就遍历取值（<sup><a href="#fn1">特例</a></sup>）</li>
+<li>遇到类似 HTML tags 这样的 function 就调用取返回值</li>
+</ul>
+<p>可以看到，从最外层的 table 开始遍历后，处理方式都是一致的递归描述，举个简单的例子</p>
+<pre lang="source"><code>local Tags = require(&quot;html-tags&quot;)
+
+local function pageSpec()
+    return {
+        html {
+            head {
+                meta { name=&quot;generator&quot;, content=&quot;MarkdownProjectCompositor.lua&quot; },
+                title &quot;Example&quot;
+            },
+            body {
+                div {
+                    { id=&quot;body&quot; },
+                    p {
+                        &quot;content 1, &quot;,
+                        &quot;content 2&quot;
+                    }
+                }
+            }
+        }
+    }
+end
+
+print(Tags.render(pageSpec, {}))
+</code></pre>
+<p>最终会生成这样的 HTML（经过了部分换行编辑）</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;meta name=&quot;generator&quot; content=&quot;MarkdownProjectCompositor.lua&quot; /&gt;
+    &lt;title&gt;Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id=&quot;body&quot;&gt;
+        &lt;p&gt;content 1, content 2&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>由于这个页面描述就是 Lua，所以加入相关的变量、函数计算是很简单的事情，而且因为限定了 _ENV 和 fenv，所以 HTML tags 和自定义的 tags 对相关函数外的 Lua 的运行环境都没有影响。</p>
+<p>感觉还可以说一下 _ENV 和 setfenv 等相关的事情。实践下来，是觉得 getfenv、setfenv 的灵活性很高，_ENV 比较受限，但也许从语言设计者的角度来说，_ENV 更安全一些吧。</p>
+<p>在 5.2 的 _ENV 下，可以认为其 upvalue 在你写完这个函数后就定下来了，虽然可以用 debug 库更改这个函数的 _ENV，但是作用有限，下面的例子对比一下 5.1 的 getfenv、setfenv 会很直观。</p>
+<p>先说一下这个 include tag 的作用，就是引入一个 Lua 文件描述的子页面，最终是输出一串字符串到这个 tag 的位置。使用场景时，比如我做了很多页面，但是想用同样的 HTML head 描述，当我改变 head 的描述是时，希望所有页面都能同样做更改，那么我将这个 head 文件拎出来单独描述就好。</p>
+<p>比如将上面的例子命名为 head_tpl.lua，那么引入的时候可以是这样：</p>
+<pre lang="source"><code>local function pageSpec()
+    return {
+        html {
+            include &quot;/path/to/head_tpl.lua&quot;,
+            body {
+                ...
+            }
+        }
+    }
+end
+</code></pre>
+<p>当这个文件被 loadfile 进入 Lua，就成了一个 function，之前我说过给 pageSpec 设定了 fenv，而 include 是早已经建立好的函数，有自己的 fenv，这时候 include 进来的 head_tpl 函数，如果我不设置 fenv，直接塞进 render 函数 call 的话，用的是 include 的 fenv。</p>
+<p>在 5.2 时，如果我不事先记录 pageSpec 的 fenv，从 pageSpec 调用了 include 函数，在 include 函数里，我无法获取到 pageSpec 函数的 fenv，即便你知道堆栈上的前一个函数有我需要的 fenv，但就是拿不到。</p>
+<p>在 5.1 的时候就很简单了，getfenv(2) 可以取到堆栈上前一个函数的 fenv，然后 setfenv 就行，方便极了。</p>
+<p><sup>[<a id="fn1">特例</a>]</sup>：HTML tags function 在实现时，如果紧接着的 table 参数里面的第一项还是 table，作为属性 key / value 处理的，比如之前例子里面的 div id=&quot;class&quot;</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-08.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
 <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
