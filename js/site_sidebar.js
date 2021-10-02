@@ -1,5 +1,4 @@
-function generate_sidebar() {
-    const content = `
+document.getElementById('sidebar').innerHTML = `
 <p class="header">Here</p>
 <ul>
   <li><a href="../index.html">Home</a></li>
@@ -30,6 +29,3 @@ function generate_sidebar() {
 <ul>
   <li><a href="mailto:suchaaa@gmail.com">Email Me</a></li>
 </ul>`
-    document.getElementById('sidebar').innerHTML = content
-}
-generate_sidebar()
