@@ -15,7 +15,41 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年10月02日 周一 22:48</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">20年11月07日 周日 11:46</div>
+<h2>stunnel 的 SNI 配置</h2>
+<p>因为是很小的网站，资源也有限，感觉没必要用上 openresty 这个大件。</p>
+<p>先贴配置：</p>
+<pre><code>debug=info
+output=/path/to/access.log
+pid=/path/to/process.pid
+client=no
+
+[https]
+accept = 443
+connect = 127.0.0.1:port1
+cert = /path/to/default.cer
+key = /path/to/default.key
+
+[site1]
+connect = 127.0.0.1:port1
+sni = https:site1.domain
+cert = /path/to/site1.cer
+key = /path/to/site1.key
+
+[site2]
+connect = 127.0.0.1:port2
+sni = https:*.site2.domain
+cert = /path/to/site2.cer
+key = /path/to/site2.key
+</code></pre>
+<p>说一下上面的配置。</p>
+<p>这是类似 INI 方式的配置文件，首先定义是 server 端的配置，设置 access.log 和 process.pid 文件的位置。</p>
+<p>之后设置默认协议，比如叫做 https，监听 443 端口，并设置连接地址，使用默认的 cert 和 key 做验证，这里其实是可以跟下面的 site1 或者 site2 用同样的 cert 和 key 配置。</p>
+<p>之后分别设置不同网站对应的处理地址，比如 site1，连接的是 port1，注意 sni 字段配置，第一个是协议，就是上面描述过的 https，而不是 HTTPS，之后是需要处理的 domain，这里只处理二级域名，没有通配字，最后加入网站申请到的 cert 和 key。</p>
+<p>site2 的 sni 用了通配字，所有 site2.domain 的二级、三级域名都可通过验证处理。</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2021-11.html#p0">Permalink</a></div>
+
+<div class="date">20年10月02日 周一 22:48</div>
 <h2>独立 SideBar</h2>
 <p>将 site 和 blog 的边栏 sidebar 独立到各自不同的 js 文件上去了，比如</p>
 <ul>
@@ -349,15 +383,6 @@ round 10: 19ms, avg: 19ms
 <p>当然现实中使用也是有收益的，负责的一个不具名的项目，因为要做上述类似的逻辑，之前单独使用 dictionary 结构做插入、删除，最后 sorted 函数在 time profile 排前面，使用了 sorted dictionary 后，耗时在 profile 中是完全看不到了。</p>
 <p>不过就我负责的那个项目来说，因为还有其他的问题如频繁 UI 刷新以及 layout 的制约，肉眼可见的观感的改进不明显，但从 time profile 的结果来看，是有改进的，算达到了预期吧。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p4">Permalink</a></div>
-
-<div class="date">21年3月24日 周三 22:22</div>
-<h2>PageEventBus 大改动</h2>
-<p>上一周，<a href="https://gitee.com/lalawue/PageEventBus">PageEventBus</a> 第一次用在了其他场景，让我不得不重新思考了一下使用 responder chain 隐含传递、关联 event bus 的优势、劣势，最后决定是将这个重要的特性去掉。</p>
-<p>先说一下问题，使用了系统 UISearchViewController，然后使用了 result view controller，但是 result view controler 无法通过 responder chain 拿到 event bus，猜测是 search view controller 使用了其他的 window，或是其他的问题。</p>
-<p>这样的话，估计如果有应用到其他的一些系统类，使用 responder chain 来拿到 event bus 这种想法，也是行不通的。</p>
-<p>于是，做成了一个中心化的架构，默认使用带类型的 event bus 做 key，将新建立的 bus 缓存到一个中心节点中，其他同样类型的 event bus，通过查询中心节点，就能拿到 bus，然后 bus retain count +1，最后当所有持有 bus 的实例销毁后，这个类型的 bus 也会被自动销毁掉的。</p>
-<p>这样的修改，对于单页面是没问题的，但是对于使用同样的事件类型，但具有多个实例，在不同的 UI 层次上，需要区分 bus 的情况，就需要特别处理一下了。这个时候，需要修改 agent 中默认的 event bus name，来建立多个不同的 event bus 实例。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p3">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
