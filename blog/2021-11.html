@@ -16,6 +16,30 @@
     <div id="body">
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for November, 2021</h1>
+<p><a id="p4"></a></p>
+<div class="date">21年11月30日 周二 21:24</div>
+<h2>div 内容过长的显示</h2>
+<p>js 入门的简单问题，我还是 baidu 了一下，花了一些时间，解决办法需要 CSS，设置 height 或者 max-height，然后设置 overflow 属性，如下</p>
+<pre lang="source&lt;a"><code> {
+    max-height: 1024px;
+    overflow: auto;
+}
+</code></pre>
+<p>实际上，我是通过 js 来设置 docuementId 属性的，因为监听了 resize 事件，我觉得加了下面的函数更完善，可以根据可见区域到校重新 layout，如下：</p>
+<pre lang="source"><code>window.addEventListener('resize', function(){
+    if (document.body.clientWidth &lt; 1024) {
+        document.getElementById('tag').removeAttribute('style');
+    } else {
+        document.getElementById('tag').setAttribute('style', 'max-height: ' + (document.body.clientHeight) + 'px;overflow:auto;');
+    }
+})
+setTimeout(() =&gt; {
+    var event = new Event('resize');
+    window.dispatchEvent(event);
+}, 1);
+</code></pre>
+<p>用了 setTimeout 来激活 resize，所以只需要设置一个 resize 监听就好，上面 js 意思是如果可见宽度 &lt; 1024，其实我是将其当成 phone 显示的，就不需要滚动条了。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p4">Permalink</a></div>
 <p><a id="p3"></a></p>
 <div class="date">21年11月25日 周四 22:51</div>
 <h2>基于 luarocks/luastatic 的二进制打包工具</h2>
