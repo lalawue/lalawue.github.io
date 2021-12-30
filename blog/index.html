@@ -15,7 +15,17 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年11月30日 周二 21:24</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年12月30日 周四 23:09</div>
+<h2>鬼吹灯读后感</h2>
+<p>不记得是月初还是上个月就看完了《鬼吹灯》，当然是全本，在微信阅读上看的，送了很多书币，断断续续就看完了。</p>
+<p>共 232 章节，记得是中间那段还比较好看，前面略显沉闷，后面呢，感觉故事跟前面差不多，没有太多新意。</p>
+<p>我自己对这个小说分类是穿越、惊悚类的探险小说，主要的场景是中国西北部、新疆、四川藏区的地域风情。故事里经常动不动就穿越了几千年，温存的场景少，打打杀杀、偷鸡摸狗的场景多，当然主角总是劫富济贫、危难中救人。</p>
+<p>这个题材拍电影感觉会很好吧，鬼洞、鬼眼，以及蓝色的萤火虫鬼火，听到觉得挺吓人的了。</p>
+<p>荒漠、戈壁、雪山下面探险，跟大粽子激斗，与狼王周旋，跟千年前的蛊术斗智斗勇，手中握着分金定穴的秘术，总是绝处逢生，但又被之前精绝古城的鬼眼、鬼洞病债，不得不到处寻方求生。</p>
+<p>故事就是这样串联起来的吧。</p>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2021-12.html#p0">Permalink</a></div>
+
+<div class="date">21年11月30日 周二 21:24</div>
 <h2>div 内容过长的显示</h2>
 <p>js 入门的简单问题，我还是 baidu 了一下，花了一些时间，解决办法需要 CSS，设置 height 或者 max-height，然后设置 overflow 属性，如下</p>
 <pre lang="source"><code>.code {
@@ -332,29 +342,6 @@ end
 </ul>
 <p>将 StackViewLayout 换成 PinStackView 后，循环 layout 的场景不再出现，layout 也挺正常的，但是公司人员变动太大，貌似这个需求测完了，但上线遥遥无期，再说吧。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p0">Permalink</a></div>
-
-<div class="date">21年6月15日 周一 21:15</div>
-<h2>MoonCake Programming Language</h2>
-<p>从 4 月底开始就很少玩游戏，因为迷上了另外一件事情，基于 Lua，创建一个语法上类似 Swift 的编程语言，一方面学习 <a href="http://www.inf.puc-rio.br/~roberto/lpeg/">LPeg</a>，
-另外一方面，按照自己的想法，对 Lua 的语法修修改改。</p>
-<p>基本上，Lua 用了很多的词来分割语意单元，比如 C/C++ 里面的语法块，是放在 '{' 和 '}' 包裹中的，在 Lua 中是 do 和 end 中，或者 then 和 end 中，
-当内容一多的时候，都是词；还有就是 function，连 Swift 都是 func 就可以了，为何要一个完整的单词呢。</p>
-<p>还有少不了的 local，避免全局变量污染，就只好都是 local 了，我觉得默认就行，总是 local 有点多余。</p>
-<p>其实最开始就是上面这 3 点，当然也参考了一下有名的 <a href="https://moonscript.org/">MoonScript</a>，因为它是 MIT 协议开源的嘛，还想抄来着，结果实际上，从头到尾几乎都是重新构建的，
-只有 global name，真的是抄的，加上了 LuaJIT 的 jit 等不多的几个而已。</p>
-<p>LPeg 的 P、S、Cg、Ct、Cmt、Cp、Cb、Cf，刚开始的一两天，真的头大，后面就变成肌肉记忆了。</p>
-<p>LPeg 的匹配规则有两种，一种是全文完全匹配，得到的是完整的 AST，另外一种是寻找匹配，拿到部分匹配的内容。对于一门编程语言，只能选择第一种。</p>
-<p>语言中的 class ／ struct 当然是基于 metamethod 的，其中，class 被设计为跟普通的 table 一样，可以随机创建 key / value，当然少不了继承；而 struct，想学 Swift，没有继承，
-且 key 不能为 nil，为了效率考虑，子类以及实例，都会读取自己的类或者父类，如果不为 nil，就 rawset 到本地，下次访问就快了，但是对于父类不断变动的信息，实际上是获取不到的，
-这种情况只有通过类方法来解决。</p>
-<p>实际上还加了 extension 的逻辑，使得 struct 不能继承这点其实是可以被突破的，而且 class 和 struct 两者就单单使用上来说，区分没有那么大。</p>
-<p>我还加了 guard、switch 关键字，都是 if 的语法糖。</p>
-<p>还有 defer 这个关键字，处理比较有意思，实际上我是能做到在任何 scope 都是起作用的，但是我嫌麻烦，而且还读到某 Swift 大 V 直觉认为 Swift 的 defer 只支持 function scope
-而导致某开源软件的 bug，当然我之前也是这么认为的，所以最后在这个语言中，我将 defer 限定为了 function scope，毕竟能用就行了，直觉理解不好的我觉得也不大好。</p>
-<p>说一下 continue，我在这个语言中也实现了，基于 goto，我的理解 continue 其实就是 goto 的语法糖，为何 Lua 不选择支持不理解。</p>
-<p>语言鼓励偏向 Swift 一样基于 class / struct 的数据和方法来编程，也有相关 VSCode 的 extension 做简单的支持，比如高亮、outline，至于 LSP 嘛，那是没有的。</p>
-<p>最后爆地址，在 <a href="https://github.com/lalawue/mooncake">MoonCake</a>.</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-06.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
