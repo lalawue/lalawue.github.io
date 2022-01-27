@@ -15,7 +15,26 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">21年12月30日 周四 23:09</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年1月27日 周四 14:42</div>
+<h2>MoocHelper</h2>
+<p><a href="https://github.com/lalawue/mooncake">MoonCake</a> 终于有了支持 LSP 的 VSCode 插件
+<a href="https://github.com/lalawue/MoocHelper">MoocHelper</a>，修改自 <a href="https://github.com/Tencent/LuaHelper">LuaHelper</a>，
+一个基于 go 的 Lua LSP 方案。</p>
+<p>话说 12 月底到 1 月中旬大部分的时间都在补充完善这个插件，基本功能两周之内的业余时间就搞定了。不得不说 go 确实比较简单，另外 LuaHelper 的代码结构也可圈可点，很好懂。</p>
+<p>基本功能完成后，就开始了边用边改的流程，就这样又过了两周多，感觉配置好后，在 Mac 上的基本使用没啥问题了。</p>
+<p>对比一下原版的功能，基本的代码补全，跳转，提示都是有的，只是缺少 debug 能力，因为 moocscript 是先翻译成 Lua 再交给 Lua 解释器的。另外，配置方面，修改了 luahelper.json 的读取路径，修改到了 .vscode/ 目录下。增加了配置项 ProjectLuaPath 以及 ProjectLuaCPath，对应工程使用的 LUA_PATH 和 LUA_CPATH 携带的路径列表。</p>
+<p>增加了这两个配置后，浏览代码期间的环境变量跟运行时候就几乎是一样的了。</p>
+<p>说到 Lua LSP 的方案选择，之前考虑过 <a href="https://github.com/sunxvming/lua-server">lua-server</a>，虽然我是 C/C++ 以及 Lua 都了解，但初步评估后，发现门槛有点高，不知道如何入手修改，以及 debug，想哭😭。</p>
+<p>相比之下，基于 Go 的 LuaHelper，就太好 debug 了。只要按照 README 描述，在插件配置里面将选项 <code>connect lsp server way</code> 修改为 socket（默认是 cmd），而在另外一边的 luahelper-lsp 目录，按下 F5 就开启了调试模式，断点什么都特别方便。就算像我这样 go 基础非常浅的，也很快弄懂了如何 debug，几遍下来，程序的结构就很清楚了。</p>
+<p>相比之下，lua-server 是 Lua + C++ 的方案，估计调试没那么容易，当然 go 的效率较高又是另外一个点了。</p>
+<p>除此之外，我还看了一下相关的代码，知道其最终输出是 AST，后续的语法分析，提示、跳转什么都是依赖这个 AST 工作的，大概读懂这个 AST 结构后，我就比较放心了。moocscript 虽然语法不一样，但其最终会编译到 Lua，会沿用一样的 AST 结构，不会遗漏语言表达的任何细节。</p>
+<p>一开始我想用 lua-server 的，但几遍下来，看不懂 parser 部分，没能抓住最后输出 AST 的逻辑，少了这个核心关键点，就只能放弃了。</p>
+<p>也是基于上面输出同样 Lua AST 的原因，除了 debug 功能外，其他的功能，moocscript 和 lua 几乎是一样的，只是有一些限制。</p>
+<p>这些限制是因为 Lua 和 MoonCake 在 token 阶段，共享了 token 这些关键字，moocscript 的关键字比 Lua 多了不少，这些关键字在 MoocHelper 里面的 Lua 文件也会被提示不能使用而报错，虽然 lua 解释器是能正常运行这些脚本的，这也算缺点之一吧。</p>
+<p>对了，因为 AST 共通，所以 MoocHelper 也能解析 Lua 代码，工程里面不同文件，混用 moocscript 和 lua 都是没有问题的。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-01.html#p0">Permalink</a></div>
+
+<div class="date">21年12月30日 周四 23:09</div>
 <h2>鬼吹灯读后感</h2>
 <p>不记得是月初还是上个月就看完了《鬼吹灯》，当然是全本，在微信阅读上看的，送了很多书币，断断续续就看完了。</p>
 <p>共 232 章节，记得是中间那段还比较好看，前面略显沉闷，后面呢，感觉故事跟前面差不多，没有太多新意。</p>
@@ -294,54 +313,6 @@ end
 <p>当然上面也提到过最后的效果，其实蛮不错的，</p>
 <p>说一下前提，如果 UINavigationBar 设置了 translant 且真的用上了半透的话，效果应该是不行的，因为系统真实的 UINavigationBar 动画在底下会动，得实际遮住才行，因此这套东西，我是觉得只能用在非 translant 的场景下，当然，如果只是设置了 translant，但实际上又带了 opaque 的背景，仅仅是为了带一丢丢高斯模糊背景的话，是没问题的。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p1">Permalink</a></div>
-
-<div class="date">21年7月11日 周日 12:08</div>
-<h2>PinStackView</h2>
-<p>目前工程主要使用 AutoLayout，但一些复杂页面上面，先不说各种约束优先级的问题，单单就因为约束不对造成的约束失败，在 debug console 里面打印一大堆，都不好定位在哪里，别说去修复了。</p>
-<p>总觉得大部分的场景，其实使用固定 frame 的 layout 就足够了，不需要那么复杂，于是我在工程里面引进了 <a href="../blog/2021-03.html#p1">PinLayout</a>。</p>
-<p>因为使用 PinLayout 构建复杂页面确实太辛苦，其只用于搭建不复杂的元素，之前使用的是 StackViewLayout，但测试反馈问题比较多，我自己也发现，不大稳定，偶尔还有 crash，毕竟这个库是未完成的状态，然后还自带内存泄漏。</p>
-<p>于是就想着自己写一个，毕竟 StackViewLayout 也用了这么久，接口已经蛮熟悉的了，而在功能上面，需要的又不多。</p>
-<p>于是就有了 <a href="https://gitee.com/lalawue/PinStackView">PinStackView</a>，这个库相比 PinStackLayout 来说，简单很多，其实只有一个文件，另外，其处理流程上也是很简单的。</p>
-<h3>配置</h3>
-<ul>
-<li>区分主轴 axis 和垂直于主轴的 cross axis，axis 可以为 horizontal 或者 vertical</li>
-<li>cross axis 用于配置 alignment，可以是 start、center、end、stretch</li>
-<li>区分沿主轴长度是自动增长的为 auto style，否则为 fixed style，默认是 fixed style</li>
-<li>接着是 axis 上的分布 distribution，可以是 start、end、equal，其中 equal 对应这 UIStackView 的 distribution equal，每个 item 平均分布</li>
-<li>spacing 是 item 之间的间距</li>
-<li>padding 之后才是 layout 的内容区域</li>
-</ul>
-<p>最后增加了一个 autoSizeChangedCallback 的回调函数，如果 style 设置为了 auto，PinStackView 在 axis 上的长度由其 item 动态长度计算得到，每次对 bounds 有更改，都会 callback 通知。</p>
-<p>另外上面的设置其实隐含了一些前提，在 fixed style 时，PinStackView 的大小是外部设置的，此时才有 start、end、equal 这些 distribution；而在 auto style 下，只有 start distribution，其实很好理解。</p>
-<h3>管理接口</h3>
-<p>下面是管理 view 的接口，添加、插入都会返回 PinStackItemInfo</p>
-<ul>
-<li>addItem() 添加管理 view，返回 PinStackItemInfo，这个接口独立于 addSubview()，通过 addSubview() 添加的，没有绑定 itemInfo，不会自动 layout</li>
-<li>insertItem() 用于插入管理 view，同样返回 PinStackItemInfo</li>
-<li>removeItem() 删除管理 view，同时从 subviews 里面删除</li>
-<li>markDirty()，其实就是 setNeedsLayout()</li>
-</ul>
-<h3>item 配置</h3>
-<p>对于每个管理 view，在添加、插入的时候，都绑定了一个 PinStackItemInfo 用来描述其 layout 信息，下面的接口都可以进行链式配置</p>
-<ul>
-<li>top()、bottom()、left()、right() 用于配置 margin，在非 equal distribution 时，这些 margin 会和 spacing 累加，可以实现其中的某个元素间距不同；在 equal 时，可以调整其位置</li>
-<li>width()、height()、size() 用于配置大小，其中 size() 优先级最高，其次是 width() 和 height()</li>
-<li>alignSelf()，独立于总的 cross axis 的配置，可以单独设置某个 view 的 alignment</li>
-<li>grow()，当设置为 fixed style 的时候，这个值可以对剩余空间进行分配；同样的，如果剩余空间不足，这个值也用于 shrink</li>
-</ul>
-<p>上面第二点，如果设置了 alignment 或者 alignSelf 为 stretch，会覆盖 item 在 cross axis 的长度</p>
-<h3>计算流程</h3>
-<p>建议看代码吧，其实没啥好说的，fxied style 下面，equal 就是平均 axis 的长度，start、end 的计算是最复杂的，因为可以带 grow()，需要先计算固定长度的，后面再分配动态长度的。</p>
-<p>auto style 其实相对好计算，计算完所有管理 view 沿着 axis 的长度后，对比 PinStackView 在 axis 的长度，有变化的话就修改 PinStackView 的长度，然后 callback。说一下 callback，这个通知，可以回调到外部依赖 PinStackView frame 的地方，重新设定相关的 layout。</p>
-<p>这个当然有可能造成 layout 的循环，之前的 StackViewLayout 就有这样的场景，我在这里将这个依赖交给了用户，用户自己来控制。</p>
-<p>PinStackView 里面对于管理 view 的宽高计算是一个焦点，代码在 calcViewSize() 里面</p>
-<ul>
-<li>优先 size() 的设置，如果有设置就直接返回</li>
-<li>接着调用 view 的 sizeThatFits()，再看 width() 和 hegith() 是否覆盖了 sizeThatFits() 的配置</li>
-<li>最后看 width、height 是否超过了外部 padding 后的宽、高</li>
-</ul>
-<p>将 StackViewLayout 换成 PinStackView 后，循环 layout 的场景不再出现，layout 也挺正常的，但是公司人员变动太大，貌似这个需求测完了，但上线遥遥无期，再说吧。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
