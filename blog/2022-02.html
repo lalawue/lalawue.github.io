@@ -17,6 +17,26 @@
     <div id="body">
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for February, 2022</h1>
+<p><a id="p2"></a></p>
+<div class="date">22年2月27日 后日 23:24</div>
+<h2>本站支持代码高亮</h2>
+<p>用的方案是 <a href="https://prismjs.com/">Prism</a>，cmark-gfm 本来就支持生成相关的 pre、code tag，并带上 &quot;language-css&quot; 这样的 attribute 值，那只要简单加上下面两行就好了，在项目站点上，选了几个自己觉得也许会用得比较多的语言，比如 Bash/Shell/JS/Lua/Go/Swift/Lisp，我也就大概会这么多而已吧。</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;../styles/prism.min.css&quot;&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;../js/prism.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>感觉效果很不错的，比如之前</p>
+<ul>
+<li><a href="../blog/2008-06.html#p1">Emacs-Lisp</a></li>
+<li><a href="../blog/2021-11.html#p4">Javascript</a></li>
+<li><a href="../blog/2021-11.html#p0">Ini</a></li>
+<li><a href="../blog/2021-08.html#p0">Lua</a></li>
+<li><a href="../blog/2020-12.html#p0">Swift</a></li>
+<li><a href="../blog/2020-11.html#p0">Go</a></li>
+<li><a href="../blog/2020-09.html#p1">Rust</a></li>
+</ul>
+<p>选的主题是 tomorrow night，跟已有的主题搭配起来也挺不错，缺点可能是 js 代码 minify 后仍然有 60k 吧。</p>
+<p>不管怎么说，还有 Etag 撑着呢，另外，毕竟是存放在 github 的，算是白嫖了。</p>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2022-02.html#p2">Permalink</a></div>
 <p><a id="p1"></a></p>
 <div class="date">22年2月27日 周日 22:35</div>
 <h2>MNet 支持 TLS 插件</h2>
