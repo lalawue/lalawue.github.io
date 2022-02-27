@@ -9,6 +9,7 @@
     <meta name="description" content="Sucha's homepage and blog" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/site.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -26,21 +27,21 @@
 <p><a id="sec-2"></a></p>
 <h4>16.1 启动 vi</h4>
 <p>vi 可以以多种方式从命令行启动。最简单的格式就是：</p>
-<pre lang="source"><code>% vi
+<pre><code class="language-source">% vi
 </code></pre>
 <p>图 16-1.一个 vi 的进程。</p>
 <p>这样会使 vi 以一个空的缓冲区启动。此时，你会看到一个屏幕的空格。现在正处于命令模式，等待你去做什么东西。16.2 节将讨论 vi 的各种模式。为了退出 vi，如下输入：</p>
-<pre lang="source"><code>:q
+<pre><code class="language-source">:q
 </code></pre>
 <p>假设没有对文件作任何改动，这个命令会让 vi 退出。如果文件已经有了改动，它会警告你已经做了改动同时告诉你如何忽视它们。放弃改动意味着在&quot;q&quot;的后面加个惊叹号就像这样：</p>
-<pre lang="source"><code>:q!
+<pre><code class="language-source">:q!
 </code></pre>
 <p>惊叹号通常意味着强制执行。我们过会儿将会讨论它和其他的按键组合更多的细节。</p>
 <p>你还可以用打开一个已经存在文件的方式打开 vi。比如，如下打开/etc/resolv.conf 文件：</p>
-<pre lang="source"><code>% vi /etc/resolv.conf
+<pre><code class="language-source">% vi /etc/resolv.conf
 </code></pre>
 <p>最后，可以让 vi 从文件的某一行启动。这对编程人员特别有用，当出错信息显示他们程序的某一行发生了错误时。比如，你可以如下启动 vi 定位于/usr/src/linux/init/main.c 第 47 行：</p>
-<pre lang="source"><code>% vi +47 /usr/src/linux/init/main.c
+<pre><code class="language-source">% vi +47 /usr/src/linux/init/main.c
 </code></pre>
 <p>vi 会显示打开的文件并将光标定位在指定的行。如果你指定的行数超出了文件的行数，vi 会将光标置于最后一行。这对编程人员特别有用，他们可以直接跳到文件出错的地方而不用搜索它。</p>
 <p><a id="sec-3"></a></p>
@@ -51,7 +52,7 @@
 <p>你首先被置于命令模式。在这个模式中，你不能直接输入或编辑已经存在的文本。尽管如此，你可以处理文本，搜索，离开，保存，加载新文件，等等。这里仅仅希望对命令模式做一个介绍。对各种模式的描述，在第 16.7 节。</p>
 <p>或许在命令模式中最为常用的命令就是变换到插入模式。这可以由敲击 i 键来完成。光标改变了形状，然后在屏幕底部出现 -- 插入 --（注意并不是所有的 vi 克隆都会这样）。从那儿开始，你所有的按键都被输入到当前缓冲区并在屏幕上显示。为了回到命令模式，按一下 ESCAPE 键。</p>
 <p>命令模式还是你在文件里移动时所处的模式。在一些系统里，你可以使用方向键去移动。在其他的系统里，你需要使用更传统的按键&quot;hjkl&quot;。这有一份如何使用按键移动的清单：</p>
-<pre lang="example"><code>h	向左移动一个字符
+<pre><code class="language-example">h	向左移动一个字符
 j	向下移动一个字符
 k	向上移动一个字符
 l	向右移动一个字符
@@ -73,22 +74,22 @@ l	向右移动一个字符
 <p><a id="sec-6"></a></p>
 <h4>16.3 打开文件</h4>
 <p>vi 允许你从命令模式里打开文件有如在命令行里指定打开的文件。如下打开/etc/lilo.conf 文件：</p>
-<pre lang="source"><code>:e /etc/lilo.conf
+<pre><code class="language-source">:e /etc/lilo.conf
 </code></pre>
 <p>如果你在当前缓冲区做了改变而没有保存，vi 会提示。你仍然可以不用保存当前缓冲区就打开文件，只需敲击 :e!，后接一个空格然后是文件名。通常，命令后紧跟叹号可以禁止 vi 的警告。</p>
 <p>如果你希望重打开当前的文件，你可以通过简单的敲击 e! 来完成。当你将文件搞得一团糟并希望重新打开它时特别有用。</p>
 <p>一些 vi 的克隆（比如，vim）允许同时打开多个缓冲区。比如，当另一个文件已经打开了时，打开主目录下的文件 09-vi.sgml，我会输入：</p>
-<pre lang="source"><code>:split ~/09-vi.sgml
+<pre><code class="language-source">:split ~/09-vi.sgml
 </code></pre>
 <p>新文件在屏幕的上半部分显示，而旧文件在屏幕的下半部显示。有许多命令可以处理分屏，其中某些来自 Emacs，man page 里有相应的介绍。注意许多 vi 克隆并不支持分屏，所以并不是什么地方都可以使用。</p>
 <p><a id="sec-7"></a></p>
 <h4>16.4 保存文件</h4>
 <p>在 vi 里有许多方式来保存文件。如果你想将当前的缓冲区保存到一个随机文件，可以输入：</p>
-<pre lang="source"><code>:w randomness
+<pre><code class="language-source">:w randomness
 </code></pre>
 <p>当你已经保存过文件后，再次保存它只需简单敲击 :w。所有的改变都将写入文件。当你保存了文件后，又将回到命令模式。如果你想保存文件然后离开vi（一个很平常的操作），只需敲击 :wq。那会告诉 vi 保存当前文件同时退出回到 shell。</p>
 <p>有时，你想保存一个只读文件。只需在写入命令后加叹号，如下：</p>
-<pre lang="source"><code>:w!
+<pre><code class="language-source">:w!
 </code></pre>
 <p>不管怎样，仍有你不能写入的文件（比如，你试图编辑一个不属于你的文件）。当这种事情发生时，vi 会告诉你无法保存文件。如果你真的想要编辑这个文件，你不得不以 root 或（更好的是）文件拥有者的身份来编辑它。</p>
 <p><a id="sec-8"></a></p>
@@ -108,7 +109,7 @@ l	向右移动一个字符
 <h4>16.7 Vi 按键</h4>
 <p>这个章节是许多 vi 常用命令的快速参考。一些命令已在前面的章节讨论过，而许多是新的。</p>
 <p>表 16-1。移动</p>
-<pre lang="example"><code>操作		按键
+<pre><code class="language-example">操作		按键
 向左，向下，向上，向右	h, j, k, l
 移动到行末		$
 移动到行首		^
@@ -117,7 +118,7 @@ l	向右移动一个字符
 移动到第 47 行		:47
 </code></pre>
 <p>表 16-2。编辑</p>
-<pre lang="example"><code>操作		按键
+<pre><code class="language-example">操作		按键
 移去一行		dd
 移去 5 行	5dd
 替换一个字符	r
@@ -128,7 +129,7 @@ l	向右移动一个字符
 新文本替换旧文本，全局性	%s'old'new'g（？）
 </code></pre>
 <p>表 16-3。查找</p>
-<pre lang="example"><code>操作		按键
+<pre><code class="language-example">操作		按键
 向前查找&quot;asdf&quot;	/asdf
 向后查找&quot;asdf&quot;	?asdf
 重复向前查找	/
@@ -137,7 +138,7 @@ l	向右移动一个字符
 重复相反方向的查找	N
 </code></pre>
 <p>表 16-4。保存和退出</p>
-<pre lang="example"><code>退出		:q
+<pre><code class="language-example">退出		:q
 退出但不保存	:q!
 写入然后退出	:wq
 写入，但不退出	:w
@@ -157,7 +158,7 @@ l	向右移动一个字符
 <p>Emacs 能从 shell 启动只需简单地键入 emacs。当你运行 X 时，Emacs 会（通常）启动它的 X 窗口，通常还有一个 menu bar［目录条］在顶部，在那儿你可以找到一些最为重要的功能。在启动时，Emacs 会首先显示一个欢迎信息，几秒钟后会将你放到<em>scratch</em> ［草稿］缓冲区里。（看 17.2 节.）</p>
 <p>&lt;emacs.png&gt;</p>
 <p>你还可以用编辑存在的文件的方式启动 Emacs，只需键入</p>
-<pre lang="source"><code>% emacs /etc/resolv.conf
+<pre><code class="language-source">% emacs /etc/resolv.conf
 </code></pre>
 <p>这会使得 Emacs 启动时去加载这个特别的文件，跳过欢迎信息。
 <a id="sec-13"></a></p>
@@ -180,7 +181,7 @@ l	向右移动一个字符
 <a id="sec-16"></a></p>
 <h5>17.3.1 打开文件</h5>
 <p>在 Emacs 里打开一个文件，敲击</p>
-<pre lang="source"><code>C-x C-f
+<pre><code class="language-source">C-x C-f
 </code></pre>
 <p>Emacs 会问你文件的名字，向你提供一些缺省的路径（通常是 ~/ ）。当你输入文件名（你可以使用 Tab 补全）敲击回车后，Emacs 会在新的缓冲区里打开文件并在屏幕上显示其内容。</p>
 <p><strong>注意</strong>	如果 Emacs 没有将文件载入当前的缓冲区，它会自动创建一个新的缓冲区。</p>
@@ -191,7 +192,7 @@ l	向右移动一个字符
 <h4>17.4 基本编辑</h4>
 <p>当你已经打开了一个文件，自然可以利用光标在里面移动。光标的按键 ''''PgUp，''''PgDn 就像你希望的那样工作。Home 和 End 跳转到行的开头和结尾。（在旧一点的版本里，它们实际上跳转到缓冲区的开头和结尾。）无论如何，还有 Control 和 Meta(Alt)键的组合去移动光标［原文将按键的组合比喻成小型爵士乐团］。因为你不需要为此将手臂移动到键盘的另一部分，当你习惯后将很快捷。像这些最为重要的命令在表格 17-1 里列出来了。</p>
 <p>表格 17-1。Emacs 基本编辑命令</p>
-<pre lang="example"><code>命令     结果
+<pre><code class="language-example">命令     结果
 C-b	往后移动一个字符
 C-f	往前移动一个字符
 C-n	往下移动一行
@@ -222,21 +223,21 @@ C-r	往后搜索
 <p><a id="sec-18"></a></p>
 <h4>17.5 保存文件</h4>
 <p>为了保存文件，敲击</p>
-<pre lang="source"><code>C-x C-s
+<pre><code class="language-source">C-x C-s
 </code></pre>
 <p>Emacs 不会向你询问一个文件名，缓冲区会被保存在它原来加载的那个文件上。如果你想将文本保存到其他的文件，敲击</p>
-<pre lang="source"><code>C-x C-w
+<pre><code class="language-source">C-x C-w
 </code></pre>
 <p>如果你在运行期间第一次保存这个文件，正常情况下 Emacs 会将你的旧版文件保存成备份文件，就是同样的名字后边加了个符号：若你正编辑一个文件“cars.txt”，Emacs 会创建一个备份&quot;cars.txt~&quot;。</p>
 <p>这个备份文件是你打开的这个文件［未操作前］的一个拷贝。当你工作时，Emacs 也会有规律地为你正在操作的文件创建一个 auto-save ［自动保存的］拷贝，文件名加上散列符号：#cars.txt#。这个文件会在你使用 C-x C-s 保存后被删除。</p>
 <p>当你已经编辑好了一个文件，需要关闭缓冲区保存它只需敲击</p>
-<pre lang="source"><code>C-x k
+<pre><code class="language-source">C-x k
 </code></pre>
 <p>接着 Emacs 会询问你想要关闭哪一个缓冲区，缺省为当前的缓冲区，也可以选择后敲击回车。如果你还不没保存文件，Emacs 会询问你是否真的想要关闭缓冲区。</p>
 <p><a id="sec-19"></a></p>
 <h5>17.5.1 离开 Emacs</h5>
 <p>当你已经用 Emacs 完成了工作，敲击</p>
-<pre lang="source"><code>C-x C-c
+<pre><code class="language-source">C-x C-c
 </code></pre>
 <p>离开 Emacs。如果你还有任何没有保存的文件，Emacs 会告诉你，然后依次询问是否许想要保存。如果你对其中的任何一个回答不，Emacs 会询问作为最后的证实然后退出。</p>
 <p><a id="sec-20"></a></p>
@@ -248,7 +249,7 @@ C-r	往后搜索
 <h4>18.1 包格式总览</h4>
 <p>在学习实用程序前，你应该先熟悉 Slackware 包格式。在 Slackware 里，一个包就是简单的用 gzip 压缩过的 tar 存档文件。包建立在会从 root 目录里解压之上。</p>
 <p>这是一个虚构的程序和它的包例子：</p>
-<pre lang="example"><code>./
+<pre><code class="language-example">./
 usr/
 usr/bin/
 usr/bin/makehejaz
@@ -280,11 +281,11 @@ install/doinst.sh
 <a id="sec-24"></a></p>
 <h5>18.2.2 installpkg</h5>
 <p>installpkg(8) 处理系统里新包的安装。语法如下：</p>
-<pre lang="source&lt;a"><code># installpkg option package_name
+<pre><code class="language-source&lt;a"># installpkg option package_name
 </code></pre>
 <p>installpkg 提供三个选项。一次只能用一个选项。</p>
 <p>表 18-1。安装选项</p>
-<pre lang="example"><code>选项	效果
+<pre><code class="language-example">选项	效果
 -m	在当前目录执行一个 makepkg 操作。
 -warn	显示如果你安装这个特别的包将发生什么。这在生产系统很有用，你将
 	会在安装前精确地看到发生了什么。
@@ -297,11 +298,11 @@ install/doinst.sh
 <a id="sec-26"></a></p>
 <h5>18.2.3 removepkg</h5>
 <p>removepkg(8) 处理从系统移除已经安装过的包。语法就像下面这样：</p>
-<pre lang="source&lt;a"><code># removepkg option package_name
+<pre><code class="language-source&lt;a"># removepkg option package_name
 </code></pre>
 <p>removepkg 拥有四个选项。一次只能用一个。</p>
 <p>表 18-2。removepkg 选项</p>
-<pre lang="example"><code>选项		   效果
+<pre><code class="language-example">选项		   效果
 -copy		   包被复制到了保留包目录。这会创建一个包原来的目录结
 		   构但并不移除它。
 -keep		   保留移动过程中创建的临时文件。仅在调试中有用。
@@ -315,10 +316,10 @@ install/doinst.sh
 <a id="sec-28"></a></p>
 <h5>18.2.4 upgradepkg</h5>
 <p>upgradepkg(8) 将升级一个已经安装的 Slackware 包。语法如下：</p>
-<pre lang="source&lt;a"><code># upgradepkg package_name
+<pre><code class="language-source&lt;a"># upgradepkg package_name
 </code></pre>
 <p>或者</p>
-<pre lang="source&lt;a"><code># upgradepkg old_package_name%new_package_name
+<pre><code class="language-source&lt;a"># upgradepkg old_package_name%new_package_name
 </code></pre>
 <p>upgradepkg 用于先安装新包然后移除旧包，然后将旧包清除出系统。如果升级后的包名已经改变，使用百分号语法指定旧包（已经安装的包）和新包（你升级后的包）。</p>
 <p>如果在 upgradepkg 前你改变了 ROOT 环境变量，路径会被用于 root 目录。这在为你的 root 目录建立新驱动将很有用。它们将典型地安装于 /mnt 或其他目录而不是 /。</p>
@@ -350,14 +351,14 @@ install/doinst.sh
 <p>Slackware 安装程序处理系统里软件包的安装。有一些文件可以告诉安装程序哪些包必须安装，哪些可供选择，而哪些缺省由安装程序自己选择。</p>
 <p>一个 tagfile 就是在软件系列目录里的第一层名叫 tagfile 的文件。它列出特定磁盘设备里的包和它们的状态。这些状态可以是：</p>
 <p>表 18－3。Tagfile 状态选项</p>
-<pre lang="example"><code>选项		  含义
+<pre><code class="language-example">选项		  含义
 ADD		  这个包为特殊的系统操作所必须
 SKP		  这个包会被自动忽略
 REC		  这个包不是必须的，但建议使用
 OPT		  这个包可供选择
 </code></pre>
 <p>格式很简单：</p>
-<pre lang="example"><code>包名：状态
+<pre><code class="language-example">包名：状态
 </code></pre>
 <p>一个包一行。原来每个软件系列的 tagfiles 被存成 tagfile.org。所以如果你搞乱了你自己的，可以恢复原来的那个。</p>
 <p>许多管理人员更喜欢编写他们自己的 tagfiles 然后启动安装程序选择“完全”。安装程序会读取 tagfiles 然后依据内容来安装。如果你使用 REC 或者 OPT，（程序）会向用户出现对话框询问是否想要那个包。所以，建议你为自动安装写 tagfiles 时仅使用 ADD 和 SKP。</p>
@@ -372,6 +373,7 @@ OPT		  这个包可供选择
       <div id="sidebar">
       </div><!-- sidebar -->
       <script type="text/javascript" src="../js/site_sidebar.js"></script>
+      <script type="text/javascript" src="../js/prism.min.js"></script>
     </div><!-- body -->
   </body>
 </html>

@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -69,7 +70,7 @@
 <p>当这样调用对象方法时，table:func(value)，func 默认第一个参数会传递 self，就是对象自己，一个 table，第二个参数才是 value。</p>
 <p>理解 Lua 的面向对象编程，需要了解 Lua 内建的细节了，比如 table 的 __index key 是指找值的时候应该去哪里找，__newindex 则是创建新值的时候应该怎么做。多说一句，如果想 table 是 readonly 的，修改 table 的 __newindex 就对了。</p>
 <p>下面是 Lua 的面向对象编程类定义的一个例子，a = Object.newObject(1), b = Object.newObject(2), a:isEqual(b) 将返回 false。</p>
-<pre lang="source"><code>local Object = {
+<pre><code class="language-lua">local Object = {
     value = 0
 }
 Object.__index = Object
@@ -97,7 +98,7 @@ return Object
 <p>面向对象的例子，就用了 Lua 的内建函数 setmetatable，定义了 Object.__index 的行为，限制 key 值应该在哪里寻找。</p>
 <p>这里有一篇 <a href="https://www.runoob.com/lua/lua-metatables.html">Lua 元表</a> 的教程。</p>
 <p>多说两句吧，结合面向对象 Object 的例子，我们定义一下两个 Object 相加的行为：</p>
-<pre lang="source"><code>local Object = {}
+<pre><code class="language-lua">local Object = {}
 Object.__index = Object
 Object.__add = function(oobj, nobj)
     oobj.value = oobj.value + nobj.value
@@ -117,7 +118,7 @@ end
 <div class="date">20年6月5日 周五 23:56</div>
 <h2>Lua 的缺点</h2>
 <p>在官网的 <a href="https://www.lua.org/about.html">关于 Lua</a> 页面，是这么介绍 Lua 的：</p>
-<pre lang="source"><code>Lua 是一种强大、高效、轻量，可嵌入的脚本语言。支持过程编程，面向对象编程，函数式编程，数据驱动编程，以及数据描述编程。
+<pre><code class="language-source">Lua 是一种强大、高效、轻量，可嵌入的脚本语言。支持过程编程，面向对象编程，函数式编程，数据驱动编程，以及数据描述编程。
 </code></pre>
 <p>虽然 Lua 官网将自己介绍为脚本语言，但业界对于 Lua 的定位及使用早已超出普通脚本的范围。比如，<a href="https://wowwiki.fandom.com/wiki/Lua">魔兽争霸 3</a>，以及 Adobe 的 <a href="https://www.adobe.io/apis/creativecloud/lightroomclassic.html">Lightmoom</a> 都大量使用了 Lua 来构建桌面程序；在后端组件中大名鼎鼎的 Redis 以及 OpenResty，则将 Lua 作为了内嵌的业务处理语言；而在 github 上 star 数量为 9k 的 <a href="https://github.com/cloudwu/skynet">skynet</a>，则更进一步地将 Lua 定位为了后端的业务逻辑语言。</p>
 <p>虽然 Lua 运行很快，业界的效率标杆 LuaJIT 是所有其他脚本语言用于比对的塔顶，要不然 Redis、OpenResty 怎会将其作为内嵌的扩展方案呢。</p>
@@ -159,6 +160,7 @@ end
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

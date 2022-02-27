@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -36,7 +37,7 @@
 <p>可惜这个项目距离久远，TCC 在 MacOS 下面编译也成问题，意味着通用性欠佳，挺可惜的。不过有了这个想法后，想着不通过 TCC，用 GCC、Clang 其实也可以的嘛，于是就有了 <a href="https://github.com/lalawue/ffi_gccload">ffi_gccload</a>。</p>
 <p>流程变成了这样，将 C Source String 导入到一个源文件里面，通过 GCC 编译得到动态库，使用 ffi.load() 加载进来，并通过 ffi.cdef 声明接口，就可以使用了。</p>
 <p>其实就是将 C 的编译、链接过程给固定了就好，如下的代码：</p>
-<pre lang="source"><code>local config = require(&quot;ffi_gccload&quot;).new()
+<pre><code class="language-lua">local config = require(&quot;ffi_gccload&quot;).new()
 
 -- like ffi.cdef
 config:addSourceDef([[
@@ -63,7 +64,7 @@ else
 end
 </code></pre>
 <p>生成一个动态编译配置，会输出</p>
-<pre lang="source"><code>$ lua test.lua 2 3
+<pre><code class="language-lua">$ lua test.lua 2 3
 Hello, world
 result  7
 </code></pre>
@@ -87,6 +88,7 @@ result  7
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

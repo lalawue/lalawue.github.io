@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -47,7 +48,7 @@ TexturePacker 的，于是就到官网下载试用了一下，因为只用到打
 <p>由于是使用正则表达式来处理上下文无关的文法，因此严格来说，不管是而在
 C/C++/Objc 中，这些匹配用的正则表达式是不完全的，还是可能会错漏的，不过对
 于大部分的情况，应该是够用了。</p>
-<pre lang="source"><code>;; for Xcode pragma mark, and C/C++ functions
+<pre><code class="language-lisp">;; for Xcode pragma mark, and C/C++ functions
 (require 'anything)
 (require 'anything-config)
 
@@ -98,7 +99,7 @@ C/C++/Objc 中，这些匹配用的正则表达式是不完全的，还是可能
 文件的小函数。</p>
 <p>我稍微改了一下，可以适应于 C/C++/Objc 的代码，当然，可以再根据需要添加诸
 如 Java 语言的支持，反正改起来超简单。</p>
-<pre lang="source"><code>;; jump between source and header file
+<pre><code class="language-lisp">;; jump between source and header file
 (defun c-base-mode-in-header-file ()
   (let* ((filename (buffer-file-name))
          (extension (car (last (split-string filename &quot;\\.&quot;)))))
@@ -146,6 +147,7 @@ C/C++/Objc 中，这些匹配用的正则表达式是不完全的，还是可能
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

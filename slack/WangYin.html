@@ -9,6 +9,7 @@
     <meta name="description" content="Sucha's homepage and blog" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/site.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -146,13 +147,13 @@
 <p>你说我是 GUI 的？我虽然很少在 console 下工作。但是我对 bash, VIM 很熟悉，我可以让 bash 按照我的键绑定方式来工作。我可以在 rxvt 里使用 Mutt 来收发 email。我的每个桌面上都常常堆放着一打不同大小的 rxvt。我用 VIM 编辑 LaTeX。我自己写 Makefile 来维护 LaTeX 文档。我有时用 mpg321 来放 mp3。我上 BBS 用的我自己写的 expect 脚本。 好了，CLI 派的朋友可以收我做盟友了。</p>
 <p>你说我是 CLI 的老古董？我的 FVWM 被我配置为可以“手写操作”，我只要画一个&quot;r&quot;就可以启动 rxvt，我只要画一个 &quot;U&quot; 就可以启动 GVIM，…… 我用 GVIM 语法加亮模式编辑程序，我用 Mozilla 浏览网页，…… GUI 派的现在好像认我做朋友了。</p>
 <p>好了。CLI 派的朋友，虽然我很喜欢命令行，但是我有时在屏幕上左右画一下就可以执行:</p>
-<pre lang="example"><code>Module FvwmConsole -terminal rxvt -geometry 45x5-0+0 \
+<pre><code class="language-example">Module FvwmConsole -terminal rxvt -geometry 45x5-0+0 \
 -bg gold -fg midnightblue \
 -fn &quot;-adobe-courier-medium-r-*-*-14-*-*-*-*-*-*-*&quot;
 </code></pre>
 <p>你是不是现在又想把我逐出师门？</p>
 <p>GUI 派的朋友，虽然我很喜欢窗口。但是我可以在 FvwmConsole 里输入：</p>
-<pre lang="example"><code>All (rxvt) MoveToDesk
+<pre><code class="language-example">All (rxvt) MoveToDesk
 </code></pre>
 <p>把我所有的 rxvt 移动到我现在工作的桌面。“这家伙，怎么这么快就叛变了！”</p>
 <p>其实何必分什么 GUI 和 CLI，UNIX 和 Xwindow 都是工业标准，它们从设计那天开始就有非常灵活的用法，各个程序，不管是 GUI 还是命令行的都可以互相协作。UNIX 和 X 是一家，何必搞的那么偏激，非此即彼？你从我上面的行为可以看出 GUI 和 CLI 的模糊界线吗？我就是坚定不移的“两面派”。</p>
@@ -269,6 +270,7 @@
       <div id="sidebar">
       </div><!-- sidebar -->
       <script type="text/javascript" src="../js/site_sidebar.js"></script>
+      <script type="text/javascript" src="../js/prism.min.js"></script>
     </div><!-- body -->
   </body>
 </html>

@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -66,14 +67,14 @@
 <div class="date">11月13日 周日 12:30</div>
 <h2>Simple mp3 playback</h2>
 <p>我把自己所有的 mp3 歌曲都按歌手名分类放在同一个目录下，可每次想用 mpg321 来播放 mp3 都很不方便，于是自己写了个函数，来播放某个目录下所有的 mp3：</p>
-<pre lang="source"><code>MP3()
+<pre><code class="language-bash">MP3()
 {
      find /path/to/mp3/dir -name &quot;*.mp3&quot; &gt; ~/.mpg321.list
      mpg321 -o alsa --quiet --random --list ~/.mpg321.list -g $1 &amp;
 }
 </code></pre>
 <p>可是这也很不爽，因为每次调用这个函数都不能确定播放的哪个歌手的东东，于是思考了下，今天变成了如下的函数：</p>
-<pre lang="source"><code># simple mp3 playback, usage: mp3 volume
+<pre><code class="language-bash"># simple mp3 playback, usage: mp3 volume
 MP3()
 {
      # first set the mp3_dir
@@ -102,12 +103,12 @@ alias mp3='MP3 $1'
 alias nosong='killall mpg321'
 </code></pre>
 <p>只要将 mp3_dir 改成你自己存放 mp3 的目录，然后将这部分加入到你的 ~/.bashrc，最后 source ~/.bashrc 就可以使用了。调用方法是：</p>
-<pre lang="source"><code>$ mp3 volume  # mp3 后接音量，播放
+<pre><code class="language-bash">$ mp3 volume  # mp3 后接音量，播放
 $ nosong      # 关闭
 </code></pre>
 <p><strong>注意</strong>:</p>
 <p>在调用 mpg321 的时候，我使用了 alsa 驱动，如果你并没有使用 alsa 驱动，上面的函数或许不会工作，所以更通用的做法是修改函数最后一行，改成：</p>
-<pre lang="source"><code>     mpg321 --quiet --random --list ~/.mpg321.list -g $1 &amp;
+<pre><code class="language-bash">$ mpg321 --quiet --random --list ~/.mpg321.list -g $1 &amp;
 </code></pre>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2005-11.html#p7">Permalink</a></div>
 <!-- date: 2005-11-13T12:30:51+0800 -->
@@ -204,6 +205,7 @@ $ nosong      # 关闭
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

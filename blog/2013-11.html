@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -113,7 +114,7 @@ F1 ~ F12、以及 Pgup、Pgdn 等对我来说还是蛮重要的，偶尔看长�
 <div class="date">13年11月2日 周六 23:19</div>
 <h2>Bash 下统计文件行数</h2>
 <p>直接列代码了，用的 pattern 是 find 命令的。</p>
-<pre lang="source"><code>linesInFilePattern() {
+<pre><code class="language-bash">linesInFilePattern() {
         sum=0
         for file in $(find . -name &quot;$1&quot;); do
                 line=`wc -l $file`
@@ -134,6 +135,7 @@ F1 ~ F12、以及 Pgup、Pgdn 等对我来说还是蛮重要的，偶尔看长�
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

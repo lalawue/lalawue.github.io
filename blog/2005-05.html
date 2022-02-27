@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -61,7 +62,7 @@
 <div class="date">2005-05-26, 星期四</div>
 <h2>微软&quot;万圣节备忘录&quot;事件</h2>
 <p>今晚像平常一样打开 Opera 看网路上的 blog，开了太多的 tab，忘记在谁那里找到的了。从这个文件可以看看微软的野心，只是事情发生得有点久了……</p>
-<pre lang="example"><code>   微软万圣节备忘录是 1998 年 10 月由微软内部所外泄的文件，在万圣节后，
+<pre><code class="language-example">   微软万圣节备忘录是 1998 年 10 月由微软内部所外泄的文件，在万圣节后，
    造成媒体及业界相当程度的震憾.文件明白的指出,微软在未来对今年来风起
    云涌的开放原始码界的战略, 读本文可一窥微软这家公司在对付对手的手段,
    或多或少, 也可以了解到, 何以美国司法部门要控诉微软.
@@ -97,10 +98,10 @@
 <h2>Emacs TAGS 设置</h2>
 <p>本来不想用 TAGS 的，但 semantic 等工具对我来说太难设置了，而且我现阶段也不需要那么专业的工具，所以还是回到 TAGS 的怀抱吧。下面的设置都是在 Linuxforum 的 GNU Emacs/XEmacs 板快偷学的，在此谢过了~</p>
 <p>在工程主目录下生成 TAGS 文件用以下命令(adong 提供):</p>
-<pre lang="source"><code>find -name &quot;*.[cSh]&quot; | xargs etags -a
+<pre><code class="language-sh">$ find -name &quot;*.[cSh]&quot; | xargs etags -a
 </code></pre>
 <p>一小段代码，方便 TAGS 的使用(zslevin 提供):</p>
-<pre lang="source"><code>;; M-. 在另一窗口处查看光标处的 tag
+<pre><code class="language-lisp">;; M-. 在另一窗口处查看光标处的 tag
 ;; M-, 查找光标处的 tag，并跳转
 ;; C-M-, 提示要查找的 tag，并跳转
 
@@ -129,13 +130,13 @@
 <h2>循环&quot;包涵于&quot;递归？</h2>
 <p>不清楚老师有这样说过没，我上课分心比较严重，一般比较有意思的问题，我才会注意，:) 这几天一直在看书，想起了上面的问题。在我看来，循环可以做的一切事情，都可以用递归来完成。以前只是听说，今天才认真想通。</p>
 <p>如下的例子，普通的 <strong>for</strong> 和 <strong>while</strong> 循环：</p>
-<pre lang="source"><code>for( i=0; i&lt;n; i++)
+<pre><code class="language-c">for( i=0; i&lt;n; i++)
 {
     LOOP BODY
 }
 </code></pre>
 <p>相当于如下的尾递归：</p>
-<pre lang="source"><code>_for(int i)
+<pre><code class="language-c">_for(int i)
 {
     if(i&lt;n)
     {
@@ -156,13 +157,13 @@
 <li>我写的程序，
 返回传递的最大值</li>
 </ol>
-<pre lang="source"><code>int max( int &amp;n1, int &amp;n2)
+<pre><code class="language-c">int max( int &amp;n1, int &amp;n2)
 {
     return (n1&gt;n2)?n1:n2;
 }
 </code></pre>
 <p><strong>求二叉树高度，用一个整形 left 计算并存储左子树高度，right 计算并存储右子树高度，</strong></p>
-<pre lang="source"><code>void bitre_hight( bitre t, int &amp;left, int &amp;right)
+<pre><code class="language-c">void bitre_hight( bitre t, int &amp;left, int &amp;right)
 {
     if(t!=NULL)
     {
@@ -175,7 +176,7 @@
 }
 </code></pre>
 <p>输出左右子树高度最大者</p>
-<pre lang="source"><code>void main()
+<pre><code class="language-c">void main()
 {
     int left=1, right=1;
     bitre_hight( t, left, right);
@@ -186,13 +187,13 @@
 <li>老师的例子程序，
 返回传递的最大值</li>
 </ol>
-<pre lang="source"><code>int max( int &amp;n1, int &amp;n2)
+<pre><code class="language-c">int max( int &amp;n1, int &amp;n2)
 {
     return (n1&gt;n2)?n1:n2;
 }
 </code></pre>
 <p><strong>返回这一层的高度加上左右子树的高度最大者</strong></p>
-<pre lang="source"><code>int bitre_hight(bitre t)
+<pre><code class="language-c">int bitre_hight(bitre t)
 {
     if(t!=NULL)
     {
@@ -304,6 +305,7 @@ Your brain is a healthy mix of male and female
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

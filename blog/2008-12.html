@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -43,7 +44,7 @@
 <p>弄了个 bash 脚本来生成偶这个小网站的 google sitemap，巨简单，其实就一行
 find 语句，限于只用 find 的原因，固定了一些 sitemap 的属性，比如固定了各
 个页面的 priority，chagefreq，且只能为 *.html 生成 sitemap，如下：</p>
-<pre lang="source"><code>generate_goole_sitemap()
+<pre><code class="language-bash">generate_goole_sitemap()
 {
     # generate google sitemap
     echo '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;' &gt; $sitemap
@@ -57,7 +58,7 @@ find 语句，限于只用 find 的原因，固定了一些 sitemap 的属性，
 }
 </code></pre>
 <p>为了使用上面的小函数，还需要设置下面的一些变量：</p>
-<pre lang="source"><code># htmlpub and sitemap relative location
+<pre><code class="language-bash"># htmlpub and sitemap relative location
 htmlpub=$HOME/workport/homesite/publish
 sitemap=$htmlpub/sitemap.txt
 
@@ -104,6 +105,7 @@ UnixUtility 下也可以使用，生成的 sitemap 也通过了 google 那边的
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

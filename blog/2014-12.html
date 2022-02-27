@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -49,7 +50,7 @@ numberOfRowsInTableView，一个是 viewForTableColumn。</p>
 闭的时候很明显会显示回默认的那个。</p>
 <p>实际上呢，需要设置的方法在 <a href="https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html#//apple_ref/doc/uid/TP40012302-CH7-SW3">Apple Doc - Optimizing for High Resolution</a>，
 具体是需要下面几个大小的图标，然后放到 icon_name.iconset 这个文件夹下面</p>
-<pre lang="example"><code>icon_16x16.png
+<pre><code class="language-example">icon_16x16.png
 icon_16x16@2x.png
 icon_32x32.png
 icon_32x32@2x.png
@@ -61,7 +62,7 @@ icon_512x512.png
 icon_512x512@2x.png
 </code></pre>
 <p>终端下使用命令</p>
-<pre lang="source"><code>$ iconutil -c icns icon_name.iconset
+<pre><code class="language-bash">$ iconutil -c icns icon_name.iconset
 </code></pre>
 <p>来生成，然后拖到工程文件里面就好了，默认就是那个图标了，这个也折腾了不
 少时间 ，第一个 Mac App 终于完成了，地址在这里 <a href="http://pan.baidu.com/s/1sjv3gNN">TcBrowserMac</a>，密码是宇宙终极答案。</p>
@@ -114,7 +115,7 @@ presentation 是专门用来显示动画的，结束后就被设成了 model 的
 coordinator 可以连接多个 store，相互的关系可以脑补了吧。</p>
 <p>下面的代码只要建立一个 TestCoreData 的头文件调用一下最下面的 test 就可以
 编译跑了，粗看有点多，其实分开函数看就好了，函数名很直白了。</p>
-<pre lang="source"><code>@interface UserInfo : NSManagedObject
+<pre><code class="language-objc">@interface UserInfo : NSManagedObject
 @property (nonatomic,copy) NSString *name;
 @property (nonatomic,copy) NSNumber *uid;
 @end
@@ -281,7 +282,7 @@ App 已经是一年以前的事情，且也没有那么系统地学习过，所�
 程，要么是属于自己创建的线程。</p>
 <p>下面的例子是建立了一个 NSRunLoop 响应一秒一次的 NSTimer，这个 NSRunLoop
 是跑在一个单独的线程（非主线程）里的。</p>
-<pre lang="source"><code>- (void)timer_entry:(NSTimer*)t
+<pre><code class="language-objc">- (void)timer_entry:(NSTimer*)t
 {
     NSLog(@&quot;timer is main thread %d&quot;, [NSThread isMainThread]);
 }
@@ -344,7 +345,7 @@ static int _newThreadAborted;
 <h2>OpenGL 3.3 under MacOS (2)</h2>
 <p>终于查明原因了，并不是 GLFW 不堪用的问题，而是需要在 glGenBuffers 之前，
 先跑下面：</p>
-<pre lang="source"><code>    glGenVertexArrays(1, &amp;vaoHandle);
+<pre><code class="language-c">    glGenVertexArrays(1, &amp;vaoHandle);
     glBindVertexArray(vaoHandle);
 </code></pre>
 <p>当然，那些诸如 &lt;Learning Modern 3D Graphics Programming&gt; 的书上面是没有
@@ -364,7 +365,7 @@ X11 XQuartz 或者 GLEW，都无法使用 OpenGL 3.3 的，对于我这个初学
 <p>剩下的就是驱动问题了，谷歌得到的结果是建议用新的 GLFW 而不是 GLUT 或者
 GLEW 来做，GLFW 在 MacOS 下默认也只打开 OpenGL 2.1 而已，听说要这样才能
 打开 3.3 的 Core：</p>
-<pre lang="source"><code>static void using_opengl_version_330(void) {
+<pre><code class="language-c">static void using_opengl_version_330(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -447,6 +448,7 @@ bits 来顺序检测并跳转查找了。</p>
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

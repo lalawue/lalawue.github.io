@@ -9,6 +9,7 @@
     <meta name="description" content="Sucha's homepage and blog" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/site.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -38,7 +39,7 @@ Makefile 的时候并不多，而 Emacs 原配的 compile 命令对于小小的�
 显麻烦，得先设置编译命令，之后再运行。</p>
 <p>下面的函数可以根据预设的文件类型选用不同的编译器编译当前正在编辑的文件，
 对于做题等等非常有帮助，省了不少力气。还可以很方便地如法炮制不同的匹配。</p>
-<pre lang="source"><code>;; C-f5, 设置编译命令，用 Emacs 原来的 compile 
+<pre><code class="language-lisp">;; C-f5, 设置编译命令，用 Emacs 原来的 compile 
 ;; f5, 保存当前窗口并选用不同的编译器编译，可如法往上添加匹配
 (defun sucha-smart-compile ()
   &quot;Simply compile your file according to the file type.&quot;
@@ -66,7 +67,7 @@ Makefile 的时候并不多，而 Emacs 原配的 compile 命令对于小小的�
 <p><a id="sec-5"></a></p>
 <h4>Tags and speedbar</h4>
 <p>Emacs 本身就提供了许多代码浏览的工具，对我来说，Emacs + Speedbar + TAGS 就已经很好用了。下面是一些方便查找、跳转 TAGS 的函数和快捷键。</p>
-<pre lang="source"><code>;; 生成 TAGS, adong 提供 (in LinuxForum GNU Emacs/XEmacs)
+<pre><code class="language-lisp">;; 生成 TAGS, adong 提供 (in LinuxForum GNU Emacs/XEmacs)
 ;; find -name &quot;*.[ch]*&quot; | xargs etags -a
 
 ;; 查找 TAGS 文件
@@ -102,7 +103,7 @@ Makefile 的时候并不多，而 Emacs 原配的 compile 命令对于小小的�
       (find-tag default))))
 </code></pre>
 <p>而 Speedbar 根本不用设置，我个人只是不大喜欢它默认使用 image 的方式和过快的更新速度，只要重新设置一下就可以了。Speedbar 里面也提供很好用的快捷键，C-h m 就可以看到很多说明。</p>
-<pre lang="source"><code>(setq speedbar-update-speed 3)
+<pre><code class="language-lisp">(setq speedbar-update-speed 3)
 (setq speedbar-use-images nil)  ;; clear face, :)
 </code></pre>
 <p><a id="sec-6"></a></p>
@@ -126,7 +127,7 @@ GTAGS，它的效率更好一些。</p>
 functions-list 这个变量里各个函数的顺序来进行尝试性扩展的，因此“适用范围
 ”要比 dabbrev-expand 大得多，除了尝试 dabbrev-* 系列，还可以自定义其
 他方面，下面是我从 LinuxForum 上面抄过来的设置：</p>
-<pre lang="source"><code>;; 定义你的 hippie-expend-try－functions-list
+<pre><code class="language-lisp">;; 定义你的 hippie-expend-try－functions-list
 (setq hippie-expand-try-functions-list
       '( ;;senator-complete-symbol
 	try-expand-dabbrev
@@ -180,6 +181,7 @@ functions-list 这个变量里各个函数的顺序来进行尝试性扩展的�
       <div id="sidebar">
       </div><!-- sidebar -->
       <script type="text/javascript" src="../js/site_sidebar.js"></script>
+      <script type="text/javascript" src="../js/prism.min.js"></script>
     </div><!-- body -->
   </body>
 </html>

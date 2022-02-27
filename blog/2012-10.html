@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -51,21 +52,21 @@ yun.io 的文件系统层面云，还有我在 github 上的 emacs 配置文件�
 <p>虽然对 elisp 说不上生疏，但是一直都在逃避正则表达式，因为若非复杂的文本
 处理，学这个东西太不讨好了。</p>
 <p>这回硬着头皮上吧，先给出需要处理的文本段落的例子：</p>
-<pre lang="example"><code>INTERVIEWER: xxx...SIMONYI: xxx...INTERVIEWER: xxx...SIMONYI: ...
+<pre><code class="language-example">INTERVIEWER: xxx...SIMONYI: xxx...INTERVIEWER: xxx...SIMONYI: ...
 </code></pre>
 <p>如上，INTERVIEWER 和 SIMONYI 都要单独分段，手上已有的文本小说处理工具决
 计搞不定。</p>
 <p>Emacs 的处理过程为，先打开文件，然后 M-x replace-regexp，输入匹配的正则
 表达式：</p>
-<pre lang="source"><code>&quot;\([A-Z]:\)&quot;
+<pre><code class="language-source">&quot;\([A-Z]:\)&quot;
 </code></pre>
 <p>替换成字符串：</p>
-<pre lang="source"><code>&quot;
+<pre><code class="language-source">&quot;
 
 \1&quot;
 </code></pre>
 <p>处理后的文本例子是：</p>
-<pre lang="example"><code>INTERVIEWER: xxx...
+<pre><code class="language-example">INTERVIEWER: xxx...
 
 SIMONYI: xxx...
 
@@ -90,6 +91,7 @@ eval 了，多不靠谱呀。</p>
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

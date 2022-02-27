@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -45,7 +46,7 @@
 <h2>Emacs 高亮</h2>
 <p>常常需要在看代码的时候高亮某个变量，查看其变化，之前用的
 <a href="http://www.emacswiki.org/emacs/LambdaExpression">lambda expression</a> 如下：</p>
-<pre lang="source"><code>(lambda () (interactive) 
+<pre><code class="language-lisp">(lambda () (interactive) 
   (highlight-phrase (current-word) 'hi-blue))
 </code></pre>
 <p>然后发现，高亮的单词是亮了，但是怎么别的单词也部分亮了，比如我只想高亮变
@@ -54,13 +55,13 @@
 <p>其实都是 highlight-phrase 惹的祸，并不判断当下的 current-word 是否是一个
 完整的单词。这样的话，用 highlight-regexp 就好了，只是需要将匹配单词的
 regexp 给它，如下的 lambda expression，我习惯将其绑定到 F8 上。</p>
-<pre lang="source"><code>(global-set-key [(f8)] (lambda () (interactive)
+<pre><code class="language-lisp">(global-set-key [(f8)] (lambda () (interactive)
                          (highlight-regexp 
                           (concat &quot;\\b&quot; (current-word) &quot;\\b&quot;)
                           'hi-blue)))
 </code></pre>
 <p>接下来是将高亮取消的 lambda expression，我绑定到了 C-F8 上。</p>
-<pre lang="source"><code>(global-set-key [(control f8)] (lambda ()
+<pre><code class="language-lisp">(global-set-key [(control f8)] (lambda ()
                                  (interactive)
                                  (hi-lock-mode nil)))
 </code></pre>
@@ -102,6 +103,7 @@ regexp 给它，如下的 lambda expression，我习惯将其绑定到 F8 上。
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

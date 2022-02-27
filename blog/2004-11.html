@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -59,7 +60,7 @@
 <p>安装后的第一步我一般是让 X11 系统工作起来。所以得配置一下关于 X11 的方方面面──#xorgconfig。先选择鼠标，我的是罗技的 USB 鼠，先选择 IM\PS2，反正以后还要改。接着是硬盘，我的是罗技套装，硬盘是普通的 105 健，然后随便键入一个名字即可。我是不要三键模拟及键盘自定意的。接着到了比较关键的部分，设置你的显示器及显卡。现在最好拿出你的说明书，一步一步跟着提示走。先设置水平刷新率，接着是垂直的刷新率，然后是显卡的，记得要在 datebase 里选。我的是 nv。接着是分辨率及颜色的选择，比较容易了。</p>
 <p>接着 #startx，看看能不能进入 X ，不行再看看出错的 log，会有不错的提示。然后根据 log 的提示思考，修改~</p>
 <p>进入了 X 系统？祝贺你，呵呵~~不过现在鼠标还不能用吧，还要修改 X 的配置文件 /etc/X11/xorg.conf，如果是 USB 的滚轮鼠，修改如下字段：</p>
-<pre lang="source"><code>Identifier  &quot;Mouse1&quot;
+<pre><code class="language-source">Identifier  &quot;Mouse1&quot;
 Driver &quot;mouse&quot;
 Option &quot;Protocol&quot; &quot;IMPS/2&quot;
 Option &quot;Device&quot; &quot;/dev/mouse&quot;
@@ -70,7 +71,7 @@ Option &quot;ZAxisMapping&quot; &quot;4 5&quot;
 <h3>II.中文及美化:</h3>
 <p>中文不是小事情。不过要搞好中文，首先要设置好 locale 在 /etc/profile.d/lang.sh。我一般设为 zh_CN.GB2312，这样 Emacs 才能出中文，其他的如 UTF-8 及 GBK 我就不懂配置了。</p>
 <p>配置如下：</p>
-<pre lang="source"><code>export LANG=zh_CN.GB2312
+<pre><code class="language-sh">export LANG=zh_CN.GB2312
 export LC_CTYPE=zh_CN.GB2312
 export G_BROKEN_FILENAMES=1
 </code></pre>
@@ -86,7 +87,7 @@ export G_BROKEN_FILENAMES=1
 <p>修改 /etc/fonts/fonts.conf，加入自定义的字体文件夹路径</p>
 </li>
 </ol>
-<pre lang="source"><code>&lt;DIR&gt;your font path&lt;DIR&gt;
+<pre><code class="language-source">&lt;DIR&gt;your font path&lt;DIR&gt;
 </code></pre>
 <ol start="3">
 <li>
@@ -99,7 +100,7 @@ export G_BROKEN_FILENAMES=1
 <p>这也是很重要的一步，光有中文显示（输出）是不行的，还要有输入，不过   这就因人而异了。我安装的中文输入软件是 fcitx，很强大的一个软件，支持   拼音、五笔、二笔等等。安装很简单，也有不少文档，就此略去。接下去要让 fcitx 能够正常工作，还得设置 XMODIFIERS 在 /etc/profie，在最后加上这几行：</p>
 </li>
 </ol>
-<pre lang="source"><code>export XMODIFIERS=&quot;@im=fcitx&quot;
+<pre><code class="language-sh">export XMODIFIERS=&quot;@im=fcitx&quot;
 export XIM=fcitx
 export XIM_PROGRAM=fcitx
 export GTK_IM_MODULES=xim
@@ -133,6 +134,7 @@ export GTK_IM_MODULES=xim
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

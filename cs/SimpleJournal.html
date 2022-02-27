@@ -9,6 +9,7 @@
     <meta name="description" content="Sucha's homepage and blog" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/site.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -29,7 +30,7 @@
 <h3>它是如何工作的?</h3>
 <p>下面是一个增加日记条目的函数。如果是这个月第一次写日记，函数会在&quot;~/path/to/your/journal/dir/&quot;文件夹下根据当月时间建立名为&quot;yyyy-mm&quot;这样按年月分类的文件，并在文件头上写&quot;# user's journal created yyyy-mm-dd&quot;这段文字，接着插入当前的日期、时间和标题。</p>
 <p>如果文件已经存在，则只插入日期、时间和标题。</p>
-<pre lang="source"><code>(defun sucha-simple-journal-add-entries  (heading)
+<pre><code class="language-lisp">(defun sucha-simple-journal-add-entries  (heading)
   &quot;Open the local diary file and add entries today.&quot;
 
   ;;; if you need backup, remove the ';' beginning of the line
@@ -58,14 +59,14 @@
   (text-mode))
 </code></pre>
 <p>下面是一个从 mini-buffer 读取用户日记标题的函数，并将读取到的函数传递到上面的函数中。如果你不想要标题，留空就行了。</p>
-<pre lang="source"><code>(defun sucha-simple-journal-add-heading ()
+<pre><code class="language-lisp">(defun sucha-simple-journal-add-heading ()
   &quot;Get the local journal heading from minibuffer.&quot;
   (interactive)
   (sucha-simple-journal-add-entries
    (read-from-minibuffer &quot;Journal Heading: &quot;)))
 </code></pre>
 <p>我希望随时使用它，所以最好把它绑定到一个按键上。比如下面的f11。</p>
-<pre lang="source"><code>(global-set-key [(f11)] 'sucha-simple-journal-add-heading)
+<pre><code class="language-lisp">(global-set-key [(f11)] 'sucha-simple-journal-add-heading)
 </code></pre>
 <p><a id="sec-4"></a></p>
 <h3>不能工作？</h3>
@@ -80,6 +81,7 @@
       <div id="sidebar">
       </div><!-- sidebar -->
       <script type="text/javascript" src="../js/site_sidebar.js"></script>
+      <script type="text/javascript" src="../js/prism.min.js"></script>
     </div><!-- body -->
   </body>
 </html>

@@ -9,6 +9,7 @@
     <meta name="description" content="Sucha's homepage and blog" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/site.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -31,14 +32,14 @@
 <h4>使用介绍</h4>
 <p>可以将文件放入 emacs 的 load-path 路径内，或者修改 ~/.emacs，加入 (add-to-list 'load-path &quot;/path/to/sqlite.el/&quot;)，然后再添入 (require 'sqlite)，就可以使用了。</p>
 <p>使用 “M-x sqlite-mode&quot; 命令运行程序，在这之前，你或许需要修改一下默认的属性，“M-x customize-group sqlite-mode” 来修改。</p>
-<pre lang="example"><code>Program: 一般填 sqlite 程序名即可，或许得加上必要的路径名
+<pre><code class="language-example">Program: 一般填 sqlite 程序名即可，或许得加上必要的路径名
 Flags: 控制 sqlite 的输出版面，默认是 “-header -column” 详细信息与
        sqlite 交互时输入 &quot;.help&quot; 查询
 Database: 需要操作的数据库
 Input window height: 输入栏的高度
 </code></pre>
 <p>属性也可以在程序运行时 C-c C-s 做临时的修改。下面是一些按键的安排。</p>
-<pre lang="example"><code>C-c C-s   对属性做临时修改
+<pre><code class="language-example">C-c C-s   对属性做临时修改
 C-c C-e   清空输入缓冲区
 M-p       上一条命令
 M-n       下一条命令
@@ -58,6 +59,7 @@ TAB       上一条命令
       <div id="sidebar">
       </div><!-- sidebar -->
       <script type="text/javascript" src="../js/site_sidebar.js"></script>
+      <script type="text/javascript" src="../js/prism.min.js"></script>
     </div><!-- body -->
   </body>
 </html>

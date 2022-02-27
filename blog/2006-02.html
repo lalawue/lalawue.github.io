@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -41,7 +42,7 @@
 <p>寝室内部有几台 linux 和 windows，经常一起开机，但是互传文件比较麻烦，在 win 下大家比较常用的方式是用飞鸽传书，但是 linux 下大家都不知道用什么程序来互传。</p>
 <p>其实可以利用 win 的网络邻居的功能，先在 linux 里启动 samba 服务，然后给所有人一个 write 权限，这样可以互传文件了。建立也极为简单，我只看了一会 Sir 上北南南北兄的文章，再修改一下 /etc/samba/smb.conf 里配有完善说明的设置，立马搞定。</p>
 <p>首先修改 /etc/samba/smb.conf 文件：</p>
-<pre lang="source"><code>[global]
+<pre><code class="language-ini">[global]
    workgroup = Slackware
    server string = Samba Server
    security = share   # 这样的认证方式不需密码
@@ -55,7 +56,7 @@
    unix charset = utf-8
 </code></pre>
 <p>下面的命令用于登入和检查：</p>
-<pre lang="source"><code>启动服务
+<pre><code class="language-bash">启动服务
 # . /etc/rc.d/rc.samba
 关闭服务
 # . /etc/rc.d/rc.samba stop
@@ -136,7 +137,7 @@
 <h2>alias 与 builtin</h2>
 <p>今天突发奇想，想让 cd 这个命令在不加参数的情况下回到原目录，于是尝试了
 下面的这个函数：</p>
-<pre lang="source"><code>CD()
+<pre><code class="language-bash">CD()
 {
     case $1 in
         &quot;&quot;) cd $OLDPWD ;;
@@ -147,7 +148,7 @@ alias cd='CD $1'
 </code></pre>
 <p>但这样出现了很大的问题，因为经过 alias 声明后的变量/命令在整个 shell 的执行周期内都是确定的，这样就把 bash 内建的 cd 和声明后的 cd 混淆了，函数会执行经过声明后的命令，运行的结果就是不断地循环。</p>
 <p>为此 man 了一下 bash，查看到了 builtin 这个命令，指定用 bash 内建的命令执行，后边的参数不用变。修改了一下原函数，加上了 builtin 关键字，如下：</p>
-<pre lang="source"><code>CD()
+<pre><code class="language-bash">CD()
 {
     case $1 in
         &quot;&quot;) builtin cd $OLDPWD ;;
@@ -202,6 +203,7 @@ alias cd='CD $1'
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

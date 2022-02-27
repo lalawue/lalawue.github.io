@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -40,7 +41,7 @@
 还是会遇到 warning 的问题。后来发现是 emacs-wiki-srctag.el 文件中的一条语
 句引起的，因为在发布的文件中恰好包含了 &lt;src&gt; tag，只要将这条语句
 comment 掉就可以了，具体的语句是：</p>
-<pre lang="source"><code>;;      (search-forward &quot;&lt;/pre&gt;&quot;)
+<pre><code class="language-lisp">;;      (search-forward &quot;&lt;/pre&gt;&quot;)
 </code></pre>
 <p>文件中仅有的一条 search-forward 语句，在使用到 &lt;src&gt; 的时候会造成
 search 失败，后果是无法发布 index.html，整个发布过程就无法自动化了。</p>
@@ -67,6 +68,7 @@ search 失败，后果是无法发布 index.html，整个发布过程就无法�
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

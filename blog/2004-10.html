@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -72,9 +73,9 @@
 <h3>ac 97驱动的安装</h3>
 <p>alsa 安装需要内核源码包，首先确定 /usr/src/ 里面有了诸如 linux-2.4.26 这样的文件夹，不然的话还得找原来的安装盘(我是菜鸟，自然用 full 安装，东西只会多，不会少的^_^)。先确定自己的主板用的是什么声音芯片，比如我，是 Intel845PEI 的板子，声音芯片是 realtek ALC202A，那么可以上驱动之家下载 ALC202A for linux 的驱动。</p>
 <p>解压缩 alsa-driver，进入 driver 目录。</p>
-<pre lang="source&lt;a"><code>&lt;a id=&quot;make&quot;&gt;&lt;/a&gt;
- intall&lt;a id=&quot;./snddevices&quot;&gt;&lt;/a&gt;
-
+<pre><code class="language-sh&lt;a">
+# make intall
+# ./snddevices
 </code></pre>
 <p>然后是修改 /etc/modules.conf (有的是 conf.modules )，具体看 driver 里有什么就到 /etc/ 下修改什么……然后重启……</p>
 <p>Intel 主板版载 ac 97 的安装过程细节在 Linuxsir 搜索下面的参考帖子。</p>
@@ -84,7 +85,7 @@
 <h3>启动加载声音设置</h3>
 <p>有没有注意到，每次启动的时候都得使用 aumix 调声音。因为启动的时候没有加载 aumix，也就不可能 load 声音配置文件。如果每次都这样，人就会被郁闷死……下面给出 Fvwm 下用 aumix 启动加载声音设置的方法。</p>
 <p>首先设置保存声音设置。先调出 aumix，然后设置好自己需要的声音大小，保存，在 ～/ 目录下会生成一个 .aumixrc 的声音配置文件。由 #aumix --help 可以知道，#aumix －L 是 load 用户 ~/.aumixrc 的声音设置（如果在 ~/ 没有 .aumixrc,则 load  /etc 下的系统配置文件）。那么我们在 ~/.fvwm/.fvwm2rc 上面的 StartFunction 加上下面一行，启动 Fvwm 的时候加载声音设置：</p>
-<pre lang="source"><code>+ I Exec exec aumix -L
+<pre><code class="language-source">+ I Exec exec aumix -L
 </code></pre>
 <p>这样就不用每次启动后都得用 aumix 设置声音了……</p>
 <h3>P.S</h3>
@@ -111,6 +112,7 @@
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

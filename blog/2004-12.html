@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -21,7 +22,7 @@
 <h2>挂载 U 盘 simple way~</h2>
 <h3>挂载U盘所需的模块</h3>
 <p>首先检查系统是否加载了以下模块，没有的话就用 #modprobe 命令加载吧。（ps：有些模块似乎不是必须的，但加上是没有错的^_^）</p>
-<pre lang="source"><code>usb-storage
+<pre><code class="language-source">usb-storage
 usb-uhci
 hid
 ide-scsi
@@ -31,7 +32,7 @@ ide-scsi
 <p>其实已经有了专门的软件 -- Autousb，Redhat 的用户可以直接下 rpm 来使用了。不过我还有别的办法~</p>
 <p>那就是可以把挂载 U 盘所需的参数写进 /etc/fstab，这样要挂载的时候只需 #mount -a 即可，卸载也只需 #umount /dev/sda*。方便吧~</p>
 <p>一般是以普通用户身份来读写U盘，为此可以在 fstab 里加入如下信息：</p>
-<pre lang="source"><code>/dev/sda* /mnt/* vfat defaults,iocharset=cp936,umask=000 1 0
+<pre><code class="language-source">/dev/sda* /mnt/* vfat defaults,iocharset=cp936,umask=000 1 0
 </code></pre>
 <p>Have fun~!</p>
 <div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2004-12.html#p3">Permalink</a></div>
@@ -79,7 +80,7 @@ daemon 来处理这些东西。于是决定用 esmtp 来发邮件。</p>
 </li>
 </ol>
 <p>假设现在已经在 texmf-local 中，以如下方式生成字体以及配置文件：</p>
-<pre lang="source"><code>gbkfonts-linux-0.3/gbkfonts   /usr/X11R6/lib/X11/fonts/TTF/simsun.ttc   song
+<pre><code class="language-source">gbkfonts-linux-0.3/gbkfonts   /usr/X11R6/lib/X11/fonts/TTF/simsun.ttc   song
   ……
   ……
 </code></pre>
@@ -100,6 +101,7 @@ daemon 来处理这些东西。于是决定用 esmtp 来发邮件。</p>
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

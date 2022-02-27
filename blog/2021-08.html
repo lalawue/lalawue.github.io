@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -42,7 +43,7 @@
 <li>遇到类似 HTML tags 这样的 function 就调用取返回值</li>
 </ul>
 <p>可以看到，从最外层的 table 开始遍历后，处理方式都是一致的递归描述，举个简单的例子</p>
-<pre lang="source"><code>local Tags = require(&quot;html-tags&quot;)
+<pre><code class="language-lua">local Tags = require(&quot;html-tags&quot;)
 
 local function pageSpec()
     return {
@@ -83,7 +84,7 @@ print(Tags.render(pageSpec, {}))
 <p>感觉还可以说一下 _ENV 和 setfenv 等相关的事情。实践下来，是觉得 getfenv、setfenv 的灵活性很高，_ENV 比较受限，但也许从语言设计者的角度来说，_ENV 更安全一些吧。</p>
 <p>先说一下这个 include tag 的作用，就是引入一个 Lua 文件描述的子页面，最终是输出一串字符串到这个 tag 的位置。使用场景时，比如我做了很多页面，但是想用同样的 HTML head 描述，当我改变 head 的描述是时，希望所有页面都能同样做更改，那么我将这个 head 文件拎出来单独描述就好。</p>
 <p>比如将上面的例子命名为 head_tpl.lua，那么引入的时候可以是这样：</p>
-<pre lang="source"><code>local function pageSpec()
+<pre><code class="language-lua">local function pageSpec()
     return {
         html {
             include &quot;/path/to/head_tpl.lua&quot;,
@@ -108,6 +109,7 @@ end
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

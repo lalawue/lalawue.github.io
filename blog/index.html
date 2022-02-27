@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -53,13 +54,13 @@
 <div class="date">21年11月30日 周二 21:24</div>
 <h2>div 内容过长的显示</h2>
 <p>js 入门的简单问题，我还是 baidu 了一下，花了一些时间，解决办法需要 CSS，设置 height 或者 max-height，然后设置 overflow 属性，如下</p>
-<pre lang="source"><code>.code {
+<pre><code class="language-css">.code {
     max-height: 1024px;
     overflow: auto;
 }
 </code></pre>
 <p>实际上，我是通过 js 来设置 docuementId 属性的，因为监听了 resize 事件，我觉得加了下面的函数更完善，可以根据可见区域到校重新 layout，如下：</p>
-<pre lang="source"><code>window.addEventListener('resize', function(){
+<pre><code class="language-js">window.addEventListener('resize', function(){
     if (document.body.clientWidth &lt; 1024) {
         document.getElementById('tag').removeAttribute('style');
     } else {
@@ -80,10 +81,10 @@ setTimeout(() =&gt; {
 <p>而实际上，由于 lua 的 LUA_PATH、LUA_CPATH 以及 package.path 和 package.cpath 太自由，可以定制很多种搜索优先级，以及目录相对关系，打包目录下的相对路径，就不能反映源码上面的 require 路径逻辑了。</p>
 <p>于是我基于上面的 luastatic，做了一点改进，可以输入相对路径，代码在 <a href="https://github.com/lalawue/luastatic">lalawue/luastatic</a>。</p>
 <p>举个例子，一方面，我重度使用 luarocks 安装的库，比如 cincau，默认目录可以是 /usr/local/share/lua/5.1/cincau，而另外自己写的源码，都在 app 目录下，然后设置了如下的 LUA_PATH：</p>
-<pre lang="source"><code>export LUA_PATH=&quot;/usr/local/share/lua/5.1/cincau/?.lua;./app/?.lua&quot;
+<pre><code class="language-shell">$ export LUA_PATH=&quot;/usr/local/share/lua/5.1/cincau/?.lua;./app/?.lua&quot;
 </code></pre>
 <p>这样在 require 的时候，省却了很多相对路径。如果使用官方的 luastatic 打包，就得建立相对目录，然后作为命令行参数输入给 luastatic，用我修改后的 luastatic，只需要先设置 shell 变量：</p>
-<pre lang="source"><code>export LUASTATIC_SOURCE_PATH=&quot;/usr/local/share/lua/5.1/cincau/;app/;&quot;
+<pre><code class="language-shell">$ export LUASTATIC_SOURCE_PATH=&quot;/usr/local/share/lua/5.1/cincau/;app/;&quot;
 </code></pre>
 <p>注意目录最后的 '/' 和 ';'，如果输入的 lua 源文件检测到相应的路径前缀，会将这个前缀去掉，这样就实现了 LUA_PATH 和 package.path 的功能，运行时的路径搜索和打包时候的路径一致了，不需要构建相对目录。</p>
 <p>另外需要注意的是，虽然 luastatic 支持生成无依赖的 binary，但那只是对应官方的 lua，luajit 依赖的 .so 库还是需要动态加载的，比如很多的 ffi.load 依赖的是系统的 dlopen。这个我看了一些文章，大佬们根据安全原则，系统的接口都不支持从内存中加载一个动态库，虽然某些平台上通过 mmap 是可以做到的，但是这个总感觉不大好。</p>
@@ -134,19 +135,19 @@ route、以及 XHR，基本上一个单页面就可以搞定了。</p>
 <p>Mithril 限定 60hz 刷新确实也不错，但是遇到一些极端情况，比如自己本地测试的时候，网络返回就挺快的，当我在用内部变量控制
 vnode 输出的不同时，因为间隔过短，虽然变量有切换状态，但 Mithril 间隔读取到的其实都是同一个状态下的 vnode，
 而忽略了中间这个变量状态下 vnode 的输出，最后导致认为没有变化，不需要刷新，出了问题，如下：</p>
-<pre lang="source"><code>// 如下的 A、B 表示变量值，后面数字表示 vnode 结构为 A 但内容不同，这里需要保证 A1 -&gt; B 间隔 1/60 秒
+<pre><code class="language-source">// 如下的 A、B 表示变量值，后面数字表示 vnode 结构为 A 但内容不同，这里需要保证 A1 -&gt; B 间隔 1/60 秒
 A1 -&gt; B -&gt; A2
 </code></pre>
 <p>所以有时候，需要将一些操作延时到 60hz 单次刷新之外才行，让 Mithril 检测到 vnode 变化。</p>
 <p>Mithril 教程用的是古老的创建 vnode 的函数调用方案，但其实可以配合 preact 的 <a href="https://github.com/developit/htm">htm</a>，
 我觉得使用方式上要比教程里面的简单很多，比如教程是下面这样创建 vnode 的：</p>
-<pre lang="source"><code>// 下面 title_str 是变量
+<pre><code class="language-js">// 下面 title_str 是变量
 // &lt;h1 class=&quot;title&quot;&gt;My first app&lt;/h1&gt;
 const title_str = 'title';
 m(&quot;h1&quot;, {class: title_str}, &quot;My first app&quot;)
 </code></pre>
 <p>如果用了 <a href="https://github.com/developit/htm">htm</a>，可以像下面这样：</p>
-<pre lang="source"><code>// 先绑定，最后也是通过 m 函数来输出 vnode 的
+<pre><code class="language-js">// 先绑定，最后也是通过 m 函数来输出 vnode 的
 const html = htm.bind(m);
 const title_str = 'title';
 html`&lt;h1 class=&quot;${title_str}&quot;&gt;My first app&lt;/h1&gt;`
@@ -161,7 +162,7 @@ html`&lt;h1 class=&quot;${title_str}&quot;&gt;My first app&lt;/h1&gt;`
 <h2>stunnel 的 SNI 配置</h2>
 <p>因为是很小的网站，资源也有限，感觉没必要用上 openresty 这个大件。</p>
 <p>先贴配置：</p>
-<pre lang="source"><code>debug=info
+<pre><code class="language-ini">debug=info
 output=/path/to/access.log
 pid=/path/to/process.pid
 client=no
@@ -241,7 +242,7 @@ key = /path/to/site2.key
 <li>遇到类似 HTML tags 这样的 function 就调用取返回值</li>
 </ul>
 <p>可以看到，从最外层的 table 开始遍历后，处理方式都是一致的递归描述，举个简单的例子</p>
-<pre lang="source"><code>local Tags = require(&quot;html-tags&quot;)
+<pre><code class="language-lua">local Tags = require(&quot;html-tags&quot;)
 
 local function pageSpec()
     return {
@@ -282,7 +283,7 @@ print(Tags.render(pageSpec, {}))
 <p>感觉还可以说一下 _ENV 和 setfenv 等相关的事情。实践下来，是觉得 getfenv、setfenv 的灵活性很高，_ENV 比较受限，但也许从语言设计者的角度来说，_ENV 更安全一些吧。</p>
 <p>先说一下这个 include tag 的作用，就是引入一个 Lua 文件描述的子页面，最终是输出一串字符串到这个 tag 的位置。使用场景时，比如我做了很多页面，但是想用同样的 HTML head 描述，当我改变 head 的描述是时，希望所有页面都能同样做更改，那么我将这个 head 文件拎出来单独描述就好。</p>
 <p>比如将上面的例子命名为 head_tpl.lua，那么引入的时候可以是这样：</p>
-<pre lang="source"><code>local function pageSpec()
+<pre><code class="language-lua">local function pageSpec()
     return {
         html {
             include &quot;/path/to/head_tpl.lua&quot;,
@@ -307,6 +308,7 @@ end
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -43,7 +44,7 @@ for limits.h 的问题。</p>
 ubuntu 下偷懒 apt-get 来得到 gcc package 的人，百思不得其解呀。</p>
 <p>好在 google 还是无比强大的，借用了 stackflow 上某高人的办法，如下方法
 bash 下指定环境变量搞定：</p>
-<pre lang="source"><code>export INCLUDE=/usr/lib/gcc/i486-linux-gnu/4.4/include-fixed/:/usr/lib/gcc/i486-linux-gnu/4.4/include/
+<pre><code class="language-bash">export INCLUDE=/usr/lib/gcc/i486-linux-gnu/4.4/include-fixed/:/usr/lib/gcc/i486-linux-gnu/4.4/include/
 export C_INCLUDE_PATH=/usr/lib/gcc/i486-linux-gnu/4.4/include-fixed/:/usr/lib/gcc/i486-linux-gnu/4.4/include/
 export CPLUS_INCLUDE_PATH=/usr/lib/gcc/i486-linux-gnu/4.4/include-fixed/:/usr/lib/gcc/i486-linux-gnu/4.4/include/
 </code></pre>
@@ -85,6 +86,7 @@ export CPLUS_INCLUDE_PATH=/usr/lib/gcc/i486-linux-gnu/4.4/include-fixed/:/usr/li
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

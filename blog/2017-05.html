@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -141,7 +142,7 @@ nvidiaweb 支持（请看这一节的最后），保存并推出 EFI 分区</p>
 </ol>
 <p>有关 nvidiaweb 驱动的支持，需要使用文本编辑器编辑 config.plist，在
 SystemParameters key 下添加：</p>
-<pre lang="source"><code>	&lt;key&gt;SystemParameters&lt;/key&gt;
+<pre><code class="language-xml">	&lt;key&gt;SystemParameters&lt;/key&gt;
 	&lt;dict&gt;
                 ... 其他配置 ...
         	&lt;key&gt;NvidiaWeb&lt;/key&gt;
@@ -172,6 +173,7 @@ SystemParameters key 下添加：</p>
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

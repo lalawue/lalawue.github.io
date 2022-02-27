@@ -9,6 +9,7 @@
     <meta name="description" content="Sucha's homepage and blog" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/site.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -50,7 +51,7 @@
 <p><a id="sec-6"></a></p>
 <h3>安装过程</h3>
 <p>Mutt 和 fetchmail 在一般的发行版里都有了，我们只需要下载配置 esmtp。如果是 SLK 的用户，这里有个好消息，royce 兄已经为我们这些 slacker 准备好了现成的 esmtp，地址是 <a href="http://download.linuxsir.org/royce/email.tar.gz">http://download.linuxsir.org/royce/email.tar.gz</a>，不过要注意，若使用这个包，在 .fetchmailrc 中加入 esmtp 时要将地址改为</p>
-<pre lang="source"><code>/usr/local/bin/esmtp
+<pre><code class="language-shell">/usr/local/bin/esmtp
 </code></pre>
 <p>就可以了。其他发行版的用户可以到它的主页上去看看，或许有你要的资源。地址是 <a href="http://esmtp.sourceforge.net/">http://esmtp.sourceforge.net/</a>，注意 esmtp 还需要 libESMTP 这个库。</p>
 <p><a id="sec-7"></a></p>
@@ -60,7 +61,7 @@
 <a id="sec-8"></a></p>
 <h4>~/.fetchmailrc</h4>
 <p>记得在配置文件的最前面加上默认的 mda，收取多个邮件帐号可以依葫芦画瓢。如果想每次只收取新信件，而不删除旧信，请参照下面收取 163 信箱的格式（需服务器支持）。有关 ~/.fetchmailrc 更多的信息，请 $ man fetchamail。</p>
-<pre lang="source"><code> # sucha's personal .fetchmailrc
+<pre><code class="language-source"> # sucha's personal .fetchmailrc
  # esmtp
  defaults
  	mda &quot;/usr/local/bin/esmtp -f %F %T&quot;
@@ -92,7 +93,7 @@
 <h4>~/.esmtprc</h4>
 <p>下面是我的 ~/.esmtprc，如果你有一个以上的帐号，记得使用 identity 这个关
 键字。更多的信息，请 $ man esmtprc。</p>
-<pre lang="source"><code>identity kio_34@163.com
+<pre><code class="language-source">identity kio_34@163.com
 	 hostname = smtp.163.com:25
 	 username = &quot;kio_34&quot;
 	 password = &quot;password&quot;
@@ -111,7 +112,7 @@ mda &quot;/usr/bin/procmail -d %T&quot;
 <p>我觉得关于 mutt 的配置，还是先去看看王垠大哥的介绍吧，很多重要且具体的配置他都有很好的说明。下面是我自己的一个简陋的配置文件包，更多、更详细的信息请 $ man muttrc，或者浏览 /usr/doc/mutt 下的文档。</p>
 <p><a href="../doc/mutt.tar.gz">Download mutt.tar.gz</a></p>
 <p>使用方法很简单，如下：</p>
-<pre lang="source"><code> $ mv mutt.tar.gz ~/
+<pre><code class="language-shell"> $ mv mutt.tar.gz ~/
  $ cd ~/
  $ tar xzvf mutt.tar.gz &amp;&amp; rm mutt.tar.gz
  $ less README (get more information)
@@ -169,6 +170,7 @@ mda &quot;/usr/bin/procmail -d %T&quot;
       <div id="sidebar">
       </div><!-- sidebar -->
       <script type="text/javascript" src="../js/site_sidebar.js"></script>
+      <script type="text/javascript" src="../js/prism.min.js"></script>
     </div><!-- body -->
   </body>
 </html>

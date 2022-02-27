@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -24,7 +25,7 @@
 <p>还有，GMP 的 C 接口，其内部实现，都是带 __gmp 这样前缀的，即便通过 FFI 使用，也很不方便，所以 gmp_ffi 库，将这些接口都重新做了绑定，重命名为类似 mpz_mul() 这样的函数，跟 gmp.h 上通过 C 宏定义出来的接口一样使用。</p>
 <p>有了上面的铺垫，一些好玩的东西可以搞起来，比如粗糙的计算素数的程序 <a href="https://github.com/lalawue/gmp_ffi/blob/master/test_prime.lua">test_prime.lua</a>，比如温习一下 RSA 加解密 <a href="https://github.com/lalawue/gmp_ffi/blob/master/test_rsa.lua">test_rsa.lua</a>，当前的实现是到处抄的，遥望大学时虽有做这个的大习题，但早就忘了，-.-</p>
 <p>贴一下 gmp_ffi.lua 使用的例子吧：</p>
-<pre lang="source"><code>local gmp = require(&quot;gmp_ffi&quot;)
+<pre><code class="language-lua">local gmp = require(&quot;gmp_ffi&quot;)
 
 function gmpffi_test()
    local a = gmp.mpz(11111111111)
@@ -68,7 +69,7 @@ gmpffi_test()
 <p>能够支持各种 C 的函数接口，比如可变参数，以及各种数据类型，包括可变长度 struct 数据，甚至还有支持 Lua 侧的 gc 对于创建的 cdata 进行 finalizer，让 Lua 的 gc 只管理虚拟机这一侧 C 指针生命周期，API 文档是 <a href="http://luajit.org/ext_ffi_api.html">http://luajit.org/ext_ffi_api.html</a>。</p>
 <h3>基本使用</h3>
 <p>具体点的例子，比如声明并调用函数，创建一个 struct 结构，以及申请、释放内存的官方例子：</p>
-<pre lang="source"><code>local ffi = require(&quot;ffi&quot;)
+<pre><code class="language-lua">local ffi = require(&quot;ffi&quot;)
 
 ffi.cdef[[
 int printf(const char *fmt, ...); //声明并调用标准 C 库函数
@@ -89,7 +90,7 @@ p = nil -- Last reference to p is gone.
 </code></pre>
 <h3>调用自定义库</h3>
 <p>如果是自定义库，库路径需加入 LuaJIT 的 package.cpath 中，使用前 ffi.load('myffi') 一下，比如下面的例子看下 ffi.gc 是不是真的有用：</p>
-<pre lang="source"><code>//#include &quot;stdio.h&quot;
+<pre><code class="language-c">//#include &quot;stdio.h&quot;
 //#include &quot;stdlib.h&quot;
 void* test_malloc(int n) {
    void *p = malloc(n);
@@ -103,10 +104,10 @@ void test_free(void *p) {
 }
 </code></pre>
 <p>先在本目录生成一个共享库：</p>
-<pre lang="source"><code>clang -g -o libmyffi.dylib -fpic -shared myffi.c
+<pre><code class="language-bash">$ clang -g -o libmyffi.dylib -fpic -shared myffi.c
 </code></pre>
 <p>在 LuaJIT 脚本侧这样使用：</p>
-<pre lang="source"><code>local ffi = require(&quot;ffi&quot;)
+<pre><code class="language-lua">local ffi = require(&quot;ffi&quot;)
 local myffi = ffi.load(&quot;myffi&quot;)
 ffi.cdef[[
 void* test_malloc(int n);
@@ -117,13 +118,13 @@ print( p )
 p = nil
 </code></pre>
 <p>会这样输出：</p>
-<pre lang="example"><code>test_malloc 0x7f9962c027c0:10
+<pre><code class="language-example">test_malloc 0x7f9962c027c0:10
 cdata&lt;void *&gt;: 0x7f9962c027c0
 test_free 0x7f9962c027c0
 </code></pre>
 <h3>使用 GMP 的例子</h3>
 <p>先试一下 GMP 提供的大整数接口：</p>
-<pre lang="source"><code>local ffi = require(&quot;ffi&quot;)
+<pre><code class="language-lua">local ffi = require(&quot;ffi&quot;)
 local gmp = ffi.load(&quot;gmp&quot;)
 
 ffi.cdef[[
@@ -182,7 +183,7 @@ gmp.__gmpz_clear(n2)
 gmp.__gmpz_clear(n3)
 </code></pre>
 <p>输出是：</p>
-<pre lang="example"><code>$ luajit test_ffi.lua 11111111111111111111111 99999999999999999999999999999999
+<pre><code class="language-example">$ luajit test_ffi.lua 11111111111111111111111 99999999999999999999999999999999
 input n1 x n2:
 n1 = 11111111111111111111111
 n2 = 99999999999999999999999999999999
@@ -199,6 +200,7 @@ n1 * n2 = 1111111111111111111111099999999988888888888888888888889
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

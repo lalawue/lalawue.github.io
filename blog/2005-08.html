@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -23,7 +24,7 @@
 <p>先用 emacs-wiki-journal-prompt-for-category-wiki 函数从用户那里读取 category 信息，在函数内部定义了两个变量 file-alist 和 emacs-wiki-default-page， file-alist 就是 emacs-wiki-journal-directory 里具有 category 前缀的文件清单，而 emacs-wiki-defualt-page 则是默认的 category，然后调用 emacs-wiki.el 里的 emacs-wiki-read-name 读取 category，而在 emacs-wiki-read-name 内部，具体的由 emacs 内建的 completing-read 函数来完成。此函数的功能是从一个 minibuffer 里读取并完成（补全）数据，也就是说 completing-read 函数拥有 &quot;readline&quot; 功能。程序有补全的意思，肯定是参数错了。</p>
 <p>据我的观察，错误就出在 file-alist 里，而这个数据是由 emacs-wiki-journal-category-alist 函数得到的。</p>
 <p>此函数如下：</p>
-<pre lang="source"><code>(defun emacs-wiki-journal-category-alist (&amp;optional no-check-p)
+<pre><code class="language-lisp">(defun emacs-wiki-journal-category-alist (&amp;optional no-check-p)
   &quot;Return possible category index Wikis in
   `emacs-wiki-journal-directory'. 
 If NO-CHECK-P is non-nil, then don't check for changes in the
@@ -44,7 +45,7 @@ re-read the disk.&quot;
 </code></pre>
 <p>我看了一下，但还是搞不懂它的 NO-CHECK-P 是什么意思，似乎并没有用到。而且如果只是实现简单的功能（返回具有 category 前缀的文件清单），则完全不需要这么长的代码。</p>
 <p>如下面我的代码，是能够返回具有 category 前缀的 file-alist 的:</p>
-<pre lang="source"><code> (directory-files emacs-wiki-journal-directory 
+<pre><code class="language-lisp"> (directory-files emacs-wiki-journal-directory 
         	  nil
 		  emacs-wiki-journal-category-regexp
 		  'true)
@@ -161,6 +162,7 @@ re-read the disk.&quot;
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

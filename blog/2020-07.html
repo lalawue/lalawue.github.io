@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -23,7 +24,7 @@
 放到 multi 中后，变成了非阻塞的接口。</p>
 <p>大概是下面这样的逻辑，是非阻塞的，目前遇到的遗憾，是 perform 以及 wait 都没法知道具体是哪一个
 easy handle 请求结束了。</p>
-<pre lang="source"><code>easy = curl.easy()
+<pre><code class="language-lua">easy = curl.easy()
 easy:setopt(...) -- custom request header, response header, body reader
 multi = curl.multi()
 multi.add_handle(easy)
@@ -51,14 +52,14 @@ body data 都太复杂了。</p>
 <p>研究了一下，Mac 下轮着 Safari、Chrome、FireFox 前后台调通后，这里大概记录一下吧。</p>
 <h3>前端页面 HTML</h3>
 <p>在前端 HTML 的写法是，form 里面指定 enctype 为 &quot;multipart/form-data&quot;，如下</p>
-<pre lang="source"><code>&lt;form class=&quot;cell&quot; action=&quot;&quot; method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;
+<pre><code class="language-html">&lt;form class=&quot;cell&quot; action=&quot;&quot; method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;
     &lt;input type=&quot;file&quot; name=&quot;myfile&quot; /&gt;
     &lt;input type=&quot;submit&quot; /&gt;
 &lt;/form&gt;
 </code></pre>
 <h3>后端解析</h3>
 <p>假设在浏览器里面点击 &quot;file&quot; 按钮，选择发送的是一个 PDF 文件，协议上收到是下面这样的，... 是省略：</p>
-<pre lang="source"><code>POST /path HTTP/1.1
+<pre><code class="language-http">POST /path HTTP/1.1
 ...
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary5WeF4Lu8GyQKEIE5
 Accept-Language: zh-cn
@@ -93,7 +94,7 @@ Content-Type: application/pdf
 <p>如果自己有一些信息需要通过点击状态栏图标后获得，或者通过点击状态栏图标启动、关闭的，都可以使用这个工具 <a href="https://getbitbar.com">BitBar</a> 来操作。</p>
 <p>安装好后，只需要定义 plugin 目录，然后在 plugin 目录下加入功能脚本就可以了。脚本其实只关注输出的文本，操作部分其实是通过特殊命令来定义的。</p>
 <p>比如例子中的 refresh.sh，精简后是下面这样：</p>
-<pre lang="source"><code>if [[ &quot;$1&quot; = &quot;restart&quot; ]]; then
+<pre><code class="language-bash">if [[ &quot;$1&quot; = &quot;restart&quot; ]]; then
 osascript &lt;&lt;EOD
 	tell application &quot;BitBar&quot; to quit
 	delay 1
@@ -118,7 +119,7 @@ echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
 <h2>GitHub 定义 Repo 语言</h2>
 <p>之前写的 <a href="https://github.com/lalawue/LWTheme">LWTheme</a> 兼顾 Swift/ObjC 语言，GitHub 改版后，在 repo 里面没有语言百分比的显示了。</p>
 <p>搜了一下，可以在 branch 里面定义 .gitattributes 文件，里面这样写</p>
-<pre lang="source"><code>*.swift linguist-language=Swift
+<pre><code class="language-source">*.swift linguist-language=Swift
 </code></pre>
 <p>自测了一把，网站只会读取 default branch 里面的 .gitattributes，切换其他 branch 没有用。</p>
 <div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p1">Permalink</a></div>
@@ -145,6 +146,7 @@ echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

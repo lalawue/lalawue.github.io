@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -71,7 +72,7 @@ MinGW，然后才能编译得到 gmp 的库，接着才能使用。也许是我�
 <p>而 SelectOnRelease&gt; 是在你松开某个键后就可以认为你选择了这个选
 项。具体的设置是在你的 MenuStyle&gt; 中在相应的菜单里加入
 SelectOnRelease KeyName，如下：</p>
-<pre lang="source"><code>MenuStyle WindowList SelectOnRelease Alt_L, # other Style settings
+<pre><code class="language-source">MenuStyle WindowList SelectOnRelease Alt_L, # other Style settings
 </code></pre>
 <p>这里的 KeyName 是你机子上有定义的名字，可以用 $ xmodmap 来查
 看，这么说也应该可以定义自己的 KeyName 了，可惜我还不大懂，要
@@ -106,6 +107,7 @@ SelectOnRelease KeyName，如下：</p>
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

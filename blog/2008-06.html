@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -56,7 +57,7 @@ find-function-calling-this-function，但不限于 function</li>
 <li>M-p 跳转到最初查找的地方</li>
 <li>SPC 在下面大窗中查看更多的上下文</li>
 </ul>
-<pre lang="source"><code>(require 'xgtags)
+<pre><code class="language-lisp">(require 'xgtags)
 
 (add-hook
  'c-mode-common-hook
@@ -114,7 +115,7 @@ t)
   (switch-to-buffer &quot;*xgtags*&quot;))
 </code></pre>
 <p>还对 xgtags 的界面做了一些设置，突出匹配的 tag 上下文。</p>
-<pre lang="source"><code>(custom-set-faces
+<pre><code class="language-lisp">(custom-set-faces
 
  ;; xgtags faces
  ;; 
@@ -144,7 +145,7 @@ xgtags 生成的 completes-list 作为 company-mode 的后端。</p>
 <li>M-SPC 匹配尽可能多的东西，不是全部</li>
 <li>M-RET 匹配当前项，选择当前项</li>
 </ul>
-<pre lang="source"><code>;; company mode, better completion
+<pre><code class="language-lisp">;; company mode, better completion
 ;; 
 (add-to-list 'load-path
              (expand-file-name &quot;~/.elisp/company/&quot;))
@@ -215,6 +216,7 @@ t)
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

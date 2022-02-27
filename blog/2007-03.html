@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -23,7 +24,7 @@
 EMACS 里面，compile 函数却被分成了两部分：先是得定义待会编译时使用的命令，
 然后再运行它，真是复杂。</p>
 <p>看看下面的函数，对于简单的文件往往只需要一步就可以完成，举手之劳。</p>
-<pre lang="source"><code>(defun sucha-smart-compile ()
+<pre><code class="language-lisp">(defun sucha-smart-compile ()
   &quot;Simply compile your file according to the file type.&quot;
   (interactive)
   (save-some-buffers t)
@@ -93,6 +94,7 @@ EMACS 里面，compile 函数却被分成了两部分：先是得定义待会编
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -24,14 +25,14 @@
 <p>深入骨髓的不同，从编译器、语言设计角度来说，是模式匹配、None、trait、宏，字符串、迭代器。</p>
 <h3>模式匹配</h3>
 <p>模式匹配不仅仅只是 match 关键字，及其控制流，从 let 到 if let 都有模式匹配的影子，如下</p>
-<pre lang="source"><code>let tup = (500, 6.4, 1);
+<pre><code class="language-rust">let tup = (500, 6.4, 1);
 let (x, y, z) = tup;
 </code></pre>
 <p>上面就是元组的模式匹配，如果数量或类型对应不上，编译期就抛错误。而 if let 是为了简写 match 出现的。因为 Rust 自己的错误处理机制，其实大量用了 if let 或者 match，所以模式匹配一定会遇到的。</p>
 <p>Rust 这里还深入提到了一点，有些模式匹配必须成功，程序才能编译通过，比如上面的例子，下面 Some(T) 在其实也是模式匹配，是可以接受匹配失败的。</p>
 <h3>None</h3>
 <p>跟很多语言不同，Rust 的 None 不算是一个值，而是一种状态，是我的感觉。下面两个是语言固定了的，一定会遇到</p>
-<pre lang="source"><code>enum Result&lt;T, E&gt; {
+<pre><code class="language-rust">enum Result&lt;T, E&gt; {
     Ok(T),
     Err(E),
 }
@@ -47,7 +48,7 @@ pub enum Option&lt;T&gt; {
 <p>Lua 的 nil 是 false 含义，还能塞入 table 表示 array 终结，ObjC 的 nil 也是 false 的含义，还能初始化指针，C 里面的 NULL 同理，Java 里面的 null 也是经常用来比较的，还容易引发 NullPointerException，反正是一个大量使用的合理值，新世代的 C++ 我不了解了，但 Rust 不一样，None 就是没有值，是一个枚举定义，我们经常使用且想见到的是 Some(T) 包裹的值。</p>
 <h3>trait</h3>
 <p>Rust 没有继承，跟 C++/Java 不同，其实鼓励使用组合来完成功能，认为两个不同实例拥有继承关系，因此隐含了大量重复的代码是危险的行为。trait 跟接口很像，但 Java 的 interface 还可以定义函数行为，Rust 这里就不可以了。而且 Rust 教程里面也不会使用 interface 这样已有的词汇来描述 trait，因为 Rust 还有非常严格的类型系统，如果需要做容器的话，会用到很多 trait 提供的能力，比如 Box dyn 之类的。</p>
-<pre lang="source"><code>trait AppendBar {
+<pre><code class="language-rust">trait AppendBar {
     fn append_bar(self) -&gt; Self;
 }
 
@@ -63,7 +64,7 @@ impl AppendBar for String {
 <p>因为 Rust 的编译器需要在编译期知道所有变量的大小，对于容器来说，是通过 Box 包裹来描述。Rust 为了实现零成本的抽象，泛型的处理实际上很多时候是编译期展开的，只有一些特殊的情况才是运行期动态决定的，这里我了解不深，先略过。</p>
 <h3>宏</h3>
 <p>Rust 的宏跟 C/C++ 的 define 完全不同，因为不懂 C++ 的 template，所以也回答不上是否拥有 template 这么强大的元编程能力。同样作为元编程，能力强是真的，这个部分我还看不大懂，大概了解到，Rust 宏在 AST 构建完成后才展开，能捕捉下面这些元素</p>
-<pre lang="source"><code>item: an item, like a function, struct, module, etc.
+<pre><code class="language-source">item: an item, like a function, struct, module, etc.
 block: a block (i.e. a block of statements and/or an expression, surrounded by braces)
 stmt: a statement
 pat: a pattern
@@ -75,7 +76,7 @@ meta: a meta item; the things that go inside #[...] and #![...] attributes
 tt: a single token tree
 </code></pre>
 <p>举个例子，下面 vec! 宏捕捉了 expr，push 每个 x</p>
-<pre lang="source"><code>let v: Vec&lt;u32&gt; = vec![1, 2, 3];
+<pre><code class="language-rust">let v: Vec&lt;u32&gt; = vec![1, 2, 3];
 &lt;a id=&quot;[macro_export]&quot;&gt;&lt;/a&gt;
 
 macro_rules! vec {
@@ -97,7 +98,7 @@ macro_rules! vec {
 <p>感觉字符串在哪一种语言都不是一个简单的事情，现在都是全球化了，考虑字符串是一种输入，可能是任何一种语言，因此其长度、分割、排版显示都不是小事情。</p>
 <h3>迭代器</h3>
 <p>Rust 中每种容器都有迭代器，即便是 (0..10) 表示 0 - 9，(0..=10) 表示 0 - 10，可以下面这样用</p>
-<pre lang="source"><code>pub fn factorial(num: u64) -&gt; u64 {
+<pre><code class="language-rust">pub fn factorial(num: u64) -&gt; u64 {
     if num &lt;= 0 {
         0
     } else {
@@ -149,6 +150,7 @@ assert_eq!(24, factorial(4));
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

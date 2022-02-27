@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -35,7 +36,7 @@
 <li>默认是包含匹配，如果不想包含，将需要匹配的放在前面、后面，用 (?&lt;=CAPTURE)、(?=CAPTURE) 包起来</li>
 <li>在支持跨行的 begin、end 匹配中，end 匹配可以用上 begin 匹配到的，比如下面这个可以匹配 Lua 的长字符串，比如 [==[ ANY THING ]==]，= 的个数是对称的</li>
 </ul>
-<pre lang="source"><code>&quot;strings_long&quot;: {
+<pre><code class="language-json">&quot;strings_long&quot;: {
 	&quot;name&quot;: &quot;string.quoted.single.name&quot;,
 	&quot;begin&quot;: &quot;\\[(=*)\\[&quot;,
 	&quot;end&quot;: &quot;\\]\\1\\]&quot;,
@@ -69,6 +70,7 @@
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

@@ -9,6 +9,7 @@
     <meta name="description" content="Sucha's homepage and blog" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/site.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -45,7 +46,7 @@
 <h3>二、利用Slackware官方提供的 config文件来简单配置自己的内核配置文件 .config ；</h3>
 <p><a id="sec-4"></a></p>
 <h4>1.解压内核及一些基础工作；</h4>
-<pre lang="source"><code>bash-3.00# pwd
+<pre><code class="language-source">bash-3.00# pwd
 /usr/src/kernel26
 bash-3.00# ls
 config-2.6.12.3 kernel-generic linux-2.6.12.3.tar.bz2.sign
@@ -79,7 +80,7 @@ bash-3.00#cp config-2.6.12.3 .config 把 config-2.6.12.3 复制为 .config
 <p>进入后我们发现有好多CPU的型号可选；一般的情况下要根据 bash-3.00# cat /proc/cpuinfo 输出的信息来选，比如我们的是 Celeron （P4）一代的，应该选如下的，当然默认的 486 也是可以正常运行的，既然我们重编一次内核，就得选中对应型号的，也许性能有所提高呢；</p>
 <p>Processor family (Pentium-4/Celeron(P4-based)/Pentium-4 M/Xeon)</p>
 <p>对大内存支持；如果内存是 1G 或者 1G 以上，但小于 4G 的，就要选 4G 支持；如果超过 4G 的，要选 64G 的支持；</p>
-<pre lang="source"><code>High Memory Support (4GB) ---&gt;
+<pre><code class="language-source">High Memory Support (4GB) ---&gt;
 
 (X) 4GB
 ( ) 64GB
@@ -87,15 +88,15 @@ bash-3.00#cp config-2.6.12.3 .config 把 config-2.6.12.3 复制为 .config
 <p>还有比如声卡等硬件，需要我们一步一步的查看；如果有不明之处，就要按 [shift]+？的组合键来查看说明。一般的情况下，slackware 的 config 文件早都配置好了，只需要我们来查看一下就可以了。</p>
 <p>再举个例子：比如我现在所用的声卡是 intel ac97 的，我应该怎么配置呢？</p>
 <p>首先要知道自己的声卡的芯片组，我们要通过 lspci -v 来查看；</p>
-<pre lang="source"><code>bash-3.00# lspci -v
+<pre><code class="language-source">bash-3.00# lspci -v
 </code></pre>
 <p>只查看声卡的，应该用如下的方法：</p>
-<pre lang="source"><code>bash-3.00# lspci -v |grep audio
+<pre><code class="language-source">bash-3.00# lspci -v |grep audio
 00:1f.5 Multimedia audio controller: Intel Corp. 82801DB (ICH4) AC'97
 Audio Controller (rev 03)
 </code></pre>
 <p>通过上面的输出，我们知道这台机器用的是 intel AC97 声卡；所以我们要特别注意 AC97 的配置；</p>
-<pre lang="source"><code>找到 Device Drivers ---&gt; Sound ---&gt;
+<pre><code class="language-source">找到 Device Drivers ---&gt; Sound ---&gt;
 &lt; M &gt; Sound card support 声卡的支持，这个是一定要选中的吧；
 
 &lt; M &gt; Advanced Linux Sound Architecture 对声卡支持的 ALSA 驱动的支持；下
@@ -110,7 +111,7 @@ Audio Controller (rev 03)
 [ ] Debug
 </code></pre>
 <p>然后我们再向下看有</p>
-<pre lang="source"><code>Generic devices ---&gt; 进入里面
+<pre><code class="language-source">Generic devices ---&gt; 进入里面
 &lt; M &gt; Dummy (/dev/null) soundcard
 &lt; M &gt; Virtual MIDI soundcard
 &lt; M &gt; MOTU MidiTimePiece AV multiport MIDI
@@ -129,7 +130,7 @@ INTEL 猫的蜂鸣器的；
 </code></pre>
 <p>因为我发现如果把猫的蜂鸣器的驱动也选上，可能造成两个冲突。所以只能选上面的那个；</p>
 <p>我们再回到 Open Sound System ---&gt; 中看看，与我用的声卡是不是有关的？</p>
-<pre lang="source"><code>&lt; M &gt; Open Sound System (DEPRECATED)
+<pre><code class="language-source">&lt; M &gt; Open Sound System (DEPRECATED)
 &lt; M &gt; Intel ICH (i8xx) audio support
 &lt; M &gt; OSS sound modules
 &lt; M &gt; Loopback MIDI device support
@@ -138,7 +139,7 @@ INTEL 猫的蜂鸣器的；
 <p>我们也可以看到 Open Sound System 中也有好多的声卡驱动，大家根据前面的 lspci -v 来选择吧。</p>
 <p><a id="sec-8"></a></p>
 <h5>3]对于操作系统所采用的文件系统的支持要编入内核，最好不要编成模块；（重要）</h5>
-<pre lang="source"><code>File systems ---&gt;
+<pre><code class="language-source">File systems ---&gt;
 &lt;*&gt; Reiserfs support
 </code></pre>
 <p>比如我的 Slackware 所采用的文件系统用的是 reiserfs，所以我要把它直接编入内核；好处是不受模块丢失或者损坏而不能启动系统；而有时您把系统所采用的文件系统编译成模块，出现 VFS 错误，也有这方面的事，可能是您没有把 reiserfs 加入到相应的加载模块的配置文件中，所以我们为了减少麻烦，把风险降到最低，还是要直接置入内模的好；</p>
@@ -150,7 +151,7 @@ INTEL 猫的蜂鸣器的；
 <a id="sec-10"></a></p>
 <h5>5]对于咱们所没有的设备，可以在内核中不选，熟能生巧罢了；</h5>
 <p>比如我没有 ISDN 设备 ，所以就把 ISDN 去掉；</p>
-<pre lang="source"><code>ISDN subsystem ---&gt;
+<pre><code class="language-source">ISDN subsystem ---&gt;
 &lt; &gt; Linux telephony support
 </code></pre>
 <p>如果您没有 1394 的设备 ，当然可以把 1394 的支持也去掉；</p>
@@ -165,11 +166,11 @@ INTEL 猫的蜂鸣器的；
 <p>如果你想把 .config 保存起来，可以再复制一份到安全一点的目录，以备后用；</p>
 <p><a id="sec-11"></a></p>
 <h4>3.编译内核</h4>
-<pre lang="source"><code>bash-3.00# make
+<pre><code class="language-source">bash-3.00# make
 bash-3.00# make modules_install
 </code></pre>
 <p>这样就编译好了，并把模块也安装在了 /lib/modules 目录中了，请看：</p>
-<pre lang="source"><code>bash-3.00# ls /lib/modules/
+<pre><code class="language-source">bash-3.00# ls /lib/modules/
 2.4.29 2.6.12.3
 </code></pre>
 <p>现在我们得安装内核了，但我们也没有必要急着安装，我们可以用 Slackware 提供的脚本来打包,然后再来安装，这样移除也方便，对不对？</p>
@@ -177,20 +178,20 @@ bash-3.00# make modules_install
 <h4>4.用 Slackware 提供的脚本为内核及 moudules 打包；</h4>
 <p>我们在前面已经说了，把 linux-2.6.12.3 在镜像上的目录下的所有东西载下来。所以我们要用到这些东西了。我在前面把所有的东西都下载到了 /usr/src/kernel26 目录中。</p>
 <p>所以我们要用他所提供的脚本打包；</p>
-<pre lang="source"><code>bash-3.00# cd /usr/src/kernel26/
+<pre><code class="language-source">bash-3.00# cd /usr/src/kernel26/
 bash-3.00# ls
 config-2.6.12.3 kernel-generic kernel-modules linux-2.6.12.3.tar.bz2
 linux-2.6.12.3.tar.bz2.sign
 </code></pre>
 <p><a id="sec-13"></a></p>
 <h5>a)首先我们为内核打包：请运行如下命令：</h5>
-<pre lang="source"><code>bash-3.00# bash-3.00# cp kernel-generic/slack-desc .
+<pre><code class="language-source">bash-3.00# bash-3.00# cp kernel-generic/slack-desc .
 </code></pre>
 <p>我们要把 kernel-generic/slack-desc 复到制当前操作目录中，只是一个说明文件；不复制也行；反正是自己用，也不是给别人用的；</p>
-<pre lang="source"><code>bash-3.00# sh kernel-generic/kernel-generic.SlackBuild
+<pre><code class="language-source">bash-3.00# sh kernel-generic/kernel-generic.SlackBuild
 </code></pre>
 <p>输出是什么呢？</p>
-<pre lang="source"><code>kernel-generic/kernel-generic.SlackBuild: line 33: [: too many arguments
+<pre><code class="language-source">kernel-generic/kernel-generic.SlackBuild: line 33: [: too many arguments
 Building kernel-generic-2.6.12.3-i486-1.tgz
 using these source files. Please check and then hit
 enter to make the package.
@@ -203,17 +204,17 @@ CONFIG = /usr/src/linux-2.6.12.3/.config
 <p><strong>注意</strong>：如果您把打包脚本 kernel-generic.SlackBuild 复制到了 /usr/src/linux-2.6.12.3 ，并在 /usr/src/linux-2.6.12.3 中执行它，提示运用的配置文件是 CONFIG = /usr/src/linux-2.6.12.3/config＊ ，所以要看好了。其实这个文件我们可能没有配置，是 slackware 原始自带的，我们在前面已经说了，我们配置的文件是 .config；除非你有把. config 另存为 config-2.6.12.3。如果要用我们配置好的内核文件，要进入内核源码目录，把 .config 拷贝一份名为 config-2.6.12.3的；</p>
 <p><a id="sec-14"></a></p>
 <h5>b)然后我们要为内核的模块打包；</h5>
-<pre lang="source"><code>bash-3.00# sh kernel-modules/kernel-modules.SlackBuild
+<pre><code class="language-source">bash-3.00# sh kernel-modules/kernel-modules.SlackBuild
 </code></pre>
 <p>我们把包都打好了，他们究竟在哪里呢？在 /tmp 目录中，请看如下：</p>
-<pre lang="source"><code>bash-3.00# ls -lh /tmp/kernel-*
+<pre><code class="language-source">bash-3.00# ls -lh /tmp/kernel-*
 -rw-r--r-- 1 root root 1.9M 2005-08-06 11:59 /tmp/kernel-generic-2.6.12.3-i486-1.tgz
 -rw-r--r-- 1 root root 11M 2005-08-06 12:13 /tmp/kernel-modules-2.6.12.3-i486-1.tgz
 </code></pre>
 <p><a id="sec-15"></a></p>
 <h5>5.安装编译好的内核及模块。</h5>
 <p>我们其实已经把编译好的模块早就安装好了，但我们最好重新安装一下。这样卸载也方便。</p>
-<pre lang="source"><code>bash-3.00#cd /tmp
+<pre><code class="language-source">bash-3.00#cd /tmp
 bash-3.00# installpkg kernel-generic-2.6.12.3-i486-1.tgz
 bash-3.00# installpkg kernel-modules-2.6.12.3-i486-1.tgz
 </code></pre>
@@ -232,6 +233,7 @@ bash-3.00# installpkg kernel-modules-2.6.12.3-i486-1.tgz
       <div id="sidebar">
       </div><!-- sidebar -->
       <script type="text/javascript" src="../js/site_sidebar.js"></script>
+      <script type="text/javascript" src="../js/prism.min.js"></script>
     </div><!-- body -->
   </body>
 </html>

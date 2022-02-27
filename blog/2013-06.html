@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -24,7 +25,7 @@
 <p>这种官方的说法是文档交互，需要这样编程处理
 <a href="../https://developer.apple.com/library/ios//documentation/FileManagement/Conceptual/DocumentInteraction_TopicsForIOS/Articles/RegisteringtheFileTypesYourAppSupports.html.html#//apple_ref/doc/uid/TP40010411-SW1">Document Interaction Programming Topics for iOS</a>，简单点就是在 App 的 Info.plist 里面
 添加以下就可以在系统弹出框里看到使用某某某打开了:</p>
-<pre lang="source"><code>&lt;dict&gt;
+<pre><code class="language-xml">&lt;dict&gt;
    &lt;key&gt;CFBundleTypeName&lt;/key&gt;
    &lt;string&gt;My File Format&lt;/string&gt;
    &lt;key&gt;CFBundleTypeIconFiles&lt;/key&gt;
@@ -60,6 +61,7 @@ didFinishLaunchingWithOptions 之后运行。</p>
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

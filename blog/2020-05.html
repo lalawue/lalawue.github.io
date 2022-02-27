@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -44,7 +45,7 @@
 <h2>MarkdownProjectCompositor 加入文件名映射配置</h2>
 <p>之前的 <a href="https://github.com/lalawue/MarkdownProjectCompositor">MarkdownProjectCompositor</a> 仅仅支持在 config.lua 配置文件中设置 suffix 为 &quot;.html&quot; 这样的，其实很不方便，特别是如果文件后缀名为 &quot;.md&quot; 的时候，就会很尴尬。</p>
 <p>所以重新配置了下面的映射函数来做这层转换</p>
-<pre lang="source"><code>destname = function(input_name)
+<pre><code class="language-lua">destname = function(input_name)
     return output_name
 end
 </code></pre>
@@ -56,7 +57,7 @@ end
 <h2>mon_sched 支持 kill child process</h2>
 <p>mon_shced 升级到了 1.3.4，支持 kill 掉 group process 中的某个 child process，同时也支持单独输出某个 child process 的 pid 到指定目录下。</p>
 <p>先列一下功能：</p>
-<pre lang="source"><code>Usage:
+<pre><code class="language-bash">Usage:
 mon_sched -h                             show help
 mon_sched -v                             show version
 mon_sched -r sched_json                  run group process from config
@@ -78,6 +79,7 @@ mon_sched -k pid_json [child_name]       kill [group | child] process
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

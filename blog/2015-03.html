@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -62,7 +63,7 @@ Clover，用的是懒人版，其实很多安装设置我是不懂的，我只�
 如 PureLayout，用了一下，使用上有些限制，且效果仍然不是我想要的。</p>
 <p>说一下我要的效果，table view cell 里面放多张方形图片，portrait 跟
 landscape 下布局不一样，前者是</p>
-<pre lang="example"><code>space | image | space | image | fixed space
+<pre><code class="language-example">space | image | space | image | fixed space
 </code></pre>
 <p>后者是三个 image，而且我还考虑 6p 下面多加一个 image。如果我选择 xib，不
 是累死。</p>
@@ -92,7 +93,7 @@ UIView 了，可以直接指定了。</p>
 映射，它自己封装了一些东西，只能作罢。</p>
 <p>所以我也简单封装了自己的一些东西，试用了一个小时，感觉还不错，也放到 gist 上面
 了。</p>
-<pre lang="source"><code>// formula as 'width == width'
+<pre><code class="language-objc">// formula as 'width == width'
 static NSLayoutConstraint*
 _lcItemRel(UIView *v1, NSString *formula, UIView *v2, float ratio, float constant) {
     static NSDictionary *attrValueForName = nil;
@@ -199,6 +200,7 @@ specification，对于写视频播放器足够了，iOS 上官方说是低阶 AP
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

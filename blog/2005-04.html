@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -69,17 +70,17 @@
 <h3>I. xmms</h3>
 <p>最近想把 locale 改成 gbk，xmms 下面几乎不用怎么改，只是重新设置了一下字体就可以了，而且用了 simsun 字体，相比以前用的 kaiti 要漂亮得多。如此定义：</p>
 <p>主窗口：</p>
-<pre lang="source"><code>-adobe-helvetica-medium-r-normal-*-13-120-*-*-*-*-iso8859-*,\
+<pre><code class="language-source">-adobe-helvetica-medium-r-normal-*-13-120-*-*-*-*-iso8859-*,\
 -misc-simsun-medium-r-normal-*-13-*-*-*-c-*-gbk-0
 </code></pre>
 <p>播放列表：</p>
-<pre lang="source"><code>-adobe-helvetica-medium-r-normal-*-16-120-*-*-*-*-iso8859-*,\
+<pre><code class="language-source">-adobe-helvetica-medium-r-normal-*-16-120-*-*-*-*-iso8859-*,\
 -misc-simsun-medium-r-normal-*-16-*-*-*-c-*-gbk-0
 </code></pre>
 <p>两个其实是差不多的，在 zh_CN.GBK 的 locale 下面没有问题。</p>
 <h3>II. FVWM</h3>
 <p>但是 FVWM 可把我难坏了，menu 等的设置不用怎么改变，但是标题的设置却不行。就是说 menu 和标题等等的设置 是不同的，晕……如果英文字体放在前面，用 iso8859 的话，menu 里可以显示定义在英文字体后的 simsun，但是在标题栏却不一样，搞了半天，尝试了很多方法，最后如此标题栏的中文才出得来：</p>
-<pre lang="source"><code>&quot;-*-helvetica-bold-*-normal-*-14-140-*-*-*-*-iso10646-*,\
+<pre><code class="language-source">&quot;-*-helvetica-bold-*-normal-*-14-140-*-*-*-*-iso10646-*,\
 -*-simsun-medium-*-normal-*-16-*-*-*-*-*-*-*&quot;
 </code></pre>
 <p>虽说 GB2312 和 GBK 有点差别，但是这些都不算太重要，接下来的才是重头戏。</p>
@@ -128,6 +129,7 @@ Windows Maker 的网站实在是很漂亮：<a href="http://www.windowsmaker.org
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

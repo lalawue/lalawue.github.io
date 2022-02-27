@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -29,7 +30,7 @@
 <p>这里一开始让我挺头疼的，比如原型对象及继承关系。</p>
 <p>对比 C++/Java 的面向对象实现都隐藏在语言核心运行时里面，通过语法‘类’来实现继承，在类里面写构造函数，描述继承关系。且 C++ 因为是零成本抽象，极端强调运行时性能，继承、面向对象的逻辑在编译期几乎都解决了，只留下了动态派发给运行时处理。Java 有反射，任何时候都能拿到其继承关系，其所有的类都继承自 Object。两者作为静态语言，在运行时无法动态修改继承关系。</p>
 <p>JS 虽然跟 Java 一样所有类都继承自 Object，但其继承的语言特性，是通过原型对象来实现的，运行时可以访问。原型对象就是类的 prototype 属性，构造函数则是 prototype.constructor，因为有 new 关键字的存在，定义一个新类，只需要定义构造函数就好了，比如</p>
-<pre lang="source"><code>function Car(color) {
+<pre><code class="language-js">function Car(color) {
     this.color = color;
     console.log(&quot;color:&quot; + color);
 }
@@ -37,7 +38,7 @@
 var car = new Car(&quot;white&quot;);
 </code></pre>
 <p>会输出 'color:white&quot;。如果定义 Bus 继承 Car 是这么实现的：</p>
-<pre lang="source"><code>function Bus(color) {
+<pre><code class="language-js">function Bus(color) {
     Car.call(this, color);
 }
 Bus.prototype = Object.create(Car.prototype)
@@ -66,7 +67,7 @@ var bus = new Bus(&quot;red&quot;)
 <p>在我的 16 年 MacBook Pro 版本 10.15.7 中，Go 1.13.4 读写文件极慢，LuaJIT FFI 版本用了不到 0.2 秒完成的测试，在 Go 这边需要 2 秒，太夸张了。</p>
 <p>试了一下在云端 Linux 上面，效果好了很多，大概需要 0.2 秒，但 LuaJIT FFI 版本只需要 0.02 秒</p>
 <p>LuaJIT FFI 版本的 bitcask</p>
-<pre lang="source"><code>$ time luajit test/test_bitcask.lua
+<pre><code class="language-shell">$ time luajit test/test_bitcask.lua
 PASS Bucket
 PASS Set/Get
 PASS Delete
@@ -77,7 +78,7 @@ user    0m0.011s
 sys     0m0.008s
 </code></pre>
 <p>Go 版本我编译后才测试的</p>
-<pre lang="source"><code>$ time ./test
+<pre><code class="language-shell">$ time ./test
 using database: {Path:/tmp/go_bitcask BucketName:0 DataFileSize:512}
 Pass Bucket
 PASS Set/Get
@@ -91,7 +92,7 @@ sys     0m0.030s
 <p>也许 Go 启动准备需要不少时间吧，或者是我实现的问题。</p>
 <p>在 Go 版本中，我同样是使用了 struct map 到内存的方式来表示一条 record，然后一次性读取 key 及 value，再 slice 切割为 key 和 value。</p>
 <p>映射的代码如下，感觉也没什么呀</p>
-<pre lang="source"><code>// map recordinfo to bytes
+<pre><code class="language-go">// map recordinfo to bytes
 func recordInfoToBytes(ri *recordInfo) []byte {
         var x reflect.SliceHeader
         x.Len = int(recordSize)
@@ -118,20 +119,20 @@ func bytesToRecordInfo(b []byte) *recordInfo {
 <p>Go 有不少必知必会的语言规定，比如变量名首字母大写才会在包里面导出，变量需要驼峰命名，带间隔的下划线是不被推荐的（VSCode 里面的 golints 有对我多次提示啦）。相比 C/C++、Java、Lua 等，我觉得变量声明、defer、slice、接口、并发模型、包管理系统，是 Go 的特色，可以拣出来说一说。</p>
 <h3>变量声明</h3>
 <p>这个知识点很简单了，可以不用指明变量类型，让系统推断，比如</p>
-<pre lang="source"><code>a := 10
+<pre><code class="language-go">a := 10
 </code></pre>
 <p>或者指明类型</p>
-<pre lang="source"><code>var a uint32 = 10
+<pre><code class="language-go">var a uint32 = 10
 </code></pre>
 <p>上面的两种是有区别的，第一种 Go 默认是 int 类型，下面指定了 uint32 类型，Go 是强类型语言，变量的后续使用必须对齐类型，否则编译报错。当然可以这样写 a := uint32(10)，成功用第一种方式声明了 uint32 类型。类型转换还有下面这样的</p>
-<pre lang="source"><code>var b interface{} = 10
+<pre><code class="language-go">var b interface{} = 10
 var c interface{} = &quot;hello&quot;
 var d string = c.(string)
 fmt.Println(b, c, d)
 </code></pre>
 <p>可以看到，虽然 Go 没有 C/C++ 的 void*，但可以用万能的接口 interface{} 弥补，interface{} 还可以在运行期用来做类型推断，这里不细说了。</p>
 <p>Go 里面方便的地方，if 控制块一开始就可以定义新的变量在控制块内使用，比如下面判断文件是否打开成功的例子：</p>
-<pre lang="source"><code>if fp, err := os.Open(&quot;/path/to/file&quot;); err != nil {
+<pre><code class="language-go">if fp, err := os.Open(&quot;/path/to/file&quot;); err != nil {
     defer fp.Close()
     // ...
 } else {
@@ -143,7 +144,7 @@ fmt.Println(b, c, d)
 <h3>defer</h3>
 <p>上面的例子已经提前用了 defer，比如在文件打开成功后，defer 了一个关闭函数，当 if 语句所在函数返回后，defer 按照先进后出的原则退栈运行。</p>
 <p>defer 运行的只能是函数，所以如果是一些变量需要离开函数后保存，可以下面这样</p>
-<pre lang="source"><code>stepRecorder = &quot;enter function&quot;
+<pre><code class="language-go">stepRecorder = &quot;enter function&quot;
 defer func(){
     stepRecorder = &quot;leave function&quot;
 }()
@@ -153,26 +154,26 @@ defer func(){
 <p>然而 Go 没有这样的关键字，所以很遗憾的老老实实按老路子写代码了。</p>
 <h3>slice</h3>
 <p>Go 里面 array 跟 slice 有紧密的联系，我总感觉 array 是 slice 的特例，是一个预定义的 slice，举个例子：</p>
-<pre lang="source"><code>a := []int{1, 2, 3, 4}
+<pre><code class="language-go">a := []int{1, 2, 3, 4}
 b := a[:2]
 fmt.Println(a, b)
 </code></pre>
 <p>打印出来的是下面这样的</p>
-<pre lang="source"><code>[1 2 3 4] [1 2]
+<pre><code class="language-go">[1 2 3 4] [1 2]
 </code></pre>
 <p>可以看到其实两者底层是一致的，只不过 array 固定了 slice 的 len 和 cap，slice 的切割是左闭右开的区间 [)，类似 for 定义的 for i := 0; i &lt; 5; i++ 的一个语言习惯吧。</p>
 <p>slice 可以使用 append 扩容，比如</p>
-<pre lang="source"><code>b = append(a, 5)
+<pre><code class="language-go">b = append(a, 5)
 </code></pre>
 <p>结果是输出</p>
-<pre lang="source"><code>[1 2 3 4 5]
+<pre><code class="language-go">[1 2 3 4 5]
 </code></pre>
 <p>slice 使用 make([]int, 5) 等方式定义，虽然用着像数组，但实际上可变长度的设计跟 C++ 里面的 vector 有点像了，由于 Go 没有 C++ STL 的 vector，slice 就是这样大量使用了。</p>
 <p>不过我总觉得，虽然底层的抽象是这样，但是用着确实不方便，使用者得很熟悉底层的抽象、分割才行。</p>
 <h3>接口</h3>
 <p>Go 没有继承，没有 Java 这样 Object 的基类，也就没有面向对象的基础。其语言设计者认为面向对象不是必要的，特别是深层级的继承，过于复杂了。其推荐通过接口抽象，所有实现了接口定义函数的 struct 类型，认为具有接口的功能，是接口抽象的代表。在实现上 struct 没有特别的关键字来声明实现了某些接口，编译期、运行时核心是知道的，提前匹配了。</p>
 <p>比如我们定义一个接口，并写某个 struct 实现接口</p>
-<pre lang="source"><code>type Dog interface {
+<pre><code class="language-go">type Dog interface {
     Name() string
 }
 
@@ -222,6 +223,7 @@ fmt.Println(&quot;dog is&quot;, dog.Name())
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

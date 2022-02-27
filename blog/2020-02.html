@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -23,7 +24,7 @@
 <p>用 Lua 的好处是相当灵活，可以自定义任何时候，将程序拉起来，或者 kill 掉。但是缺点也很明显，这里周期性的用 top 命令，每次都得起一个 shell 进程，查看完信息后就退出了，有些浪费；而且要完成这样的一个控制结构，需要不少的 Lua 编程基础，还需要知道控制结构本身不同函数的作用才行。</p>
 <p>后来看到了 <a href="https://github.com/tj/mon">mon</a>，一个程序的 supervisor，只管一个进程，控制结构是相当的简单。我之前关于进程组概念的想法又冒了出来，想着将其改写为管理进程组，并且用 JSON 做为配置工具，最好还有类似 cron 控制周期性运行的能力。</p>
 <p>后来就自己验证了一下，发现其实是可以的，然后就产生了 <a href="https://github.com/lalawue/mon_sched">mon_sched</a>，一个进程组 supervisor。使用 JSON 的控制结构也相当的简单，而且部分功能沿用了 mon 本来的配置：</p>
-<pre lang="source"><code>{
+<pre><code class="language-json">{
         &quot;name&quot; : &quot;mon_group&quot;,
         &quot;logfile&quot; : &quot;mon_sched.log&quot;,
         &quot;pidfile&quot; : &quot;mon_sched.pid&quot;,
@@ -48,7 +49,7 @@
 </code></pre>
 <p>上最外层的 name 是进程组的名称，日志、pid 文件路径，以及是否需要做为 daemon 运行；下面的是每个需要拉起程序的配置，cmd 是程序的路径以及参数，attempts 是重试次数，on_restart、on_error 是失败后重启、或者超过重试次数后的 shell 命令。</p>
 <p>特别介绍一下 cron 参数，从左到右分别是分钟、小时，月日期、月份、周日期，并且支持部分域配置，比如</p>
-<pre lang="source"><code>&quot;0,30,45   */3     2,[4-9]     *       *&quot;
+<pre><code class="language-source">&quot;0,30,45   */3     2,[4-9]     *       *&quot;
 # minius   hour    month_day   month   weak_day
 # (0-59)   (0-23)  (1-31)      (0-11)  (0-6)
 </code></pre>
@@ -66,6 +67,7 @@
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -33,7 +34,7 @@ EMACS 的 mode-line ），配合着 mlterm 半透的图片背景，相当地酷�
 个窗口 6000 行历史信息。另外下面配置的 caption 颜色搭配估计不适合所有的终
 端，主要是背景部分，在我这里是全透明的，但在 PuTTY 及 SecureCRT 下似乎不
 是这样。</p>
-<pre lang="source"><code># create by sucha, 2008/06/04
+<pre><code class="language-bash"># create by sucha, 2008/06/04
 
 # define the escape
 escape ^zz&lt;a id=&quot;defescape&quot;&gt;&lt;/a&gt;
@@ -93,7 +94,7 @@ caption always &quot;%?%F%{+b 50}%:%{+b rr}%?%H | %D %m/%d %c | %?%F%{+b 50}%?%L
 </code></pre>
 <p>如上，caption 的配置够麻烦的，相当不人性化，我的 caption 配置在终端下面大
 概是下面的样子：</p>
-<pre lang="example"><code>tuu | Thu 10/30  0:11 | 0$ net  1-$ home  2$* tmp  3$ bash
+<pre><code class="language-example">tuu | Thu 10/30  0:11 | 0$ net  1-$ home  2$* tmp  3$ bash
 </code></pre>
 <p>固定在终端的底部，从左到右的信息分别为，主机名、时间星期，最后是窗口信
 息，这个长度不固定。上面我共打开了四个窗口（标号 0 ～ 3），活跃窗口是带
@@ -243,6 +244,7 @@ caption always &quot;%?%F%{+b 50}%:%{+b rr}%?%H | %D %m/%d %c | %?%F%{+b 50}%?%L
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -52,7 +53,7 @@ cscope-find-this-symbol 来查找，cscope 会把索引到的输出到一个 11 
 看结束，&quot;C-&quot;, 关闭窗口，pop-mark，回到之前的位置。</p>
 <p>如果有多次跳转，可以一直 &quot;M-,&quot;，做 pop-mark 的动作。反正可以按照你的习惯
 来定义按键，下面列出的只是一个方案而已。</p>
-<pre lang="source"><code>;; for C and C++ programming
+<pre><code class="language-lisp">;; for C and C++ programming
 (add-hook 
  'c-mode-common-hook
  (lambda ()
@@ -97,7 +98,7 @@ cscope-find-this-symbol 来查找，cscope 会把索引到的输出到一个 11 
 的文件，并且文件堆在好几个地方，不得不用 cscope.files 来标明，可以将这个
 脚本放在 cron 里面，定时增量更新 cscope.files 列出的文件。</p>
 <p>算了，这么高级的功能暂时还用不上，权且将其绑定在一个按键上偷偷懒吧。</p>
-<pre lang="source"><code>(defun sucha-generate-cscope-files ()
+<pre><code class="language-lisp">(defun sucha-generate-cscope-files ()
   &quot;Generate cscope.files for cscope.&quot;
   (interactive)
   (cd
@@ -135,6 +136,7 @@ cscope-find-this-symbol 来查找，cscope 会把索引到的输出到一个 11 
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

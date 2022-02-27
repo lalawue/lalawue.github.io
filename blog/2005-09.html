@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -110,7 +111,7 @@
 <p>“无损”这个词，是相对而言的。</p>
 <p>要达到以下目的：在文本里剪切（Emacs 里面叫 kill-region）一段文字，尽可能的不破坏原来的文章。</p>
 <p>先看如下的程序：</p>
-<pre lang="source"><code>(save-excursion
+<pre><code class="language-lisp">(save-excursion
   (kill-region 
    BEG
    END)
@@ -163,7 +164,7 @@
 <p>搬到了南区，虽说是六人间，却比往日热闹，似乎一切都好，只有网络……</p>
 <p>南区采用 802.1x 身份认证，用的是锐杰，Windows 下面上网没有问题，因为这是大众利益，肯定要顾及，现在客户端已经出到 2.43 测试版。而在 Linux 下面，问题就一大堆。先是客户端版本低，学校提供的 xrgsu 版本才 1.01，而且在安装方面，虽说提供了软件下载，但是文档很少，而且会因为各个发行版的不同而出错。我也是借助网上的帖子修改了 libpcap-0.8.3 的 Makefile.in 文件才顺利编译好 libcap-0.8.3 然后让 xrgsu 启动。否则 xrgsu 会提示说找不到相应的库文件而无法启动。</p>
 <p>即便如此，还是不能完成认证。无论是 dhcp 自动分配地址还是手动设定本机 IP 地址，启动 xrgsu 后在显示屏上的信息只有一种：</p>
-<pre lang="example"><code>Searching server...
+<pre><code class="language-example">Searching server...
 Connecting server...
 Searching server...
 Connecting server...
@@ -184,6 +185,7 @@ xrgsu exit!
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>

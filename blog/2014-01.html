@@ -11,6 +11,7 @@
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
     <link rel="stylesheet" type="text/css" href="../styles/blog.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css" />
   </head>
   <body>
     <div id="body">
@@ -34,12 +35,12 @@
 shutdown -P now 仅仅 poweroff 就好了。</p>
 <p>帖子里介绍的内容也挺简单，先 apt-get ethtool，然后往 /etc/init.d 放一个
 wakeonlanconfig 开机启动脚本，内容为：</p>
-<pre lang="source"><code> #!/bin/bash
+<pre><code class="language-source"> #!/bin/bash
  ethtool -s eth0 wol g
  exit
 </code></pre>
 <p>chmod a+x wakeonlanconfig，然后设置开机启动方式：</p>
-<pre lang="source"><code>update-rc.d -f wakeonlanconfig defaults
+<pre><code class="language-bash">update-rc.d -f wakeonlanconfig defaults
 </code></pre>
 <p>这两步手工运行一下，再使用上面的关机命令，可以发现系统关闭了，硬件指示灯
 也都不亮了，除了网卡灯和供电部分。</p>
@@ -97,12 +98,12 @@ wakeonlanconfig 开机启动脚本，内容为：</p>
 <p>因为 GitHub Pages 需要以 username.github.io 来创建仓库，如果生成这些静态
 网页的源码也打算放到 github 托管，就像我是把整个主页都放到了 github 上，
 并使用 EmacsWiki 在本地生成静态网页，如下的目录结构：</p>
-<pre lang="source"><code>homepage +
+<pre><code class="language-source">homepage +
          - publish
          - sources
 </code></pre>
 <p>那么可以考虑将 publish 作为 homepage 的一个 submodule 关联起来：</p>
-<pre lang="source"><code>$ cd homepage
+<pre><code class="language-bash">$ cd homepage
 $ git submodule add git@github.com:username/username.github.io.git publish
 </code></pre>
 <p>这样 homepage 也可以单独作为 github 的工程了，publish 以及 sources 目录
@@ -146,7 +147,7 @@ CNAME 文件来记录 domain，另外还需要修改域名的 A 记录，次级�
 新更为有利，且所需要的背景知识 05 年的我应该也已经具备了，深深地鄙视这么
 多年的自己，笨死了。</p>
 <p>贴一下核心部分就好了：</p>
-<pre lang="source"><code> #!/bin/bash
+<pre><code class="language-bash"> #!/bin/bash
  ftp -n &lt;&lt; &quot;___EOF__&quot;
  open 192.168.33.88
  user FTP_USER FTP_PASS_WORD
@@ -174,7 +175,7 @@ ubuntu server，将 git server、nginx + wiki 都安装在了上面，反正 ser
 ssh 上去的 prompt，shell 下 power off 的命令，一些发行版可能是 halt，不
 过也得看电源模块的配置的吧，最后是 server power off 后广播出来的字符串。</p>
 <p>按照惯例贴代码：</p>
-<pre lang="source"><code> #!/usr/bin/expect
+<pre><code class="language-bash"> #!/usr/bin/expect
  #
  # create in 2013/12/31, by sucha in http://suchang.net
  #
@@ -220,6 +221,7 @@ ssh 上去的 prompt，shell 下 power off 的命令，一些发行版可能是 
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js"></script>
   </div> <!-- body -->
 </body>
 </html>
