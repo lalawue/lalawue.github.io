@@ -16,7 +16,28 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年2月10日 周二 00:56</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年2月27日 周日 22:35</div>
+<h2>MNet 支持 TLS 插件</h2>
+<p>先说一下背景，<a href="https://github.com/lalawue/m_net/">mnet</a> 很早就想着加入 TLS 的支持，比如在做 cincau 或者 rpc_framework 的时候，就分别有作为独立 server 支持 https，以及作为 agent 使用内建的 TCP，去请求一个 https 认证的 API，或者拉取网页这样的要求。</p>
+<p>但之前都是在 Lua/LuaJIT 这一层，在 C 之外做的 SSL 的状态管理，用起来不稳定，就放弃了，直接用了 curl。当时没有认真研究，自从考虑在 C 这一层，mnet 这一层加入 <a href="https://github.com/lalawue/m_net/tree/master/extension/openssl">TLS 插件</a> 后，之前不稳定的原因我终于找到了，这个后面再说。</p>
+<p>先过一下 mnet 的插件系统，比如为什么要做成插件系统。</p>
+<p>因为 mnet 本身是一个小型网络库，几乎是就是单文件支持 MacOS/Linux/FreeBSD/Windows，抽象了 epoll/kqueue/wepoll (IOCP epoll 化)，将 TLS 做成插件，是希望没有编译链接 TLS、OpenSSL 时，仍能独立支持 TCP、UDP。而加入 TLS、OpenSSL 的插件代码，以及相关编译选项后，提供 TLS 的支持，使用方式跟抽象为 chann 的普通 TCP 一样。</p>
+<p>为了达成这一个目标，mnet 将插件接口抽象为基于 chann_type 的一种配置，mnet_core 单文件本身就提供了 TCP、UDP 的内建插件，外部只需要在 open_chann 时指定使用 TCP、UDP 接口，就能使用 core 提供的 chann listen、conect、send、recv API。</p>
+<p>TLS 插件则是抽象 TLS 为一种外部定义的 chann_type，配置了这个定义后，TLS chann 使用方式跟 TCP、UDP 没有差别，从内部往外看，TLS chann_type 也是一种普通的 chann 而已，内部 core 对于所有类型的 chann_type，都提供同样能力的配置接口，没有特别对待。</p>
+<p>所谓插件配置，其实就是抽象了 open_chann，listen_chann/connect_chann, send_chann/recv_chann, disconnect_chann/close_chann，chann_state 的回调函数，mnet 的插件，只要能提供 fd，以及这些插件接口，就可以利用上内部的 epoll、kqueue，以及 sending cache。</p>
+<p>这样，外部建立 TLS chann，只需要指定 TLS chann_type，open 后做 listen/connect 就好，插件需要外部提供 SSL_CTX，因此证书管理是在外部的，网络无关的 API 内部没有引入。插件提供了 filter 接口，对于 epoll/kqueue 的读写事件，会 filter 询问 chann_type 对应的插件接口，是否要传递给外层调用的 API，还是插件还需要继续处理。</p>
+<p>插件同样封装了 chann_state，这样 TLS 的状态可以有 CLOSE/DISCONNECT/CONNECTING/CONNECTED/LISTEN 了。</p>
+<p>接着说一下之前在 Lua/LuaJIT 层为何基于 mnet 的 TCP 层做 SSL 没成功，仔细阅读 SSL_read/SSL_write 的 man page，可以看到这个接口接收到 buffer 读写命令后，底层仍然可能有重协商的逻辑，重协商的逻辑需要双方的数据传递，因此有可能需要先读取数据（协商相关的数据）才能写 buffer，反观 SSL_read 底层的重协商有可能先要写数据，才能读。</p>
+<p>SSL_read/SSL_write 都有可能导致底层重协商，如果 fd 是阻塞的，协商结束，数据读、写成功后，才会返回给调用方；如果是非阻塞的 fd，ret 返回 &lt;= 0，需要调用 SSL_get_error(ret) 来获取是否是 SSL_ERROR_WANT_READ 或者 SSL_ERROR_WANT_WRITE，还是确实出错了，比如 SSL_ERROR_SSL 这种错误只有 SSL_shutdown，然后 close(fd) 了。</p>
+<p>非阻塞 fd 导致的 WANT_READ 或 WANT_WRITE 的错误，需要调用方在合适的时机，使用同样的参数重新调用。说实话，看到这里，我总觉得这个 API 怎能这样设计，但是从 API 提供者的角度来说，非阻塞的 fd，需要打包额数据也许不足 ，也许干嘛干嘛，反正需要等待双方协商好后才能重新打包，如果传递过来的不是之前的数据，或者长度，又需要重新协商了。</p>
+<p>为了方便调用方，SSL 提供了两个改善性的配置，一个是 SSL_MODE_ENABLE_PARTIAL_WRITE，只写一部分数据成功后，也返回了，再次发起 SSL_write 可以传递新的数据了，而不是整个 buffer 都成功才返回；另外一个是 SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER，意味着调用方可以换用 buffer 指针（内容、长度还需一致）。</p>
+<p>之前 mnet 的 send 是有 cache 的，cache 长度是固定的，导致上面 SSL_write 这个接口不满足，长度变了，这次为了支持 TLS，一旦有 send 数据 cache，都是申请足量的内存 cache 住，后续 epoll/kqueue raise 了可以写的事件，在传递同样的内容、长度（仅 buffer 指针变化）给插件层的 send。</p>
+<p>以上就解决了之前 Lua/LuaJIT SSL 不稳定的问题。</p>
+<p>我自己是搞了自签名的证书、私钥测试了 reconnect 和 rwdata 这两个跟 TCP 一样的单点测试程序，算是通过了验收。因为 SSL_CTX 是外部提供的，因此后续的认证问题，应该不是问题，即便有特殊需要，基于插件的系统，应该可以可以回调解决吧，毕竟其实我也没有很重度使用这个插件的功能呢。</p>
+<p>先这样吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-02.html#p1">Permalink</a></div>
+
+<div class="date">22年2月10日 周二 00:56</div>
 <h2>LuaRocks with LuaJIT (2)</h2>
 <p>之前我还提到<a href="../blog/2020-07.html#p3">使用了 torch 的 LuaRock 方案</a>，但实际上不晓得 LuaRocks 在哪个版本起（至少在 3.7），编译的时候指定 Lua 解释器，就能直接支持，我其实已经用上很长时间了。</p>
 <p>说实话，比较期待 LuaRocks 的方面是，直接根据依赖的 rocks，能够输出 single executable，虽然按照目前 LuaRocks 的 spec 构建描述，应该是很难的。</p>
@@ -216,89 +237,6 @@ key = /path/to/site2.key
 <p>不过上面提到的 Wiki 支持 revision 功能，在 cincau 的 demo 上面是没有的，目前没打算开源，🙂</p>
 <p>9 月份忘记写 blog 了，10 月初初回顾了一下，后面有时间再详细铺开，先这样吧，🤗</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2021-09.html#p0">Permalink</a></div>
-
-<div class="date">21年8月31日 周二 22:37</div>
-<h2>lua-html-tags</h2>
-<p>上周才知道 <a href="https://stackblitz.com/">StackBlitz</a> 的在线代码编辑工具，是一个 React JS 编辑器，包括了自动导入的包管理等功能，React 这边随便编辑修改页面添加变量，右侧的页面瞬间刷新，看着这样的前端开发实在太香了。相比之下，虽然 Swift 开发还有类型信息，但是为了上真机跑起来，还得编译链接，老费劲了。</p>
-<p>其中 React 将页面和逻辑都放到一起的做法，感觉挺好的。</p>
-<p>因为之前做了一个 <a href="https://github.com/lalawue/cincau">Cincau</a> web 框架，用了 <a href="https://github.com/leafo/etlua">etlua</a> 做模版渲染引擎，发现其实还是要写很多的 HTML，而且之前的做法是将模版和实际的逻辑页面分开、model 分开，为了搭建一个页面，心智经常要顾及太多文件，再加上我搭建的多页面跳转的 demo，router 加上各个页面、model、template，真的让人头大。</p>
-<p>但为此将模版文件放到业务逻辑里面，又感觉太啰嗦了。</p>
-<p>就想找一个将 HTML tag 和 Lua 结合起来的描述语言，其实看过一些短小的，后来看到较大的是这个 <a href="https://github.com/bungle/lua-resty-tags">lua-resty-tags</a>，但是这个使用的时候需要建立 tags 描述的，非开箱即用感觉不够专业呀。</p>
-<p>我描述一下自己的需求吧</p>
-<ul>
-<li>基本的 HTML tags</li>
-<li>可以自定义 tags</li>
-<li>支持 attributes 等</li>
-<li>不影响当前 _ENV 和 fenv</li>
-<li>可以 include 文件</li>
-</ul>
-<p>最终是自己摸索着建立了一个 <a href="https://github.com/lalawue/lua-html-tags">lua-html-tags</a>，这些 tags 实际上都是 Lua function，因为 Lua 语法的关系，function 可以不加括号接受一个 string 和 table 作为参数，让之前相对简洁的 HTML 描述得以实现。</p>
-<p>简单描述一下实现逻辑：</p>
-<ul>
-<li>因为需要包裹在特定的 _ENV 和 fenv，所以页面描述是用 function 包裹返回的</li>
-<li>返回的最外层是一个 table</li>
-<li>里面的每一项如果不是 function 或者 table，就转成 string 输出</li>
-<li>如果是 table 就遍历取值<sup><a href="#fn1">特例</a></sup></li>
-<li>遇到类似 HTML tags 这样的 function 就调用取返回值</li>
-</ul>
-<p>可以看到，从最外层的 table 开始遍历后，处理方式都是一致的递归描述，举个简单的例子</p>
-<pre><code class="language-lua">local Tags = require(&quot;html-tags&quot;)
-
-local function pageSpec()
-    return {
-        html {
-            head {
-                meta { name=&quot;generator&quot;, content=&quot;MarkdownProjectCompositor.lua&quot; },
-                title &quot;Example&quot;
-            },
-            body {
-                div {
-                    { id=&quot;body&quot; },
-                    p {
-                        &quot;content 1, &quot;,
-                        &quot;content 2&quot;
-                    }
-                }
-            }
-        }
-    }
-end
-
-print(Tags.render(pageSpec, {}))
-</code></pre>
-<p>最终会生成这样的 HTML（经过了部分换行编辑）</p>
-<pre><code>&lt;html&gt;
-&lt;head&gt;
-    &lt;meta name=&quot;generator&quot; content=&quot;MarkdownProjectCompositor.lua&quot; /&gt;
-    &lt;title&gt;Example&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div id=&quot;body&quot;&gt;
-        &lt;p&gt;content 1, content 2&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>由于这个页面描述就是 Lua，所以加入相关的变量、函数计算是很简单的事情，而且因为限定了 _ENV 和 fenv，所以 HTML tags 和自定义的 tags 对相关函数外的 Lua 的运行环境都没有影响。</p>
-<p>感觉还可以说一下 _ENV 和 setfenv 等相关的事情。实践下来，是觉得 getfenv、setfenv 的灵活性很高，_ENV 比较受限，但也许从语言设计者的角度来说，_ENV 更安全一些吧。</p>
-<p>先说一下这个 include tag 的作用，就是引入一个 Lua 文件描述的子页面，最终是输出一串字符串到这个 tag 的位置。使用场景时，比如我做了很多页面，但是想用同样的 HTML head 描述，当我改变 head 的描述是时，希望所有页面都能同样做更改，那么我将这个 head 文件拎出来单独描述就好。</p>
-<p>比如将上面的例子命名为 head_tpl.lua，那么引入的时候可以是这样：</p>
-<pre><code class="language-lua">local function pageSpec()
-    return {
-        html {
-            include &quot;/path/to/head_tpl.lua&quot;,
-            body {
-                ...
-            }
-        }
-    }
-end
-</code></pre>
-<p>当这个文件被 loadfile 进入 Lua，就成了一个 function，之前我说过给 pageSpec 设定了 fenv，而 include 是早已经建立好的函数，有自己的 fenv，这时候 include 进来的 head_tpl 函数，如果我不设置 fenv，直接调用获取结果的话，用的是 include 的 fenv。</p>
-<p>在 5.2 时，如果我不事先记录 pageSpec 的 fenv，从 pageSpec 调用了 include 函数，在 include 函数里，我无法获取到 pageSpec 函数的 fenv，即便你知道堆栈上的前一个函数有我需要的 fenv，但就是拿不到。</p>
-<p>在 5.1 的时候就很简单了，getfenv(2) 可以取到堆栈上前一个函数的 fenv，然后 setfenv 就行，方便极了。</p>
-<p><sup>[<a id="fn1">特例</a>]</sup>：HTML tags function 在实现时，如果紧接着的 table 参数里面的第一项还是 table，是特别作为属性 key / value 用 pairs 函数遍历的，比如之前例子里面的 div id=&quot;class&quot;</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-08.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
