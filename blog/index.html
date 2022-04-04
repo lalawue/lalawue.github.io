@@ -16,7 +16,31 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年3月29日 后日 22:54</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年4月5日 周六 01:28</div>
+<h2>MoocHelper 更新到 0.2.12</h2>
+<p>项目地址 <a href="https://github.com/lalawue/MoocHelper">MoocHelper</a>，同时更新了 .vsix 跨平台安装包。</p>
+<p>因为 LuaHelper 前段时间更新了，我也跟着将基本的代码更新上去，这次改动主要是 anotation，语法方面我觉得没有什么变化。
+anotation 我用得少，所以相关改变也说不上了解。</p>
+<p>另外修复了 switch case 中 case 后面 exp 的一些解析问题，之前跟 Lua EBNF 表述的 prefixexp 语法 ':' 有冲突。</p>
+<p>mooncake 里 case 紧接着的 exp 可以是右值，比如 object:func1(param1):func2(param2) 是一个合法的 Lua prefixexp，
+而 case 语句依赖 ':' 作为终结符，由于 Lua 不依赖空格、分行、间距来作为语法分割，因此刚刚的 exp 对于两个不同的 ':' 可以有多种解释：</p>
+<pre><code class="language-lua">-- case 1
+case object:
+    func1(param):func2(param2)
+-- case 2
+case object:func1(param1):
+    func2(param2)
+-- case 3
+case (object:func1(param1):func2(param2))
+</code></pre>
+<p>实际上 Lua 的 prefixexp 使用的是贪心策略，最终解析出来的是 case 3，认为 case 子句没有完结，会报语法错误。
+而 mooncake 之前对这里没有定义，因此 case 1 和 case 2 都是可选的合法解释。</p>
+<p>这次的修改加上了补充，认为 ':' 之后如果紧接着空格，比如 '\t'、'\n'、'\t'、'\v'，则认为是 case 语句的终结。
+因此 case 1、case 2 才是 mooncake 合法的 case 语句，并且语义有区别。而 case 3 并不是合法的语句。</p>
+<p>大概这样吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-04.html#p0">Permalink</a></div>
+
+<div class="date">22年3月29日 后日 22:54</div>
 <h2>深圳停摆一周</h2>
 <p>深圳因为疫情整个城市停摆了一周，我所在的小区因为有密接者检测出阳性，被封了两周。</p>
 <p>密接者所在的楼栋，在被封锁的 2 周内足不出户，医护都是送吃的到户；我们这些顺带的，前面 4 天，足不出户，
@@ -213,40 +237,6 @@ html`&lt;h1 class=&quot;${title_str}&quot;&gt;My first app&lt;/h1&gt;`
 呼吁结构化组件，分解功能模块我是一点都没用上。</p>
 <p>先这样吧。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p1">Permalink</a></div>
-
-<div class="date">21年11月07日 周日 11:46</div>
-<h2>stunnel 的 SNI 配置</h2>
-<p>因为是很小的网站，资源也有限，感觉没必要用上 openresty 这个大件。</p>
-<p>先贴配置：</p>
-<pre><code class="language-ini">debug=info
-output=/path/to/access.log
-pid=/path/to/process.pid
-client=no
-
-[https]
-accept = 443
-connect = 127.0.0.1:port1
-cert = /path/to/default.cer
-key = /path/to/default.key
-
-[site1]
-connect = 127.0.0.1:port1
-sni = https:site1.domain
-cert = /path/to/site1.cer
-key = /path/to/site1.key
-
-[site2]
-connect = 127.0.0.1:port2
-sni = https:*.site2.domain
-cert = /path/to/site2.cer
-key = /path/to/site2.key
-</code></pre>
-<p>说一下上面的配置。</p>
-<p>这是类似 INI 方式的配置文件，首先定义是 server 端的配置，设置 access.log 和 process.pid 文件的位置。</p>
-<p>之后设置默认协议，比如叫做 https，监听 443 端口，并设置连接地址，使用默认的 cert 和 key 做验证，这里其实是可以跟下面的 site1 或者 site2 用同样的 cert 和 key 配置。</p>
-<p>之后分别设置不同网站对应的处理地址，比如 site1，连接的是 port1，注意 sni 字段配置，第一个是协议，就是上面描述过的 https，而不是 HTTPS，之后是需要处理的 domain，这里只处理二级域名，没有通配字，最后加入网站申请到的 cert 和 key。</p>
-<p>site2 的 sni 用了通配字，所有 site2.domain 的二级、三级域名都可通过验证处理。</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2021-11.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
