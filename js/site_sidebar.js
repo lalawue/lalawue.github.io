@@ -1,3 +1,7 @@
+var onPageSearch = function() {
+  var value = document.getElementById("searchtext").value
+  window.open('https://cn.bing.com/search?q=site:suchang.net+'+value,'_blank');
+}
 document.getElementById('sidebar').innerHTML = `
 <p class="header">Here</p>
 <ul>
@@ -16,14 +20,10 @@ document.getElementById('sidebar').innerHTML = `
   <li><a href="../scratch/index.html">Scratch</a></li>
 </ul>
 <p class="header">Search</p><!-- Bing Search -->
-<form id="searchform" method="get" action="http://cn.bing.com/search" >
-  <p><input id="searchtext" type="text" name="q" value="" /></p>
- <p><input type="hidden" name="ie" value="utf-8" /></p>
-  <p><input type="hidden" name="oe" value="utf-8" /></p>
-  <p><input type="hidden" name="hl" value="zh-CN" /></p>
-   <p><input type="hidden" name="domains" value="suchang.net" /></p>
- <p><input name="si" type="hidden" value="suchang.net" /></p>
- <p><input type="hidden" name="sitesearch" value="suchang.net" /></p>
+<form>
+  <input id="searchtext" type="text" />
+  <input type="text" class="form-control" style="display:none" />
+  <a style="text-decoration: none;" href="javascript:"onclick="onPageSearch();">🔍</a>
 </form>
 <p class="header">Contact</p>
 <ul>

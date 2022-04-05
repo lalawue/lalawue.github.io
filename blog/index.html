@@ -17,6 +17,16 @@
     <div id="body">
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年4月5日 周六 01:28</div>
+<h2>改进侧边栏搜索</h2>
+<ul>
+<li>改进了 site 和 blog 的侧边栏搜索，用的搜索引擎是 cn.bing.com</li>
+<li>更改了 Yulin City Map 的地图卫星图像 URL，来源为 map.baidu.com</li>
+</ul>
+<p>UI 交互没变化，也是方便之后如果想从站点、博客搜索内容的话，会方便一些，不过自己测试了一下，很多内容搜索不到，应该是小站点，搜索引擎照顾不了。</p>
+<p>没名气的静态网页就这样的了，😌</p>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2022-04.html#p0">Permalink</a></div>
+
+<div class="date">22年4月5日 周六 01:28</div>
 <h2>MoocHelper 更新到 0.2.12</h2>
 <p>项目地址 <a href="https://github.com/lalawue/MoocHelper">MoocHelper</a>，同时更新了 .vsix 跨平台安装包。</p>
 <p>因为 LuaHelper 前段时间更新了，我也跟着将基本的代码更新上去，这次改动主要是 anotation，语法方面我觉得没有什么变化。
@@ -193,50 +203,6 @@ setTimeout(() =&gt; {
 <p>前面写得太好了，觉得跟兽人大战之后，跟魔教对决的这一段，马马虎虎，没啥感觉。</p>
 <p>总体可以打 7.5 ~ 8 分了。</p>
 <div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2021-11.html#p2">Permalink</a></div>
-
-<div class="date">21年11月11日 周四 00:33</div>
-<h2>Mithril 使用心得（1）</h2>
-<p>这个网站已经诞生 10 多年，但其是静态页面，基于 XHTML 结构，而不是最新的 HTML5，站长本人是专业 APP 开发，
-H5/Web 开发比较业余，对 <a href="https://mithril.js.org/">Mithril</a> 的使用感觉还不够深入，但也算趟了一些坑，
-可以作为心得说一下的。</p>
-<p>说一下为何不使用 React、Vue 或者 Preact，以及 Angular 等等其他框架，没什么原因，因为其实入手之前看了非常多的入门对比文章，
-在对比的过程中总是要上手的嘛，因为看到 Mithril 吹自己简单，其网站入门教程的介绍也是非常到位的（React 没能一下学会，
-但是 Mithril 可以），加上不需要 nodejs 这样的依赖，不需要 build，学习的曲线感觉很平缓。</p>
-<p>话说我之前是一个连 SPA（Single Page Application）都不懂的人，通过 Mithril 的教程，学会了基础的 component，
-route、以及 XHR，基本上一个单页面就可以搞定了。</p>
-<p>再说还有 <a href="https://stackblitz.com/">stackblitz</a> 这样的平台，入门是很方便的。因为是个无需 build 的方案，
-简单的 HTML5 + rel 标签带入 Mithril 就可以开始工作了。</p>
-<p>js 我也只懂皮毛，很多东西都得百度，没关系，出来的程序能用就行。最后做了 2 个 SPA 页面，一个是 wiki，一个是 note 便签。</p>
-<p>wiki 的相对简单一些，大概 2 - 3 天才搞定，学习了 route，但是内部的很多状态我是通过一个全局状态变量来控制的。
-便签这个页面没有用到路由，纯内部状态跳转刷新，两个都没有用到 browser 的 history，浏览器的返回按钮会退回上个 URL。</p>
-<p>Mithirl 的 bind 或者 route，都可以仅指定页面的一个部分，一个 element 来刷新，内部是根据 vnode 的变化来判断是否更新的，
-这个 vnode 变化感觉有点悬乎，比如我在创建一些子节点的时候，attribute 是有变化的，但是 Mithril 感觉不到这个变化，
-所以我不得不在外层做更明显的 vnode 变化，比如增加一个用不到的 span 标签这样，来确保重新输出 HTML 节点。</p>
-<p>Mithril 限定 60hz 刷新确实也不错，但是遇到一些极端情况，比如自己本地测试的时候，网络返回就挺快的，当我在用内部变量控制
-vnode 输出的不同时，因为间隔过短，虽然变量有切换状态，但 Mithril 间隔读取到的其实都是同一个状态下的 vnode，
-而忽略了中间这个变量状态下 vnode 的输出，最后导致认为没有变化，不需要刷新，出了问题，如下：</p>
-<pre><code class="language-source">// 如下的 A、B 表示变量值，后面数字表示 vnode 结构为 A 但内容不同，这里需要保证 A1 -&gt; B 间隔 1/60 秒
-A1 -&gt; B -&gt; A2
-</code></pre>
-<p>所以有时候，需要将一些操作延时到 60hz 单次刷新之外才行，让 Mithril 检测到 vnode 变化。</p>
-<p>Mithril 教程用的是古老的创建 vnode 的函数调用方案，但其实可以配合 preact 的 <a href="https://github.com/developit/htm">htm</a>，
-我觉得使用方式上要比教程里面的简单很多，比如教程是下面这样创建 vnode 的：</p>
-<pre><code class="language-js">// 下面 title_str 是变量
-// &lt;h1 class=&quot;title&quot;&gt;My first app&lt;/h1&gt;
-const title_str = 'title';
-m(&quot;h1&quot;, {class: title_str}, &quot;My first app&quot;)
-</code></pre>
-<p>如果用了 <a href="https://github.com/developit/htm">htm</a>，可以像下面这样：</p>
-<pre><code class="language-js">// 先绑定，最后也是通过 m 函数来输出 vnode 的
-const html = htm.bind(m);
-const title_str = 'title';
-html`&lt;h1 class=&quot;${title_str}&quot;&gt;My first app&lt;/h1&gt;`
-</code></pre>
-<p>明显是使用了 htm 的代码更容易定位问题。</p>
-<p>因为追求短平快，单个 js 文件就完成了 wiki 或者 note 便签这样的功能，所以 Mithril 结构化方面我是没有发言权了，教程上面
-呼吁结构化组件，分解功能模块我是一点都没用上。</p>
-<p>先这样吧。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p1">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
