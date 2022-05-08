@@ -16,7 +16,15 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年5月4日 周三 23:28</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年5月8日 周日 23:16</div>
+<h2>Parallels 和 VirtualBox</h2>
+<p>用 <a href="https://github.com/lalawue/cincau">cincau</a> 开发了一个小站点，而 cincau 是支持使用定制的 <a href="https://github.com/ers35/luastatic">luastatic</a> 打包的，目标系统是 Linux。因为容器什么的我还不熟悉，所以其实最终拿到的是 luajit 包含了所有脚本 C 数据 + 一堆 shared library，tar 到一起的结果。</p>
+<p>像上面说的，因为没搞容器，所以还是需要通过虚拟机上的 Linux 系统生成目标二进制，之前在 Mac 上我用的是 Parallels，也挺方便的，但是 Parallels 贵啊，非正规的也不好搞，这次新机器上的 Parallels 好不容易安装好了，结果网络怎么都用不了，我是相当郁闷，花了几个小时还搞不定，但是又确实不想花钱升级了。</p>
+<p>于是试了一下 VirtualBox，发现同样一个版本，低至 10.12 的 Mac 也能安装，新 Mac 系统上面创建的虚拟机文件，拷贝过来后，直接用，不能更开心。</p>
+<p>感觉不需要什么特别的配置，直接用就行，早知道我早早地使用 VirtualBox 好了，毕竟不是使用 Windows，对于虚拟化性能、3D、2D 什么我是一点都不在乎的，现在身边已经没有 Windows 机器了。</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-05.html#p1">Permalink</a></div>
+
+<div class="date">22年5月4日 周三 23:28</div>
 <h2>罗浮山一日游</h2>
 <p>3 号 7 点的时候，太阳已经把深圳晒得金黄，五一开头的冷雨天气正式结束，然后气温紧接着就上来了。我是计划好了去罗浮山，早买了票。</p>
 <p>一路还挺顺利的，老地方惠州北站转华侨中学，为了吃到肠粉早餐，走了 3 站公交，然后上 268 到了罗浮山。</p>
@@ -178,33 +186,6 @@ setTimeout(() =&gt; {
 </code></pre>
 <p>用了 setTimeout 来激活 resize，所以只需要设置一个 resize 监听就好，上面 js 意思是如果可见宽度 &lt; 1024，其实我是将其当成 phone 显示的，就不需要滚动条了。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p4">Permalink</a></div>
-
-<div class="date">21年11月25日 周四 22:51</div>
-<h2>基于 luarocks/luastatic 的二进制打包工具</h2>
-<p><a href="https://github.com/ers35/luastatic">luastatic</a> 可以打无依赖的二进制包，但是官方的版本有一些限制，比如在命令行里面，lua 源文件之只能是基于当前打包目录的相对路径。</p>
-<p>而实际上，由于 lua 的 LUA_PATH、LUA_CPATH 以及 package.path 和 package.cpath 太自由，可以定制很多种搜索优先级，以及目录相对关系，打包目录下的相对路径，就不能反映源码上面的 require 路径逻辑了。</p>
-<p>于是我基于上面的 luastatic，做了一点改进，可以输入相对路径，代码在 <a href="https://github.com/lalawue/luastatic">lalawue/luastatic</a>。</p>
-<p>举个例子，一方面，我重度使用 luarocks 安装的库，比如 cincau，默认目录可以是 /usr/local/share/lua/5.1/cincau，而另外自己写的源码，都在 app 目录下，然后设置了如下的 LUA_PATH：</p>
-<pre><code class="language-shell">$ export LUA_PATH=&quot;/usr/local/share/lua/5.1/cincau/?.lua;./app/?.lua&quot;
-</code></pre>
-<p>这样在 require 的时候，省却了很多相对路径。如果使用官方的 luastatic 打包，就得建立相对目录，然后作为命令行参数输入给 luastatic，用我修改后的 luastatic，只需要先设置 shell 变量：</p>
-<pre><code class="language-shell">$ export LUASTATIC_SOURCE_PATH=&quot;/usr/local/share/lua/5.1/cincau/;app/;&quot;
-</code></pre>
-<p>注意目录最后的 '/' 和 ';'，如果输入的 lua 源文件检测到相应的路径前缀，会将这个前缀去掉，这样就实现了 LUA_PATH 和 package.path 的功能，运行时的路径搜索和打包时候的路径一致了，不需要构建相对目录。</p>
-<p>另外需要注意的是，虽然 luastatic 支持生成无依赖的 binary，但那只是对应官方的 lua，luajit 依赖的 .so 库还是需要动态加载的，比如很多的 ffi.load 依赖的是系统的 dlopen。这个我看了一些文章，大佬们根据安全原则，系统的接口都不支持从内存中加载一个动态库，虽然某些平台上通过 mmap 是可以做到的，但是这个总感觉不大好。</p>
-<p>那如果是基于 luajit，lua 源文件是打到 binary 里面了，但是依赖的 so 库，是在运行前，通过 export LD_LIBRARY_PATH 或者 DYLD_LIBRARY_PATH 来设置 so 搜索路径，做成外部库加载的。</p>
-<p>通过这样的方式做成的 binary 发布包，可以在对应平台上不依赖 luarocks 就可以运行，安全性也好一些，发布更新都很方便。</p>
-<hr />
-<p>话说昨天看了一下 <a href="https://programming-language-benchmarks.vercel.app/">Programming Language and compiler Benchmarks</a> 里面 go vs java，go vs javascript 以及 go vs luajit，不得不说 go 性能确实好，速度跟 java 一样，但是内存消耗少了不知多少。</p>
-<p>luajit 平均速度是 go 的一半，内存消耗多了一些，javascript 速度跟 luajit 类似，但内存消耗多很多。</p>
-<p>如果是从头学起的话，我觉得 go 是要比 java 简单很多的，工程属性方面，go 更是标杆，如果算上多线程 goroutine 的话，毫无疑问，go 是首选。多线程多难搞呀，所以小公司很可能都慢慢转向 go 了，反正我是觉得真的香呀，现在都有点后悔搞 luajit 了，因为速度是赶不上 go 的，基础工具又差这么多。</p>
-<p>上面的所谓打二进制包，就是补充了一部分基础工具的缺失，即便不说标杆 go，人家 deno 也是可以打成二进制包的。</p>
-<p>luajit 不多的优点，一方面是不需要编译，虽然 go 编译很快，但是不需要编译连这个部分都省略了；另外就是 luajit 语法几乎是固定了，不大担心后续会有比较大的变动，唯一担心的额是 Mike Pall 是 luajit 几乎唯一的维护者，社区太小了，这个软件太高深，往后一些平台的支持以及升级估计够呛，更新也慢。</p>
-<p>lua 语言的的优点在 web 开发上面不大体现得出来，相比之下，比如虚拟机很小，这样轻量的虚拟环境、沙箱，可以造就诸如国内有名的 <a href="https://github.com/cloudwu/skynet/">skynet</a>。</p>
-<p>lua 语法更简单，类型都可以少关心，但并不意味说这个语言抽象能力不够，或者扩展不行，如果 metatable 抽象得好，可能性太多，OO 小菜一碟，比如我之前基于 lua 构建的 mooncake；所以，也没有泛型渴望症；但是因为缺乏类型系统，那么测试系统得自己保证才放心。话说，也是因为语言自由，lua 很多库的源码，相对 go 源码来说，可太难懂了。</p>
-<p>最近还看了 WASM，感觉也很香，go 自从 1.11 后，支持输出 WASM，但 WASM 这个技术还比较早期，W3C 上面到了提案 2 的阶段，还没有多线程这样的标准。从上面效率对比，跟 go 是一个级别。</p>
-<p>这次 post 先到这里吧。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p3">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
