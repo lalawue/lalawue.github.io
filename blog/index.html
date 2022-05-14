@@ -16,7 +16,45 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年5月8日 周日 23:16</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年5月14日 周日 23:49</div>
+<h2>cmark-gfm 静态链接</h2>
+<p>默认情况下，<a href="https://github.com/github/cmark-gfm">cmark-gfm</a> 是通过 cmake 编译为动态库的方式，但其实可以通过设置</p>
+<pre><code class="language-bash">$ cmake -DCMARK_SHARED=OFF ../
+$ make
+</code></pre>
+<p>配置为静态链接，少一个依赖，如果能修改一下再链接到 <a href="https://musl.libc.org/">musl libc</a>，那就更进一步，不受限于系统版本了哈哈。</p>
+<p>不过即便使用系统的 libc，也已经很不错了，毕竟也是向后兼容的，不担心未来的使用</p>
+<pre><code class="language-bash">$ otool -L src/cmark-gfm
+src/cmark-gfm:
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1311.100.3)
+</code></pre>
+<p>如果是动态链接的话，会是下面这样</p>
+<pre><code class="language-bash">$ otool -L src/cmark-gfm
+src/cmark-gfm:
+	@rpath/libcmark-gfm-extensions.0.29.0.gfm.3.dylib (compatibility version 0.29.0, current version 0.29.0)
+	@rpath/libcmark-gfm.0.29.0.gfm.3.dylib (compatibility version 0.29.0, current version 0.29.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1311.100.3)
+</code></pre>
+<p>编译后当然不会放到系统目录，而是随便丢到一个 PATH 能访问到的目录下用就好了。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-05.html#p3">Permalink</a></div>
+
+<div class="date">22年5月14日 周日 21:16</div>
+<h2>倾我所有去生活</h2>
+<p>前一段时间在多抓鱼上买了这本二手书，之所以买，是因为一篇豆瓣上的文章<a href="https://www.douban.com/group/topic/29630912/">《没有什么必须要说》</a><sup><a href="#fnc1">1</a></sup>，作者苏美。</p>
+<p>短篇记载的是一位女儿父亲的一生，从荣耀到低沉，从生机勃勃到病患缠身黯然神伤，这篇短篇的另外一条线是女儿跟父亲的关系，她们的关系算是父亲境遇的反映。</p>
+<p>父亲年轻时是一位帕米尔高原的边防战士，在一片白茫茫的雪海里面恪尽职守，直来直往，追雪兔、打雪狼，莽莽撞撞，不言轻伤。直来直往的性格，也体现在跟女儿的关系上面。父亲威严，不允许孩子反驳，女儿为此挨了不少耳光。</p>
+<p>画风一转。</p>
+<p>可这又有什么用呢，父亲退伍转业，突然患病后身体状况急转而下，为了救命，不得不躺在手术台上，身体被医生划开，插满了管子，任人摆布。</p>
+<p>冰天雪地上顶天立地的男儿不在，只剩下无法自理，得依靠儿女度过难关的一位凄惨病人，当时父亲才 49 岁。</p>
+<p>父亲状态转好，但在更为复杂、广大的社会丛林里里的小角色，随时间流逝，生计慢慢成了问题，不得不依靠一些之前的狐朋狗友接济。</p>
+<p>这位狐朋狗友丢给了父亲一份差事，表面上是管个小公司，实际上是帮摆平这位前辈的一个二奶，二奶啥都不懂，公司帐很乱。</p>
+<p>女儿看到父亲这般情景，是恨不得给父亲这位朋友一个耳光。可这位朋友也算是女儿从小就认识的长辈，只能作罢。</p>
+<p>故事从高光开局，进入接近死亡的威胁，身体转好的递进，来到社会丛林复杂关系的碾压，然后进入了尾声。</p>
+<p>父亲年迈，在厨房里面为儿辈准备晚餐，唠唠叨叨，完全融入了家庭生活。</p>
+<p><sup>[<a id="fnc1">1</a>]</sup> 被删帖了，禁止网站 JS 能看到</p>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2022-05.html#p2">Permalink</a></div>
+
+<div class="date">22年5月8日 周日 23:16</div>
 <h2>Parallels 和 VirtualBox</h2>
 <p>用 <a href="https://github.com/lalawue/cincau">cincau</a> 开发了一个小站点，而 cincau 是支持使用定制的 <a href="https://github.com/ers35/luastatic">luastatic</a> 打包的，目标系统是 Linux。因为容器什么的我还不熟悉，所以其实最终拿到的是 luajit 包含了所有脚本 C 数据 + 一堆 shared library，tar 到一起的结果。</p>
 <p>像上面说的，因为没搞容器，所以还是需要通过虚拟机上的 Linux 系统生成目标二进制，之前在 Mac 上我用的是 Parallels，也挺方便的，但是 Parallels 贵啊，非正规的也不好搞，这次新机器上的 Parallels 好不容易安装好了，结果网络怎么都用不了，我是相当郁闷，花了几个小时还搞不定，但是又确实不想花钱升级了。</p>
@@ -152,40 +190,6 @@ case (object:func1(param1):func2(param2))
 <p>这些限制是因为 Lua 和 MoonCake 在 token 阶段，共享了 token 这些关键字，moocscript 的关键字比 Lua 多了不少，这些关键字在 MoocHelper 里面的 Lua 文件也会被提示不能使用而报错，虽然 lua 解释器是能正常运行这些脚本的，这也算缺点之一吧。</p>
 <p>对了，因为 AST 共通，所以 MoocHelper 也能解析 Lua 代码，工程里面不同文件，混用 moocscript 和 lua 都是没有问题的。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-01.html#p0">Permalink</a></div>
-
-<div class="date">21年12月30日 周四 23:09</div>
-<h2>鬼吹灯读后感</h2>
-<p>不记得是月初还是上个月就看完了《鬼吹灯》，当然是全本，在微信阅读上看的，送了很多书币，断断续续就看完了。</p>
-<p>共 232 章节，记得是中间那段还比较好看，前面略显沉闷，后面呢，感觉故事跟前面差不多，没有太多新意。</p>
-<p>我自己对这个小说分类是穿越、惊悚类的探险小说，主要的场景是中国西北部、新疆、四川藏区的地域风情。故事里经常动不动就穿越了几千年，温存的场景少，打打杀杀、偷鸡摸狗的场景多，当然主角总是劫富济贫、危难中救人。</p>
-<p>这个题材拍电影感觉会很好吧，鬼洞、鬼眼，以及蓝色的萤火虫鬼火，听到觉得挺吓人的了。</p>
-<p>荒漠、戈壁、雪山下面探险，跟大粽子激斗，与狼王周旋，跟千年前的蛊术斗智斗勇，手中握着分金定穴的秘术，总是绝处逢生，但又被之前精绝古城的鬼眼、鬼洞病债，不得不到处寻方求生。</p>
-<p>故事就是这样串联起来的吧。</p>
-<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2021-12.html#p0">Permalink</a></div>
-
-<div class="date">21年11月30日 周二 21:24</div>
-<h2>div 内容过长的显示</h2>
-<p>js 入门的简单问题，我还是 baidu 了一下，花了一些时间，解决办法需要 CSS，设置 height 或者 max-height，然后设置 overflow 属性，如下</p>
-<pre><code class="language-css">.code {
-    max-height: 1024px;
-    overflow: auto;
-}
-</code></pre>
-<p>实际上，我是通过 js 来设置 docuementId 属性的，因为监听了 resize 事件，我觉得加了下面的函数更完善，可以根据可见区域到校重新 layout，如下：</p>
-<pre><code class="language-js">window.addEventListener('resize', function(){
-    if (document.body.clientWidth &lt; 1024) {
-        document.getElementById('tag').removeAttribute('style');
-    } else {
-        document.getElementById('tag').setAttribute('style', 'max-height: ' + (document.body.clientHeight) + 'px;overflow:auto;');
-    }
-})
-setTimeout(() =&gt; {
-    var event = new Event('resize');
-    window.dispatchEvent(event);
-}, 1);
-</code></pre>
-<p>用了 setTimeout 来激活 resize，所以只需要设置一个 resize 监听就好，上面 js 意思是如果可见宽度 &lt; 1024，其实我是将其当成 phone 显示的，就不需要滚动条了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p4">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -195,7 +199,7 @@ setTimeout(() =&gt; {
   <div id="sidebar">
   </div><!-- sidebar -->
   <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async></script>
   </div> <!-- body -->
 </body>
 </html>
