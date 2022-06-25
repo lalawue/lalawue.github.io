@@ -16,7 +16,32 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年5月14日 周日 23:49</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年6月25日 周六 22:30</div>
+<h2>MoocHelper 更新到 0.2.15</h2>
+<p>这个其实也是 5 月份的事情，之前也说过，因为一直都有用 <a href="https://github.com/lalawue/mooncake">MoonCake</a>，自然就少不了
+LSP 的支持。</p>
+<p>这次是同步了 <a href="https://github.com/Tencent/LuaHelper">LuaHelper</a> 的更新，自己这边添加了另外一些功能，比如对于非工程路径的支持，
+hover 到 require 库时，可以寻找过去，另外就是函数内部的 local 变量，我是默认不展示在 outline 的，我觉得这些变量太烦了。</p>
+<p>另外刚看到 upstream 已经到了 0.2.16 了，等我后面有空再同步一下吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-06.html#p1">Permalink</a></div>
+
+<div class="date">22年6月25日 周六 21:15</div>
+<h2>新台式电脑</h2>
+<p>上个月买了新的台式电脑，用了一个多月后，感觉还行吧。当时换台式机想了挺久，主要是之前那台 i5 一直停留在 10.12 升不了系统，
+也用了好多年了，考虑再三，还是先换了吧。</p>
+<p>之前还犹豫要不要买 Apple Silicon M1 的，因为工作中用的就是 M1，所以也算了解。最大 16G 的内存是软肋，即便是工作，
+勉勉强强够吧，CPU 倒是还不错，这一两年都足够了其实，GPU 不参与评测。不过如果配上 512G 的 SSD，价格就很不香了。</p>
+<p>还有因为平时绝大部分时间用的是 M1，真的不大想下班再用 M1 了，也是一个因素。</p>
+<p>于是搞了一台黑苹果，CPU 用了 i7-12700，GPU 是基本入门款，因为平时极少玩游戏，反而内存直接到了 64G。规格上去之后，
+机箱体积也小不了，虽然还是 Mini-ITX，还挺重的。</p>
+<p>各种原因，显示屏还是 1080P 的，已经用了有 8 年了，因为租住的地方比较小，如果换成 27 寸 4K，感觉塞不下（真的有点挤），
+而 M1 对 2K 屏幕支持很弱，我试过即便用了 GitHub 上的 HiDPI 脚本，还是不尽如人意，要上就只能上 4K，所以不如先不换。</p>
+<p>直接上 64G 内存的原因，是之前编译一些稍微大一点的 Swift 工程，加上开了其他浏览器什么的之后，感觉内存都快满了情况，
+所以不如一步到位 64G 了。</p>
+<p>现在的感觉，性能毫无疑问是过剩的，结论我现在确实只是个参数党。</p>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2022-06.html#p0">Permalink</a></div>
+
+<div class="date">22年5月14日 周日 23:49</div>
 <h2>cmark-gfm 静态链接</h2>
 <p>默认情况下，<a href="https://github.com/github/cmark-gfm">cmark-gfm</a> 是通过 cmake 编译为动态库的方式，但其实可以通过设置</p>
 <pre><code class="language-bash">$ cmake -DCMARK_SHARED=OFF ../
@@ -165,31 +190,6 @@ case (object:func1(param1):func2(param2))
 <p>我自己是搞了自签名的证书、私钥测试了 reconnect 和 rwdata 这两个跟 TCP 一样的单点测试程序，算是通过了验收。因为 SSL_CTX 是外部提供的，因此后续的认证问题，应该不是问题，即便有特殊需要，基于插件的系统，应该可以可以回调解决吧，毕竟其实我也没有很重度使用这个插件的功能呢。</p>
 <p>先这样吧。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-02.html#p1">Permalink</a></div>
-
-<div class="date">22年2月10日 周二 00:56</div>
-<h2>LuaRocks with LuaJIT (2)</h2>
-<p>之前我还提到<a href="../blog/2020-07.html#p3">使用了 torch 的 LuaRock 方案</a>，但实际上不晓得 LuaRocks 在哪个版本起（至少在 3.7），编译的时候指定 Lua 解释器，就能直接支持，我其实已经用上很长时间了。</p>
-<p>说实话，比较期待 LuaRocks 的方面是，直接根据依赖的 rocks，能够输出 single executable，虽然按照目前 LuaRocks 的 spec 构建描述，应该是很难的。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-02.html#p0">Permalink</a></div>
-
-<div class="date">22年1月27日 周四 14:42</div>
-<h2>MoocHelper</h2>
-<p><a href="https://github.com/lalawue/mooncake">MoonCake</a> 终于有了支持 LSP 的 VSCode 插件
-<a href="https://github.com/lalawue/MoocHelper">MoocHelper</a>，修改自 <a href="https://github.com/Tencent/LuaHelper">LuaHelper</a>，
-一个基于 go 的 Lua LSP 方案。</p>
-<p>话说 12 月底到 1 月中旬大部分的时间都在补充完善这个插件，基本功能两周之内的业余时间就搞定了。不得不说 go 确实比较简单，另外 LuaHelper 的代码结构也可圈可点，很好懂。</p>
-<p>基本功能完成后，就开始了边用边改的流程，就这样又过了两周多，感觉配置好后，在 Mac 上的基本使用没啥问题了。</p>
-<p>对比一下原版的功能，基本的代码补全，跳转，提示都是有的，只是缺少 debug 能力，因为 moocscript 是先翻译成 Lua 再交给 Lua 解释器的。另外，配置方面，修改了 luahelper.json 的读取路径，修改到了 .vscode/ 目录下。增加了配置项 ProjectLuaPath 以及 ProjectLuaCPath，对应工程使用的 LUA_PATH 和 LUA_CPATH 携带的路径列表。</p>
-<p>增加了这两个配置后，浏览代码期间的环境变量跟运行时候就几乎是一样的了。</p>
-<p>说到 Lua LSP 的方案选择，之前考虑过 <a href="https://github.com/sumneko/lua-language-server">sumneko/lua-language-server</a>，虽然我是 C/C++ 以及 Lua 都了解，但初步评估后，发现门槛有点高，不知道如何入手修改，以及 debug，想哭😭。</p>
-<p>相比之下，基于 Go 的 LuaHelper，就太好 debug 了。只要按照 README 描述，在插件配置里面将选项 <code>connect lsp server way</code> 修改为 socket（默认是 cmd），而在另外一边的 luahelper-lsp 目录，按下 F5 就开启了调试模式，断点什么都特别方便。就算像我这样 go 基础非常浅的，也很快弄懂了如何 debug，几遍下来，程序的结构就很清楚了。</p>
-<p>相比之下，lua-server 是 Lua + C++ 的方案，估计调试没那么容易，当然 go 的效率较高又是另外一个点了。</p>
-<p>除此之外，我还看了一下相关的代码，知道其最终输出是 AST，后续的语法分析，提示、跳转什么都是依赖这个 AST 工作的，大概读懂这个 AST 结构后，我就比较放心了。moocscript 虽然语法不一样，但其最终会编译到 Lua，会沿用一样的 AST 结构，不会遗漏语言表达的任何细节。</p>
-<p>一开始我想用 lua-server 的，但几遍下来，看不懂 parser 部分，没能抓住最后输出 AST 的逻辑，少了这个核心关键点，就只能放弃了。</p>
-<p>也是基于上面输出同样 Lua AST 的原因，除了 debug 功能外，其他的功能，moocscript 和 lua 几乎是一样的，只是有一些限制。</p>
-<p>这些限制是因为 Lua 和 MoonCake 在 token 阶段，共享了 token 这些关键字，moocscript 的关键字比 Lua 多了不少，这些关键字在 MoocHelper 里面的 Lua 文件也会被提示不能使用而报错，虽然 lua 解释器是能正常运行这些脚本的，这也算缺点之一吧。</p>
-<p>对了，因为 AST 共通，所以 MoocHelper 也能解析 Lua 代码，工程里面不同文件，混用 moocscript 和 lua 都是没有问题的。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-01.html#p0">Permalink</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
