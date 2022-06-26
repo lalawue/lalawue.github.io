@@ -20,7 +20,7 @@
 <p><a id="p2"></a></p>
 <div class="date">22年6月26日 周日 15:02</div>
 <h2>MoocHelper 更新到 0.2.16</h2>
-<p>昨天说到 <a href="https://github.com/Tencent/LuaHelper">LuaHelper</a> 已经更新到了 0.2.16，今天我也同步讲 <a href="https://github.com/lalawue/MoocHelper">MoocHelper</a> 更新上去了，主要的改动有</p>
+<p>昨天说到 <a href="https://github.com/Tencent/LuaHelper">LuaHelper</a> 已经更新到了 0.2.16，今天我也同步将 <a href="https://github.com/lalawue/MoocHelper">MoocHelper</a> 更新上去了，主要的改动有</p>
 <ul>
 <li>当方法里local与self同名时，self指向正确的table</li>
 </ul>
@@ -35,9 +35,9 @@ end
 function foo:bar()
 end
 </code></pre>
-<p>之前当 hover 到 test() 函数中的 self:bar() 时，self 其实指向的是函数内的 local variable foo，而实际 Lua 语义是指向运行当前 function 的 table，毕竟是当前 function 第一个参数传递进来的。</p>
-<p>moocscript 的处理还特别一点，因为其 class/struct 是通过拼凑 AssignStat 来实现的，这种 <code>:</code> 函数在 class/struct 里面其实是实例函数，跟 Lua 不一样，没有 table name 前缀，得特别处理一下。</p>
-<p>这里的特别处理是，一直寻找 parent scope 到最近的 class scope，如果存在，拿到外层 local variable map 的变量定义，将变量定义的 Loc 传递给 self varStruct 描述，后面这个 Loc 的逻辑是跟 Lua 一样的。</p>
+<p>之前当 hover 到 test() 函数中的 self:bar() 时，self 其实指向的是函数内的 local variable foo，而实际 Lua 语义是指向运行当前 function 的 table，毕竟 self 是作为当前 function 第一个参数传递进来的。</p>
+<p>moocscript 的处理还特别一点，因为其 class/struct 是通过拼凑 AssignStat 来实现的，这种 <code>:</code> 函数在 class/struct 里面其实是实例函数，语法跟 Lua 不一样，没有 table name 前缀，得特别处理一下。</p>
+<p>这里的特别处理是，需要在当前 AST 的位置，一直寻找 parent scope 到最近的 class scope，如果存在，拿到外层 local variable map 的同名变量定义（如上面例子的 <code>foo</code>），将变量定义的 Loc 作为 self 的 varStruct 描述，后面这个 Loc 的逻辑跟 Lua 侧是一样的。</p>
 <p>大概这样吧。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-06.html#p2">Permalink</a></div>
 <p><a id="p1"></a></p>
