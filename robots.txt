@@ -5,10 +5,11 @@
 
 # exclude some access-controlled areas
 
+Sitemap: https://suchang.net/sitemap.xml
+
 User-agent: *
 Disallow: /code
 Disallow: /doc
 Disallow: /images
 Disallow: /styles
 Disallow: /none
-Sitemap: https://suchang.net/sitemap.xml
