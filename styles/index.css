@@ -1,4 +1,6 @@
-/* By sucha in Apirl, 2006 */
+/*  By sucha in Apirl, 2006
+    last updated: 2022-09-01
+ */
 
 /* initial section */
 
@@ -9,6 +11,7 @@
 
 html {
     width: 100%;
+    height: 100%;
     background-color: #9ec5c9;
 }
 
@@ -17,7 +20,7 @@ html {
 
 body {
     width: 100%;
-    font: 14px/1.5 "Luxi Serif", Verdana, helvetica, sans-serif;    
+    font: 14px/1.5 "Luxi Serif", Verdana, helvetica, sans-serif;
 }
 
 #body {
@@ -28,40 +31,49 @@ body {
 /* sidebar section*/
 
 #sidebar {
-    width: 15%;
-    float: right;
-    position: absolute;
-    margin-left: 74%;
-    margin-top: 12%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 #sidebar ul {
+    display: flex;
     list-style-type: none;
+    align-items: center;
 }
-
-#sidebar p.header {
-    color: #526568;
-    margin-top: 1.5em;
-    margin-bottom: .7em;
-    font-size: 105%;
-    font-weight: bold;
-}
-
 
 /* text section */
 
-#content {
-    width: 45%;
-    float: left;
-    position: absolute;
-    margin-top: 9%;
-    margin-bottom: 0.5em;
-    margin-left: 21%;
-    padding-left: 2em;
-    padding-right: 2em;
-    padding-bottom: 0.5em;
-    border: 1px solid gray;
-    background-color: #efefef;
+@media screen and (max-width: 1100px) {
+    #content {
+        width: 70%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30%;
+        margin-bottom: 0.5em;
+        padding-left: 2em;
+        padding-right: 2em;
+        padding-bottom: 0.5em;
+        border: 1px solid gray;
+        background-color: #efefef;
+    }
+}
+
+@media screen and (min-width: 1100px) {
+    #content {
+        width: 70%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 12%;
+        margin-bottom: 0.5em;
+        padding-left: 2em;
+        padding-right: 2em;
+        padding-bottom: 0.5em;
+        border: 1px solid gray;
+        background-color: #efefef;
+    }
 }
 
 #text p {
@@ -78,13 +90,8 @@ body {
     font-weight: bold;
 }
 
-#text-link {
-    margin-top: 1.7em;
-    text-align: right;
-}
-
 #foot {
-    color: silver;
+    color: #526568;
     margin-top: 2.3em;
     font-family: Verdana, Arial, sans-serif;
     font-size: 85%;
@@ -126,7 +133,7 @@ h1 {
 
 /* link section */
 
-a { 
+a {
     color: #0061c4;
     font-weight: bold;
     text-decoration: none;

@@ -24,8 +24,4 @@ document.getElementById('sidebar').innerHTML = `
   <input id="searchtext" type="text" />
   <input type="text" class="form-control" style="display:none" />
   <a style="text-decoration: none;" href="javascript:"onclick="onPageSearch();">🔍</a>
-</form>
-<p class="header">Contact</p>
-<ul>
-  <li><a href="mailto:suchaaa@gmail.com">Email Me</a></li>
-</ul>`
+</form>`

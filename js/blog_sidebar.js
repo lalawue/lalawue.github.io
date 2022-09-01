@@ -15,10 +15,6 @@ var onPageSearch = function() {
       <input type="text" class="form-control" style="display:none" />
       <a style="text-decoration: none;" href="javascript:"onclick="onPageSearch();">🔍</a>
    </form>
-   <p class="header">Contact</p>
-   <ul>
-      <li><a href="mailto:suchaaa@gmail.com">Mail me</a></li>
-   </ul>
    <p class="header">Categories</p>
    <ul>
      <li><a href="CategoryLinux.html">GNU/Linux</a></li>
