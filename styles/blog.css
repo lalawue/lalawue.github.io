@@ -1,4 +1,7 @@
-/* created by Sucha in Mar 2007 */
+/*  created by Sucha in Mar 2007
+    last updated: 2022-09-01
+ */
+
 
 /* initial section */
 
@@ -34,13 +37,27 @@ p {
 
 /* sidebar section */
 
-#sidebar {
-    width: 15%;
-    float: left;
-    position: absolute;
-    margin-left: 81.5%;
-    margin-top: 6%;
-    text-align: left;
+@media screen and (max-width: 1100px) {
+    #sidebar {
+        width: 15%;
+        float: left;
+        position: absolute;
+        margin-left: 81.5%;
+        margin-top: 6%;
+        text-align: left;
+    }
+}
+
+@media screen and (min-width: 1100px) {
+    #sidebar {
+        width: 15%;
+        position: absolute;
+        left: 50%;
+        margin-left: 350px;
+        max-width: 200px;
+        margin-top: 6%;
+        text-align: left;
+    }
 }
 
 #sidebar p.header {
@@ -76,19 +93,39 @@ p {
 
 /* text section */
 
-#text {
-    width: 70%;
-    float: left;
-    position: absolute;
-    overflow: hidden;
-    margin-top: .5em;
-    margin-bottom: 0;
-    margin-left: 2.7%;
-    padding-left: 2.5em;
-    padding-right: 2em;
-    padding-bottom: .5em;
-    border: 1px solid gray;
-    background-color: #efefef;
+@media screen and (max-width: 1100px) {
+    #text {
+        width: 70%;
+        float: left;
+        position: absolute;
+        overflow: hidden;
+        margin-top: .5em;
+        margin-bottom: 0;
+        margin-left: 2.7%;
+        padding-left: 2.5em;
+        padding-right: 2em;
+        padding-bottom: .5em;
+        border: 1px solid gray;
+        background-color: #efefef;
+    }
+}
+
+@media screen and (min-width: 1100px) {
+    #text {
+        width: 70%;
+        position: absolute;
+        left: 50%;
+        margin-left: -430px;
+        max-width: 700px;
+        overflow: hidden;
+        margin-top: .5em;
+        margin-bottom: 0;
+        padding-left: 2.5em;
+        padding-right: 2em;
+        padding-bottom: .5em;
+        border: 1px solid gray;
+        background-color: #efefef;
+    }
 }
 
 #foot {
@@ -102,7 +139,7 @@ p {
 }
 
 pre {
-    margin-top: 1em; 
+    margin-top: 1em;
     margin-bottom: 1em;
     margin-left: 3%;
     margin-right: 3%;
@@ -118,7 +155,7 @@ pre code {
 }
 
 /* pre.exmaple */
-pre[ lang = example ] {
+pre[ lang=example] {
     color: black;
     background-color: #fcfff3;
     border: 1px solid #5a5a5a;
@@ -169,7 +206,7 @@ div.date {
     margin-top: 5.6em;
     margin-bottom: 1.5em;
     font-size: .9em;
-    font-weight: bold;    
+    font-weight: bold;
 }
 
 /* origin h4 */
@@ -193,7 +230,7 @@ strong {
 
 /* links and img*/
 
-a { 
+a {
     color: #0061c4;
     text-decoration: none;
 }
@@ -242,23 +279,24 @@ ul {
 }
 
 ol {
-    margin-left: 2em;;
+    margin-left: 2em;
+    ;
 }
 
-li {  
-    margin-bottom: 3px; 
+li {
+    margin-bottom: 3px;
 }
 
-dl.contents { 
+dl.contents {
     margin-top: 0;
 }
 
-dt.contents { 
+dt.contents {
     margin-bottom: 0;
 }
 
 dt {
-    font-weight: bold; 
+    font-weight: bold;
     padding: 3px;
 }
 
@@ -267,7 +305,7 @@ dd {
 }
 
 span {
-    margin-top: 0; 
+    margin-top: 0;
     color: silver;
 }
 
@@ -328,7 +366,9 @@ thead {
     border: 1px solid gray;
 }
 
-th, tr, td {
+th,
+tr,
+td {
     border: 1px solid gray;
     padding: 2px;
     padding-left: 5px;
@@ -336,28 +376,32 @@ th, tr, td {
 
 
 
-/* rss_feeds */ 
+/* rss_feeds */
 
-a#rss_feeds { 
+a#rss_feeds {
     color: #ff3f3f;
     background-color: transparent;
     text-decoration: none;
 }
 
-a#rss_feeds:hover { 
+a#rss_feeds:hover {
     color: white;
     font-weight: bold;
     background-color: #ff3f3f;
     text-decoration: none;
 }
 
-hr { display: none; } /* Footnote */
+hr {
+    display: none;
+}
+
+/* Footnote */
 
 
 /* Source tag , more to see "emacs-wiki-srctag.el" */
 
 /* pre.source */
-pre[ lang = source ] {
+pre[ lang=source] {
     color: black;
     background-color: #f4fffe;
     border: 1px solid #5a5a5a;
@@ -367,19 +411,52 @@ pre[ lang = source ] {
     text-indent: 0px;
 }
 
-pre[ lang = source ] code {
+pre[ lang=source] code {
     font-family: "Courier New", monospace;
-    text-indent: 0px;    
+    text-indent: 0px;
 }
 
-.builtin           { color: #7580d5; }
-.comment           { color: #a02200; }
-.doc               { color: #a02200; }
-.constant          { color: #894591; }
-.function-name     { color: #1f5087; }
-.keyword           { color: #159190; font-weight: bold;}
-.preprocessor      { color: #489bdc; }
-.string            { color: #9a4b43; }
-.type              { color: #158715; }
-.variable-name     { color: #967f00; }
-.comment-delimiter { color: #a02200; }
+.builtin {
+    color: #7580d5;
+}
+
+.comment {
+    color: #a02200;
+}
+
+.doc {
+    color: #a02200;
+}
+
+.constant {
+    color: #894591;
+}
+
+.function-name {
+    color: #1f5087;
+}
+
+.keyword {
+    color: #159190;
+    font-weight: bold;
+}
+
+.preprocessor {
+    color: #489bdc;
+}
+
+.string {
+    color: #9a4b43;
+}
+
+.type {
+    color: #158715;
+}
+
+.variable-name {
+    color: #967f00;
+}
+
+.comment-delimiter {
+    color: #a02200;
+}
