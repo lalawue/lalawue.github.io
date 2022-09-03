@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for March, 2021</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -60,7 +61,7 @@ round 10: 19ms, avg: 19ms
 </code></pre>
 <p>当然现实中使用也是有收益的，负责的一个不具名的项目，因为要做上述类似的逻辑，之前单独使用 dictionary 结构做插入、删除，最后 sorted 函数在 time profile 排前面，使用了 sorted dictionary 后，耗时在 profile 中是完全看不到了。</p>
 <p>不过就我负责的那个项目来说，因为还有其他的问题如频繁 UI 刷新以及 layout 的制约，肉眼可见的观感的改进不明显，但从 time profile 的结果来看，是有改进的，算达到了预期吧。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p4">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p4">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p3"></a></p>
 <div class="date">21年3月24日 周三 22:22</div>
 <h2>PageEventBus 大改动</h2>
@@ -69,7 +70,7 @@ round 10: 19ms, avg: 19ms
 <p>这样的话，估计如果有应用到其他的一些系统类，使用 responder chain 来拿到 event bus 这种想法，也是行不通的。</p>
 <p>于是，做成了一个中心化的架构，默认使用带类型的 event bus 做 key，将新建立的 bus 缓存到一个中心节点中，其他同样类型的 event bus，通过查询中心节点，就能拿到 bus，然后 bus retain count +1，最后当所有持有 bus 的实例销毁后，这个类型的 bus 也会被自动销毁掉的。</p>
 <p>这样的修改，对于单页面是没问题的，但是对于使用同样的事件类型，但具有多个实例，在不同的 UI 层次上，需要区分 bus 的情况，就需要特别处理一下了。这个时候，需要修改 agent 中默认的 event bus name，来建立多个不同的 event bus 实例。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p3">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p3">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p2"></a></p>
 <div class="date">21年3月16日 周二 21:04</div>
 <h2>PageEventBus 实践心得</h2>
@@ -81,7 +82,7 @@ round 10: 19ms, avg: 19ms
 <p>所以这算个小遗憾吧，我现在的做法是，做一个可选闭包，在 viewDidLoad 里面执行，确保有了 viewDiDLoad 后，才初始化 page model，这样就好很多了，估计后面会改到 BlockViewController 里面做例子。</p>
 <p>另外，还有些遗憾的点是，不复杂的业务，实际上根本用不到这个 event bus；还有就是，如果需要在不同的业务 controller 之间做数据传递，当前的 PageEventBus 又不可以拓展，比如没有相关路由的接口，可以连接两个不同的 event bus。</p>
 <p>连接两个不同的 event bus，有时候还是很必要的，当然这个完全可以交给系统的 notification 来完成，但是接口感觉又麻烦了一点，后续感觉可以在这点上继续推进的，虽然现在的工程不一定能够用上，缺少实践心得还是感觉稍微有点不爽。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p2">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p1"></a></p>
 <div class="date">21年3月15日 周一 22:27</div>
 <h2>PinLayout 及 StackViewLayout</h2>
@@ -98,7 +99,7 @@ round 10: 19ms, avg: 19ms
 <p>StackViewLayout 相比 UIStackView 可以做到一些特别的方案，比如因为有 grow 和 shrink，可以玩剩余比例。而且在搭建的时候，因为 chainable 很方便，就都在一个 lazy 属性中全部描述完了，我说的是描述多层嵌套的 StackViewLayout，看起来是很赏心悦目的。</p>
 <p>只是具体 Layout 真的得多动一下脑筋，毕竟不是 AutoLayout 是多项式计算的，这里是固定流程的，特别是一些限定了宽度高度的场合，我可是将 subview 高度自动计算完后，设置给 StackViewLayout 的，StackViewLayout 再拉伸其他的 subview。</p>
 <p>大概就是这样了吧，还可以用下的，不晓得后面有了 SwiftUI 后会怎么样了，SwiftUI 毕竟还没有用过。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-03.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">21年3月15日 周一 20:46</div>
 <h2>西行漫记读后感</h2>
@@ -115,7 +116,7 @@ round 10: 19ms, avg: 19ms
 <p>为何会拥护共产党呢，是因为土地革命，革了大地主的命，将地分给广大农民，少征税，因此各地都收到广大群众的欢迎，这个国民党是做不到的。这也是红军为何是初期很穷的原因，也是为什么如燎原之火的原因，真的因为各地都是军阀，广大农民活不下去了。</p>
 <p>对比一下，李得胜在回答斯诺对印度的看法时，说”印度不经过土地革命，是永远不会实现独立的“。当然印度在 1947 年就独立了，不过应该是类似国民党上台一样吧，代表的是大地主、大资产阶级的利益，现在种性、各地利益分割就可以看到，显然生产力远未得到解放。</p>
 <p>估计是年龄大了吧，现在都喜欢看这样的书了。</p>
-<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2021-03.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2021-03.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -124,8 +125,8 @@ round 10: 19ms, avg: 19ms
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

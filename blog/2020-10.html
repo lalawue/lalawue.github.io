@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for October, 2020</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -29,7 +30,7 @@
 <p>即便如此，短暂的就职，也给杭州留下了疏通后的西湖，淤泥堆成了白堤。然后是一路向南的贬职，最远到了海南岛。当时海南岛都还是原住民，以当时的条件，过了海就当成是半个死囚了，当时那边连书都没有，这是他最痛苦的地方。</p>
 <p>书籍里面对于苏东坡诗词画的介绍，结合当时环境、心境的分析太细腻了，我表达不出来，对比在其时代之前相同的主题，认为其自创了一派，在表达，艺术以及美的结合上，大大拓展了延伸的范围。</p>
 <p>最悲哀的是，作者认为诗、词的顶峰在千年以前，自从苏东坡之后，就没有诗、词的达人了，至少没有那种高度的。</p>
-<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2020-10.html#p2">Permalink</a></div>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2020-10.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p1"></a></p>
 <div class="date">20年10月21日 周三 20:51</div>
 <h2>ffi_gccload 在 Lua 中动态加载 C Source</h2>
@@ -72,13 +73,13 @@ result  7
 <p>上面生成的动态编译配置，其实可以加入 include、libary 的 path 以及 lib name，已经越来越像一个 build 系统了，其实就是类似的。</p>
 <p>有了上面这套，虽然相比 TCC 速度慢一点（毕竟 TCC 是 one pass 就出成果的），但是胜在兼容性号，修改一下后，估计 Windows 下面也是能跑的。</p>
 <p>往后可以在服务端拿到 C 代码，捣鼓以下就能用到客户端上面了，或者一些少量使用 C 操作更方面的逻辑，结合放在 Lua 中作为源代码发布出去，使用的时候，先编译加载动态库，也是一个方案。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-10.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-10.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">20年10月11日 周二 02:12</div>
 <h2>DNS service 重构</h2>
 <p>将 rpc_framework 中 <a href="https://github.com/lalawue/rpc_framework/tree/master/apps/service_dns">service_dns</a> 网络层的控制从 C 层移到了 Lua 层，C 层只负责 UDP 包的数据拼接、解包，将代码统一到了 <a href="https://github.com/lalawue/m_dnsutils">m_dnsutils</a> 里。</p>
 <p>在减少了大量 C 跟 Lua 的交互后，两者算是各自做了自己擅长的方面，自测后的效果也不错。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-10.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-10.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -87,8 +88,8 @@ result  7
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

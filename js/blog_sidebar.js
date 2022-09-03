@@ -2,7 +2,7 @@ var onPageSearch = function() {
          var value = document.getElementById("searchtext").value
          window.open('https://cn.bing.com/search?q=site:suchang.net+'+value,'_blank');
       }
-      document.getElementById("sidebar").innerHTML = `<p class="header">Here</p>
+      document.getElementById("sidebar").innerHTML = `<p class="header">Navi</p>
    <ul>
      <li><a href="../index.html">Home</a></li>
      <li><a href="index.html">Front</a></li>

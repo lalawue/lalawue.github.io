@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for November, 2021</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -40,7 +41,7 @@ setTimeout(() =&gt; {
 }, 1);
 </code></pre>
 <p>用了 setTimeout 来激活 resize，所以只需要设置一个 resize 监听就好，上面 js 意思是如果可见宽度 &lt; 1024，其实我是将其当成 phone 显示的，就不需要滚动条了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p4">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p4">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p3"></a></p>
 <div class="date">21年11月25日 周四 22:51</div>
 <h2>基于 luarocks/luastatic 的二进制打包工具</h2>
@@ -67,7 +68,7 @@ setTimeout(() =&gt; {
 <p>lua 语法更简单，类型都可以少关心，但并不意味说这个语言抽象能力不够，或者扩展不行，如果 metatable 抽象得好，可能性太多，OO 小菜一碟，比如我之前基于 lua 构建的 mooncake；所以，也没有泛型渴望症；但是因为缺乏类型系统，那么测试系统得自己保证才放心。话说，也是因为语言自由，lua 很多库的源码，相对 go 源码来说，可太难懂了。</p>
 <p>最近还看了 WASM，感觉也很香，go 自从 1.11 后，支持输出 WASM，但 WASM 这个技术还比较早期，W3C 上面到了提案 2 的阶段，还没有多线程这样的标准。从上面效率对比，跟 go 是一个级别。</p>
 <p>这次 post 先到这里吧。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p3">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p3">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p2"></a></p>
 <div class="date">21年11月17日 周三 21:52</div>
 <h2>诛仙读后感</h2>
@@ -79,7 +80,7 @@ setTimeout(() =&gt; {
 <p>但是也有遗憾的支线，比较不能理解的是陆雪琪，一直走不到明线，但是暗线又这么强烈，难受。</p>
 <p>前面写得太好了，觉得跟兽人大战之后，跟魔教对决的这一段，马马虎虎，没啥感觉。</p>
 <p>总体可以打 7.5 ~ 8 分了。</p>
-<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2021-11.html#p2">Permalink</a></div>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2021-11.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p1"></a></p>
 <div class="date">21年11月11日 周四 00:33</div>
 <h2>Mithril 使用心得（1）</h2>
@@ -123,7 +124,7 @@ html`&lt;h1 class=&quot;${title_str}&quot;&gt;My first app&lt;/h1&gt;`
 <p>因为追求短平快，单个 js 文件就完成了 wiki 或者 note 便签这样的功能，所以 Mithril 结构化方面我是没有发言权了，教程上面
 呼吁结构化组件，分解功能模块我是一点都没用上。</p>
 <p>先这样吧。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-11.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">21年11月07日 周日 11:46</div>
 <h2>stunnel 的 SNI 配置</h2>
@@ -157,7 +158,7 @@ key = /path/to/site2.key
 <p>之后设置默认协议，比如叫做 https，监听 443 端口，并设置连接地址，使用默认的 cert 和 key 做验证，这里其实是可以跟下面的 site1 或者 site2 用同样的 cert 和 key 配置。</p>
 <p>之后分别设置不同网站对应的处理地址，比如 site1，连接的是 port1，注意 sni 字段配置，第一个是协议，就是上面描述过的 https，而不是 HTTPS，之后是需要处理的 domain，这里只处理二级域名，没有通配字，最后加入网站申请到的 cert 和 key。</p>
 <p>site2 的 sni 用了通配字，所有 site2.domain 的二级、三级域名都可通过验证处理。</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2021-11.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2021-11.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -166,8 +167,8 @@ key = /path/to/site2.key
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

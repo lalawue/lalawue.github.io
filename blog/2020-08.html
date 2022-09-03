@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for August, 2020</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -76,7 +77,7 @@ void free(void *ptr);
 <p>19 号解决了上面遇到的 2 个问题，原因在于 ffi.cdef 使用的 key 宽度是 float，但是 LuaJIT number 的宽度是 double 导致的，我修改 ffi.cdef node 里面的 key 为 double 类型，问题不再出现。</p>
 <p>不过我也有疑问，为何 AVL 这边同样的实现，没有暴露出来问题呢。</p>
 <p>反正现在修改为多轮循环 test 验证了，验证了几千遍，每次是 1000x1000 次的 push、pop，都是正常的了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-08.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-08.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">20年8月02日 周日 20:50</div>
 <h2>做了一个 web 框架：cincau</h2>
@@ -94,7 +95,7 @@ void free(void *ptr);
 <img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9y00d1j20h00m0aam.jpg" width=360>
 <img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9xlayej20h00m00t2.jpg" width=360>
 <img src="https://tva1.sinaimg.cn/mw690/6f6cc1c0gy1gh9e9xzu40j20h00m0t93.jpg" width=360>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-08.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-08.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -103,8 +104,8 @@ void free(void *ptr);
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

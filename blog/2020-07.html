@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for July, 2020</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -45,7 +46,7 @@ body data 都太复杂了。</p>
 创建 socket，为何不是更底层来管理 socket fd，其实参数交给 curl 来设置都可以，底层只是保证非阻塞就可以了。而 curl 更多的是面向 HTTP 这一层的中间件，raw data &lt;-&gt; HTTP structure data 的转换。</p>
 <p>但不管怎么说，curl 这套东西还是太香了，毕竟每个发行版都有，每个发行版安装 dev 或者 command line tool 之后，有了头文件，就可以立马基于 libcurl 这个库进行发开发了。</p>
 <p>因为自测 event-driven 没成功，相关信息也比较少，最后是用了上面 multi 接口包裹 easy 接口的非阻塞式设计，用了 <a href="https://github.com/Lua-cURL/Lua-cURLv3.git">Lua-cURLv3</a> 这个库，就请求而言，单独使用了 select。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-07.html#p5">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-07.html#p5">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p4"></a></p>
 <div class="date">20年7月25日 周四 11:22</div>
 <h2>HTML 的 Content-Type: multipart/form-data</h2>
@@ -78,7 +79,7 @@ Content-Type: application/pdf
 <p>代码部分就不贴了，感觉有点挫，考虑了多文件分割，以及需要传递给用户文件名、类型等信息，最后是使用了阶段状态的描述，毕竟后端收到的数据是不定长的输入。</p>
 <p>--</p>
 <p>最后还是整了一下代码，加入了 builder，在 <a href="https://github.com/lalawue/multipart-formdata-lib">multipart-formdata-lib</a>.</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-07.html#p4">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-07.html#p4">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p3"></a></p>
 <div class="date">20年7月16日 周四 12:04</div>
 <h2>LuaRocks with LuaJIT</h2>
@@ -87,7 +88,7 @@ Content-Type: application/pdf
 <p>torch 的 luajit 其实还有修改 2 个地方，一个是 string 的 hash 方案，一个加入了交互用的 readline。交互部分明显有改善，而 hash 部分不晓得为什么要这么改，应该也还好吧，反正为了 pull request 这里我是不敢动的。hash 用的是 <a href="https://github.com/amadvance/tommyds">tommy 的方案</a>。</p>
 <p>在 Linux 中编译了一把，顺利通过，后面再看需要安装吧。在自己的 MacBook Pro 上安装好后，install 了 busted 和 moonscript。不得不说，其实是为了试一下 moonscript，硬是找到了 LuaRocks 的 LuaJIT based 方案。</p>
 <p>先用一阵子再说吧。</p>
-<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p3">Permalink</a></div>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p3">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p2"></a></p>
 <div class="date">20年7月15日 周三 22:38</div>
 <h2>MacOS 下使用 BitBar 在状态栏自定义信息</h2>
@@ -113,7 +114,7 @@ echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
 <li>Restart Bitbar 是第二项，bash 定义使用到的脚本或者程序，‘$0' 就是 Bitbar 自己了，参数是 &quot;restart&quot;，其实是关闭然后再重启这个 refresh.sh，简简单单的 bash shell 语法了</li>
 </ul>
 <p>可惜的是我虽然弄懂了一点点如何编写这个 Bitbar 的 plugin 命令，但是通过 Bitbar 控制的程序最后没有符合我的预期，:-(</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2020-07.html#p2">Permalink</a></div>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2020-07.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p1"></a></p>
 <div class="date">20年7月14日 周二 11:34</div>
 <h2>GitHub 定义 Repo 语言</h2>
@@ -122,7 +123,7 @@ echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
 <pre><code class="language-source">*.swift linguist-language=Swift
 </code></pre>
 <p>自测了一把，网站只会读取 default branch 里面的 .gitattributes，切换其他 branch 没有用。</p>
-<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">20年7月9日 周四 15:44</div>
 <h2>OpenVPN 配置记录</h2>
@@ -136,7 +137,7 @@ echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
 <li>最后<a href="http://blog.joylau.cn/2020/05/28/OpenVPN-Config/">客户端软件配置</a>，大体上只是配置服务端 ip 地址，密钥就可以了</li>
 </ul>
 <p>客户端我在 Mac 下用的是 TunnelBlick，速度其实一般，还没长时间使用，后续先观察一阵。</p>
-<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2020-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -145,8 +146,8 @@ echo &quot;Restart Bitbar| bash='$0' param1=restart terminal=false&quot;;
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

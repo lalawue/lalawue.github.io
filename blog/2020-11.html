@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for November, 2020</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -58,7 +59,7 @@ var bus = new Bus(&quot;red&quot;)
 <p>总的来说，JS 是一门比较完善，还在不断渐进式发展，且考虑兼容性的编程语言，慢慢的将变成桌面应用编程语言，部分后端编程语言，可不再是脚本语言了。</p>
 <p>相比 Go，JS 是动态类型，也不是静态编译的；相比 Lua，语言成熟度，库的丰富程度，应用范围都好好很多，没有 Lua 目的是宿主语言的累赘，虽然 Lua 还有速度上的优势。</p>
 <p>而且，学会 JS 的好处可是，前端通吃，后端独立。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p2">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p1"></a></p>
 <div class="date">20年11月5日 周四 09:49</div>
 <h2>go_bitcask</h2>
@@ -110,7 +111,7 @@ func bytesToRecordInfo(b []byte) *recordInfo {
 <p>也许完全运行起来以后，Go 的速度才会又继续上去吧，我 pprof 的结果，是 system call 占用时间最多，其中 Set 是占用很多的，其次是 GC，但是 GC 不常用，这个倒没什么关系。</p>
 <p>Set 占用多，感觉说不过去呀，因为就检测如果有重复 key，做了 remove，然后再 set 新的 key/value，两次 system call write 函数。</p>
 <p>也许 Go 版本真的应该做完整一些，将写的操作单独一个 goroutine，并且做 LSM 操作，将读写都 encode/decode 起来，再做一层抽象才好吧，但是目前这个算是简单版本，不打算再做这一层了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">20年11月4日 周三 10:32</div>
 <h2>Go(1)</h2>
@@ -213,7 +214,7 @@ fmt.Println(&quot;dog is&quot;, dog.Name())
 <p>最后说一下内存占用，C/C++ &lt;- Lua &lt;- Go &lt;- Java，Lua 不是正统的非宿主语言，这里有加入 VM 对比的考虑，一般的评测，都是认为 Go 是要比 Java 快的，再说 JVM 基本占用内存就很大了，如果不是大型程序，用 JVM 的成本会比较高。</p>
 <p>但是 Java 多年来的基础建设都很好，不管是 JVM 还是 IDE，我用过最好的 IDE 就是 Java 的，太省心了。但是另一方面，Java 的交付、部署应该是没有 Go 的简单，至少也是有 JVM 版本的，而 Go 真的就是统一交付了。</p>
 <p>Go 席卷了互联网，Docker 及云的基础建设就是明证，Java 瓜分了剩下的很大一块，接着是 Python 的简易运维，C++ 是核心中的核心，不晓得这个分布是不是当前占有率的反映。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-11.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -222,8 +223,8 @@ fmt.Println(&quot;dog is&quot;, dog.Name())
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

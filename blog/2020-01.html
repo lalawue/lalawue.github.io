@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for January, 2020</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -34,13 +35,13 @@
 <p>这里可以确保在系统的任何地方，调用这个 C 生成的程序，拉起的 Cygwin 环境都是正常的，然后跑脚本里面的 Cygwin 下的 git 操作，就很顺理成章了。</p>
 <p>贴一下仓库地址吧：<a href="https://github.com/nukata/cyg-git">https://github.com/nukata/cyg-git</a></p>
 <p>话说这种想法感觉跟容器化的想法类似，将依赖封装到一起；跟编程语言里面的闭包思想也类似，将 upvalue 带入到闭包里面。只是头大后碰到了这样的解决办法，佩服之余，也思考学习一下。</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2020-01.html#p3">Permalink</a></div>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2020-01.html#p3">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p2"></a></p>
 <div class="date">20年1月24日 周五 12:53</div>
 <h2>庆祝在 Windows 下更新本站</h2>
 <p>受益于<a href="../blog/2020-01.html#p0">MarkdownProjectCompositor 支持 Win 7</a>，有了 generator、compositor 的准备，包括 Win 下 Git 的支持，加上我的编辑器是一个浏览器端单文件编辑器，现在可以比较顺利地在 Win 下写 Markdown，并更新博客了。</p>
 <p>老早之前，用 Emacs 做 Markdown 编辑器 + 生成器的时候，也是能够支持 Win 的，当时是用 FTP 上传到网站，改换成 cmark-gfm 后，终于又实现了一次。</p>
-<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2020-01.html#p2">Permalink</a></div>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2020-01.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p1"></a></p>
 <div class="date">20年1月24日 周五 12:22</div>
 <h2>m_net 支持 pull-style API</h2>
@@ -65,7 +66,7 @@ Transfer rate:          945.55 [Kbytes/sec] received
 
 </code></pre>
 <p>感觉还可以。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">20年1月24日 周五 01:24</div>
 <h2>MarkdownProjectCompositor 支持 Win 7</h2>
@@ -84,7 +85,7 @@ make
 <p>最后我还在 compositor 里面加入了去掉 CRLF 以及 CR 的 dos2unix 开关，把原来 Markdown 里面的多余 CR 都去掉了，毕竟 CR 没啥用，会被 HTML 的 tag 忽略的。这段是确保 MacOS 下生成的 HTML 跟 Windows 下生成的一模一样。</p>
 <p>再搞了一个 publish_html.bat 脚本，配置好 config.lua 以及目录后，一键生成，就可以看着赛扬 4核慢吞吞地做转换了。</p>
 <p>最后把这半天的成果，windows 下的 cmark-gfm、luajit、lfs_ffi.lua，还有一个一键生成脚本，打了一个 zip 包，作为一个 release 发出去了，毕竟不是专业 windows 下的开发，也许以后再换一个 windows 环境，可真的折腾不来了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-01.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -93,8 +94,8 @@ make
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

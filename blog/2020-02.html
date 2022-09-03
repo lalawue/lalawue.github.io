@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for February, 2020</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -57,7 +58,7 @@
 <p>话说为了实现这样的控制，存储结构用了 bitmap（还是觉得有些浪费），然后解析需要两层，第一层解析 blank、*、/、DIGIT 做为 TOKEN（其他可以认为是结束符，或者非法），然后比如 */3 这样的，需要保存上一个 TOKEN，用栈来实现，因为只有一层，其实用一个单独的变量比如 LAST_TOKEN 也是可以的；然后遇到空格、逗号、连字符后面的下一个数字 TOKEN，认为是一次识别结束，将位置相关的数字，设置到 bitmap 里面，话说重复的话也不管它了。</p>
 <p>最后提一下，mon 本身就有说明不想用 awkward 的 DSL，然后参数都从命令行传递，而且为了保证稳定性，只管一个进程。相比之下，mon_sched 是都退回去了，用了 JSON 做为配置，然后管多个进程。</p>
 <p>经验有限，更看中功能吧，也许是吃的苦还不够多。。。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-02.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2020-02.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -66,8 +67,8 @@
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for July, 2021</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -37,7 +38,7 @@
 <p>太多细节细节，不现场调试根本说不清楚，也不晓得会不会在后面的系统更新中变化，这里大体说了思路，以及需要注意的地方。</p>
 <p>当然上面也提到过最后的效果，其实蛮不错的，</p>
 <p>说一下前提，如果 UINavigationBar 设置了 translant 且真的用上了半透的话，效果应该是不行的，因为系统真实的 UINavigationBar 动画在底下会动，得实际遮住才行，因此这套东西，我是觉得只能用在非 translant 的场景下，当然，如果只是设置了 translant，但实际上又带了 opaque 的背景，仅仅是为了带一丢丢高斯模糊背景的话，是没问题的。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">21年7月11日 周日 12:08</div>
 <h2>PinStackView</h2>
@@ -85,7 +86,7 @@
 <li>最后看 width、height 是否超过了外部 padding 后的宽、高</li>
 </ul>
 <p>将 StackViewLayout 换成 PinStackView 后，循环 layout 的场景不再出现，layout 也挺正常的，但是公司人员变动太大，貌似这个需求测完了，但上线遥遥无期，再说吧。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2021-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
@@ -94,8 +95,8 @@
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>

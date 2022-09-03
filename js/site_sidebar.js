@@ -3,7 +3,7 @@ var onPageSearch = function() {
   window.open('https://cn.bing.com/search?q=site:suchang.net+'+value,'_blank');
 }
 document.getElementById('sidebar').innerHTML = `
-<p class="header">Here</p>
+<p class="header">Navi</p>
 <ul>
   <li><a href="../index.html">Home</a></li>
   <li><a href="index.html">Front</a></li>
@@ -13,15 +13,20 @@ document.getElementById('sidebar').innerHTML = `
 <p class="header">Categories</p>
 <ul>
   <li><a href="../blog/index.html">Blog</a></li>
-  <li><a href="../live/index.html">Life</a></li>
-  <li><a href="../cs/index.html">Lab</a></li>
-  <li><a href="../slack/index.html">Slackware</a></li>
+  <li><a href="../live/index.html">Travel</a></li>
+  <li><a href="../cs/index.html">Projects</a></li>
+  <li><a href="../slack/index.html">Linux</a></li>
   <li><a href="../muse/index.html">Muse</a></li>
   <li><a href="../scratch/index.html">Scratch</a></li>
 </ul>
-<p class="header">Search</p><!-- Bing Search -->
+<p class="header">Search</p>
 <form>
   <input id="searchtext" type="text" />
   <input type="text" class="form-control" style="display:none" />
   <a style="text-decoration: none;" href="javascript:"onclick="onPageSearch();">🔍</a>
-</form>`
+</form>
+<p class="header">Discussions</p>
+<ul>
+  <li><a href="https://github.com/lalawue/homepage/discussions/categories/site" target="_blank">start discussion ➡</a></li>
+</ul>
+`

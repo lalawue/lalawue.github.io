@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Sucha's Blog - Archive for March, 2006</title>
     <meta name="generator" content="MarkdownProjectCompositor.lua" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="Sucha" />
-    <meta name="keywords" content="suchang, programming, GNU, Linux, Emacs, Lua" />
+    <meta name="keywords" content="suchang, programming, Linux, Lua" />
     <meta name="description" content="Sucha's blog" />
     <link rev="made" href="mailto:suchaaa@gmail.com" />
     <link rel="shortcut icon" href="../images/ico.png" />
@@ -25,7 +26,7 @@
 <p>但是谁都没想到，那个店竟然关门了，还贴着招租的字条……</p>
 <p>然后这件事就一直压着，直到前几天，跟同学到科大那边买书，忽然发现竟然有文曲星专卖店，进去一问，不帮修机，但是给了个维修部的号码我，还给了个地址，在什么“中原大酒店”七楼。</p>
 <p>中原大酒店离工大很近，但是里面的情况就不清楚了，好不容易才找到那个侧门，然后乘着摇摇晃晃的电梯上到了七楼，什么七楼啊，不就是楼顶吗，然后那个维修部，晕死，是个临时搭建的临时工棚。服务员态度还好，维修进度也很快，换个屏幕二十多分钟就搞定了，不过 60RMB 怎么说还是觉得有点冤。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p8">Permalink</a></div>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p8">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-25T17:24:33+0800 -->
 <p><a id="p7"></a></p>
 <div class="date">3月20日 周一 22:39</div>
@@ -34,14 +35,14 @@
 <p>程序使用系统的 shell 命令与程序通讯，支持命令回顾，语法高亮的简单功能。虽然网路上 SQLite 的图形界面很多，但是它们大部分与 SQLite 都绑定得非常紧，有的已经不支持最新的 SQLite 产生的数据库文件了。而单纯地使用 shell 与 SQLite 交互，命令又不好编辑，所以就产生了用 Emacs 与 SQLite 交互的想法，编写了大半天，终于将简单的功能搞定了。</p>
 <p>现在程序在 Win 和 Linux 下运行得都很顺利，但是也有不爽的地方，因为我的两个系统编码不同，造成写入读出数据库的时候在不同的系统上乱码。本以为修改 default-process-coding-system 这个全局变量就可以搞定，但是发现 emacs 本身的转换其实也不大好，而刚开始时使用的 encode-coding-string 函数先对字符串进行转换的方式其实不起作用，因为 emacs 在与 shell 交互的时候，会使用特殊的方式，真是让人伤脑筋。</p>
 <p>最后决定把这个工作列入 TODO 算了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2006-03.html#p7">Permalink</a></div>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2006-03.html#p7">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-20T22:39:48+0800 -->
 <p><a id="p6"></a></p>
 <div class="date">3月18日 周六 22:21</div>
 <h2>上下楼的困难</h2>
 <p>这个学期的课表好奇怪，前半段的时间里，周日、周一没课，等于周末右移一天，周四也放假，想来可以搞搞健身活动，然后就有人答应了别班球队踢球。这本来是个好提议，可对于我们这些经久不运动、只会面对电脑屏幕发呆的人来说，就是另外一回事了。</p>
 <p>周四的球赛对我们的影响，直到今天都还未散去，大家面对面的时候都只有苦笑。忽然间觉得那双沉重而酸疼的腿，对我们来说实在是太重要了，一定要好好保护，否则，连上下楼都得用手了。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p6">Permalink</a></div>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p6">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-18T22:21:06+0800 -->
 <p><a id="p5"></a></p>
 <div class="date">3月16日 周四 22:48</div>
@@ -49,7 +50,7 @@
 <p>这是一个完全用 C 实现的超小型关系数据库引擎，支持绝大部分的 SQL 92 功能，速度超快，而大小却只有几百 KB，同时还支持多平台，只要你有 gcc 环境，就可以编译执行。对于个人单机使用或是流量不多的网站来说非常合适，网路上也有很多的图形化界面支持，实在是非常好用。</p>
 <p>最近正在学数据库系统概论，还学了点 SQL，使用 sqlitecc<sup><a href="#fn1">注</a></sup> 来管理我的个人数据真是不错，还定义了几个视图来方便操作，真让人爱不释手。</p>
 <p><sup>[<a id="fn1">注</a>]</sup>：SQLite Control Center，一个使用 SQLite 作为引擎的跨平台图形化控制台。</p>
-<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2006-03.html#p5">Permalink</a></div>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2006-03.html#p5">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-16T22:48:42+0800 -->
 <p><a id="p4"></a></p>
 <div class="date">3月14日 周二 18:49</div>
@@ -58,7 +59,7 @@
 <p>虽然冒起的烟不多，但是机子周围已经布满了焦臭味，那时我对显示器冒烟这种现象完全没有概念，鉴于实践的观点，尝试着再开机看看会发生些什么。觉得应该不会有比刚才更危险的事情，但是也不可能坏到哪里去了，显示器的画面已经完全模糊，就像调不清楚的电视机。看来，只好拿去维修，心里真是郁闷。</p>
 <p>第二天一早，就和同学将它带到了双联，当年装机的地方，我还庆幸自己的 LG 是三年连保，今年才是第二年而已。双联看了我的保修单，把我推到了新百脑汇 C407 的 LG 特约维修站。于是我高高兴兴地去了，可没想到 LG 却只提供一年的保修服务，白纸黑字的东西都不认了！完全没有讨价还价的余地，没办法，最后还不是得修。看着墙上写着大修 110RMB 的牌子，心想，这点钱看来省不了了。</p>
 <p>于是我就天天追问，可是直到今天，机子才修好，如果没有我的几通电话，天知道会拖到什么时候！最后的价钱也没得讲，150RMB，只收小修的维修费 50RMB，因为烧焦的零件要换，要多收一点钱，可是对我们说这些有什么用呢，我又不懂。站在那里，有如人家案板上的肉，只能说，要杀要剐，随便吧。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p4">Permalink</a></div>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p4">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-14T18:49:12+0800 -->
 <p><a id="p3"></a></p>
 <div class="date">3月6日 周一 22:40</div>
@@ -67,7 +68,7 @@
 <p>小图标有我写字的风范，比划歪歪斜斜的，不过有防止刻意模仿、尽力雷同的功能，至于其他优缺点，就不一一列举了，:)</p>
 <p>原以为在 16x16 pix 的小地方上面画弧线是个大麻烦，没想到用 GIMP 蛮顺的，特别是“模糊画处理”非常棒，感觉就是为这些棘手事准备的，不用为每个小点单独考虑了。不过有些东西还不是很懂，似乎 GIMP 的橡皮擦处理，仍然采取覆盖的方式，就是一层盖一层，最终的文件相对于必需浪费了相当多的空间，所以得“非常”谨慎，宁可撤销而不要用橡皮擦覆盖。</p>
 <p>不知道有什么好的解决方法。</p>
-<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2006-03.html#p3">Permalink</a></div>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2006-03.html#p3">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-06T22:40:12+0800 -->
 <p><a id="p2"></a></p>
 <div class="date">3月6日 周一 13:27</div>
@@ -75,7 +76,7 @@
 <p>最近才发现 Gmail 有提供个人信箱的 RSS 种子，每当有新的来信，我都可以在最快的时间内得到消息。最方便的，是可以用 Opera 内置的 RSS 阅读器订阅，有了这样的整合环境，上网真是再惬意不过。</p>
 <p>昨天跟室友打球去了，握上了许久没碰的乒乓球拍，还玩得蛮开心的，可是一到今天，缺乏锻炼的双腿开始酸痛，上下楼都小有困难，跟前几天的大跨步根本不能比，痛苦死了。</p>
 <p>星期一第六周才有课，难得的休息日。</p>
-<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2006-03.html#p2">Permalink</a></div>
+<div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2006-03.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-06T13:27:14+0800 -->
 <p><a id="p1"></a></p>
 <div class="date">3月4日 周六 18:03</div>
@@ -84,14 +85,14 @@
 <p>也曾想过是网络惹的祸，于是调试了一下 QQ 里边的选项，比如把登录方式从 TCP 改为 UDP，可还是一点用都没有，还是无限期的登录，最后超时。不过在尝试 UDP 登录不成功的时候，出现了提示，说什么版本太旧。我的版本是 2005 beta3，可也不得不重新下过一个 sp1 的版本。</p>
 <p>没想到这回成功了，后来问了一下室友们的 QQ 版本，原来大家都换了新货……</p>
 <p>不知不觉已经过了第三周，下周开始有德语的选修课，六级还没过呢，就选了第二外语，压力一下就上来了。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p1">Permalink</a></div>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-04T18:03:10+0800 -->
 <p><a id="p0"></a></p>
 <div class="date">3月1日 周三 22:38</div>
 <h2>南方人, 北方面</h2>
 <p>最近对食堂的米饭失去了兴趣，也许因为天气凉，饭容易硬。然后慢慢转到以前不怎么喜欢的面食上面，这么冷的天面对热腾腾的拉面，牛肉面，身子再冷都不会抖了。</p>
 <p>没想到有这种嗜好的不只我一个，几个从南方过来的室友最近也都吃面。今天大家在往食堂的路上说笑，“终于知道为什么北方人那么喜欢吃面了”，这里的饭那么硬，根本就没得选择嘛。说笑而已了，:)</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p0">Permalink</a></div>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2006-03.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- date: 2006-03-01T22:38:18+0800 -->
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script type="text/javascript">var d = new
@@ -101,8 +102,8 @@
   </div><!-- text -->
   <div id="sidebar">
   </div><!-- sidebar -->
-  <script type="text/javascript" src="../js/blog_sidebar.js"></script>
-  <script type="text/javascript" src="../js/prism.min.js" async></script>
+  <script type="text/javascript" src="../js/blog_sidebar.js" async="async"></script>
+  <script type="text/javascript" src="../js/prism.min.js" async="async"></script>
   </div> <!-- body -->
 </body>
 </html>
