@@ -35,7 +35,7 @@ p {
         float: left;
         position: absolute;
         margin-top: 6%;
-        margin-left: 81.5%;
+        margin-left: 82.5%;
         text-align: left;
     }
 }
@@ -126,7 +126,7 @@ p {
     color: #63787b;
     margin-top: 2.3em;
     font-family: Verdana, Arial, sans-serif;
-    font-size: 85%;
+    font-size: 6px;
     text-align: center;
     position: relative;
     clear: both;
