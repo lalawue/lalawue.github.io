@@ -49,13 +49,14 @@ strong#root {
 /* prompt */
 
 #prompt {
-    maring-bottom: 1em;
+    margin-bottom: 0.1em;
 }
 
 /* dir and files */
 
 .dir_file {
-    maring-top: 1em;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
     word-spacing: 1em;
 }
 
