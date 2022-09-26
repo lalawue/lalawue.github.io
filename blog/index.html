@@ -15,7 +15,17 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年9月25日 周日 21:33</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年9月26日 周一 23:50</div>
+<h2>WIN 10 手记</h2>
+<p>买的笔记本 512G 固态到，之前叫店家装的 WIN 10，本来是想看下跟 WIN 7 有什么不同的，但是上了系统后，就一股脑把依赖的软件、配置，全给装好了，接着把 Win7 的盘给格式化了。</p>
+<p>上手了才几个小时呀。</p>
+<p>总的来说，我觉得 WIN 10 相比 WIN 7 还是有优势的，首先系统占用其实是差不多的，但是 WIN 10 本身就能提供暗夜模式，这个加分。还有扁平的 UI 系统，相比之前精细化的拟物的 UI，也算一个优势。</p>
+<p>搜索其实算是一个进步，不过我还得慢慢适应它。</p>
+<p>看控制面板，感觉就是 WIN 7 的翻版，哈哈。</p>
+<p>不过现在遇到了使用 vscode 在 markdown 中写文本，输入文字最后输入符号，符号会将最后一个文字覆盖，之前 WIN 7 就不会，蛋疼呀。</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-09.html#p6">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">22年9月25日 周日 21:33</div>
 <h2>T450 翻新记</h2>
 <h3>来历及背景</h3>
 <p>这台 T450 还是在大厂时候的存货，之前的老人有说过，笔记本用了 3 年后就归自己了，所以我就将这台 T450 带回了家，成了家里人炒股的第二屏幕。</p>
@@ -212,29 +222,6 @@ $ chmod -R 777 /HOST/data /HOST/conf /HOST/ext
 <p>重启后，发现文档服务起来了，之前的设置也都还有效，这样就配置完了。</p>
 <p>搞了一个下午，就感觉 php 太坑了，跟 go 的起步差了十万八千里。</p>
 <div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">22年6月26日 周日 15:02</div>
-<h2>MoocHelper 更新到 0.2.16</h2>
-<p>昨天说到 <a href="https://github.com/Tencent/LuaHelper">LuaHelper</a> 已经更新到了 0.2.16，今天我也同步将 <a href="https://github.com/lalawue/MoocHelper">MoocHelper</a> 更新上去了，主要的改动有</p>
-<ul>
-<li>当方法里local与self同名时，self指向正确的table</li>
-</ul>
-<p>例子是</p>
-<pre><code class="language-lua">local foo = {}
-
-function foo:test()
-    local foo = {}
-    self:bar()
-end
-
-function foo:bar()
-end
-</code></pre>
-<p>之前当 hover 到 test() 函数中的 self:bar() 时，self 其实指向的是函数内的 local variable foo，而实际 Lua 语义是指向运行当前 function 的 table，毕竟 self 是作为当前 function 第一个参数传递进来的。</p>
-<p>moocscript 的处理还特别一点，因为其 class/struct 是通过拼凑 AssignStat 来实现的，这种 <code>:</code> 函数在 class/struct 里面其实是实例函数，语法跟 Lua 不一样，没有 table name 前缀，得特别处理一下。</p>
-<p>这里的特别处理是，需要在当前 AST 的位置，一直寻找 parent scope 到最近的 class scope，如果存在，拿到外层 local variable map 的同名变量定义（如上面例子的 <code>foo</code>），将变量定义的 Loc 作为 self 的 varStruct 描述，后面这个 Loc 的逻辑跟 Lua 侧是一样的。</p>
-<p>大概这样吧。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-06.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
