@@ -17,6 +17,133 @@
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for September, 2021</h1>
 <p><a id="p6"></a></p>
+<div class="date">22年9月29日 周四 23:55</div>
+<h2>Win 10 下 AHK 模拟 Mac 快捷键</h2>
+<p>Win 10 是买的 512G 固态预装的，我安上后解压就行了，软件安装配置大概 2 ~ 3 个小时，但是为了适应自己的需要，各种捣腾。比如我的电脑界面隐藏顶部的几个文件夹，觉得太突兀了，没啥用，再说左边不是有快捷键吗。然后是暗黑模式，配置也快，其实到这一步就差不多了。</p>
+<p>但是软件配置这块其实优化是没有底的，比如就突然觉得 Win 10 的快捷键很难受，所以用了 AHK，然后就浪费了 2 天时间在这个上面。</p>
+<p>先说一下 Win 10 系统虽然提供了快捷键，但是没有提供相应的更改按键映射的能力，不像 Mac，系统就提供了各种按键映射，这点要给 Mac 点赞。</p>
+<p>AHK 脚本语言粗看是很简单的，但是里面要考虑很多已有的 Win 下按键的处理，有的是按下就响应的，有的是弹起来才响应，还有自测的过程中，按键断触也是有的，突然间有的按键就怎么都不响应了，没办法，只能重启了。</p>
+<p>贴一个今晚上搞好，觉得还能用一阵子的配置吧：</p>
+<pre><code class="language-bash">;;
+;; Public Domain
+;;
+;; Win 10 下 AHK 模拟 MacOSX 快捷键（MacOSX shortcuts with AHK under Win 10）
+;;
+;; 参考文档：https://wyagd001.github.io/（Documentation）
+;;
+
+;;
+;; Alt 按键相关
+;;
+
+; LAlt+q，关闭应用，替换 LAlt+F4
+&lt;!q::
+    Send {LAlt}{F4}
+return
+
+; LAlt+a，全选，替换 LCtrl+a
+&lt;!a::
+    Send {RCtrl Down}{a}
+    Send {RCtrl Up}
+return
+
+; LAlt+c，拷贝，替换 LCtrl+c
+&lt;!c::
+    Send {RCtrl Down}{c}
+    Send {RCtrl Up}
+return
+
+; LAlt+v，粘贴，替换 LCtrl+v
+&lt;!v::
+    Send {RCtrl Down}{v}
+    Send {RCtrl Up}
+return
+
+; LAlt+x，剪切，替换 LCtrl+x
+&lt;!x::
+    Send {RCtrl Down}{x}
+    Send {RCtrl Up}
+return
+
+; LAlt+s，保存，替换 LCtrl+s
+&lt;!s::
+    Send {RCtrl Down}{s}
+    Send {RCtrl Up}
+return
+
+;;
+;; Ctrl 按键相关
+;;
+
+; Ctrl+s，搜索，替换 Ctrl+f
+&lt;^~s::
+    ; 忽略 Emacs 按键的 C-x C-s
+    if (A_PriorKey not in x) { 
+        Send {RCtrl Down}{f}
+        Send {RCtrl Up}
+    } 
+return
+
+; LCtrl+a，光标行首
+&lt;^a::
+    Send {Home}
+return
+
+; Ctrl+e，光标行尾
+&lt;^e::
+    Send {End}
+return
+
+; Ctrl+f，前进一个字符
+&lt;^f::
+    Send {Right}
+return
+
+; Ctrl+b，后退一个字符
+&lt;^b::
+    Send {Left}
+return
+
+; Ctrl+p，上一行
+&lt;^p::
+    Send {Up}
+return
+
+; Ctrl+n，下一行
+&lt;^n::
+    Send {Down}
+return
+
+;;
+;; Win 按键相关
+;;
+
+; LWin+w 替换 LWin+Tab
+&lt;#w::&gt;#Tab
+
+; LWin+Tab 访问右边桌面空间，一直点按 Tab 一直往右移
+; LWin+Shift+Tab 访问左边桌面空间，一直点按 Tab 一直往左移
+; 以上命令类似 Alt+Tab 和 Alt+Shift+Tab
+LWin &amp; Tab::
+    LWinTabMenu := true
+    if GetKeyState(&quot;Shift&quot;,&quot;P&quot;) {
+        Send {LCtrl Down}{LWin Down}{Left}
+    } else {
+        Send {LCtrl Down}{LWin Down}{Right}
+    }
+return
+&lt;a id=&quot;If&quot;&gt;&lt;/a&gt;
+ (LWinTabMenu)
+    ~*Tab Up::
+        Send {LCtrl Up}{LWin Up}
+        LWinTabMenu := false 
+    return&lt;a id=&quot;If&quot;&gt;&lt;/a&gt;
+
+</code></pre>
+<p>上面都写好了注释，就不多做介绍了，感觉最有用的是桌面空间切换这个，跟我在 Mac 上是一致得了。</p>
+<p>另外其他的一些，基本上能用吧，大概就是这样，如果以后感觉到有冲突的话，在修修改改，或者删删减减吧，太折腾人了，感觉不大值得。</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-09.html#p6">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+<p><a id="p6"></a></p>
 <div class="date">22年9月26日 周一 23:50</div>
 <h2>WIN 10 手记</h2>
 <p>买的笔记本 512G 固态到了，之前叫店家装的 WIN 10，本来是想看下跟 WIN 7 有什么不同的，但是上了系统后，就一股脑把依赖的软件、配置，全给装好了，接着把 Win7 的盘给格式化了。</p>
