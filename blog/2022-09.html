@@ -16,7 +16,7 @@
     <div id="body">
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for September, 2021</h1>
-<p><a id="p6"></a></p>
+<p><a id="p7"></a></p>
 <div class="date">22年9月29日 周四 23:55</div>
 <h2>Win 10 下 AHK 模拟 Mac 快捷键</h2>
 <p>Win 10 是买的 512G 固态预装的，我安上后解压就行了，软件安装配置大概 2 ~ 3 个小时，但是为了适应自己的需要，各种捣腾。比如我的电脑界面隐藏顶部的几个文件夹，觉得太突兀了，没啥用，再说左边不是有快捷键吗。然后是暗黑模式，配置也快，其实到这一步就差不多了。</p>
@@ -78,10 +78,10 @@ return
 ; Ctrl+s，搜索，替换 Ctrl+f
 &lt;^~s::
     ; 忽略 Emacs 按键的 C-x C-s
-    if (A_PriorKey not in x) { 
+    if (A_PriorKey not in x) {
         Send {RCtrl Down}{f}
         Send {RCtrl Up}
-    } 
+    }
 return
 
 ; LCtrl+a，光标行首
@@ -132,17 +132,17 @@ LWin &amp; Tab::
         Send {LCtrl Down}{LWin Down}{Right}
     }
 return
-&lt;a id=&quot;If&quot;&gt;&lt;/a&gt;
- (LWinTabMenu)
+
+ #If (LWinTabMenu)
     ~*Tab Up::
         Send {LCtrl Up}{LWin Up}
-        LWinTabMenu := false 
-    return&lt;a id=&quot;If&quot;&gt;&lt;/a&gt;
-
+        LWinTabMenu := false
+    return
+ #If
 </code></pre>
 <p>上面都写好了注释，就不多做介绍了，感觉最有用的是桌面空间切换这个，跟我在 Mac 上是一致得了。</p>
 <p>另外其他的一些，基本上能用吧，大概就是这样，如果以后感觉到有冲突的话，在修修改改，或者删删减减吧，太折腾人了，感觉不大值得。</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-09.html#p6">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-09.html#p7">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p6"></a></p>
 <div class="date">22年9月26日 周一 23:50</div>
 <h2>WIN 10 手记</h2>
