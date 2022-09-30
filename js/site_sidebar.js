@@ -27,6 +27,6 @@ document.getElementById('sidebar').innerHTML = `
 </form>
 <p class="header">Discussions</p>
 <ul>
-  <li><a href="https://github.com/lalawue/homepage/discussions/categories/site" target="_blank">start discussion ➡</a></li>
+  <li><a href="https://github.com/lalawue/homepage/discussions/categories/site" target="_blank">enter ➟</a></li>
 </ul>
 `
