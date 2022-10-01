@@ -56,7 +56,7 @@ setTimeout(() =&gt; {
 <p>另外需要注意的是，虽然 luastatic 支持生成无依赖的 binary，但那只是对应官方的 lua，luajit 依赖的 .so 库还是需要动态加载的，比如很多的 ffi.load 依赖的是系统的 dlopen。这个我看了一些文章，大佬们根据安全原则，系统的接口都不支持从内存中加载一个动态库，虽然某些平台上通过 mmap 是可以做到的，但是这个总感觉不大好。</p>
 <p>那如果是基于 luajit，lua 源文件是打到 binary 里面了，但是依赖的 so 库，是在运行前，通过 export LD_LIBRARY_PATH 或者 DYLD_LIBRARY_PATH 来设置 so 搜索路径，做成外部库加载的。</p>
 <p>通过这样的方式做成的 binary 发布包，可以在对应平台上不依赖 luarocks 就可以运行，安全性也好一些，发布更新都很方便。</p>
-<hr />
+<hr>
 <p>话说昨天看了一下 <a href="https://programming-language-benchmarks.vercel.app/">Programming Language and compiler Benchmarks</a> 里面 go vs java，go vs javascript 以及 go vs luajit，不得不说 go 性能确实好，速度跟 java 一样，但是内存消耗少了不知多少。</p>
 <p>luajit 平均速度是 go 的一半，内存消耗多了一些，javascript 速度跟 luajit 类似，但内存消耗多很多。</p>
 <p>如果是从头学起的话，我觉得 go 是要比 java 简单很多的，工程属性方面，go 更是标杆，如果算上多线程 goroutine 的话，毫无疑问，go 是首选。多线程多难搞呀，所以小公司很可能都慢慢转向 go 了，反正我是觉得真的香呀，现在都有点后悔搞 luajit 了，因为速度是赶不上 go 的，基础工具又差这么多。</p>
