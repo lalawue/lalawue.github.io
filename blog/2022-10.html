@@ -16,6 +16,39 @@
     <div id="body">
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for October, 2022</h1>
+<p><a id="p1"></a></p>
+<div class="date">22年10月05日 周三 17:47</div>
+<h2>sshfs-win 配置记录</h2>
+<p>文章提供了一种 Windows 通过 sshfs-win 挂载 Linux 文件系统并访问内容的方案。</p>
+<h3>​​Windows 与 Linux 文件系统交互的可选方式</h3>
+<p>Windows 跟 Linux 文件系统交互数据的方式有好多种，我了解到的有</p>
+<ul>
+<li>rsync、scp 通过命令行传递数据</li>
+<li>Linux 上开 Samba 服务，Windows 通过网络邻居协议访问</li>
+<li>虚拟机诸如 VMware Tools 将 Windows 目录挂载到 Linux</li>
+<li>sshfs-win 将 Linux 文件系统挂载到 Windows 的一个磁盘</li>
+</ul>
+<h3>SSHFS 介绍</h3>
+<p>SSHFS 是一个使用 SSH File Transfer Protocol （SFTP）协议访问 SSHD 服务端，将远端文件系统，挂载到本地的用户层文件系统（FUSE)。</p>
+<p>而 sshfs-win 则是一个 Windows 的实现方案，最终会将 Linux 文件系统挂载到本地的一个虚拟磁盘上。</p>
+<h3>sshfs-win 安装</h3>
+<p>我自己的情况是 WIN 7 SP1，Linux 是 VMware 虚拟机的 Ubuntu 18.04，看项目介绍 WIN 7 及之后的都能支持。</p>
+<p>（新换了 WIN10 系统，也是这个方式安装使用）</p>
+<p>有 sshfs-win-manager 这个界面管理器提供方便的操作，项目 README 有提供安装流程，我这里简单翻译一下</p>
+<h4>第一步</h4>
+<p>安装 winfsp 项目下的 releases 页面找到的最新稳定版本，目前是 winfsp-1.10.22006.msi</p>
+<p>安装 sshfs-win 项目下的 releases 页面找到最新的稳定版本，目前是 sshfs-win-3.5.20357-x64.msi，这个是 64 位的</p>
+<h4>第二步</h4>
+<p>安装 ssh-win-manager 项目下的 releases 页面找到的最新稳定版本，目前是 sshfs-win-manager-setup-v1.3.1.exe</p>
+<p>以上两步就安装完了。</p>
+<h3>sshfs-win 配置</h3>
+<p>开始菜单打开 SSHFS-Win Manager 后，点击右侧的 Add Connect 来增加需要访问的 Linux 文件系统地址就好</p>
+<img width="480" alt="SSHFS-Win Manager" src="https://tva1.sinaimg.cn/large/6f6cc1c0gy1h6jagqv05aj20vm0hrgm3.jpg">
+<p>增加一个配置图片</p>
+<img width="480" alt="Add Connection" src="https://tva1.sinaimg.cn/large/6f6cc1c0gy1h6jahu78d5j20hp0r2mxs.jpg">
+<p>如果 ssh 过去的用户无权限的话，在 Windows 这边会显示</p>
+<img width="480" alt="Window 侧权限访问" src="https://wx3.sinaimg.cn/large/6f6cc1c0gy1h6jajuvrauj20j909f0te.jpg">
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-10.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">22年10月03日 周一 22:42</div>
 <h2>MNet / Cincau 支持 Win 10</h2>
