@@ -36,14 +36,14 @@ EMACS 的 mode-line ），配合着 mlterm 半透的图片背景，相当地酷�
 <pre><code class="language-bash"># create by sucha, 2008/06/04
 
 # define the escape
-escape ^zz&lt;a id=&quot;defescape&quot;&gt;&lt;/a&gt;
- zz
+escape ^zz
+#defescape zz
 
 # define scroolback lines
 defscrollback 6000
 
-# the original one&lt;a id=&quot;caption&quot;&gt;&lt;/a&gt;
- always &quot;%?%F%{-b 4w}%:%{-b bb}%? %H | %l | %m-%d %c |%?%F%{-b 4w}%?%L=%-Lw%45&gt;%{-b w4}%n%f* %t%{-}%+Lw%-0&lt;&quot;
+# the original one
+#caption always &quot;%?%F%{-b 4w}%:%{-b bb}%? %H | %l | %m-%d %c |%?%F%{-b 4w}%?%L=%-Lw%45&gt;%{-b w4}%n%f* %t%{-}%+Lw%-0&lt;&quot;
 
 # modified
 # caption always &quot;%3n %t%? @%u%?%? [%h]%?%=%c&quot;

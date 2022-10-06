@@ -43,8 +43,8 @@ config:addSourceDef([[
     int print_name(void);
     int add_num(int a, int b); 
 ]])
-local p = config:loadSourceString([[&lt;a id=&quot;include&quot;&gt;&lt;/a&gt;
- &lt;stdio.h&gt;
+local p = config:loadSourceString([[
+#include &lt;stdio.h&gt;
 int print_name(void) {
     printf(&quot;Hello, world\n&quot;);
     return 0;

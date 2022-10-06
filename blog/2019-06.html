@@ -60,7 +60,7 @@
 <ul>
 <li>生成文件内标题深度为 4 的目录摘要，例子是 <a href="../slack/SlackBook.html">Slackware Linux Essentials</a> 的本页目录</li>
 </ul>
-<pre><code class="language-source">\#\contents 4
+<pre><code class="language-source">#contents 4
 </code></pre>
 <ul>
 <li>支持 footnote，看本文最后的配置文件标注</li>
@@ -76,13 +76,13 @@
  #category Programming
 </code></pre>
 <ul>
-<li>博客 proj 里动态生成 WelcomePage、Category 页面内容<br>
-无法举例了，&gt;_&lt;</li>
+<li>博客 proj 里动态生成 WelcomePage、Category 页面内容</li>
 </ul>
+<p>无法举例了，&gt;_&lt;</p>
 <h3>配置、使用细节</h3>
 <p>配置文件会使用 lua 的 dofile() 函数加载，返回类似的 table 就好，所以配置文件可以非常复杂，大大扩展 Markdown 语法。</p>
 <p>使用方法如下，可选参数 PROJ_BASE_DIR，当 confg.lua 中的 source、build 配置为相对路径时可以使用，如果有跨平台写 Markdown 同学，应该需要这个吧。</p>
-<pre><code class="language-bas">$ lua MarkdownProjectCompositor.lua config.lua [PROJ_BASE_DIR]
+<pre><code class="language-sh">$ lua MarkdownProjectCompositor.lua config.lua [PROJ_BASE_DIR]
 </code></pre>
 <p>基本的配置下面有，注意 proj 中含有 res = true 的，意味着仅仅列举文件，但不做生成，用于上述扩展语法中做 proj 间的引用。</p>
 <p>prepare 函数上面有介绍，当 proj 的 files 被填充后，会跑一次；body 用于生成临时源文件，自定义的语法在这里做转换，其他函数都有介绍过了。</p>
@@ -172,7 +172,7 @@ return config
 <li>博客里面良好的 HTML 标题结构、date、category 语法<sup><a href="#fn2">2</a></sup></li>
 <li>动态生成 WelcomePage、Category 内容</li>
 </ul>
-<p><sup>[<a id="fn1">1</a>]</sup> <a href="../images/elisp_highlight_syntax.jpg">emacs-lisp 语法高亮图</a><br>
+<p><sup>[<a id="fn1">1</a>]</sup> <a href="../images/elisp_highlight_syntax.jpg">emacs-lisp 语法高亮图</a>
 <sup>[<a id="fn2">2</a>]</sup> <a href="../images/md_cmark_syntax.jpg">新的博客结构</a></p>
 <div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2019-06.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->

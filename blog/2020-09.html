@@ -76,8 +76,8 @@ tt: a single token tree
 </code></pre>
 <p>举个例子，下面 vec! 宏捕捉了 expr，push 每个 x</p>
 <pre><code class="language-rust">let v: Vec&lt;u32&gt; = vec![1, 2, 3];
-&lt;a id=&quot;[macro_export]&quot;&gt;&lt;/a&gt;
 
+#[macro_export]
 macro_rules! vec {
     ( $( $x:expr ),* ) =&gt; {
         {

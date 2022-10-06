@@ -72,7 +72,7 @@
 <h3>ac 97驱动的安装</h3>
 <p>alsa 安装需要内核源码包，首先确定 /usr/src/ 里面有了诸如 linux-2.4.26 这样的文件夹，不然的话还得找原来的安装盘(我是菜鸟，自然用 full 安装，东西只会多，不会少的^_^)。先确定自己的主板用的是什么声音芯片，比如我，是 Intel845PEI 的板子，声音芯片是 realtek ALC202A，那么可以上驱动之家下载 ALC202A for linux 的驱动。</p>
 <p>解压缩 alsa-driver，进入 driver 目录。</p>
-<pre><code class="language-sh&lt;a">
+<pre><code class="language-sh">#./configure
 # make intall
 # ./snddevices
 </code></pre>

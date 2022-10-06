@@ -230,8 +230,8 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。</p>
         NSLog(@&quot;Fail to save: %@&quot;, [error localizedDescription]);
         return false;
     }
-    &lt;a id=&quot;if&quot;&gt;&lt;/a&gt;
- 1
+    
+#if 1
     // query &amp; delete
     NSFetchRequest *req = [[NSFetchRequest alloc] init];
     [req setEntity:infoEntity];
@@ -255,8 +255,8 @@ coordinator 可以连接多个 store，相互的关系可以脑补了吧。</p>
     if (error) {
         NSLog(@&quot;Fail to save: %@&quot;, [error localizedDescription]);
         return false;
-    }&lt;a id=&quot;endif&quot;&gt;&lt;/a&gt;
-
+    }
+#endif
     return true;
 }
 @end
@@ -371,8 +371,8 @@ GLEW 来做，GLFW 在 MacOS 下默认也只打开 OpenGL 2.1 而已，听说要
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 }
 </code></pre>
-<p>设置完之后，我就按教程走了，但是，又出现了意外的情况，在我的黑苹果上面，<a id="version"></a>
-330 的 shader 源码都编译链接过了，但就是没有显示，窗口里面都是
+<p>设置完之后，我就按教程走了，但是，又出现了意外的情况，在我的黑苹果上面，
+<a id="version"></a> 330 的 shader 源码都编译链接过了，但就是没有显示，窗口里面都是
 黑的。总之 OpenGL 2.1 可以，3.3 就是不行。即便 glClear 颜色显示 OK，loop
 循环也有走。</p>
 <p>又不甘心使用 OpenGL 2.1 呢，只好救助于 Apple 原生的系统接口看看了，还好
