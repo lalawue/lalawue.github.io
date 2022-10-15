@@ -20,13 +20,11 @@ document.getElementById('sidebar').innerHTML = `
   <li><a href="../scratch/index.html">Scratch</a></li>
 </ul>
 <p class="header">Search</p>
-<form>
-  <input id="searchtext" type="text" />
-  <input type="text" class="form-control" style="display:none" />
-  <a style="text-decoration: none;" href="javascript:"onclick="onPageSearch();">🔍</a>
-</form>
+<ul>
+  <li><a href="../pagefind.html">search ➟</a></li>
+</ul>
 <p class="header">Discussions</p>
 <ul>
-  <li><a href="https://github.com/lalawue/homepage/discussions/categories/site" target="_blank">enter ➟</a></li>
+  <li><a href="https://github.com/lalawue/homepage/discussions/categories/site" target="_blank">discuss ➟</a></li>
 </ul>
 `
