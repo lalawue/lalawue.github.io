@@ -15,7 +15,35 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年10月05日 周三 17:47</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年10月15日 周六 23:17</div>
+<h2>使用 Pagefind 支持静态网页站内搜索</h2>
+<p>在微博上看到了人家介绍 <a href="https://pagefind.app/">Pagefind</a>，一个静态网站搜索工具，试用了一下，感觉很不错，部署也很方便。</p>
+<p>这个工具的可以在每次 html 静态内容生成之后，对 html 网页进行分析，可以指定语言等，生成的是一个个独立的 zip 文件，
+以及 css 和 js，全部生成在某个目录下，不需要其他的打包工具了。</p>
+<p>打包的命令行比如，最后加的 <code>--serve</code> 参数可以拉起一个本地的 http 服务器，可以浏览器直接预览。</p>
+<pre><code class="language-bash">$ pagefind --bundle-dir ./pagefind --source ./publish --verbose --serve
+</code></pre>
+<p>运行的时候，先拉起一个 html，指定一个 id 内容节点，然后运行 js 提供的类进行 UI 渲染，它会监听 input 的输入，
+然后动态更新节点下面搜索到的内容。</p>
+<p>比如 HTML 页面先加载依赖的资源。</p>
+<pre><code class="language-js">	&lt;link href=&quot;pagefind/pagefind-ui.css&quot; rel=&quot;stylesheet&quot;&gt;
+	&lt;script src=&quot;pagefind/pagefind-ui.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>然后下面这样跑 js 就可以了。</p>
+<pre><code class="language-js">&lt;div id=&quot;pagefind&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+   	window.addEventListener('DOMContentLoaded', (event) =&gt; {
+       	new PagefindUI({
+			element: &quot;#pagefind&quot;,
+			showImages: false
+		});
+   	});
+&lt;/script&gt;
+</code></pre>
+<p>很好操作，UI 就不放上来了，工具是 Rust 搞的，要赞一个。</p>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2022-10.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">22年10月05日 周三 17:47</div>
 <h2>sshfs-win 配置记录</h2>
 <p>文章提供了一种 Windows 通过 sshfs-win 挂载 Linux 文件系统并访问内容的方案。</p>
 <h3>​​Windows 与 Linux 文件系统交互的可选方式</h3>
@@ -328,16 +356,6 @@ return
 <p>CSS 文件应该有超过 10 年没有更新了，改的也不多，我也不大懂怎么改，反正改完 Chrome 上看着就还好。</p>
 <p>先这样用着吧。</p>
 <div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2022-09.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">22年8月23日 周二 22:57</div>
-<h2>支持 HTTPS 域名</h2>
-<p>本站域名服务商是 <a href="https://name.com">Name.com</a>，托管在 <a href="https://pages.github.com/">GitHub Pages</a>，使用很久了（没错，大于 9 年！）。</p>
-<p>之前是不支持 HTTPS 域名的，原因是 github pages 需要域名服务商提供某些东西才支持，所以我其实是简单使用了 CNAME 文件 标明了域名而已。所以这个 https 的支持，是 github 单方面的感觉，要么就是 name.com 给提供上了。</p>
-<p>看了一下证书信任链，是 R3 (Let's Encrypt) 签发的，反正证书签发我是不用管的。</p>
-<p>记得最早的时候，一个账号只能有一个 github pages 站点，现在应该是每个 repo 都支持了吧。</p>
-<p>之所以有这个感慨，其实是看了 github 上某位开发者的个人站点，用的自然是自己买的域名，但是却不舍得搞正式的 HTTPS 证书（完整的信任链），那位大佬的 star 数量，在3k 左右，数量不算多，原因是开源的都是 Swift 的代码，用的人相对少一些吧。</p>
-<p>不打算透露这位大佬的更多信息了，感慨一下罢了。</p>
-<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2022-08.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;

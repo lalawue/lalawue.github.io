@@ -16,6 +16,34 @@
     <div id="body">
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for October, 2022</h1>
+<p><a id="p2"></a></p>
+<div class="date">22年10月15日 周六 23:17</div>
+<h2>使用 Pagefind 支持静态网页站内搜索</h2>
+<p>在微博上看到了人家介绍 <a href="https://pagefind.app/">Pagefind</a>，一个静态网站搜索工具，试用了一下，感觉很不错，部署也很方便。</p>
+<p>这个工具的可以在每次 html 静态内容生成之后，对 html 网页进行分析，可以指定语言等，生成的是一个个独立的 zip 文件，
+以及 css 和 js，全部生成在某个目录下，不需要其他的打包工具了。</p>
+<p>打包的命令行比如，最后加的 <code>--serve</code> 参数可以拉起一个本地的 http 服务器，可以浏览器直接预览。</p>
+<pre><code class="language-bash">$ pagefind --bundle-dir ./pagefind --source ./publish --verbose --serve
+</code></pre>
+<p>运行的时候，先拉起一个 html，指定一个 id 内容节点，然后运行 js 提供的类进行 UI 渲染，它会监听 input 的输入，
+然后动态更新节点下面搜索到的内容。</p>
+<p>比如 HTML 页面先加载依赖的资源。</p>
+<pre><code class="language-js">	&lt;link href=&quot;pagefind/pagefind-ui.css&quot; rel=&quot;stylesheet&quot;&gt;
+	&lt;script src=&quot;pagefind/pagefind-ui.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>然后下面这样跑 js 就可以了。</p>
+<pre><code class="language-js">&lt;div id=&quot;pagefind&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+   	window.addEventListener('DOMContentLoaded', (event) =&gt; {
+       	new PagefindUI({
+			element: &quot;#pagefind&quot;,
+			showImages: false
+		});
+   	});
+&lt;/script&gt;
+</code></pre>
+<p>很好操作，UI 就不放上来了，工具是 Rust 搞的，要赞一个。</p>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2022-10.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p1"></a></p>
 <div class="date">22年10月05日 周三 17:47</div>
 <h2>sshfs-win 配置记录</h2>
