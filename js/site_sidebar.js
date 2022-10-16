@@ -10,6 +10,10 @@ document.getElementById('sidebar').innerHTML = `
   <li><a href="../scratch/ThisSite.html">This Site</a></li>
   <li><a href="../live/AboutMe.html">About Me</a></li>
 </ul>
+<p class="header">Search</p>
+<ul>
+  <li><a href="../pagefind.html">search ➟</a></li>
+</ul>
 <p class="header">Categories</p>
 <ul>
   <li><a href="../blog/index.html">Blog</a></li>
@@ -18,10 +22,6 @@ document.getElementById('sidebar').innerHTML = `
   <li><a href="../slack/index.html">Linux</a></li>
   <li><a href="../muse/index.html">Muse</a></li>
   <li><a href="../scratch/index.html">Scratch</a></li>
-</ul>
-<p class="header">Search</p>
-<ul>
-  <li><a href="../pagefind.html">search ➟</a></li>
 </ul>
 <p class="header">Discussions</p>
 <ul>
