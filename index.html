@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.5, user-scalable=yes">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.5, user-scalable=yes">
 	<title>Sucha's Homepage - Welcome</title>
 	<meta name="author" content="Sucha">
-    <meta name="generator" content="MarkdownProjectCompositor.lua">
+	<meta name="generator" content="MarkdownProjectCompositor.lua">
 	<meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html">
 	<meta name="keywords" content="suchang, programming, Linux, Lua">
 	<meta name="description" content="Sucha's homepage and blog">
 	<link rel="shortcut icon" href="images/ico.png">
 	<link rel="stylesheet" type="text/css" href="styles/index.css">
+	<script src="/js/darkreader.min.js"></script>
 	<meta name="verify-v1" content="zI6bDtEidzcaBl4QgtfKF+iZLg9My6ynZKFPDwlRlMQ=">
 	<meta name="msvalidate.01" content="708EDD0378F42AD2F48D5160D47027F8">
 </head>
+
 <body>
 	<div id="body">
 		<div id="content">
@@ -47,10 +50,39 @@
 				<a href="scratch/index.html">Scratch</a>
 			</p>
 			<div id="foot">
-				2004-<script>var d = new
-				Date();document.write(d.getFullYear())</script> &copy;
+				2004-
+				<script>var d = new
+						Date(); document.write(d.getFullYear())</script> &copy;
 				Sucha
 			</div><!-- foot -->
+			<script>
+				function getCookie(name) {
+					var cookieArr = document.cookie.split(";");
+					for (var i = 0; i < cookieArr.length; i++) {
+						var cookiePair = cookieArr[i].split("=");
+						if (name == cookiePair[0].trim()) {
+							return decodeURIComponent(cookiePair[1]);
+						}
+					}
+					return null;
+				}
+				var site_theme = getCookie("site_theme");
+				function changeTheme(key) {
+					var sk = ''
+					if (key == "@@@") {
+						sk = site_theme == 'dark' ? 'dark' : 'light';
+					} else {
+						sk = site_theme == 'dark' ? 'light' : 'dark';
+					}
+					site_theme = sk;
+					if (site_theme == 'light') {
+						DarkReader.disable();
+					} else {
+						DarkReader.enable({ brightness: 100, contrast: 90, sepia: 10 });
+					}
+				}
+				changeTheme('@@@')
+			</script>
 		</div><!-- body -->
 </body>
 

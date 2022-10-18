@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.5, user-scalable=yes">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.5, user-scalable=yes">
 	<title>Sucha's Homepage - Search Site ...</title>
 	<meta name="author" content="Sucha">
 	<meta name="generator" content="MarkdownProjectCompositor.lua">
@@ -11,56 +12,89 @@
 	<meta name="description" content="Sucha's homepage and blog">
 	<link rel="shortcut icon" href="images/ico.png">
 	<link rel="stylesheet" type="text/css" href="styles/blog.css">
+	<script src="/js/darkreader.min.js"></script>
 	<link href="pagefind/pagefind-ui.css" rel="stylesheet">
 	<script src="pagefind/pagefind-ui.js" type="text/javascript"></script>
 </head>
+
 <body>
-<div id="body">
-	<div id="text">
-		<h1>Search Site ...</h1>
-		<div id="pagefind"></div>
-		<div id="foot">2004-<script>var d = new
-			Date();document.write(d.getFullYear())</script> &copy;
-			Sucha. Powered by Pagefind.
+	<div id="body">
+		<div id="text">
+			<h1>Search Site ...</h1>
+			<div id="pagefind"></div>
+			<div id="foot">2004-
+				<script>var d = new
+						Date(); document.write(d.getFullYear())</script> &copy;
+				Sucha. Powered by Pagefind.
+			</div>
 		</div>
+		<div id="sidebar">
+			<p class="header">Navi</p>
+			<ul>
+				<li><a href="./index.html">Home</a></li>
+				<li><a href="./scratch/ThisSite.html">This Site</a></li>
+				<li><a href="./live/AboutMe.html">About Me</a></li>
+			</ul>
+			<p class="header">Function</p>
+			<ul>
+				<li><a onclick="window.history.go(-1)">back ➟</a></li>
+				<li><a href="https://github.com/lalawue/homepage/discussions/categories/site" target="_blank">discuss ➟</a></li>
+				<li><a onClick="changeTheme()">theme ➟</a>
+				<li>
+			</ul>
+			<p class="header">Categories</p>
+			<ul>
+				<li><a href="./blog/index.html">Blog</a></li>
+				<li><a href="./live/index.html">Travel</a></li>
+				<li><a href="./cs/index.html">Projects</a></li>
+				<li><a href="./slack/index.html">Linux</a></li>
+				<li><a href="./muse/index.html">Muse</a></li>
+				<li><a href="./scratch/index.html">Scratch</a></li>
+			</ul>
+		</div><!-- sidebar -->
 	</div>
-	<div id="sidebar">
-		<p class="header">Back</p>
-		<ul>
-			<li><a onclick="window.history.go(-1)">go back</a></li>
-		</ul>
-        <p class="header">Navi</p>
-          <ul>
-            <li><a href="./index.html">Home</a></li>
-            <li><a href="./scratch/ThisSite.html">This Site</a></li>
-            <li><a href="./live/AboutMe.html">About Me</a></li>
-          </ul>
-          <p class="header">Categories</p>
-          <ul>
-            <li><a href="./blog/index.html">Blog</a></li>
-            <li><a href="./live/index.html">Travel</a></li>
-            <li><a href="./cs/index.html">Projects</a></li>
-            <li><a href="./slack/index.html">Linux</a></li>
-            <li><a href="./muse/index.html">Muse</a></li>
-            <li><a href="./scratch/index.html">Scratch</a></li>
-          </ul>
-	</div><!-- sidebar -->
-</div>
-<script>
-   	window.addEventListener('DOMContentLoaded', (event) => {
-       	new PagefindUI({
-			element: "#pagefind",
-			showImages: false
+	<script>
+		window.addEventListener('DOMContentLoaded', (event) => {
+			new PagefindUI({
+				element: "#pagefind",
+				showImages: false
+			});
 		});
-   	});
-</script>
-<style>
-#pagefind input {
-	--pagefind-ui-background: transparent;
-	--pagefind-ui-border-width: 2px;
-	--pagefind-ui-border-radius: 0px;
-	border-bottom: 1px solid gray;
-}
-</style>
+		function getCookie(name) {
+			var cookieArr = document.cookie.split(";");
+			for (var i = 0; i < cookieArr.length; i++) {
+				var cookiePair = cookieArr[i].split("=");
+				if (name == cookiePair[0].trim()) {
+					return decodeURIComponent(cookiePair[1]);
+				}
+			}
+			return null;
+		}
+		var site_theme = getCookie("site_theme");
+		function changeTheme(key) {
+			var sk = ''
+			if (key == "@@@") {
+				sk = site_theme == 'dark' ? 'dark' : 'light';
+			} else {
+				sk = site_theme == 'dark' ? 'light' : 'dark';
+			}
+			site_theme = sk;
+			if (site_theme == 'light') {
+				DarkReader.disable();
+			} else {
+				DarkReader.enable({ brightness: 100, contrast: 90, sepia: 10 });
+			}
+		}
+		changeTheme('@@@')
+	</script>
+	<style>
+		#pagefind input {
+			--pagefind-ui-background: transparent;
+			--pagefind-ui-border-width: 2px;
+			--pagefind-ui-border-radius: 0px;
+			border-bottom: 1px solid gray;
+		}
+	</style>
 </body>
+
 </html>

@@ -1,17 +1,40 @@
-var onPageSearch = function() {
-         var value = document.getElementById("searchtext").value
-         window.open('https://cn.bing.com/search?q=site:suchang.net+'+value,'_blank');
-      }
-      document.getElementById("sidebar").innerHTML = `<p class="header">Navi</p>
+function getCookie(name) {
+   var cookieArr = document.cookie.split(";");
+   for (var i=0; i<cookieArr.length; i++) {
+         var cookiePair = cookieArr[i].split("=");
+         if (name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+         }
+   }
+   return null;
+}
+var site_theme = getCookie("site_theme");
+function changeTheme(key) {
+   var sk = ''
+   if (key == "@@@") {
+      sk = site_theme == 'dark' ? 'dark' : 'light';
+   } else {
+      sk = site_theme == 'dark' ? 'light' : 'dark';
+   }
+   site_theme = sk;
+   document.cookie = "site_theme=" + sk + "; path=/; max-age=2147483647;"
+   if (site_theme == 'light') {
+      DarkReader.disable();
+   } else {
+      DarkReader.enable({ brightness: 100, contrast: 90, sepia: 10 });
+   }
+}
+changeTheme('@@@');
+document.getElementById("sidebar").innerHTML = `<p class="header">Navi</p>
    <ul>
      <li><a href="../index.html">Home</a></li>
-     <li><a href="index.html">Front</a></li>
      <li><a href="../scratch/ThisSite.html">This Site</a></li>
      <li><a href="../live/AboutMe.html">About Me</a></li>
    </ul>
-   <p class="header">Search</p><!-- Bing Search -->
+   <p class="header">Function</p>
    <ul>
       <li><a href="../pagefind.html">search ➟</a></li>
+      <li><a onClick="changeTheme()">theme ➟</a><li>
    </ul>
    <p class="header">Categories</p>
    <ul>
