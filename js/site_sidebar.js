@@ -1,10 +1,10 @@
 function getCookie(name) {
   var cookieArr = document.cookie.split(";");
-  for (var i=0; i<cookieArr.length; i++) {
-        var cookiePair = cookieArr[i].split("=");
-        if (name == cookiePair[0].trim()) {
-           return decodeURIComponent(cookiePair[1]);
-        }
+  for (var i = 0; i < cookieArr.length; i++) {
+    var cookiePair = cookieArr[i].split("=");
+    if (name == cookiePair[0].trim()) {
+      return decodeURIComponent(cookiePair[1]);
+    }
   }
   return null;
 }
@@ -12,16 +12,16 @@ var site_theme = getCookie("site_theme");
 function changeTheme(key) {
   var sk = ''
   if (key == "@@@") {
-     sk = site_theme == 'dark' ? 'dark' : 'light';
+    sk = site_theme == 'dark' ? 'dark' : 'light';
   } else {
-     sk = site_theme == 'dark' ? 'light' : 'dark';
+    sk = site_theme == 'dark' ? 'light' : 'dark';
   }
   site_theme = sk;
   document.cookie = "site_theme=" + sk + "; path=/; max-age=2147483647;"
   if (site_theme == 'light') {
-     DarkReader.disable();
+    DarkReader.disable();
   } else {
-     DarkReader.enable({ brightness: 100, contrast: 90, sepia: 10 });
+    DarkReader.enable({ brightness: 100, contrast: 90, sepia: 10 });
   }
 }
 changeTheme('@@@');
