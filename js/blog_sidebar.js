@@ -19,9 +19,10 @@ function changeTheme(key) {
    site_theme = sk;
    document.cookie = "site_theme=" + sk + "; path=/; max-age=2147483647;"
    if (site_theme == 'light') {
-      DarkReader.disable();
+      document.getElementById('site_theme').innerHTML = ``;
    } else {
-      DarkReader.enable({ brightness: 100, contrast: 90, sepia: 10 });
+      document.getElementById('site_theme').innerHTML =
+      `html { background-color: #e7e7e7; filter: invert(1) hue-rotate(180deg); } img, .code-toolbar { filter: invert(1) hue-rotate(180deg); }`;
    }
 }
 changeTheme('@@@');

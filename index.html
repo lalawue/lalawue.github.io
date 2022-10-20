@@ -12,7 +12,7 @@
 	<meta name="description" content="Sucha's homepage and blog">
 	<link rel="shortcut icon" href="images/ico.png">
 	<link rel="stylesheet" type="text/css" href="styles/index.css">
-	<script src="/js/darkreader.min.js"></script>
+	<style id="site_theme"></style>
 	<meta name="verify-v1" content="zI6bDtEidzcaBl4QgtfKF+iZLg9My6ynZKFPDwlRlMQ=">
 	<meta name="msvalidate.01" content="708EDD0378F42AD2F48D5160D47027F8">
 </head>
@@ -76,9 +76,9 @@
 					}
 					site_theme = sk;
 					if (site_theme == 'light') {
-						DarkReader.disable();
+						document.getElementById('site_theme').innerHTML = ``;
 					} else {
-						DarkReader.enable({ brightness: 100, contrast: 90, sepia: 10 });
+						document.getElementById('site_theme').innerHTML = `html { background-color: #e7e7e7; filter: invert(1) hue-rotate(180deg); } img, .code-toolbar { filter: invert(1) hue-rotate(180deg); }`;
 					}
 				}
 				changeTheme('@@@')
