@@ -15,7 +15,29 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年11月26日 周六 09:48</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">22年11月29日 周二 23:40</div>
+<h2>上线 mooncake 主页 https://moocscript.fun</h2>
+<p>周末忙着将 <a href="https://github.com/lalawue/mooncake">mooncake</a> 的主页 <a href="https://moocscript.fun">https://moocscript.fun</a> 上线了。</p>
+<p>蛮早就知道了 browser 上直接能跑的 Lua VM <a href="https://fengari.io">https://fengari.io</a>，而 mooncake 是一个纯 Lua 的 transpiler，自然可以直接就支持在浏览器里面运行。</p>
+<p>当然 fengari 也有一些限制，比如没有 io 库，而在 mooncake 这边，则需要将分开的工程文件 parser、compiler、core、class、utils 集成到一起，主要是在浏览器需要使用 script tag name 来加载，加载一次就够了，没必要加载独立的模块文件。</p>
+<p>另外一方面，项目本身在不断的发展，因此这个集成需要做成自动化的，除了需要翻译到 fengari 能识别的 Lua，还需要加上 fengari 环境特别的变量，以及 loader 使用到的接口，最后面才能支持 HTML 语法的脚本接口，比如：</p>
+<pre><code class="language-bash">&lt;script src=&quot;/path/to/hello-word.mooc&quot; type=&quot;application/mooc&quot;&gt;&lt;/script&gt;
+
+&lt;script type=&quot;application/mooc&quot;&gt;
+import Core from &quot;moocscript.core&quot;
+print(&quot;hello, world ! from &quot; .. Core.version())
+&lt;/script&gt;
+</code></pre>
+<p>所以，也看了不少 fengari 上面的 javascript 代码，基本上也就是标准的 Lua 上 require 函数的 searcher / loader 的实现了。</p>
+<p>这些 fengari 环境上的特别的变量，以及 loader 接口，算是粘合整个支撑环境的胶水代码，代码不多，但花了不少时间探索。</p>
+<p>上面说的这些工作，当然不会是一个周末就搞定，当然也不可能每个周末都搞。而上周末的工作，仅仅只是 HTML 页面的搭建，比如 UI，比如创建 browser 上面直接可以运行的例子，将 onclick 事件绑定到暴露到 window 的各种 moocscript 函数，比如 window.alert 之类的 Lua/mooncake 跟 browser javascript 的 fengari-interop 例子。</p>
+<p>还加上了日间/夜间模式，之前在本主页尝试过的哈哈哈。</p>
+<p>有了这个网站后，非 io 库相关的例子代码，其实都能直接在浏览器上面跑了，玩这个脚本语言，也不需要再下载一个 Lua 解释器，以及 mooncake 的支持库。</p>
+<p>由于不需要后端 API 接口，简单的静态页面就够了，所以直接使用了 github pages 托管的 project repo，反正这些代码也是需要上传到 github 上的。还有，域名国内买的，主要是便宜。</p>
+<p>项目主页 <a href="https://moocscript.fun">https://moocscript.fun</a> 顶级域名后缀表达了要义，have <strong>fun</strong> ~</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-11.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">22年11月26日 周六 09:48</div>
 <h2>笑傲江湖</h2>
 <p>我记得大学时候就看过，在当时功能机上面那么小的屏幕、那么小的字、那么长的小说居然看完了。</p>
 <p>不过具体故事情节到现在已经忘了，所以才有这么个又看一次。笑傲江湖电视剧我不记得有没有看过，林青霞的电影我倒是看过的，前几个月还重温了一下。</p>
@@ -24,12 +46,11 @@
 <ul>
 <li>中间情节转折最大的是左冷禅未能做五岳派盟主，倒是被君子剑岳不群给设计夺取，前面刘正风金盆洗手被清理门户，当时嵩山派被拔的多高，反转后就跌的多重，也够反讽的</li>
 <li>林平之为了报父母的不共戴天之仇，到处寄人篱下，忍气吞声，一直演戏直到拿到并掌握了《辟邪剑谱》，为了武功最高不被人欺反转欺人，不惜丢掉人性，跟岳灵珊做个表面夫妻</li>
-<li>岳灵珊其实没啥错，但有爹妈守着，有些傲气，江湖阅历不深，不仅得罪人，居然被亲人卖了还帮数钱，夹杂在岳不群、林平之两个人中间，结局令人唏嘘</li>
+<li>岳灵珊其实没啥错，但有爹妈守着，一直未能直面江湖，缺少江湖阅历，经历了两位亲人人性的扭曲，未能及时作出决断，结局有点惨</li>
 <li>岳不群变化最大，小说开始是谦谦君子，中间为了保全华山派还算情有可原，后来为了夺取武林盟主，学习辟邪剑谱，丧失了人性</li>
-<li>任我行跟中原各派有攻有守，打得有来有回，也是为了武功最高，学习吸星大法走火入魔，被东方不败架空设计关入西湖底，出来后群殴了东方不败，继承了那套万岁的人设，人性开始扭曲，小说设定其最终是无故暴毙得有点遗憾</li>
-<li>东方不败侧面描写远大于正面，魔教中厉害人物那么多，居于高位不出场却控制全教，排场就是万岁的排场，以及后面用一根绣花针以一敌四其实完全不落下风，毕竟还有一点点扭曲的人性，为了杨莲亭丢掉了性命</li>
-<li>任盈盈的出场算是悄无声息，在洛阳绿竹巷中作为老婆婆出场，身份模糊，作者故意不说，拖到后面才完全披露，作为魔教教主之女，为了令狐冲可以牺牲一切，经过了各种江湖道义的考验</li>
-<li>令狐冲跟任盈盈久经波折，在本书的最后结婚隐居江湖，算是一个很完满的结局</li>
+<li>任我行跟中原各派有攻有守，打得有来有回，也是为了武功最高，学习吸星大法走火入魔，被东方不败逐步架空，并设计关入西湖底，出来后群殴了东方不败，继承了那套万岁的人设，人性开始逐渐扭曲，最终是无故暴毙</li>
+<li>东方不败侧面描写远大于正面，魔教中厉害人物那么多，其居于高位不出场却控制全教，排场就是万岁的排场，以及后面用一根绣花针以一敌四完全不落下风，毕竟还有一点点扭曲的人性，为了杨莲亭丢掉了性命</li>
+<li>任盈盈的出场算是悄无声息，在洛阳绿竹巷中作为老婆婆出场，身份模糊，作者故意不说，拖到后面才完全披露，作为魔教教主之女，为了令狐冲可以牺牲一切，经过了各种江湖道义的考验，久经波折，跟令狐冲在本书的最后结婚隐居江湖，算是一个很完满的结局</li>
 </ul>
 <p>在故事后面，任我行没能跟令狐冲来一场打斗，我觉得有些遗憾，也许是作者不想在后面喧宾夺主了，毕竟有一个最大的反转坏蛋岳不群作为对立面就够了吧。</p>
 <div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2022-11.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
@@ -362,38 +383,6 @@ return
 <p>我就说手头的这台一加 7 Pro，为啥开个微信小程序，都有可能导致微信崩溃，另外就是偶尔有些莫名其妙的小问题，也许是待机时长超过 3 年的 855 有些老迈了吧。</p>
 <p><img src="https://tva1.sinaimg.cn/orj360/6f6cc1c0gy1h6aiwiwaqkj21402eogmv.jpg" alt=""></p>
 <div class="category"><a href="CategoryMisc.html">CategoryMisc</a> / <a href="2022-09.html#p4">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">22年9月17日 周六 20:56</div>
-<h2>中秋返乡黄码风波</h2>
-<p>在返工的动车上了，有些经历当成日记，记录一下吧。</p>
-<p>像我这种返乡没能3天2检导致[团圆月饼]的情况，社区网格管理人员对于扭转成[绿丝带]，有决定权。</p>
-<p>我9号到家，按照自治区文件，需要做足7天核酸。算上9号，到15号就7天了，但管我的认为，14号刚检查了一次，要隔一天，最后一次16号检查才好。</p>
-<p>16号要不是我家人到社区催他，鬼知道什么时候过来核酸。</p>
-<p>16号下午不到4点，二医院出结果了，也是阴性，我把结果微信给他，他说马上提交，但一直等到17号早上还是[团圆月饼]。我wx问了一下，他说帮问一下，然后没消息了。我的车票是买了又退。</p>
-<p>17号早上我挺着急的了，距离最后一次检查核酸阴性，到现在快一天了未能[绿丝带]，让我对整个[团圆月饼]扭转为[绿丝带]的上报链很不信任。</p>
-<p>但我也知道，像我这样从外地返乡，又没有按流程报备，到社区cao着普通话跟街道办的人对线，天生理亏，人家2、3句话就把我打发了（不好意思，本地话最大）。</p>
-<p>同样17号早上，sz那边问我具体情况，我就说了当前位置，最近几次核酸检测结果，以及桂康码状态。她说把我在sz挂白名单，避免黄码之类的吧。</p>
-<p>我也知道我现在粤康码[绿丝带]，只是标记了7天未检测核酸。这个状态在sz不正常，但在一些类似的粤西4线城市，谁说一定要在7天内检查一次核酸呢。就想着要不到gd检测一下核酸，到gd地坐车返深算了。</p>
-<p>于是回拨sz那边的电话，就这个操作咨询了一下。她跟我解释了gd这边，跟湖南、四川的健康码互认，如果核酸阴性，符合转[绿丝带]条件，一天内就能转了。对于我这种想着在gd核酸转[绿丝带]的情况，没有否认，当然也不保证这样一定行。</p>
-<p>我的求生欲望迫切，在sz，上地铁要48h核酸，像我这种不是因为接触风险导致的[团圆月饼]，3天2检就给你转[绿丝带]了。</p>
-<p>想好后跟家人说了一下，查了一下线路，玉湛高速到廉江人民医院14x公里，我压着120，一个多小时就到了，就算是6个小时出结果，我返回玉林睡一个晚上，第二天周日18号到湛江坐高铁就能返深。当然，如果玉林这边的结果出来更早，那更好。</p>
-<p>有了保底的方案，加上我家人也觉得街道那边转[绿丝带]的流程太磨叽了，他们就过去吵，问到底什么时候能转[绿丝带]。街道的人就推系统问题，上报不了自治区，再给一个半小时吧。我家人又吵，你们说是系统问题，那出一个纸质的说明吧。你们转不了[绿丝带]，gd可以转。</p>
-<p>也没提具体方案，街道办的人就慌了。为什么这么说呢，因为我家离街道办走路不到5分钟，回家坐下来还没开始吃午饭，我的桂康码就转[绿丝带]了，神奇不神奇。</p>
-<p>谁预计得到，网络突然就顺畅了，资料突然就能推上自治区的系统了。敢情是管我的一直不放在心上，拖着不提交吧。</p>
-<p>可是，人家管我的街道网格员就有这样的权力。</p>
-<hr>
-<ul>
-<li>我想过如果自己到街道办对线，转[绿丝带]机会渺茫才有这个想法</li>
-<li>粤桂健康码不互认，才留下了这样的理论操作空间</li>
-<li>如果在sz后3天2检一直阴性保持[绿丝带]，然后桂康码又还保持着[团圆月饼]，理论变成现实，就问[doge]不[doge]</li>
-</ul>
-<hr>
-<p>感觉高风险区、中风险区导致的[新鲜好柿][团圆月饼]管理，以及区域行政命令导致的[团圆月饼]管理，不是一回事，后者是交给街道办处管理的，街道办对于[团圆月饼]转[绿丝带]的管理，有决定权。</p>
-<p>我是千不该万不该回家没报备，然后又没3天2检导致激活了自治区的[团圆月饼]大礼。</p>
-<p>如果支线剧情结果是[团圆月饼][绿丝带]共存，一半冰水一半火焰，我甚至有想过春节咋办，算不算彻底得罪了街道办管我这种异省返乡的。到时候，我是早早哈哈报备呢，还是掐着表不到3天就溜。</p>
-<p>纪念一下2022的[团圆月饼]节，想想 mission impossible、亡命天涯就觉得有那味儿，可惜没能激活支线剧情。</p>
-<p>太长写了至少 3 个站[裂开]</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2022-09.html#p3">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
