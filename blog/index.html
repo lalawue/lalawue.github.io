@@ -15,7 +15,16 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年1月18日 周三 23:57</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年1月28日 周六 22:47</div>
+<h2>VSCode 的 'Remote - SSH'</h2>
+<p>春节带了 T450 回家，但实际是使用虚拟机来调试代码的，代码里面的头文件啥的都是 Linux 那边的路径，如果用 Win 下的 VSCode 打开工程，是找不到相关头文件，仅有报错的。</p>
+<p>这个时候安装上 ‘Remote - SSH’ 扩展，就可以通过 SSH 协议访问虚拟机里面的工程，头文件路径啥的都是正确的，跟在 Linux 桌面打开工程是一样的。</p>
+<p>这得益于 VSCode 的 C/S 架构，只要在支持 SSHD 的服务器上安装上 VSCode 的 server 端，以及相关 server 端的插件，就能够支持访问 server 端用户权限下的文件、工程。</p>
+<p>虽然在 T450 上，虚拟机 + SSH 确实会慢一些，但有 LSP 的支持总要比没有良好编译环境的 Windows 要好吧。</p>
+<p>对了，如果还装了 SSHFS-Win 这样的组合，要避免 SSHFS 使用的 ssh.exe 跟扩展使用的 ssh.exe 混用，以及扩展使用的 <code>.ssh/config</code> 文件，可以选择创建在 <code>AppData</code> 目录下的那个，要不会导致 SSHFS-Win 创建目录链接失败。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-01.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">23年1月18日 周三 23:57</div>
 <h2>T450 维修记录</h2>
 <p>之前新冠阳时没能抢返乡火车票，导致后面连过路湛江的动车都没票了，只好选择飞回南宁再转车玉林的路线，麻烦许多，另外路线功课没有做足，比如完全可以在机场过夜，然后从吴圩机场高铁站直接返回玉林的。</p>
 <p>到家后启动了 T450，还安装了驱动才能让一个蓝牙音箱响起来，才开机 4、5 分总吧，就到了午饭时间，先屏幕一合吃个饭。</p>
@@ -240,158 +249,6 @@ print(&quot;hello, world ! from &quot; .. Core.version())
 <p>此次变更后，demo 工程 playground 页面下的几个测试项都通过了，可喜可贺。</p>
 <p>之后将这个 win 目录放到了单独的分支中，毕竟编译麻烦，不像 mnet，后面如果没有 C 层的改动，这个目录其实可以继续用下去了。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-10.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">22年9月29日 周四 23:55</div>
-<h2>Win 10 下 AHK 模拟 Mac 快捷键</h2>
-<p>Win 10 是买的 512G 固态预装的，我安上后解压就行了，软件安装配置大概 2 ~ 3 个小时，但是为了适应自己的需要，各种捣腾。比如我的电脑界面隐藏顶部的几个文件夹，觉得太突兀了，没啥用，再说左边不是有快捷键吗。然后是暗黑模式，配置也快，其实到这一步就差不多了。</p>
-<p>但是软件配置这块其实优化是没有底的，比如就突然觉得 Win 10 的快捷键很难受，所以用了 AHK，然后就浪费了 2 天时间在这个上面。</p>
-<p>先说一下 Win 10 系统虽然提供了快捷键，但是没有提供相应的更改按键映射的能力，不像 Mac，系统就提供了各种按键映射，这点要给 Mac 点赞。</p>
-<p>AHK 脚本语言粗看是很简单的，但是里面要考虑很多已有的 Win 下按键的处理，有的是按下就响应的，有的是弹起来才响应，还有自测的过程中，按键断触也是有的，突然间有的按键就怎么都不响应了，没办法，只能重启了。</p>
-<p>贴一个今晚上搞好，觉得还能用一阵子的配置吧：</p>
-<pre><code class="language-bash">;;
-;; Public Domain
-;;
-;; Win 10 下 AHK 模拟 MacOSX 快捷键（MacOSX shortcuts with AHK under Win 10）
-;;
-;; 参考文档：https://wyagd001.github.io/（Documentation）
-;;
-
-;;
-;; Alt 按键相关
-;;
-
-; LAlt+q，关闭应用，替换 LAlt+F4
-&lt;!q::
-    Send {LAlt Down}{F4}
-    Send {LAlt Up}
-return
-
-; LAlt+a，全选，替换 LCtrl+a
-&lt;!a::
-    Send {RCtrl Down}{a}
-    Send {RCtrl Up}
-return
-
-; LAlt+c，拷贝，替换 LCtrl+c
-&lt;!c::
-    Send {RCtrl Down}{c}
-    Send {RCtrl Up}
-return
-
-; LAlt+v，粘贴，替换 LCtrl+v
-&lt;!v::
-    Send {RCtrl Down}{v}
-    Send {RCtrl Up}
-return
-
-; LAlt+x，剪切，替换 LCtrl+x
-&lt;!x::
-    Send {RCtrl Down}{x}
-    Send {RCtrl Up}
-return
-
-; LAlt+s，保存，替换 LCtrl+s
-&lt;!s::
-    Send {RCtrl Down}{s}
-    Send {RCtrl Up}
-return
-
-;;
-;; Ctrl 按键相关
-;;
-
-; LCtrl+s，搜索，替换 Ctrl+f
-&lt;^~s::
-    ; 忽略 Emacs 按键的 C-x C-s
-    if (A_PriorKey not in x) {
-        Send {RCtrl Down}{f}
-        Send {RCtrl Up}
-    }
-return
-
-; LCtrl+a，光标行首
-&lt;^a::
-    Send {Home}
-return
-
-; LCtrl+e，光标行尾
-&lt;^e::
-    Send {End}
-return
-
-; LCtrl+f，前进一个字符
-&lt;^f::
-    Send {Right}
-return
-
-; LCtrl+b，后退一个字符
-&lt;^b::
-    Send {Left}
-return
-
-; LCtrl+p，上一行
-&lt;^p::
-    Send {Up}
-return
-
-; LCtrl+n，下一行
-&lt;^n::
-    Send {Down}
-return
-
-; LCtrl+d，删除前一个字符
-&lt;^d::
-    Send {Delete}
-return
-
-; LCtrl+k，删除一行
-&lt;^k::
-    Send {Home}
-    Send {LShift Down}{End}
-    Send {LShift Up}{Delete}
-return
-
-;;
-;; Win 按键相关
-;;
-
-; LWin+f 替换 LCtrl+f
-&lt;#f::
-    Send {RCtrl Down}{f}
-    Send {RCtrl Up}
-return
-
-; LWin+s 替换系统搜索打开 Wox
-&lt;#s::
-    Send {LAlt Down}{Delete}
-    Send {LAlt Up}
-return
-
-; LWin+w 替换 LWin+Tab
-&lt;#w::&gt;#Tab
-
-; LWin+Tab 访问右边桌面空间，一直点按 Tab 一直往右移
-; LWin+Shift+Tab 访问左边桌面空间，一直点按 Tab 一直往左移
-; 以上命令类似 Alt+Tab 和 Alt+Shift+Tab
-LWin &amp; Tab::
-    LWinTabMenu := true
-    if GetKeyState(&quot;Shift&quot;,&quot;P&quot;) {
-        Send {LCtrl Down}{LWin Down}{Left}
-    } else {
-        Send {LCtrl Down}{LWin Down}{Right}
-    }
-return
-
-#If (LWinTabMenu)
-    ~*Tab Up::
-        Send {LCtrl Up}{LWin Up}
-        LWinTabMenu := false
-    return
-#If
-</code></pre>
-<p>上面都写好了注释，就不多做介绍了，感觉最有用的是桌面空间切换这个，跟我在 Mac 上是一致得了。</p>
-<p>另外其他的一些，基本上能用吧，大概就是这样，如果以后感觉到有冲突的话，在修修改改，或者删删减减吧，太折腾人了，感觉不大值得。</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-09.html#p7">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
