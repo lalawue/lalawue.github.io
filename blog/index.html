@@ -15,7 +15,20 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年1月28日 周六 22:47</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年2月12日 周日 23:24</div>
+<h2>将驾驶证转入深圳</h2>
+<p>春节返乡，发现驾驶证快到期了，但春节期间老家的车管所也放假，也有点担心在老家的车管所续签会不会花费比较多的时间，比如排队什么的。</p>
+<p>查了一下将驾驶证转入深圳，特别是知乎上面的长文介绍，发现转入深圳其实很简单的，反正自己长期在深圳，不如就转过来吧。</p>
+<p>说一下异地转入深圳吧，整个流程都自动化了，比如体检的几个环节，都是在大厅里面一个封闭的体检箱里面完成的，大厅里面这样的体检箱有好多个，平时如果人不多，几乎不用排队。</p>
+<p>整个体检过程也比较顺利，都有视频、语音提示，虽然一开始有点笨手笨脚的没立即理解跟上，因为不同的测试项目需要配合一些道具（比如测试视力需要用板子遮眼），但是上面没有立即通过的地方会标红色，重新测一遍相关项就好了。</p>
+<p>对了，拍照可以在体检箱里面完成，如果出了体检箱，就得单独花 ¥10 来拍照了。</p>
+<p>然后大概等了十几、二十分钟，体检结果出来了，可以在任何一台体检箱外面打印。</p>
+<p>拿到了体检报告，下一个环节就是打印驾驶证了，感觉体检报告这个出来只是给自己看一下而已，毕竟体检结果都要在线审核的，都联网了。</p>
+<p>打印驾驶证之前，还会要求回收旧的驾驶证，新的驾驶证打印出来后，还热乎的，要凉一下，要不太烫手了。</p>
+<p>体检 ¥45，照片 ¥10，新的驾驶证、皮套工本费 ¥10，整个流程大概 30 ～ 40 分钟吧，真的快。</p>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-02.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">23年1月28日 周六 22:47</div>
 <h2>VSCode 的 'Remote - SSH'</h2>
 <p>春节带了 T450 回家，但实际是使用虚拟机来调试代码的，代码里面的头文件啥的都是 Linux 那边的路径，如果用 Win 下的 VSCode 打开工程，是找不到相关头文件，仅有报错的。</p>
 <p>这个时候安装上 ‘Remote - SSH’ 扩展，就可以通过 SSH 协议访问虚拟机里面的工程，头文件路径啥的都是正确的，跟在 Linux 桌面打开工程是一样的。</p>
@@ -228,27 +241,6 @@ print(&quot;hello, world ! from &quot; .. Core.version())
 <p>如果 ssh 过去的用户无权限的话，在 Windows 这边会显示</p>
 <img width="480" alt="Window 侧权限访问" src="https://tva1.sinaimg.cn/large/6f6cc1c0gy1h6jajuvrauj20j909f0te.jpg">
 <div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2022-10.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">22年10月03日 周一 22:42</div>
-<h2>MNet / Cincau 支持 Win 10</h2>
-<p>国庆放假没想好去哪里，再加上深圳这边几乎天天都有疫情，零星爆发，特别是罗湖、福田，连宝安也有一处，就更不敢走远了。</p>
-<p>然后这个国庆的前几天，是为 MNet、Cincau 加入了 Win 10 的支持，虽然说之前有做过 Win 7 的，但在那之后都只验证了 Mac 和 Linux 下的场景，毕竟我自己没怎么使用 Windows 嘛。</p>
-<p>其实有这个想法也很自然，因为 9 月底的时候，把家里的 T450 拿到了深圳，还升级了几个主要的硬件，多了这一台玩具后，就有了上面的想法，然后实践了一把。</p>
-<p>用的工具链是 mingw64，安装包这里有 <a href="http://www.winlibs.com/">http://www.winlibs.com/</a>。</p>
-<p>有一些工程本来就考虑 Windows 环境的，用 mingw32-make 替换 make 很多东西都能直接编译过，比如 LuaJIT。</p>
-<p>mnet 的部分还好，都是我自己的代码，我是单独搞了一个独立于项目之外的 win 目录，放置一个 shell 文件，编译参数都配置好了，而且加上了 OpenSSL 的支持，来自 <a href="https://slproweb.com/products/Win32OpenSSL.html">https://slproweb.com/products/Win32OpenSSL.html</a>。</p>
-<p>这个 OpenSSL 可以选择是 msi 安装包的，安装好后，将头文件以及二进制库放到刚提到的 win 目录下相应位置就好。</p>
-<p>跑了一下基于 openssl 的 reconnect 以及 rwdata 点对点测试，没毛病，跑得很好。</p>
-<p>mnet 测试 OK 后，想着是不是 cincau 也可以呀，但是 cincau 的依赖项比较多，在 Mac 以及 Linux 下，依赖了 LuaRocks 来管理。但是在 Win 下，我死活用不了这个 LuaRocks，不知道怎么用，不管是 Git Bash、Windows Terminal 还是 cmd.exe，都没法用，也许是我使用的方式不对吧，这个就不晓得了。</p>
-<p>不过没关系，用不了 LuaRocks，我就一个一个编译好了，好几个是不需要单独编译的，比如 MoonCake，纯 Lua 的库，但也遇到了问题，没法用 shebang 的方式拉起一个 lua 源代码了，只能删除 shebang 行，用一个单独的 bat 文件模拟了。</p>
-<p>另外一个比较难的是 luasql.sqlite3，我搞了好久，大概有 3 个小时左右，在 lua 侧 require 老是出现找不到库的问题，运行起来后，库函数定位不到。</p>
-<p>这个时候其实 cincau demo 工程里面，基本的 HTTP 已经通了，但是在 playground 页面里的 sqlite3 数据库读写还是失败的。</p>
-<p>这里的原因，是因为 sqlite3.dll 预编译包和 lua.sqlite3 最终生成的 sqlite3.dll 文件名冲突了，导致加载失败。</p>
-<p>使用了工具链的 nm 查看，发现 luaopen_luasql_sliqte3 确实没找到，怪不得失败，搞了半个晚上呀，没成功，只能先睡觉去了。</p>
-<p>第二天一想，不对呀，我其实可以将 sqlite3.c 和 sqlite3.h 跟 luas.qlite3 放到一起编译的，这样就少了一层 dll 加载，只留了一个 sqilte3.dll 放到 luasql 目录下。这样在 lua 源文件层，之前怎么 require lua.sqlite3，现在还是一样。</p>
-<p>此次变更后，demo 工程 playground 页面下的几个测试项都通过了，可喜可贺。</p>
-<p>之后将这个 win 目录放到了单独的分支中，毕竟编译麻烦，不像 mnet，后面如果没有 C 层的改动，这个目录其实可以继续用下去了。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2022-10.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
