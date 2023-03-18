@@ -16,6 +16,62 @@
     <div id="body">
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for March, 2023</h1>
+<p><a id="p3"></a></p>
+<div class="date">23年3月18日 周六 13:26</div>
+<h2>Mac 下关闭 Edge 右上角发现按钮</h2>
+<h3>1.创建描述文件</h3>
+<p>保存下面的文件为 microsoflt.edge.mobileconfig</p>
+<pre><code class="language-sh">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+	&lt;key&gt;PayloadDisplayName&lt;/key&gt;
+	&lt;string&gt;Microsoft Edge Policy&lt;/string&gt;
+	&lt;key&gt;PayloadIdentifier&lt;/key&gt;
+	&lt;string&gt;com.example.edge-sensible&lt;/string&gt;
+	&lt;key&gt;PayloadType&lt;/key&gt;
+	&lt;string&gt;Configuration&lt;/string&gt;
+	&lt;key&gt;PayloadUUID&lt;/key&gt;
+	&lt;string&gt;6BAC9A8B-19F3-4876-99D9-BCA6C8B30238&lt;/string&gt;
+	&lt;key&gt;PayloadVersion&lt;/key&gt;
+	&lt;integer&gt;1&lt;/integer&gt;
+	&lt;key&gt;TargetDeviceType&lt;/key&gt;
+	&lt;integer&gt;5&lt;/integer&gt;
+	&lt;key&gt;PayloadContent&lt;/key&gt;
+	&lt;dict&gt;
+		&lt;key&gt;PayloadDisplayName&lt;/key&gt;
+		&lt;string&gt;Microsoft Edge Policy&lt;/string&gt;
+		&lt;key&gt;PayloadIdentifier&lt;/key&gt;
+		&lt;string&gt;com.microsoft.Edge.13D4EE1D-74BF-4963-AE69-88E61F9FD9EA&lt;/string&gt;
+		&lt;key&gt;PayloadType&lt;/key&gt;
+		&lt;string&gt;com.microsoft.Edge&lt;/string&gt;
+		&lt;key&gt;PayloadUUID&lt;/key&gt;
+		&lt;string&gt;9FCEF286-C20B-4708-A8C0-FB728C75B677&lt;/string&gt;
+		&lt;key&gt;PayloadVersion&lt;/key&gt;
+		&lt;integer&gt;1&lt;/integer&gt;
+		&lt;key&gt;HubsSidebarEnabled&lt;/key&gt;
+		&lt;false/&gt;
+		&lt;key&gt;DiagnosticData&lt;/key&gt;
+		&lt;integer&gt;0&lt;/integer&gt;
+		&lt;key&gt;EdgeCollectionsEnabled&lt;/key&gt;
+		&lt;false/&gt;
+		&lt;key&gt;EdgeShoppingAssistantEnabled&lt;/key&gt;
+		&lt;false/&gt;
+		&lt;key&gt;PersonalizationReportingEnabled&lt;/key&gt;
+		&lt;false/&gt;
+		&lt;key&gt;ShowMicrosoftRewards&lt;/key&gt;
+		&lt;false/&gt;
+	&lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+<h3>2.加载描述文件</h3>
+<p>在系统偏好设置 -&gt; 描述文件，点击 <code>+</code> 添加这个描述文件</p>
+<h3>3.在 Edge 浏览器里面启用策略</h3>
+<p>在 Edge 地址栏里面输入 <code>edge://policy/</code>，点击重新加载策略，就可以看到效果</p>
+<p>--</p>
+<p>教程在这里 <a href="https://zhuanlan.zhihu.com/p/614089321">https://zhuanlan.zhihu.com/p/614089321</a>，只不过上面的描述文件需要删掉注释。</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2023-03.html#p3">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p2"></a></p>
 <div class="date">23年3月17日 周五 22:27</div>
 <h2>买了一个 RX580 2304SP 矿卡</h2>
