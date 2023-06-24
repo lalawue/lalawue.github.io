@@ -15,7 +15,23 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年6月11日 周日 11:49</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年6月24日 周六 23:36</div>
+<h2>cincau 支持多进程模型</h2>
+<p>自从 <a href="https://github.com/lalawue/m_net">mnet</a> 在 Mac/Linux 下支持了多进程模型，<a href="https://github.com/lalawue/cincau">cincau</a> 也支持上了。</p>
+<p>luajit 会检测是否增加了多进程的配置，如果有多进程的配置，将创建了一个控制面用的 UDP。然后 monitor 根据 worker 的存活数量，fork() 足够数量的 process。</p>
+<p>控制面之所以选用 UDP 而不是 TCP，是因为 UDP 是按帧发送的，不需要再做一层协议的解析，系统内也不存在丢帧，只要发送的数量不多就没啥问题，缺点是一帧的数据长度有限。</p>
+<p>另外，monitor 通过 fork() 拿到了 worker pid 后，需要将 pid 传递给调用的 luajit 做记录。而 worker 在被 fork() 后，需要往 monitor 控制面的 UDP port 发送数据，传递自己的 port 和 index 的对应关系。</p>
+<p>每个 process 都有控制面的 UDP 用来收发内部数据，接口部分是提供了类似 worker index 来指明需要发送到的 worker port。之所以用 worker index，是因为 worker 被重新创建后，绑定 port 是会变化的（配置文件中不需要指明每一个 worker 的 port）。worker index 序号将会从 1 到 worker count，其他的序号代表 monitor。</p>
+<p>而且在每个 worker process 内，是不知道其他 worker 的控制面端口的，只能通过 monitor 来转发，monitor 毕竟拥有所有 worker 的 index 和 port 的对应关系。</p>
+<p>之所以 monitor 需要占据其他非 worker 的 index，举个例子，比如搜集当前所有 worker 的某项数据。</p>
+<p>可以向 worker 1 发送事件，worker 1 接收到后，往 worker 序号为 index + 1 的发送，一直到最后一个 worker 发送给序号 worker count + 1，最后就是 monitor 收到了，你可以认为数据是被不断叠加的，一直到 monitor 收到结果。</p>
+<p>这样本轮就搜集完了。如果需要传递收集的结果，monitor 可以广播到所有的 worker ，这样就完成了一个数据的循环。</p>
+<p>假若某个 worker 挂掉后，拥有 cookie 的客户端如果继续访问，接管的其他 process 为了保持登陆态（比如拥有服务端定义的最新的 cookie 数据），可以事先通过某个事件同步 cookie，monitor 也一样接收。这样当 worker 被 fork() 后，拿到的将是跟其他 worker 一样的的 cookie 数据。</p>
+<p>上述的 monitor 模型依赖 mnet 的多进程模型，虽然持有 listen fd，但是不处理 accept 事件，只有一个系统内的控制面 UDP 来传递数据，其他的工作，只是检查、拉起 worker process，状态相对稳定。</p>
+<p>另外在 .mooc 配置文件上，透出来了多进程配置中的数据回调、发送函数，除了 <code>WORKER_ONLINE</code>、<code>WORKER_ROUTE</code>、<code>WOREKR_SESSION</code> 是保留事件外，其他的可以自行添加处理。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-06.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">23年6月11日 周日 11:49</div>
 <h2>mnet 支持多进程模型</h2>
 <p>mnet 目前还未原生支持多线程，比如在同一进程内持有所有 socket 列表，无法独立区分不同线程，反正把这个区分交给调用方来解决。</p>
 <p>而对于 <a href="https://github.com/lalawue/m_net/tree/master/examples/process">mnet 多进程模型</a>，之前也无法区分，比如无法在不同进程 listen 同一个 fd。</p>
@@ -229,29 +245,6 @@ Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /AL
 <p>然后就去掉了内置电池（不要了），只要外部电池就行，小哥说这样也是没问题的，不接电源也能用 1、2 个小时。</p>
 <p>这篇文章就是在这个 T450 上写的，只要能用，当然是继续用着了，毕竟带笔记本的日子极少，只要能在返乡时候凑凑数就行。</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-01.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年1月13日 周五 22:18</div>
-<h2>新冠中奖经历</h2>
-<p>12 月最重要的事情，莫过于中奖新冠，我以为身在广东，平时又勤戴口罩，加上已有 3 支疫苗加持，而且大概率沾染的是广东毒株，便认为即便遇见新冠，应该可以游刃有余。</p>
-<p>但没想到病毒给我开了个玩笑，即便现在新冠过后一周了，感觉身体状况还未能完全放松下来。</p>
-<p>说一下具体情况吧，前面几周在赶一个需求，好几天晚上加班加到吐血，到了 12 月 30 号，上上周五终于忙完，但是身体也透支了不少，下班就感觉头有点晕，回到家量了体温，39+，看来是感染新冠了。</p>
-<p>还发现一个情况，心率提升很多，有 130+，因为我平时都戴佳明手表，一眼就能看到心率的情况。</p>
-<p>周五除了头晕、心率高，其他就还好，当时还没有喉咙疼。第二天起来，心率没有降下来，仍然有 130+、140+，体温有也还有 38+，全身骨头有种轻微的肿痛感觉，不明显，除此外喉咙不疼，我还以为是广东毒株，这点痛算什么，周六嘛，还去海边玩了。</p>
-<p>不过周六心率高挺明显的，普通的过街天桥，走得快一点都会头晕，看一下心率，140+，我赶紧心里放空，然后平稳呼吸缓一下，等降到 120 再动，话说平时哪有这样。</p>
-<p>到了第三天周日，心率稍微降了一点，体温早上 37+，下午 38+，但是中午我忍不住洗了个澡、洗了个头。感觉就是这次洗澡洗头没注意，给搞严重了，从周日下午开始喉咙疼，不是一般的疼，就像是微博大 V 们说的，刀锋过喉，咽口水都疼。</p>
-<p>没有感冒药，也没有布洛芬，就这样硬熬着，家人给介绍，说吃点冰糖雪梨煮的糖水，还要喝炙甘草、陈皮、葱白、茯苓泡的药饮，话说冰糖雪梨煮的糖水效果果然好，我煮了大概有 2 碗，然后一下就喝完了，甜的嘛。喉咙轻松了不少，但感觉病毒转移到头上来了，头嗡嗡的。</p>
-<p>跟家人说了一下，家人说，不应该一下子喝那么多，要一口一口地喝，😭</p>
-<p>不管怎么说，刀锋过喉的感觉松了一点，然后慢慢有痰了，但是到了周一，鼻涕出来了，痰和鼻涕都有，咳嗽也有，完全无法控制的鼻涕、咳嗽慢慢来了。</p>
-<p>倒是体温降下来了一些，到了下午是 37+ 这样了，感觉病毒慢慢下到了肺部，卡在喉咙之下，有些痰出不来，然后鼻涕也都把鼻孔完全堵住，除非我塞着一张纸，否则一下就不通了，记得是周三、还是周四晚上，我突然起了好奇心，用鼻子闻了一下之前买的大葱，发现没有嗅觉了，毕竟那天下午鼻子几乎没有通过，估计里面已经包了一层浓鼻涕粘液，不过味觉倒是一直都有。</p>
-<p>这种感觉只经历了半天，第二天大葱的嗅觉我还是感受到了一点点。还好那几天都早睡，然后把自己塞得暖暖的，所以睡觉的时候，咳嗽没有那么严重，不过两天下来，也用了一卷半纸，咳嗽、鼻涕、痰都有。</p>
-<p>到了周五早上吧，发现喉咙好了一些，然后突然间咳嗽了一下，吐出了一口浓痰，这口浓痰感觉是从喉咙根部运上来的，人生第一次感觉还有这种痰，我平时很少感冒，痰也很少，所以这种感觉会记住很久。</p>
-<p>没想到我的新冠症状消失经历，用了整一周，结束居家之后，周一上班我才收到了抗原检测，当时已经阳康了。</p>
-<p>接下来的这一周，主要还是喝之前提到的药饮，功效是减少咳嗽，慢慢这一周修养下来，算是有效果，到了今天周五，刚好两周算是咳嗽基本停了。</p>
-<p>不过这段时间，我吃饭都得搞清淡的，前面一周，因为也还挺冷的，都没洗澡，就擦身，洗头差不多 2、3 天洗一次，还要捡中午洗。</p>
-<p>到了这周就没这么多顾虑，正常洗澡、洗头了。</p>
-<p>前一阵子也看了很多报道，说要避免运动，更要避免剧烈运动，我想起新冠第一天的情景，那个心率，如果那样的心率几天熬下来，妥妥心肌炎，弄不好还会有更严重的影响。</p>
-<p>记录一下吧。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-01.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;

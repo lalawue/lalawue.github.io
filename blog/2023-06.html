@@ -16,6 +16,22 @@
     <div id="body">
       <div id="text">
 	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for June, 2023</h1>
+<p><a id="p1"></a></p>
+<div class="date">23年6月24日 周六 23:36</div>
+<h2>cincau 支持多进程模型</h2>
+<p>自从 <a href="https://github.com/lalawue/m_net">mnet</a> 在 Mac/Linux 下支持了多进程模型，<a href="https://github.com/lalawue/cincau">cincau</a> 也支持上了。</p>
+<p>luajit 会检测是否增加了多进程的配置，如果有多进程的配置，将创建了一个控制面用的 UDP。然后 monitor 根据 worker 的存活数量，fork() 足够数量的 process。</p>
+<p>控制面之所以选用 UDP 而不是 TCP，是因为 UDP 是按帧发送的，不需要再做一层协议的解析，系统内也不存在丢帧，只要发送的数量不多就没啥问题，缺点是一帧的数据长度有限。</p>
+<p>另外，monitor 通过 fork() 拿到了 worker pid 后，需要将 pid 传递给调用的 luajit 做记录。而 worker 在被 fork() 后，需要往 monitor 控制面的 UDP port 发送数据，传递自己的 port 和 index 的对应关系。</p>
+<p>每个 process 都有控制面的 UDP 用来收发内部数据，接口部分是提供了类似 worker index 来指明需要发送到的 worker port。之所以用 worker index，是因为 worker 被重新创建后，绑定 port 是会变化的（配置文件中不需要指明每一个 worker 的 port）。worker index 序号将会从 1 到 worker count，其他的序号代表 monitor。</p>
+<p>而且在每个 worker process 内，是不知道其他 worker 的控制面端口的，只能通过 monitor 来转发，monitor 毕竟拥有所有 worker 的 index 和 port 的对应关系。</p>
+<p>之所以 monitor 需要占据其他非 worker 的 index，举个例子，比如搜集当前所有 worker 的某项数据。</p>
+<p>可以向 worker 1 发送事件，worker 1 接收到后，往 worker 序号为 index + 1 的发送，一直到最后一个 worker 发送给序号 worker count + 1，最后就是 monitor 收到了，你可以认为数据是被不断叠加的，一直到 monitor 收到结果。</p>
+<p>这样本轮就搜集完了。如果需要传递收集的结果，monitor 可以广播到所有的 worker ，这样就完成了一个数据的循环。</p>
+<p>假若某个 worker 挂掉后，拥有 cookie 的客户端如果继续访问，接管的其他 process 为了保持登陆态（比如拥有服务端定义的最新的 cookie 数据），可以事先通过某个事件同步 cookie，monitor 也一样接收。这样当 worker 被 fork() 后，拿到的将是跟其他 worker 一样的的 cookie 数据。</p>
+<p>上述的 monitor 模型依赖 mnet 的多进程模型，虽然持有 listen fd，但是不处理 accept 事件，只有一个系统内的控制面 UDP 来传递数据，其他的工作，只是检查、拉起 worker process，状态相对稳定。</p>
+<p>另外在 .mooc 配置文件上，透出来了多进程配置中的数据回调、发送函数，除了 <code>WORKER_ONLINE</code>、<code>WORKER_ROUTE</code>、<code>WOREKR_SESSION</code> 是保留事件外，其他的可以自行添加处理。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-06.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <p><a id="p0"></a></p>
 <div class="date">23年6月11日 周日 11:49</div>
 <h2>mnet 支持多进程模型</h2>
