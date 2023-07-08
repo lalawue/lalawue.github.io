@@ -15,7 +15,18 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年6月24日 周六 23:36</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年7月08日 周六 22:17</div>
+<h2>OTP 研究</h2>
+<p>学习了一下 OTP 这个东西，比如用的是 <a href="https://github.com/OTPLibraries/LuaOTP">LuaOTP</a>。</p>
+<p>区分为 OTP、TOTP、HOTP 这三种，OTP 英文展开为 One Time Password，是服务端对客户端的一次性密码，属于双因素验证的范畴。</p>
+<p>TOTP 这里，公式中的一个参与计算的因子是时间，比如这个时间因子，可以 30 秒更新一次，那这个一次性密码，也是 30 秒更新一次。</p>
+<p>HOTP 有一个 counter 的概念，每次用过后都会变化，每次都生成新的，对应的是该一次性密码的使用次数。</p>
+<p>上述 LuaOTP 支持 Google Authenticator，浏览器 JS 这边用的是<a href="https://www.runoob.com/w3cnote/javascript-qrcodejs-library.html">菜鸟教程</a>介绍的<a href="https://github.com/davidshimjs/qrcodejs">qrcodejs</a>，用来生成二维码图片。</p>
+<p>当然也可以不生成图片，而是导出字符串，Google Authenticator 也同样支持字符串导入。</p>
+<p>之前不大理解这一套，搞了一下，发现也没有那么难。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">23年6月24日 周六 23:36</div>
 <h2>cincau 支持多进程模型</h2>
 <p>自从 <a href="https://github.com/lalawue/m_net">mnet</a> 在 Mac/Linux 下支持了多进程模型，<a href="https://github.com/lalawue/cincau">cincau</a> 也支持上了。</p>
 <p>luajit 会检测是否增加了多进程的配置，如果有多进程的配置，将创建了一个控制面用的 UDP。然后 monitor 根据 worker 的存活数量，fork() 足够数量的 process。</p>
@@ -229,22 +240,6 @@ Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /AL
 <p>虽然在 T450 上，虚拟机 + SSH 确实会慢一些，但有 LSP 的支持总要比没有良好编译环境的 Windows 要好吧。</p>
 <p>对了，如果还装了 SSHFS-Win 这样的组合，要避免 SSHFS 使用的 ssh.exe 跟扩展使用的 ssh.exe 混用，以及扩展使用的 <code>.ssh/config</code> 文件，可以选择创建在 <code>AppData</code> 目录下的那个，要不会导致 SSHFS-Win 创建目录链接失败。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-01.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年1月18日 周三 23:57</div>
-<h2>T450 维修记录</h2>
-<p>之前新冠阳时没能抢返乡火车票，导致后面连过路湛江的动车都没票了，只好选择飞回南宁再转车玉林的路线，麻烦许多，另外路线功课没有做足，比如完全可以在机场过夜，然后从吴圩机场高铁站直接返回玉林的。</p>
-<p>到家后启动了 T450，还安装了驱动才能让一个蓝牙音箱响起来，才开机 4、5 分总吧，就到了午饭时间，先屏幕一合吃个饭。</p>
-<p>午饭后屏幕盖子打开，电脑屏幕没亮，点按电源键屏幕都不亮，电源键也没亮！</p>
-<p>自己拆了电池、插拔主板电池都没用，关键是连 BIOS 都没进去，这个太不符合常理了。</p>
-<p>虽然已经近新年，还是抱着试一下的心态到了咱小城市的电脑城，没想到联想品牌店关联的维修中心虽然有人值班，但实际操刀的工程师已经下班，要初六才会回来上班。</p>
-<p>我是在一楼门口的小摊上，被一位大姐拉到了旁边的维修点，那个门店很小，到处都是主板、各种元器件。</p>
-<p>小哥拆开机器，开始点测看机器状态，首先发现没有在待机，另外发现电源接上后有电流，但是下降很快，一下电流就归 0  了。另外排除了主板问题（这个是大头呀，之前的 MacBook 坏了，水果认证的第三方要收我 4k+，我就没修了）。</p>
-<p>然后开始去掉电池看情况，首先去掉了外部电池，还是不行，然后去掉了内置电池，然后机器就亮了，我之前不知道还有一个内置电池，这个内置电池看起来鼓包明显。</p>
-<p>然后单独用电源、外置电池都是能上电、点亮，进入系统的。</p>
-<p>我是千恩万谢了小哥，小哥试了我几句玉林话，还好我的玉林话还是练过的，最后象征性收了我 30 块，我感觉捡到宝了。</p>
-<p>然后就去掉了内置电池（不要了），只要外部电池就行，小哥说这样也是没问题的，不接电源也能用 1、2 个小时。</p>
-<p>这篇文章就是在这个 T450 上写的，只要能用，当然是继续用着了，毕竟带笔记本的日子极少，只要能在返乡时候凑凑数就行。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-01.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;

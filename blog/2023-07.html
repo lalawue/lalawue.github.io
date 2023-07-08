@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sucha's Blog - Archive for July, 2022</title>
+    <meta name="generator" content="MarkdownProjectCompositor.lua">
+    <meta name="author" content="Sucha">
+    <meta name="keywords" content="suchang, programming, Linux, Lua">
+    <meta name="description" content="Sucha's blog">
+    <link rel="shortcut icon" href="../images/ico.png">
+    <link rel="stylesheet" type="text/css" href="../styles/blog.css">
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css">
+    <style id="site_theme"></style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="text">
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for July, 2022</h1>
+<p><a id="p0"></a></p>
+<div class="date">23年7月08日 周六 22:17</div>
+<h2>OTP 研究</h2>
+<p>学习了一下 OTP 这个东西，比如用的是 <a href="https://github.com/OTPLibraries/LuaOTP">LuaOTP</a>。</p>
+<p>区分为 OTP、TOTP、HOTP 这三种，OTP 英文展开为 One Time Password，是服务端对客户端的一次性密码，属于双因素验证的范畴。</p>
+<p>TOTP 这里，公式中的一个参与计算的因子是时间，比如这个时间因子，可以 30 秒更新一次，那这个一次性密码，也是 30 秒更新一次。</p>
+<p>HOTP 有一个 counter 的概念，每次用过后都会变化，每次都生成新的，对应的是该一次性密码的使用次数。</p>
+<p>上述 LuaOTP 支持 Google Authenticator，浏览器 JS 这边用的是<a href="https://www.runoob.com/w3cnote/javascript-qrcodejs-library.html">菜鸟教程</a>介绍的<a href="https://github.com/davidshimjs/qrcodejs">qrcodejs</a>，用来生成二维码图片。</p>
+<p>当然也可以不生成图片，而是导出字符串，Google Authenticator 也同样支持字符串导入。</p>
+<p>之前不大理解这一套，搞了一下，发现也没有那么难。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+<!-- Page published by cmark-gfm ends here -->
+  <div id="foot">2004-<script>var d = new
+	Date();document.write(d.getFullYear())</script> &copy;
+	Sucha. Powered by MarkdownProjectCompositor.
+  </div>
+  </div><!-- text -->
+  <div id="sidebar">
+  </div><!-- sidebar -->
+  <script src="../js/prism.min.js" async="async"></script>
+  <script src="../js/blog_sidebar.js"></script>
+  </div> <!-- body -->
+</body>
+</html>
