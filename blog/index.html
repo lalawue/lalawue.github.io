@@ -15,7 +15,30 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年7月08日 周六 22:17</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年7月29日 周六 21:39</div>
+<h2>记录 LXC/LXD 使用相关</h2>
+<p>不用 docker 的原因是，有些时候需要创建不同版本库的开发环境，这个时候，其实只是引用路径的不同，文件系统甚至是 directory 的，而不是 image，当然 LXD 貌似也没有提供类似 docker 的分层的文件系统，主要是我也不大懂 docker。</p>
+<p>有一说一，后面其实发现 alphine 除了空间占用小一些，其他都是劣势，比如 musl 的 CRT，居然不能打印调用栈，我也是服气了，下面的内容来自之前的学习，大概是能建立起一个可以用的系统容器。</p>
+<p>下面比如 a1、a2 是 alpine instance。</p>
+<h3>创建 profile</h3>
+<p>这个 profile 就是 default profile，后续从不同 image（发行版本）创建 container 时，会使用这里的 storage、network 等的配置</p>
+<h3>创建 instance</h3>
+<p>这里使用了 alpine 3.18 的 image，由于 container 可以直接保存东西，所以直接拉起来，这里 ash 是不会运行 <code>~/.profile</code> 的，如果是从 sshd 登陆进去的才会，所以这种情况下需要 source 一下 shell 的配置文件。</p>
+<pre><code class="language-sh">$ lxc launch images:alpine/3.18 a1
+$ lxc exec a1 ash
+</code></pre>
+<h3>挂载 host 目录到 instance</h3>
+<p>比如挂载 host <code>/wwwdata</code> 到 a1 相关目录，之后删除这个挂载，这里的前提是文件其实是只读的，如果需要挂载读写的文件系统，需要创建一个用户权限 map 配置，在容器内的 /etc 相关配置中，不过感觉也不是很方便。</p>
+<pre><code class="language-sh">$ lxc config device add a1 sharedwww disk source=/wwwdata/ path=/var/www/html/
+$ lxc config device remove a1 sharedwww
+</code></pre>
+<h3>其他的问题</h3>
+<p>用 alpine 容器还遇到问题，比如拉起 cincau 映射 host 端口到容器，容器内的 proxy，居然一直长连接到内部服务器，从不关闭连接，人家 ngnix proxy 就做得很好，由于遇到上面说的 musl CRT 不能打印堆栈，就没有继续研究下去了。</p>
+<p>作为封闭的开发环境感觉还行，作为 production 的容器，首先不能用 alpine image，其次，还有不少需要摸索调整的东西吧。</p>
+<p>先记录一下。</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2023-07.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">23年7月08日 周六 22:17</div>
 <h2>OTP 研究</h2>
 <p>学习了一下 OTP 这个东西，比如用的是 <a href="https://github.com/OTPLibraries/LuaOTP">LuaOTP</a>。</p>
 <p>区分为 OTP、TOTP、HOTP 这三种，OTP 英文展开为 One Time Password，是服务端对客户端的一次性密码，属于双因素验证的范畴。</p>
@@ -231,15 +254,6 @@ Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /AL
 <p>打印驾驶证之前，还会要求回收旧的驾驶证，新的驾驶证打印出来后，还热乎的，要凉一下，要不太烫手了。</p>
 <p>体检 ¥45，照片 ¥10，新的驾驶证、皮套工本费 ¥10，整个流程大概 30 ～ 40 分钟吧，真的快。</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-02.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年1月28日 周六 22:47</div>
-<h2>VSCode 的 'Remote - SSH'</h2>
-<p>春节带了 T450 回家，但实际是使用虚拟机来调试代码的，代码里面的头文件啥的都是 Linux 那边的路径，如果用 Win 下的 VSCode 打开工程，是找不到相关头文件，仅有报错的。</p>
-<p>这个时候安装上 ‘Remote - SSH’ 扩展，就可以通过 SSH 协议访问虚拟机里面的工程，头文件路径啥的都是正确的，跟在 Linux 桌面打开工程是一样的。</p>
-<p>这得益于 VSCode 的 C/S 架构，只要在支持 SSHD 的服务器上安装上 VSCode 的 server 端，以及相关 server 端的插件，就能够支持访问 server 端用户权限下的文件、工程。</p>
-<p>虽然在 T450 上，虚拟机 + SSH 确实会慢一些，但有 LSP 的支持总要比没有良好编译环境的 Windows 要好吧。</p>
-<p>对了，如果还装了 SSHFS-Win 这样的组合，要避免 SSHFS 使用的 ssh.exe 跟扩展使用的 ssh.exe 混用，以及扩展使用的 <code>.ssh/config</code> 文件，可以选择创建在 <code>AppData</code> 目录下的那个，要不会导致 SSHFS-Win 创建目录链接失败。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-01.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
