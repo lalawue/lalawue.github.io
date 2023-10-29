@@ -15,7 +15,18 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年9月30日 周四 21:54</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">23年10月29日 周日 14:50</div>
+<h2>装了一套 AMD YES R5-5500</h2>
+<p>最近装了一套 AMD YES R5-5500，内存金百达银爵 3600 长鑫 Adie，主板是爱国嘉 B450M K，风扇利民 AX120 R SE。本来是看中主板的 PBO 超频和内存 XMP 超频的，但是内存默认是 2666，XMP 也才 3200，PBO 默认的话，感觉差点意思，反正只依赖主板提供参数的话感觉不大够。</p>
+<p>在 B 站学习的过程中，我找到了内存超频的小参可以升到 4133（<a href="https://www.bilibili.com/video/BV1V24y1H7Kb/">5600g内存超频(3600至4133)金百达银爵3600长鑫A die 可以直接抄作业，手把手</a>），经过了系统自带的内存诊断和 AIDA64 内存测试都稳稳的。</p>
+<p>在内存 4133 和 CPU 主频 4.5G 的情况下，此时 CPUZ 分数可以到 610 左右。</p>
+<p>CPU 主频定到 4.5G 参考的是（<a href="https://www.bilibili.com/video/BV1ak4y1i72v/">（新）r5 5500+c9bjz+5600xt超频视频详解（技嘉b450m小雕），含2k分辨率游戏实测</a>），待机温度 40+，但是 5500 积热，FPU 单烤温度一下就到了 80，此时风扇散热片还是凉的，如果机箱风道好的话，也许可以抗住吧。还有就是 Core Temp 上面电压总是固定为 1.35v，感觉有点高不知道为啥。</p>
+<p>用了一阵，还是将 CPU 改成了 PBO Advance 来控制，教程（<a href="https://www.bilibili.com/video/BV1HD4y1F7rK/">技嘉b450m主板锐龙5000系列开PBO2教程</a>），PBO 定格后频率在 3.6 到 4.45 之间浮动，电压 1.2x 附近感觉还行，FPU 单烤温度要比定频 4.5G 好一点点。</p>
+<p>显卡也是老古董 10 系，正常用整机功率 50W ~ 70W 这样，FPU 单烤时会飙升到 130W，不管是定频 4.5 还是 PBO Advance 定格都一样。</p>
+<p>深圳秋天用了一阵，感觉还行，希望夏天应该没事吧。</p>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-10.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">23年9月30日 周四 21:54</div>
 <h2>买了一个 RX6600-XT</h2>
 <p>之前用了大概半年的 RX580，黑苹果 4K 输出，感觉挺好，只是机器有点浪费，毕竟 CPU 和内存都还不错的，想搞个双系统游戏主机，买了 1T 的 SSD，顺利安装上了 Win11，这样短板就来到了显卡 RX580。</p>
 <p>PDD 上比较了半天，觉得 RX6600-XT 也不错，价钱不错，性能主流，就入手了。也用了一阵子了，感觉不错，相比 RX580 耗能要少，散热压力小一些，关键是主流游戏 1080、甚至 2K 都还行，现在闲暇时间，不少都是切换到 Win11 下玩游戏了。</p>
@@ -217,40 +228,6 @@ $ lxc config device remove a1 sharedwww
 <p>现在稳定运行 3 天了，大部分情况下风扇声音很轻几乎听不见，是优势；劣势是跑了几个小时后，感觉温度其实挺高的。然后我压测了一下，风扇全力运转后的声音是真的大，像个风箱一样，但这种情况不大容易遇到吧。</p>
 <p>不管这么说，这个价格下，大部分的情况下很不错的，可喜可贺，😁</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-03.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年3月4日 周六 21:34</div>
-<h2>WSL2 under Win11 22H2</h2>
-<p>玩起了 Win11，搞的是 Ubuntu-18.04 LTS，其实 Ubuntu 的版本对我来说不是那么重要，之所以选 18.04 因为其他虚拟机上面用的也是这个版本，而不同版本的 glibc 库不同，会导致同一个程序编译后在其他虚拟机上面跑不了，为了避免这个麻烦，就都用同一套吧，要升级就一起升级。</p>
-<p>另外 WSL2 不再依赖系统功能里面的 Linux 子系统组件，而是提供了一个<a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/WSL/releases">单独的更新包</a>，这个 URL 是固定的，下载后更新，可以解决 WSL 下面固定 IP 地址的难题。</p>
-<p>安装完成后，WSL 版本是 1.0 以上，比如我的：</p>
-<pre><code class="language-sh">&gt; wsl --version
-WSL 版本： 1.1.3.0
-...
-</code></pre>
-<p>首先建立一个虚拟交换机：</p>
-<ul>
-<li>Win-S 打开搜索面板，搜索 Hyper-V 管理器，点击并打开右侧的虚拟交换机管理器</li>
-<li>右侧建立一个绑定到物理设备的虚拟交换机，比如可以用无线网卡绑定一个 WSLBridge</li>
-<li>注意不要操作已有的 WSL 虚拟交换机，那个是原来的</li>
-</ul>
-<p>我们刚创建的 WSLBridge 虚拟交换机，分配地址是外部物理网络的 DHCP，接着我们指定 Ubuntu-18.04 使用刚建立的虚拟交换机做桥接设备，Powershell 下面在用户目录下（%USERPROFILE%目录下）创建 .wslconfig，内容是下面</p>
-<pre><code class="language-sh">[wsl2]
-networkingMode=bridged # 桥接模式
-vmSwitch=WSLBridge # 你想使用的网卡
-ipv6=true # 启用 IPv6
-</code></pre>
-<p>这样 Ubuntu-18.04 虚拟机的 IP 地址就固定了（由外部路由分配）。</p>
-<p>访问 WSL 上的 Ubuntu 18.04 还挺方便，文件管理器地址栏上面输入 <code>\\wsl$</code> 就能访问 Linux 系统的 <code>\</code> 目录，可太方便了。</p>
-<p>虽然我的是家庭版 Win11 22H2，但并不妨碍我使用 WSL，之前网上找的一个脚本，保存内容为 xx.cmd 并以管理员权限运行，就能获得 WSL 的能力。</p>
-<pre><code class="language-bash">pushd &quot;%~dp0&quot;
-dir /b %SystemRoot%\servicing\Packages\*Hyper-V*.mum &gt;hyper-v.txt
-for /f %%i in ('findstr /i . hyper-v.txt 2^&gt;nul') do dism /online /norestart /add-package:&quot;%SystemRoot%\servicing\Packages\%%i&quot;
-del hyper-v.txt
-Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /ALL
-</code></pre>
-<p>不过我后面改成从 github 上下载更新了，去掉了 Windows 系统功能里面的 Linux 子系统的钩，不知道这个还有没有影响。</p>
-<p>不管了，先玩着吧，😊</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2023-03.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
