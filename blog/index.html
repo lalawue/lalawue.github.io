@@ -15,7 +15,34 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年1月28日 周日 22:47</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年2月29日</div>
+<h2>mmap(1)</h2>
+<p>自从 cincau 支持多进程的方式之后，同步数据的能力最开始是通过不同 worker 的 UDP socket 来传递的，即时性有限，大概固定几秒钟去同步一次，而且如果数据量大了也是个问题。</p>
+<p>相比较下，即时性的问题才是主要的，比如其中一个 worker 接受了用户的登陆状态，用户的下个请求是另外一个 worker 来服务的，此时 cookie 的 session 信息根本还没同步过来，就成了问题。</p>
+<p>当然这个问题也有粗放的解决办法，比如用 SQLite 来同步，但是这种 Key/Value 的信息也使用 SQLite 觉得还是太重了。</p>
+<p>这里插播一句，之前了解过使用 mmap 来同步数据的 <a href="https://github.com/Tencent/MMKV">MMKV</a>，因为 mmap 同样可以用来多进程同步数据，因此这个库也是可以多进程同步的，感觉这个库可以解决 95% 以上的同步问题，其他的例外情况，我下面会说。</p>
+<p>在展开其他方案之前，我得检讨一下，一开始走了很多的弯路，虽然了解到需要使用一些多进程同步手段，比如最开始的 socket，比如可以使用 Linux 消息队列，以及 mmap，但是我把这个问题想得简单了，而且一开始我也没想起 MMKV。</p>
+<p>比如我一开始就选择了 mmap，想做一个 mmap 的有序字典，我手头有 MIT LICENSE 的 AVL tree 代码，相比之下 MMKV 这种 bitcask 结构的数据库，是无序的，除非你 dump 出来所有的 key 再排序，否则你无法快速拿到按照 Key 排序的第一个节点，而 AVL tree 对 Key 排序的方案就可以。</p>
+<p>可是已有的 AVL Tree 的方案，其对节点的引用是指针的，虽然 mmap 只管映射内存区域，但是不同的进程，其映射的内存区域很可能不一样，比如我使用的 LuaJIT，除了我自己主动调用的 mmap，其他不知道什么原因，也有不少的 mmap 调用。导致如果使用 AVL tree 的方案，除非是能保证每一个进程 mmap 过来给 AVL tree 使用的内存块，采用同样的起始地址，否则后续的指针计算，指向的节点地址就有问题。</p>
+<p>虽然理论上，我可以将进程空间的一大段都交给这个 AVL tree 共享内存的方案，但是实际做起来其实也不方便，而且 mmap 这个系统调用其实很频繁，用 strace 就可以看到，其他的一些文章也有介绍。</p>
+<p>所以，不得不将 AVL tree 的指针引用，改成 int32_t 的间接引用，这里的 int32_t 分成了高 16bit 和低 16bit，其中的高 16bit 用于 index 内存区块，低 16bit 用于 index 每个区块内的位置，byte offset。</p>
+<p>之所以这么做，是因为内存块是动态申请的，不会一下就申请完所使用的内存，而是根据使用量逐步申请，虽说是共享内存，也总得使用实际内存空间的嘛。</p>
+<p>另外这个 AVL tree 的方案相比 MMKV，其实有很大的限制，因为考虑到不想做 bitcask 那样的回收方案（简单点做），因此设置了限定最大的 Key/Value 长度，这个是调用库在初始化的时候就得进行设置的。</p>
+<p>比如 Key/Value 的最大长度是 64 字节，其中 Key 是一个 timestamp 占 32 字节，后续的 Value 是一个 MD5 的 hash 占 32 字节，这里还可以插播一句，可以将这个 Value 作为 MMKV 的 Key，这样就实现了 MMKV Key 的有序，回应了最开始说的 95% 的应用场景。不过这里也得提一下，MMKV 还可以设置每个 Key 的过期时间，所以这个 95% 的应用场景，实际上还可以扩大不少。</p>
+<p>回到刚刚的 AVL Tree，所有需要同步的数据都存放到 mmap 的内存区块中，每个进程都有对 AVL Tree 的引用，以及自己保留一份已经打开的内存区块列表，当别的进程因为塞入更多的数据申请了新的内存区块，其他进程在进入库调用的时候，检查到这个场景，将新的内存区块也 mmap 到自己的进程空间上。</p>
+<p>因为每条数据是固定的长度（最大 Key/Value 长度），所以 AVL Tree 的 index 间接指针会忽略掉不同进程内存区块的起始地址不一致的情况，只关注内存区块的序号，以及每条数据对应内存区块的偏移字节，当这个内存区块已经映射到进程空间上后，对 index 的数据的读写就没有障碍了。</p>
+<p>在实际使用中，当内存空间不足时，申请内存区区块序号（2^16个），映射内部的节点地址偏移，两者揉进每个节点的唯一 index，当删除节点时，节点可以回收而不需要整理内存区块，比如将该节点的 index 保存到未使用空间列表节点的 right 指针（间接指针）中。</p>
+<p>上面说完了 mmap AVL Tree 的使用场景、面临的问题，提出的解决方案，和该方案的限制，下面列出来了一些实际跑通该场景的有趣细节：</p>
+<ul>
+<li>AVL Tree 需要对比 Key 才能排序然后旋转，但是这个比较函数的运行空间是在不同的进程地址空间，因此每个进程在实际进行查找、插入、删除时，得使用自己进程空间的比较函数来执行，如果比较函数的函数指针，用的是其他进程的，那就有问题了（父子进程不在此讨论范围）</li>
+<li>mmap 有些参数需要注意，除了多进程共享一定会用到的 MAP_SHARED，还得使用 MAP_POPULATE，否则后续其他进程将内存区块加载进来后，会遇到问题，这个参数是告诉 mmap，为了避免后续访问地址的 page fault，得将此文件涉及到的内存地址，先全都映射上来</li>
+<li>mmap 只涉及到共享的内存区块，为了保证数据的一致性，还得在访问时加锁，需要用到 pthread_mutexattr_setpshared 的 PTHREAD_PROCESS_SHARED，除此外，当某个进程 crash 掉而没有清理 pthread 数据时（共享的内存区块中），其他进程在锁的处理过程中，需要 pthread_mutex_consistent，这个是在初始化 mutex 时通过 pthread_mutexattr_setrobust 的 PTHREAD_MUTEX_ROBUST 参数保证的</li>
+</ul>
+<p>细节太多了，当然相比较 SQLITE，上述两套方案的效率会高很多。</p>
+<p>MMKV 已经很成熟，多平台都能支持，AVL Tree 是我当初小看了 mmap 导致的，而且有先天的短板，虽然说提供了有序 Key 的能力，但这个是在约束了最大 Key、Value（每条数据都是这个最大长度）来达到的，因为可以避免替换 mmap 共享的内存区块。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2024-02.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">24年1月28日 周日 22:47</div>
 <h2>WebSocket(1)</h2>
 <p>研究了一下 WebSocket，在 HTTP/1.1 之上，提供了一个双工长连接，通过 header 的 Upgrade 来完成协议升级及参数交换，之后就都是 websocket 的 frame 了。其最基础的协议描述在 <a href="https://www.rfc-editor.org/rfc/rfc6455">RFC6455</a>，压缩部分的扩展在 <a href="https://www.rfc-editor.org/rfc/rfc7692">RFC7962</a>。</p>
 <p>之前研究了一下 <a href="https://github.com/mortzdk/Websocket">C 写的 Websocket</a>，验证了一下是可以正常工作的，但它 frame 的解析部分不好单独摘出来。</p>
@@ -185,36 +212,6 @@ $ lxc config device remove a1 sharedwww
 <p>对于父进程，在这个多进程模型中，将上升为 monitor，并放弃对该 listen fd 的 accept，所以判断较为简单，不需要争夺关联 accept 的临界锁。因为多次 fork() 而拥有所有子进程的 pid，转而 waitpid()，在子进程崩溃后，可以重新 fork() 出新的子进程接着服务。</p>
 <p>多进程模型相较于多线程，优势在于资源的隔离。进程之间通过操作系统的进程模型来隔离，子进程崩溃后还可以再次拉起来。劣势在于资源共享，如果子进程之间需要大量的资源同步和共享，因为都需要通过系统的 IPC，消耗会变大，而且也不方便。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-06.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年5月13日 周六 13:14</div>
-<h2>平价 Win11 4K 电脑</h2>
-<p>大概 ¥800 左右的家用 Win11 4K 电脑，配件什么都是 2 手 PDD，毕竟有保修。</p>
-<p>在 B 站上看了太多的相关评测，想着可以自己动手试下，之前就有想法将老家的几台电脑换成 Win11 4K，这里就给摸索一下，排一下雷。</p>
-<ul>
-<li>主板是二手的 GA-B85M-D3H，因为它有 2 条 PCIE，第二条为 PCIEx4</li>
-<li>CPU 先用之前留下来的 i3-4170，后面换的 e3-2170v3</li>
-<li>显卡先用 RX560，因为需要 2 台，后续估计会再买一块 RX580</li>
-<li>使用 RX580 的这台电脑需要升级电源，二手长城 500W 足够了</li>
-<li>内存本来预算都用 16G，后来发现基本办公的话 8G 就够了</li>
-</ul>
-<p>因为我还有旧的额外机箱，这个后面看看要不要换新吧，排雷期间可以先用旧的顶住。</p>
-<p>以上配件搭配出来的电脑，目前价格大概 ¥800 左右，我预估跑 Win11 + 4k 的基本办公应该没啥问题吧。</p>
-<p>另外在 D3H 的主页上面看不到第二条 PCIEx4 的版本，但即便是 PCIE 2.0，转接 NVME 后速度也有 1000MB+，虽说是 NVME PCIE 3.0 下的半速，但也要比 SATA 3.0 的 550M 或者 600M 快一倍，挺值的；另外还可以选一些直接支持 nvme 的寨板，也是办法，这里不做比较了。</p>
-<p>大概花了几个晚上的业余时间，才装了好这台电脑，时间都花费上升级 BIOS、安装 Win11 上面了。</p>
-<h3>升级老主板 BIOS 支持 NVME</h3>
-<p>先是用闲置的 SSD 安装了 Win10 拉起系统，之后下载 GA 的 @BIOS 软件，读出本来就是最新版本 F4 的 bios.bin，然后用 MMTool 编辑 bios.bin，按照教程删除用不到的组件，再插入 <a href="https://github.com/VioSynthax/9343_NVME/tree/main">nvme 组件</a>。</p>
-<p>当然如果你都用 U 盘升级 BIOS，而且有额外的电脑来操作的话，其实也不需要先用 SSD 安装 Win10 给这套主板拉起系统，我这么操作的原因，是想先用 Win10 验证一下这个二手主板再说。</p>
-<p>和所有按照教程操作的博主一样，我也遇到了 MMTool 在 Win10 和 Win11 下面的 UI 显示问题，部分按钮被遮挡了，无法删除组件、插入组件。</p>
-<p>按照某个 B 站视频介绍的方法，下载 Resoureces 软件修改 .exe，视频介绍的是修改字体，但仅仅这样作是不够的，我是继续调整了几个展示区域的大小。</p>
-<p>BIOS 升级成功后，启动认出了 NVME，显示为 PATA:SS，顺利当上了启动盘，那可以拔掉之前的 Win10 SSD 了。</p>
-<h3>安装 Win11</h3>
-<p>然后继续使用之前的 U 盘安装 Win10 到 NVME。本来想在 Win10 上一步到位直接升级到 Win11 的，结果 ISO 解压缩后本地点击 setup.exe 升级，等了半天提示失败，说硬件不支持。不大明白之前 B 站博主在 775 主板上面是怎么从 Win10 setup.exe 升级到 Win11 的。</p>
-<p>后来按照鲁大师介绍的方法来操作，需要使用 U 盘安装，这样就只能重新安装了。</p>
-<p>试了一下，i3-4170 + RX560 鲁大师跑分 30 多万，开 Edge 播放 B 站 4K 视频有点卡，特别是从小窗打开放到到全屏这个操作，其他基本勉勉强强，搞得我有点心慌。</p>
-<p>换成 e3-2170v3 后，鲁大师跑分 40 多万，CPU 分数提升其实没有很多，但看 B 站 4K 不卡了，就系统启动时候 CPU 占用有点高，大概有 70% ～ 80%，后面稳定在 15% 左右，看视频、刷网页大概半个小时，感觉基本的办公需求应该挺挺顺畅的，而且内存占用也不高。</p>
-<p>原本我预计是要使用 16G 内存的，现在觉得 8G 应该够了。我还试了一下 4G，系统虽然能启动，但一上来就用了 2.5G，随便开几个网页就 3G 多了，罢了罢了。</p>
-<p>那先给家里人配置这套 Win11 + 4k 组合，如果后续系统升级，或者软件吃紧，应该会选择全套替换，毕竟这个 CPU 已经是主板配置的顶天了，到时再看看有什么可选吧。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-05.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
