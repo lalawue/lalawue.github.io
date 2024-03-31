@@ -15,7 +15,7 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年2月29日</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年2月25日 周日</div>
 <h2>mmap(1)</h2>
 <p>自从 cincau 支持多进程的方式之后，同步数据的能力最开始是通过不同 worker 的 UDP socket 来传递的，即时性有限，大概固定几秒钟去同步一次，而且如果数据量大了也是个问题。</p>
 <p>相比较下，即时性的问题才是主要的，比如其中一个 worker 接受了用户的登陆状态，用户的下个请求是另外一个 worker 来服务的，此时 cookie 的 session 信息根本还没同步过来，就成了问题。</p>
