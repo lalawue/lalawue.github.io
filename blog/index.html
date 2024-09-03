@@ -15,7 +15,13 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年2月25日 周日 12:12</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年8月30日 周五 22:41</div>
+<h2>GTA5 大结局</h2>
+<p>下载的 GTA5，大部分的时间，都是富兰克林开摩托，点开秘籍后，打爆 LSPD 的车胎后调戏，或者就直接调戏，以及各种破坏后，带着 4 星、5 星通缉逃逸（即便在地面上，还是有概率逃逸成功的）。主线的进度没怎么关注，但后面黑悟空发售了，我这边主线还没打完，如果立即切换游戏，就太可惜了，于是继续了之前的主线。</p>
+<p>主线其实要认真推起来，也挺快的，最后结局选 C，三人互相帮助，免于一死。</p>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2024-08.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">24年2月25日 周日 12:12</div>
 <h2>mmap(1)</h2>
 <p>自从 cincau 支持多进程的方式之后，同步数据的能力最开始是通过不同 worker 的 UDP socket 来传递的，即时性有限，大概固定几秒钟去同步一次，而且如果数据量大了也是个问题。</p>
 <p>相比较下，即时性的问题才是主要的，比如其中一个 worker 接受了用户的登陆状态，用户的下个请求是另外一个 worker 来服务的，此时 cookie 的 session 信息根本还没同步过来，就成了问题。</p>
@@ -138,7 +144,7 @@ Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 <p>黑苹果可加上 NTFS 的 KEXT 驱动，读写 Win11 分区不成问题，所以对于黑苹果来说，也算是扩大了硬盘容量。虽然 SATA 3.0 600MB 的速度远不如 M2 的速率，但总比没有好嘛，可惜主板是 ITX，只有一个 M2 的接口，要不谁不想接双 M2 呢。</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-09.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 
-<div class="date">22年8月27日 周日 20:57</div>
+<div class="date">23年8月27日 周日 20:57</div>
 <h2>新机箱和 ARGB 灯</h2>
 <p>之前的 ITX 机箱散热不大行，于是换成了一个大一点的机箱，一整面都是钢化玻璃，算是海景房配置了。</p>
 <p>这个便宜的机箱虽然有开机键，但是没有电源指示灯，主板是否上电，得仔细看风扇才能知道，这样子不如搞个 ARGB 灯呢，再说之前都没玩过。</p>
@@ -199,19 +205,6 @@ $ lxc config device remove a1 sharedwww
 <p>上述的 monitor 模型依赖 mnet 的多进程模型，虽然持有 listen fd，但是不处理 accept 事件，只有一个系统内的控制面 UDP 来传递数据，其他的工作，只是检查、拉起 worker process，状态相对稳定。</p>
 <p>另外在 .mooc 配置文件上，透出来了多进程配置中的数据回调、发送函数，除了 <code>WORKER_ONLINE</code>、<code>WORKER_ROUTE</code>、<code>WOREKR_SESSION</code> 是保留事件外，其他的可以自行添加处理。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-06.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年6月11日 周日 11:49</div>
-<h2>mnet 支持多进程模型</h2>
-<p>mnet 目前还未原生支持多线程，比如在同一进程内持有所有 socket 列表，无法独立区分不同线程，反正把这个区分交给调用方来解决。</p>
-<p>而对于 <a href="https://github.com/lalawue/m_net/tree/master/examples/process">mnet 多进程模型</a>，之前也无法区分，比如无法在不同进程 listen 同一个 fd。</p>
-<p>当然现在可以了，是基于 Mac/Linux 的 fork() 和 waitpid() 等系统调用做的，Windows 下面没有实验，也不打算实验了。</p>
-<p>上面链接的例子，是基于 Linux 的 fork() 系统调用，子进程可以访问父进程的所有资源，比如打开的 fd 等等，在代码方面，指针、fd 在 fork() 后看起来跟父进程是一摸一样的。</p>
-<p>多进程模型下，fork() 出来的子进程会有多个，由于 event queue（epoll/kqueue）在内核中唯一，虽然子进程拥有该 event queue 的 fd，但实际上无法操作，验证得自己重新创建一条才行，所以子进程被 fork() 出来后，立即自己新建立一条 event queue，将之前拥有的 fd 都添加上去。</p>
-<p>其次由于 listen fd 实际上也是父子进程都拥有的，在多条 event queue 中被监听，如果新的链接进来，其实只能 accept 一次，其余进入 accept 函数的实际上会 accept 失败，貌似较老版本的 Linux 会造成其他的问题，具体我也没有进一步地了解。这些是我从网上不知名博客搜到的，当时是想借鉴 nginx 的多进程模型的，就搜到了这个问题。</p>
-<p>解决的办法是使用进程间锁，创建只有一个临界资源的 semaphore，子进程们在进入实际 accept 前，尝试独占该 accept 系统调用，如果尝试失败，将放弃此次 accept。该系统 API 在 Mac/Linux 下面的接口是一样的，</p>
-<p>对于父进程，在这个多进程模型中，将上升为 monitor，并放弃对该 listen fd 的 accept，所以判断较为简单，不需要争夺关联 accept 的临界锁。因为多次 fork() 而拥有所有子进程的 pid，转而 waitpid()，在子进程崩溃后，可以重新 fork() 出新的子进程接着服务。</p>
-<p>多进程模型相较于多线程，优势在于资源的隔离。进程之间通过操作系统的进程模型来隔离，子进程崩溃后还可以再次拉起来。劣势在于资源共享，如果子进程之间需要大量的资源同步和共享，因为都需要通过系统的 IPC，消耗会变大，而且也不方便。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-06.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
