@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Sucha's Homepage - Welcome</title>
+	<meta name="author" content="Sucha">
+	<meta name="generator" content="MarkdownProjectCompositor.lua">
+	<meta name="copyright" content="GFDL, http://www.gnu.org/licenses/fdl.html">
+	<meta name="keywords" content="suchang, programming, Linux, Lua">
+	<meta name="description" content="Sucha's homepage and blog">
+	<link rel="shortcut icon" href="images/ico.png">
+	<link rel="stylesheet" type="text/css" href="styles/index.css">
+	<style id="site_theme"></style>
+	<meta name="verify-v1" content="zI6bDtEidzcaBl4QgtfKF+iZLg9My6ynZKFPDwlRlMQ=">
+	<meta name="msvalidate.01" content="708EDD0378F42AD2F48D5160D47027F8">
+</head>
+
+<body>
+	<div id="body">
+		<div id="content">
+			<h1>Sucha's Homepage ~ Welcome</h1>
+			<p>
+				<strong>Hi</strong>，欢迎来到 Sucha 的主页，:)
+			</p>
+			<div id="news">News</div>
+			<p><strong>September 2022</strong>，更新部分 CSS</p>
+			<p><strong>June 2019</strong>，更换 Markdown Engine 为 cmark-gfm</p>
+			<p><strong>January 2014</strong>，主页改成 Github 托管了</p>
+			<!--p><strong>Apirl 2015</strong>，深圳，工作中……</p-->
+			<!--p><strong>December 2013</strong>，珠海，工作中……</p-->
+			<p><strong>Septemper 2010</strong>，深圳，工作中……</p>
+			<p><strong>January 2008</strong>，福州，工作中……</p>
+			<!--p><strong>Apirl 2007</strong>，又长了一岁；把自己卖掉了，:)</p-->
+			<br>
+		</div><!-- content -->
+		<div id="sidebar">
+			<br>
+			<p><a href="blog/index.html">Blog</a>
+				&nbsp;/&nbsp;
+				<a href="live/index.html">Travel</a>
+				&nbsp;/&nbsp;
+				<a href="cs/index.html">Projects</a>
+				&nbsp;/&nbsp;
+				<a href="slack/index.html">Linux</a>
+				&nbsp;/&nbsp;
+				<a href="muse/index.html">Muse</a>
+				&nbsp;/&nbsp;
+				<a href="scratch/index.html">Scratch</a>
+			</p>
+			<div id="foot">
+				2004-
+				<script>var d = new
+						Date(); document.write(d.getFullYear())</script> &copy;
+				Sucha
+			</div><!-- foot -->
+			<script>
+				function getCookie(name) {
+					var cookieArr = document.cookie.split(";");
+					for (var i = 0; i < cookieArr.length; i++) {
+						var cookiePair = cookieArr[i].split("=");
+						if (name == cookiePair[0].trim()) {
+							return decodeURIComponent(cookiePair[1]);
+						}
+					}
+					return null;
+				}
+				var site_theme = getCookie("site_theme");
+				function changeTheme(key) {
+					var sk = ''
+					if (key == "@@@") {
+						sk = site_theme == 'dark' ? 'dark' : 'light';
+					} else {
+						sk = site_theme == 'dark' ? 'light' : 'dark';
+					}
+					site_theme = sk;
+					if (site_theme == 'light') {
+						document.getElementById('site_theme').innerHTML = ``;
+					} else {
+						document.getElementById('site_theme').innerHTML = `html { background-color: #e7e7e7; filter: invert(1) hue-rotate(180deg); } img, .code-toolbar { filter: invert(1) hue-rotate(180deg); }`;
+					}
+				}
+				changeTheme('@@@')
+			</script>
+		</div><!-- body -->
+</body>
+
+</html>
