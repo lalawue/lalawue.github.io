@@ -21,6 +21,16 @@
 <p>主线其实要认真推起来，也挺快的，最后结局选 C，三人互相帮助，免于一死。</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2024-08.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 
+<div class="date">24年7月28日 周日 23:32</div>
+<h2>1421——中国发现世界</h2>
+<p>最近看了一本书<a href="https://baike.baidu.com/item/1421%E5%B9%B4%E4%B8%AD%E5%9B%BD%E5%8F%91%E7%8E%B0%E4%B8%96%E7%95%8C/10032225">《1421——中国发现世界》</a>，作者是加文·孟席斯（原英国海军潜艇编队指挥官）。</p>
+<p>论证中国早在明朝郑和时，就已经进行了大规模的环球航行，发现了美洲、大洋洲、南极洲等，并出了海图。</p>
+<p>哥伦布、麦哲伦、库克等就是靠着这些海图，才进行的环球航行。其舰队规模，人员配置比郑和船队小多了，如果没有这些海图，其舰队规模根本无法支撑其环球航行。</p>
+<p>作者花了 14 年研究，给出了许多论据，比如船队沿路经过留下的遗物、碑文、沉船、哥伦布等人的信件等。</p>
+<p>有种小时候已熟读的历史被点了刷新的感觉。</p>
+<p>🐼</p>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2024-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
 <div class="date">24年2月25日 周日 12:12</div>
 <h2>mmap(1)</h2>
 <p>自从 cincau 支持多进程的方式之后，同步数据的能力最开始是通过不同 worker 的 UDP socket 来传递的，即时性有限，大概固定几秒钟去同步一次，而且如果数据量大了也是个问题。</p>
@@ -189,22 +199,6 @@ $ lxc config device remove a1 sharedwww
 <p>当然也可以不生成图片，而是导出字符串，Google Authenticator 也同样支持字符串导入。</p>
 <p>之前不大理解这一套，搞了一下，发现也没有那么难。</p>
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年6月24日 周六 23:36</div>
-<h2>cincau 支持多进程模型</h2>
-<p>自从 <a href="https://github.com/lalawue/m_net">mnet</a> 在 Mac/Linux 下支持了多进程模型，<a href="https://github.com/lalawue/cincau">cincau</a> 也支持上了。</p>
-<p>luajit 会检测是否增加了多进程的配置，如果有多进程的配置，将创建了一个控制面用的 UDP。然后 monitor 根据 worker 的存活数量，fork() 足够数量的 process。</p>
-<p>控制面之所以选用 UDP 而不是 TCP，是因为 UDP 是按帧发送的，不需要再做一层协议的解析，系统内也不存在丢帧，只要发送的数量不多就没啥问题，缺点是一帧的数据长度有限。</p>
-<p>另外，monitor 通过 fork() 拿到了 worker pid 后，需要将 pid 传递给调用的 luajit 做记录。而 worker 在被 fork() 后，需要往 monitor 控制面的 UDP port 发送数据，传递自己的 port 和 index 的对应关系。</p>
-<p>每个 process 都有控制面的 UDP 用来收发内部数据，接口部分是提供了类似 worker index 来指明需要发送到的 worker port。之所以用 worker index，是因为 worker 被重新创建后，绑定 port 是会变化的（配置文件中不需要指明每一个 worker 的 port）。worker index 序号将会从 1 到 worker count，其他的序号代表 monitor。</p>
-<p>而且在每个 worker process 内，是不知道其他 worker 的控制面端口的，只能通过 monitor 来转发，monitor 毕竟拥有所有 worker 的 index 和 port 的对应关系。</p>
-<p>之所以 monitor 需要占据其他非 worker 的 index，举个例子，比如搜集当前所有 worker 的某项数据。</p>
-<p>可以向 worker 1 发送事件，worker 1 接收到后，往 worker 序号为 index + 1 的发送，一直到最后一个 worker 发送给序号 worker count + 1，最后就是 monitor 收到了，你可以认为数据是被不断叠加的，一直到 monitor 收到结果。</p>
-<p>这样本轮就搜集完了。如果需要传递收集的结果，monitor 可以广播到所有的 worker ，这样就完成了一个数据的循环。</p>
-<p>假若某个 worker 挂掉后，拥有 cookie 的客户端如果继续访问，接管的其他 process 为了保持登陆态（比如拥有服务端定义的最新的 cookie 数据），可以事先通过某个事件同步 cookie，monitor 也一样接收。这样当 worker 被 fork() 后，拿到的将是跟其他 worker 一样的的 cookie 数据。</p>
-<p>上述的 monitor 模型依赖 mnet 的多进程模型，虽然持有 listen fd，但是不处理 accept 事件，只有一个系统内的控制面 UDP 来传递数据，其他的工作，只是检查、拉起 worker process，状态相对稳定。</p>
-<p>另外在 .mooc 配置文件上，透出来了多进程配置中的数据回调、发送函数，除了 <code>WORKER_ONLINE</code>、<code>WORKER_ROUTE</code>、<code>WOREKR_SESSION</code> 是保留事件外，其他的可以自行添加处理。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-06.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
