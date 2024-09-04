@@ -15,7 +15,16 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年8月30日 周五 22:41</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年9月3日 周二 21:12</div>
+<h2>更新 GitHub Page Build Process</h2>
+<p>2024 年 6 月 30 日后，GitHub Pages 默认使用 GitHub Actions 拉起 Jekyll 来构建网站（需自己动手配置），若想恢复之前的分支部署，需要在发布工程根目录增加 .nojekyll 文件做标记。</p>
+<p>具体可以访问这个<a href="https://github.blog/changelog/2024-07-08-pages-legacy-worker-sunset/">链接</a>。</p>
+<p>我用的是分支部署的方式，所有文件都会部署为静态资源。</p>
+<p>没有跟上时代步伐使用 Jekyll 的原因是，我最开始用的是 EmacsWiki 来通过 wiki 生成静态页面，后续 Emacs 不断更新，但 EmacsWikiMode 已经渐渐没人维护，我就转而使用 CommonMark 引擎的变体 cmark-gfm 来渲染 wiki，然后自己写了一个 build 管理脚本去控制页面渲染流程。</p>
+<p><a href="../blog/2019-06.html#p0">《更换 Markdown Engine 为 cmark-gfm》</a>有详细的描述。</p>
+<div class="category"><a href="CategoryThisSite.html">CategoryThisSite</a> / <a href="2024-09.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">24年8月30日 周五 22:41</div>
 <h2>GTA5 大结局</h2>
 <p>下载的 GTA5，大部分的时间，都是富兰克林开摩托，点开秘籍后，打爆 LSPD 的车胎后调戏，或者就直接调戏，以及各种破坏后，带着 4 星、5 星通缉逃逸（即便在地面上，还是有概率逃逸成功的）。主线的进度没怎么关注，但后面黑悟空发售了，我这边主线还没打完，如果立即切换游戏，就太可惜了，于是继续了之前的主线。</p>
 <p>主线其实要认真推起来，也挺快的，最后结局选 C，三人互相帮助，免于一死。</p>
@@ -188,17 +197,6 @@ $ lxc config device remove a1 sharedwww
 <p>作为封闭的开发环境感觉还行，作为 production 的容器，首先不能用 alpine image，其次，还有不少需要摸索调整的东西吧。</p>
 <p>先记录一下。</p>
 <div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2023-07.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年7月08日 周六 22:17</div>
-<h2>OTP 研究</h2>
-<p>学习了一下 OTP 这个东西，比如用的是 <a href="https://github.com/OTPLibraries/LuaOTP">LuaOTP</a>。</p>
-<p>区分为 OTP、TOTP、HOTP 这三种，OTP 英文展开为 One Time Password，是服务端对客户端的一次性密码，属于双因素验证的范畴。</p>
-<p>TOTP 这里，公式中的一个参与计算的因子是时间，比如这个时间因子，可以 30 秒更新一次，那这个一次性密码，也是 30 秒更新一次。</p>
-<p>HOTP 有一个 counter 的概念，每次用过后都会变化，每次都生成新的，对应的是该一次性密码的使用次数。</p>
-<p>上述 LuaOTP 支持 Google Authenticator，浏览器 JS 这边用的是<a href="https://www.runoob.com/w3cnote/javascript-qrcodejs-library.html">菜鸟教程</a>介绍的<a href="https://github.com/davidshimjs/qrcodejs">qrcodejs</a>，用来生成二维码图片。</p>
-<p>当然也可以不生成图片，而是导出字符串，Google Authenticator 也同样支持字符串导入。</p>
-<p>之前不大理解这一套，搞了一下，发现也没有那么难。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2023-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
