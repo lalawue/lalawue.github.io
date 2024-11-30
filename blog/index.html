@@ -15,7 +15,205 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年10月27日 周日 19:21</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年11月30日 周六 10:57</div>
+<h2>SwiftSQLiteORM</h2>
+<p>地址在 https://github.com/lalawue/SwiftSQLiteORM.git</p>
+<p>之前在公司实现过一个 Swift SQLite 的 ORM 库，基于 <a href="https://github.com/groue/GRDB.swift">GRDB</a>，ORM 的优势就是方便，不用自己 CURD，也能享受到关系数据库的 ACID（原子性、一致性、完整性与持久性）能力。</p>
+<p>只不过 ORM 的方式，搜索能力确实一般而已，比如不好自己组 SQL 搜索子句，以及 join 其他表，或者仅 select 输出某几列。</p>
+<p>不过这个输出某几列没有实现的原因，倒不是不好组子句，只是 Swift 是有类型系统的，输出的额外的类型必须得先定义，这个其实跟已有的表结构可能完全不相同，所以省略不做的。</p>
+<p>因为之前自己也重构过 Lua 的 SQLite 的 ORM，所以多少熟悉了这个部分（没办法，工作很大一部分就是熟能生巧，在限制场景和条件下找解决方案，一边摸索一边实践，顺利的话，条件满足后就可以输出，当然纯逻辑的的数学、理论物理等这些领域不熟悉，不发表意见）。</p>
+<h3>使用介绍</h3>
+<p>先给个定义的例子：</p>
+<pre><code class="language-swift">    // nested struct will store as JSON string
+    struct ExampleNested: Codable {
+        let desc: String
+        let index: Int
+    }
+
+    struct ExampleType: DBTableDef {
+        let name: String
+        let data: ExampleNested
+
+        typealias ORMKey = Columns
+
+        /// keep blank or return nil for using hidden 'rowid' column
+        static var primaryKey: Columns? {
+            return .name
+        }
+
+        enum Columns: String, DBTableKey {
+            case name
+            case data
+        }
+    }
+</code></pre>
+<p><code>ExampleType</code> 是需要支持 ORM 的结构，遵循 <code>DBTableDef</code>，可以是 struct 或者是 class，不要求遵循 Codable 协议。</p>
+<p>如上也就定义了数据库中的表结构，其中使用 <code>DBTableKey</code> 定义了数据库中的字段类型（支持仅部分属性进入数据库），这里还额外定义了 primary key 是 name，这样就支持了后续的 <code>deletes([T]) </code> 的接口，可以直接传递需要删除的实例进去。</p>
+<p>如果结构有嵌套的子结构，比如上面的 <code>ExampleNested</code>，则需要支持 Codable 协议，因为非内建字段类型 ，默认是 Blob，将 encode 为 JSON 后保存，否则将 throw error。</p>
+<p>使用如下：</p>
+<pre><code class="language-swift">    do {
+        // insert / update
+        let c = ExampleType(name: &quot;c&quot;, data: ExampleNested(desc: &quot;c&quot;, index: 1))
+        let u = ExampleType(name: &quot;u&quot;, data: ExampleNested(desc: &quot;u&quot;, index: 2))
+        try DBMgnt.push([c, u])
+
+        // select
+        let arr = try DBMgnt.fetch(ExampleType.self, .eq(.name, c.name))
+        XCTAssert(arr.count == 1, &quot;failed&quot;)
+        XCTAssert(arr[0].name == c.name, &quot;failed&quot;)
+
+        // delete
+        try DBMgnt.deletes([c]) // require primaryKey in table definition
+        try DBMgnt.delete(ExampleType.self, .eq(.name, u.name))
+        let count = try DBMgnt.fetch(ExampleType.self, .eq(.name, c.name)).count
+        XCTAssert(count == 0, &quot;failed&quot;)
+
+        // clear
+        try DBMgnt.clear(ExampleType.self)
+
+        // drop table
+        try DBMgnt.drop(ExampleType.self)
+
+    } catch {
+        if let err = error as? DBORMError {
+            fatalError(&quot;failed to try block: \(err.localizedDescription)&quot;)
+        } else {
+            fatalError(&quot;failed to try block: \(error.localizedDescription)&quot;)
+        }
+    }
+</code></pre>
+<p>CURD 基本上就是 push、fetch、deletes、delete、clear、drop 这样，其中 fetch、delete 接口支持 <code>DBRecordFilter</code>，关联 <code>DBTableDef</code> 中的字段定义，计算操作、比较操作都是可以传递属性名称进去的，类型则遵循 SQLite select 的类型转换规定，我大体理解是跟字段定义相关，比如 SQLite 给的字段定义可以是 TEXT、INTEGER、REAL、BLOB。</p>
+<p>另外，我只实现了部分内建字段的映射定义，用户可以根据自己需要通过 <code>DBPrimitive</code> 协议，定义某些类型支持映射：</p>
+<pre><code class="language-swift">/// database column type
+/// - will perform relative type calculation in sql expression
+/// - https://sqlite.org/datatype3.html
+public enum DBStoreType {
+
+    /// Int64
+    case INTEGER
+
+    /// Double
+    case REAL
+
+    /// String, Numeric
+    case TEXT
+
+    /// Data
+    case BLOB
+}
+
+/// database store value type
+/// - will sotre as type's DatabaseValueConvertible through GRDB
+public enum DBStoreValue {
+
+    /// box with int64
+    case integer(Int64)
+
+    /// box with double
+    case real(Double)
+
+    /// box with String
+    case text(String)
+
+    /// box with data
+    case blob(Data)
+}
+
+/// type transform for store / restore from database
+public protocol DBPrimitive: DefaultConstructor {
+
+    /// database column type
+    static var ormStoreType: DBStoreType { get }
+
+    /// return TypeInfo for mocking, for example objc wrapper NSUUID
+    static func ormTypeInfo() throws -&gt; TypeInfo
+
+    /// mapping value to store in database
+    func ormToStoreValue() -&gt; DBStoreValue?
+
+    /// restore value from database
+    static func ormFromStoreValue(_ value: DBStoreValue) -&gt; Self?
+}
+</code></pre>
+<p>其中的 <code>DBStoreType</code> 是数据库列类型，<code>DBStoreValue</code> 则是将自定义字段的数据通过 String、Int64、Double 或者 Data 传递到数据库，以及读取的时候，数据库也将返回这几种数据，给自定义类型来恢复。</p>
+<p>比如最开始例子的 name 属性是 String 类型，将映射为 SQLite 下的 TEXT 列类型。</p>
+<p>比如下面例子的 URL 将映射为 TEXT 列类型：</p>
+<pre><code class="language-swift">extension URL: DBPrimitive {
+
+    public init() {
+        // will be placed by database value later
+        self.init(string: &quot;a://a.a&quot;)!
+    }
+
+    public static var ormStoreType: SwiftSQLiteORM.DBStoreType { .TEXT }
+
+    public func ormToStoreValue() -&gt; SwiftSQLiteORM.DBStoreValue? {
+        return .text(self.absoluteString)
+    }
+
+    public static func ormFromStoreValue(_ value: SwiftSQLiteORM.DBStoreValue) -&gt; URL? {
+        guard case .text(let string) = value else {
+            return nil
+        }
+        return URL(string: string)
+    }
+}
+</code></pre>
+<p>上面的例子都没有涉及到如何 connect 数据库，以及建立 table 等，因为这些 ORM 库都自动做了，甚至支持 alter table。</p>
+<p>比如需要多增加一个属性，并记录到数据库，只需要升级 <code>DBTableDef</code> 下的 <code>tableVersion</code> 就好，是一个 Double 类型的字段。</p>
+<p>当然还支持指定 table 名称，以及使用独立的数据库文件，如下：</p>
+<pre><code class="language-swift">extension DBTableDef {
+
+    /// ...
+
+    /// specify table name or use type name
+    /// - should be unique in all scope
+    static var tableName: String { get }
+
+    /// schema version for table columns, default 0
+    /// - increase version after you add columns
+    static var tableVersion: Double { get }
+
+    /// specify database file name or use default
+    static var databaseName: String { get }
+
+    /// ...
+}
+</code></pre>
+<h3>实现细节</h3>
+<p>ORM 需要将 struct、class 的指定字段，映射到 SQLite 中的表结构，对应列的类型需要能保存属性数据，便于后续的计算、比较操作，这里对 Swift 语法结构的获取，用的库是 <a href="https://github.com/wickwirew/Runtime">Runtime</a>，这个也是我在 github 上遇到了 <a href="https://github.com/pozi119/SQLiteORM">SQLiteORM</a> 后，读取其代码了解到的。</p>
+<p>从 Runtime 这个库，可以拿到 Swift 结构的属性列表，以及每一个属性的类型，甚至可以构造这个属性的实例。</p>
+<p>比如 <code>fetch</code> 接口操作之后，这个实例的字段数据，是依赖数据库字段读取到的，因为 <code>DBTableDef</code> 支持仅保存部分字段，因此其他字段可以通过下面的函数由用户自己填充，或者使用默认值。</p>
+<pre><code class="language-swift">/// Table ORM mapping definition
+public protocol DBTableDef {
+
+    /// ...
+
+    /// update instance property value created by type reflection
+    /// - only ORMKey covered property can restore value from database column
+    /// - others property will use default value
+    static func ormUpdateNew(_ value: inout Self) -&gt; Self
+}
+</code></pre>
+<p>Swift 侧的表结构大致可以定义，但是数据库这边我偷懒了，不像 SQLiteORM 那样通过 SQLite 的接口组织操作，而是利用了 GRDB 来做保存、读取。</p>
+<p>这次我用了 <code>GRDB.swift/SQLCipher</code> 来做底层存储操作接口，其中的加密用的 password phrase 是库自动生成后，保存到 keychain 里面的。所以每次重新安装后，password phrase 都会不一样，但不影响使用，用户侧也无需知道具体是什么。</p>
+<p>GRDB 的读取是通过 Row 结构，使用上类似字典，保存的时候是通过 <code>encode</code>，也是类似字典，将属性保存到 container 中：</p>
+<pre><code class="language-swift">    /// insert / update
+    override func encode(to container: inout PersistenceContainer) {
+        /// ...
+    }
+</code></pre>
+<p>其中遇到的一些问题，以及不大好解决的问题记录大概有：</p>
+<p>SQLite 不支持保存 UInt64，所以这个类型，我是保存为了 TEXT，记录、恢复当然是没有问题的，只是在计算、比较的时候，我大概理解 SQLite 应该是 cast 为了 TEXT 来进行比较的吧。对比之下，GRDB 几乎是不支持 UInt64。</p>
+<p>NSDecimalNumber 其实在 Swift 里面就是 Decimal，但在 ObjC 里面，是 NSNumber 的子类，在 GRDB 里面，是被认为是 NSNumber，然后内部比较后来保存的，GRDB 对于 NSDecimalNumber 仅支持保存 &gt;=Int64.min 和 &lt;=Int64.max 的值。</p>
+<p>而在本库 NSDecimalNumber 是作为 TEXT 保存，短板也是类似 UInt64。</p>
+<p>同样的 NSNumber 本库也是作为 TEXT 保存，估计计算、比较的时候会有点问题吧，但基本存取操作在边界上是没啥问题的。</p>
+<p>等于是将计算、比较任务，都扔给 SQLite 列类型来处理了，比如 Decimal 跟 Real 的比较，等于是 SQLite 中 TEXT 字段和输入 REAL 值的比较了。</p>
+<p>也许这部分后续可以改进一下，利用 GRDB 的 argument 参数，使用 SQLite 的 bind 接口来完成，估计会更好一些，后面再说吧。</p>
+<p>大概就是这样。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2024-11.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">24年10月27日 周日 19:21</div>
 <h2>枢纽——3000年的中国</h2>
 <p>这个大部头读了好久，主线是中华民族的发展史，以及当前取得的成就，结合地缘、历史的深入解读。</p>
 <p><strong>枢纽</strong>是本书强调的中心点。</p>
@@ -71,6 +269,24 @@
 <p>有种小时候已熟读的历史被点了刷新的感觉。</p>
 <p>🐼</p>
 <div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2024-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">24年3月16日 周六 19:26</div>
+<h2>全频段阻塞干扰</h2>
+<p>感觉算是短篇小说，很早就下载啦，预计是年底前看完，这会儿终于是看完了，才花了不到一个小时。</p>
+<p>因为太短，直接爆内容了，补充一下，这篇小说写于 2003 年。</p>
+<p>--</p>
+<p>美俄欧军事联合，进攻我国，传统战争下我国并不吃亏，但是信息战很吃亏。</p>
+<p>我从书中描述，理解到的是，信息战这里并不是平等对抗，比如你有 1000 辆坦克，我有 500 辆，传统战争下对抗，我多少能耗一点你的坦克，也许是 500 辆，也许是 400 辆、300 辆，拼死之下总有消耗（其实朝鲜战争已经说明，即便是轻步兵对机械化部队，我方都是有优势的）。</p>
+<p>但是信息战下不是这样，信息战之下，电磁优势的一方，不仅仅是消息传递畅通无阻，还有就是能输出强大的电磁压制，弱势一方的电磁通讯，包括指挥控制链，会被干扰导致没法使用，精确导弹没法击中目标，通讯不畅，雷达屏幕上一片白点，没有有效的指示。</p>
+<p>这样高精度的制导武器不能定位目标，坦克集群作战的话，则通讯不畅，能力反而被打折了。</p>
+<p>所以，我从书中理解到的电子信息战，可能造成的是，完全不对称的战争。</p>
+<p>书中，我方电磁弱势，导致防守出现问题，被压缩了行动空间，人员、武器都受损，北京紧急。为了扭转这个局面，指挥部研究决定，使用全频段电磁压制，也就是要用不了电磁通讯，那大家都用不了，那传统战争下，我方反而有优势了。</p>
+<p>这样就争取了某集团军防守回撤的空间，但是联军调整了战略，先清输出电磁压制的单位，因为发射电磁全频段干扰的其实是个明显的输出源，没法躲藏的，所以没太久，就被一一清理了。</p>
+<p>集团军的领导有个儿子，学习成绩太好，最后研究的天体物理，一直以来爱，离战争都很遥远，无法理解地球上人类争夺生存空间的残酷，太优秀最后进入了研究太阳的飞行器内，独自一人离开地球，逐渐接近太阳。在国家生存受到挑战时，给出了一份解决办法：利用太阳这颗恒星，引导控制这颗恒星爆发电磁风暴，破坏地球上的电磁通讯。</p>
+<p>太阳质量、能量占星系的绝大部分，这个干扰源联军是没法消除的，计算结果可以导致地球电磁受影响至一周，足够我方集团军布好防守位置，将双方拉入没有电磁能力的传统战争。</p>
+<p>领导的儿子牺牲了，联军在没有电磁优势的情况下，内部有了裂痕，比如法国就退出了联军的进攻，转入防守撤退。</p>
+<p>全书结束。</p>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2024-03.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 
 <div class="date">24年2月25日 周日 12:12</div>
 <h2>mmap(1)</h2>
@@ -176,24 +392,6 @@ Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 <p>相比法环，没有那么在意近距离的格斗，那个实在是太难了，除非把脑子和手都训练成一块，肌肉记忆，要不哪里来的及。</p>
 <p>所以攻击力、弹药用量比较重要，可以继续搞搞。</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-11.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年10月29日 周日 14:50</div>
-<h2>装了一套 AMD YES R5-5500</h2>
-<p>最近装了一套 AMD YES R5-5500，内存金百达银爵 3600 长鑫 Adie，主板是爱国嘉 B450M K，风扇利民 AX120 R SE。本来是看中主板的 PBO 超频和内存 XMP 超频的，但是内存默认是 2666，XMP 也才 3200，PBO 默认的话，感觉差点意思，反正只依赖主板提供参数的话感觉不大够。</p>
-<p>在 B 站学习的过程中，我找到了内存超频的小参可以升到 4133（<a href="https://www.bilibili.com/video/BV1V24y1H7Kb/">5600g内存超频(3600至4133)金百达银爵3600长鑫A die 可以直接抄作业，手把手</a>），经过了系统自带的内存诊断和 AIDA64 内存测试都稳稳的。</p>
-<p>在内存 4133 和 CPU 主频 4.5G 的情况下，此时 CPUZ 分数可以到 610 左右。</p>
-<p>CPU 主频定到 4.5G 参考的是（<a href="https://www.bilibili.com/video/BV1ak4y1i72v/">（新）r5 5500+c9bjz+5600xt超频视频详解（技嘉b450m小雕），含2k分辨率游戏实测</a>），待机温度 40+，但是 5500 积热，FPU 单烤温度一下就到了 80，此时风扇散热片还是凉的，如果机箱风道好的话，也许可以抗住吧。还有就是 Core Temp 上面电压总是固定为 1.35v，感觉有点高不知道为啥。</p>
-<p>用了一阵，还是将 CPU 改成了 PBO Advance 来控制，教程（<a href="https://www.bilibili.com/video/BV1HD4y1F7rK/">技嘉b450m主板锐龙5000系列开PBO2教程</a>），PBO 定格后频率在 3.6 到 4.45 之间浮动，电压 1.2x 附近感觉还行，FPU 单烤温度要比定频 4.5G 好一点点。</p>
-<p>显卡也是老古董 10 系，正常用整机功率 50W ~ 70W 这样，FPU 单烤时会飙升到 130W，不管是定频 4.5 还是 PBO Advance 定格都一样。</p>
-<p>深圳秋天用了一阵，感觉还行，希望夏天应该没事吧。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-10.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年9月30日 周四 21:54</div>
-<h2>买了一个 RX6600-XT</h2>
-<p>之前用了大概半年的 RX580，黑苹果 4K 输出，感觉挺好，只是机器有点浪费，毕竟 CPU 和内存都还不错的，想搞个双系统游戏主机，买了 1T 的 SSD，顺利安装上了 Win11，这样短板就来到了显卡 RX580。</p>
-<p>PDD 上比较了半天，觉得 RX6600-XT 也不错，价钱不错，性能主流，就入手了。也用了一阵子了，感觉不错，相比 RX580 耗能要少，散热压力小一些，关键是主流游戏 1080、甚至 2K 都还行，现在闲暇时间，不少都是切换到 Win11 下玩游戏了。</p>
-<p>黑苹果可加上 NTFS 的 KEXT 驱动，读写 Win11 分区不成问题，所以对于黑苹果来说，也算是扩大了硬盘容量。虽然 SATA 3.0 600MB 的速度远不如 M2 的速率，但总比没有好嘛，可惜主板是 ITX，只有一个 M2 的接口，要不谁不想接双 M2 呢。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-09.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;

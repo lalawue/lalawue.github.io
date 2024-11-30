@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sucha's Blog - Archive for November, 2024</title>
+    <meta name="generator" content="MarkdownProjectCompositor.lua">
+    <meta name="author" content="Sucha">
+    <meta name="keywords" content="suchang, programming, Linux, Lua">
+    <meta name="description" content="Sucha's blog">
+    <link rel="shortcut icon" href="../images/ico.png">
+    <link rel="stylesheet" type="text/css" href="../styles/blog.css">
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css">
+    <style id="site_theme"></style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="text">
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for November, 2024</h1>
+<p><a id="p0"></a></p>
+<div class="date">24年11月30日 周六 10:57</div>
+<h2>SwiftSQLiteORM</h2>
+<p>地址在 https://github.com/lalawue/SwiftSQLiteORM.git</p>
+<p>之前在公司实现过一个 Swift SQLite 的 ORM 库，基于 <a href="https://github.com/groue/GRDB.swift">GRDB</a>，ORM 的优势就是方便，不用自己 CURD，也能享受到关系数据库的 ACID（原子性、一致性、完整性与持久性）能力。</p>
+<p>只不过 ORM 的方式，搜索能力确实一般而已，比如不好自己组 SQL 搜索子句，以及 join 其他表，或者仅 select 输出某几列。</p>
+<p>不过这个输出某几列没有实现的原因，倒不是不好组子句，只是 Swift 是有类型系统的，输出的额外的类型必须得先定义，这个其实跟已有的表结构可能完全不相同，所以省略不做的。</p>
+<p>因为之前自己也重构过 Lua 的 SQLite 的 ORM，所以多少熟悉了这个部分（没办法，工作很大一部分就是熟能生巧，在限制场景和条件下找解决方案，一边摸索一边实践，顺利的话，条件满足后就可以输出，当然纯逻辑的的数学、理论物理等这些领域不熟悉，不发表意见）。</p>
+<h3>使用介绍</h3>
+<p>先给个定义的例子：</p>
+<pre><code class="language-swift">    // nested struct will store as JSON string
+    struct ExampleNested: Codable {
+        let desc: String
+        let index: Int
+    }
+
+    struct ExampleType: DBTableDef {
+        let name: String
+        let data: ExampleNested
+
+        typealias ORMKey = Columns
+
+        /// keep blank or return nil for using hidden 'rowid' column
+        static var primaryKey: Columns? {
+            return .name
+        }
+
+        enum Columns: String, DBTableKey {
+            case name
+            case data
+        }
+    }
+</code></pre>
+<p><code>ExampleType</code> 是需要支持 ORM 的结构，遵循 <code>DBTableDef</code>，可以是 struct 或者是 class，不要求遵循 Codable 协议。</p>
+<p>如上也就定义了数据库中的表结构，其中使用 <code>DBTableKey</code> 定义了数据库中的字段类型（支持仅部分属性进入数据库），这里还额外定义了 primary key 是 name，这样就支持了后续的 <code>deletes([T]) </code> 的接口，可以直接传递需要删除的实例进去。</p>
+<p>如果结构有嵌套的子结构，比如上面的 <code>ExampleNested</code>，则需要支持 Codable 协议，因为非内建字段类型 ，默认是 Blob，将 encode 为 JSON 后保存，否则将 throw error。</p>
+<p>使用如下：</p>
+<pre><code class="language-swift">    do {
+        // insert / update
+        let c = ExampleType(name: &quot;c&quot;, data: ExampleNested(desc: &quot;c&quot;, index: 1))
+        let u = ExampleType(name: &quot;u&quot;, data: ExampleNested(desc: &quot;u&quot;, index: 2))
+        try DBMgnt.push([c, u])
+
+        // select
+        let arr = try DBMgnt.fetch(ExampleType.self, .eq(.name, c.name))
+        XCTAssert(arr.count == 1, &quot;failed&quot;)
+        XCTAssert(arr[0].name == c.name, &quot;failed&quot;)
+
+        // delete
+        try DBMgnt.deletes([c]) // require primaryKey in table definition
+        try DBMgnt.delete(ExampleType.self, .eq(.name, u.name))
+        let count = try DBMgnt.fetch(ExampleType.self, .eq(.name, c.name)).count
+        XCTAssert(count == 0, &quot;failed&quot;)
+
+        // clear
+        try DBMgnt.clear(ExampleType.self)
+
+        // drop table
+        try DBMgnt.drop(ExampleType.self)
+
+    } catch {
+        if let err = error as? DBORMError {
+            fatalError(&quot;failed to try block: \(err.localizedDescription)&quot;)
+        } else {
+            fatalError(&quot;failed to try block: \(error.localizedDescription)&quot;)
+        }
+    }
+</code></pre>
+<p>CURD 基本上就是 push、fetch、deletes、delete、clear、drop 这样，其中 fetch、delete 接口支持 <code>DBRecordFilter</code>，关联 <code>DBTableDef</code> 中的字段定义，计算操作、比较操作都是可以传递属性名称进去的，类型则遵循 SQLite select 的类型转换规定，我大体理解是跟字段定义相关，比如 SQLite 给的字段定义可以是 TEXT、INTEGER、REAL、BLOB。</p>
+<p>另外，我只实现了部分内建字段的映射定义，用户可以根据自己需要通过 <code>DBPrimitive</code> 协议，定义某些类型支持映射：</p>
+<pre><code class="language-swift">/// database column type
+/// - will perform relative type calculation in sql expression
+/// - https://sqlite.org/datatype3.html
+public enum DBStoreType {
+
+    /// Int64
+    case INTEGER
+
+    /// Double
+    case REAL
+
+    /// String, Numeric
+    case TEXT
+
+    /// Data
+    case BLOB
+}
+
+/// database store value type
+/// - will sotre as type's DatabaseValueConvertible through GRDB
+public enum DBStoreValue {
+
+    /// box with int64
+    case integer(Int64)
+
+    /// box with double
+    case real(Double)
+
+    /// box with String
+    case text(String)
+
+    /// box with data
+    case blob(Data)
+}
+
+/// type transform for store / restore from database
+public protocol DBPrimitive: DefaultConstructor {
+
+    /// database column type
+    static var ormStoreType: DBStoreType { get }
+
+    /// return TypeInfo for mocking, for example objc wrapper NSUUID
+    static func ormTypeInfo() throws -&gt; TypeInfo
+
+    /// mapping value to store in database
+    func ormToStoreValue() -&gt; DBStoreValue?
+
+    /// restore value from database
+    static func ormFromStoreValue(_ value: DBStoreValue) -&gt; Self?
+}
+</code></pre>
+<p>其中的 <code>DBStoreType</code> 是数据库列类型，<code>DBStoreValue</code> 则是将自定义字段的数据通过 String、Int64、Double 或者 Data 传递到数据库，以及读取的时候，数据库也将返回这几种数据，给自定义类型来恢复。</p>
+<p>比如最开始例子的 name 属性是 String 类型，将映射为 SQLite 下的 TEXT 列类型。</p>
+<p>比如下面例子的 URL 将映射为 TEXT 列类型：</p>
+<pre><code class="language-swift">extension URL: DBPrimitive {
+
+    public init() {
+        // will be placed by database value later
+        self.init(string: &quot;a://a.a&quot;)!
+    }
+
+    public static var ormStoreType: SwiftSQLiteORM.DBStoreType { .TEXT }
+
+    public func ormToStoreValue() -&gt; SwiftSQLiteORM.DBStoreValue? {
+        return .text(self.absoluteString)
+    }
+
+    public static func ormFromStoreValue(_ value: SwiftSQLiteORM.DBStoreValue) -&gt; URL? {
+        guard case .text(let string) = value else {
+            return nil
+        }
+        return URL(string: string)
+    }
+}
+</code></pre>
+<p>上面的例子都没有涉及到如何 connect 数据库，以及建立 table 等，因为这些 ORM 库都自动做了，甚至支持 alter table。</p>
+<p>比如需要多增加一个属性，并记录到数据库，只需要升级 <code>DBTableDef</code> 下的 <code>tableVersion</code> 就好，是一个 Double 类型的字段。</p>
+<p>当然还支持指定 table 名称，以及使用独立的数据库文件，如下：</p>
+<pre><code class="language-swift">extension DBTableDef {
+
+    /// ...
+
+    /// specify table name or use type name
+    /// - should be unique in all scope
+    static var tableName: String { get }
+
+    /// schema version for table columns, default 0
+    /// - increase version after you add columns
+    static var tableVersion: Double { get }
+
+    /// specify database file name or use default
+    static var databaseName: String { get }
+
+    /// ...
+}
+</code></pre>
+<h3>实现细节</h3>
+<p>ORM 需要将 struct、class 的指定字段，映射到 SQLite 中的表结构，对应列的类型需要能保存属性数据，便于后续的计算、比较操作，这里对 Swift 语法结构的获取，用的库是 <a href="https://github.com/wickwirew/Runtime">Runtime</a>，这个也是我在 github 上遇到了 <a href="https://github.com/pozi119/SQLiteORM">SQLiteORM</a> 后，读取其代码了解到的。</p>
+<p>从 Runtime 这个库，可以拿到 Swift 结构的属性列表，以及每一个属性的类型，甚至可以构造这个属性的实例。</p>
+<p>比如 <code>fetch</code> 接口操作之后，这个实例的字段数据，是依赖数据库字段读取到的，因为 <code>DBTableDef</code> 支持仅保存部分字段，因此其他字段可以通过下面的函数由用户自己填充，或者使用默认值。</p>
+<pre><code class="language-swift">/// Table ORM mapping definition
+public protocol DBTableDef {
+
+    /// ...
+
+    /// update instance property value created by type reflection
+    /// - only ORMKey covered property can restore value from database column
+    /// - others property will use default value
+    static func ormUpdateNew(_ value: inout Self) -&gt; Self
+}
+</code></pre>
+<p>Swift 侧的表结构大致可以定义，但是数据库这边我偷懒了，不像 SQLiteORM 那样通过 SQLite 的接口组织操作，而是利用了 GRDB 来做保存、读取。</p>
+<p>这次我用了 <code>GRDB.swift/SQLCipher</code> 来做底层存储操作接口，其中的加密用的 password phrase 是库自动生成后，保存到 keychain 里面的。所以每次重新安装后，password phrase 都会不一样，但不影响使用，用户侧也无需知道具体是什么。</p>
+<p>GRDB 的读取是通过 Row 结构，使用上类似字典，保存的时候是通过 <code>encode</code>，也是类似字典，将属性保存到 container 中：</p>
+<pre><code class="language-swift">    /// insert / update
+    override func encode(to container: inout PersistenceContainer) {
+        /// ...
+    }
+</code></pre>
+<p>其中遇到的一些问题，以及不大好解决的问题记录大概有：</p>
+<p>SQLite 不支持保存 UInt64，所以这个类型，我是保存为了 TEXT，记录、恢复当然是没有问题的，只是在计算、比较的时候，我大概理解 SQLite 应该是 cast 为了 TEXT 来进行比较的吧。对比之下，GRDB 几乎是不支持 UInt64。</p>
+<p>NSDecimalNumber 其实在 Swift 里面就是 Decimal，但在 ObjC 里面，是 NSNumber 的子类，在 GRDB 里面，是被认为是 NSNumber，然后内部比较后来保存的，GRDB 对于 NSDecimalNumber 仅支持保存 &gt;=Int64.min 和 &lt;=Int64.max 的值。</p>
+<p>而在本库 NSDecimalNumber 是作为 TEXT 保存，短板也是类似 UInt64。</p>
+<p>同样的 NSNumber 本库也是作为 TEXT 保存，估计计算、比较的时候会有点问题吧，但基本存取操作在边界上是没啥问题的。</p>
+<p>等于是将计算、比较任务，都扔给 SQLite 列类型来处理了，比如 Decimal 跟 Real 的比较，等于是 SQLite 中 TEXT 字段和输入 REAL 值的比较了。</p>
+<p>也许这部分后续可以改进一下，利用 GRDB 的 argument 参数，使用 SQLite 的 bind 接口来完成，估计会更好一些，后面再说吧。</p>
+<p>大概就是这样。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2024-11.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+<!-- Page published by cmark-gfm ends here -->
+  <div id="foot">2004-<script>var d = new
+	Date();document.write(d.getFullYear())</script> &copy;
+	Sucha. Powered by MarkdownProjectCompositor.
+  </div>
+  </div><!-- text -->
+  <div id="sidebar">
+  </div><!-- sidebar -->
+  <script src="../js/prism.min.js" async="async"></script>
+  <script src="../js/blog_sidebar.js"></script>
+  </div> <!-- body -->
+</body>
+</html>
