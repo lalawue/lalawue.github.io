@@ -15,7 +15,30 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">24年11月30日 周六 10:57</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">25年1月26日 周日 22:39</div>
+<h1>Sucha's Blog ~ WSL2 的网络配置</h1>
+<p>之前在 Win 11 23H 搞好的 Ubuntu 18.04 LTS 的网络配置，回到家里，又死活连不上了，原因未知，于是重新记录一下吧。</p>
+<p>Window 侧</p>
+<pre><code class="language-sh"> type .\.wslconfig
+[wsl2]
+networkingMode=bridged
+vmSwitch=WSLBridge
+ipv6=false
+</code></pre>
+<p>WSL2 这边之前按就安装好了 sshd，但是设置了不支持密码登陆，而是用 ssh 公钥登录，关键配置是：</p>
+<pre><code class="language-sh"># To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication no
+#PermitEmptyPasswords no
+
+# Change to yes to enable challenge-response passwords (beware issues with
+# some PAM modules and threads)
+ChallengeResponseAuthentication no
+</code></pre>
+<p>然后支持 vscode 使用 Remote - SSH 连接，但是 Putty 用的自己的 SSH 方案的，还没搞懂要怎么连接。</p>
+<p>不过不管咋说，用 vscode 写这个 blog 没啥问题。</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2025-01.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">24年11月30日 周六 10:57</div>
 <h2>SwiftSQLiteORM</h2>
 <p>地址在 <a href="https://github.com/lalawue/SwiftSQLiteORM.git">https://github.com/lalawue/SwiftSQLiteORM.git</a>。</p>
 <p>之前在公司实现过一个 Swift SQLite 的 ORM 库，基于 <a href="https://github.com/groue/GRDB.swift">GRDB</a>，ORM 的优势就是方便，不用自己 CURD，也能享受到关系数据库的 ACID（原子性、一致性、完整性与持久性）能力。</p>
@@ -378,20 +401,6 @@ Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 <p>网上搜了一下，貌似通关一次后，可以选择将世界升级为二周目，难度会上升一个级别，之前的老头环也是如此，有这样的一个选项，不过我没升级，感觉打同样的场景可太没意思了。</p>
 <p>老头环我的操作熟练度很差，几乎可以说是靠着 TB 买的魂升级属性硬给拗过的；相比下遗迹 2 因为大部分的地图有随机场景，估计继续肝 2 周目的感觉会好一些吧，不过我现在还没通关一周目，后面再说吧。</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-12.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">23年11月26日 周日 23:58</div>
-<h2>法环和遗迹2</h2>
-<p>法环（艾尔登法环）是我第一次玩魂系，进入游戏的大树守卫者就已经让我崩溃了，后面就是熟悉的操作，上 TB 买游戏内魂币，升级人物属性，
-后面的难度确实大大降低，很容易就搞到了厉害的武器，没多久就通关了。</p>
-<p>不过也因为走了捷径，后面的游戏性其实没有那么强了，很少死了。</p>
-<p>也看过不少厉害的游戏玩家，那个操作，我实在是学不来，罢了罢了，我只是通关走过场。</p>
-<p>之后又看到了遗迹2的介绍，也算是一个魂系，配合 FPS 之类的远程打击，以及职业切换（还没玩到这个部分，不熟悉），那就入手试试吧。</p>
-<p>然后花费了一个晚上，才算入门，死了四五十次都有，这次倒没想着要上 TB 买游戏币升经验，反正就试试看吧，看独立玩这个魂系能否进行下去吧，
-感觉游戏性还是可以的，只是要计算的东西不少，比如弹药用量就有受的，因为有的枪射速太快了，伤害反而低，感觉升级武器的系统还是挺重要的，
-武器反而不需要随便换，没那个必要。</p>
-<p>相比法环，没有那么在意近距离的格斗，那个实在是太难了，除非把脑子和手都训练成一块，肌肉记忆，要不哪里来的及。</p>
-<p>所以攻击力、弹药用量比较重要，可以继续搞搞。</p>
-<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2023-11.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;

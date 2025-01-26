@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sucha's Blog - Archive for January, 2025</title>
+    <meta name="generator" content="MarkdownProjectCompositor.lua">
+    <meta name="author" content="Sucha">
+    <meta name="keywords" content="suchang, programming, Linux, Lua">
+    <meta name="description" content="Sucha's blog">
+    <link rel="shortcut icon" href="../images/ico.png">
+    <link rel="stylesheet" type="text/css" href="../styles/blog.css">
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css">
+    <style id="site_theme"></style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="text">
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for January, 2025</h1>
+<p><a id="p0"></a></p>
+<div class="date">25年1月26日 周日 22:39</div>
+<h1>Sucha's Blog ~ WSL2 的网络配置</h1>
+<p>之前在 Win 11 23H 搞好的 Ubuntu 18.04 LTS 的网络配置，回到家里，又死活连不上了，原因未知，于是重新记录一下吧。</p>
+<p>Window 侧</p>
+<pre><code class="language-sh"> type .\.wslconfig
+[wsl2]
+networkingMode=bridged
+vmSwitch=WSLBridge
+ipv6=false
+</code></pre>
+<p>WSL2 这边之前按就安装好了 sshd，但是设置了不支持密码登陆，而是用 ssh 公钥登录，关键配置是：</p>
+<pre><code class="language-sh"># To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication no
+#PermitEmptyPasswords no
+
+# Change to yes to enable challenge-response passwords (beware issues with
+# some PAM modules and threads)
+ChallengeResponseAuthentication no
+</code></pre>
+<p>然后支持 vscode 使用 Remote - SSH 连接，但是 Putty 用的自己的 SSH 方案的，还没搞懂要怎么连接。</p>
+<p>不过不管咋说，用 vscode 写这个 blog 没啥问题。</p>
+<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2025-01.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+<!-- Page published by cmark-gfm ends here -->
+  <div id="foot">2004-<script>var d = new
+	Date();document.write(d.getFullYear())</script> &copy;
+	Sucha. Powered by MarkdownProjectCompositor.
+  </div>
+  </div><!-- text -->
+  <div id="sidebar">
+  </div><!-- sidebar -->
+  <script src="../js/prism.min.js" async="async"></script>
+  <script src="../js/blog_sidebar.js"></script>
+  </div> <!-- body -->
+</body>
+</html>
