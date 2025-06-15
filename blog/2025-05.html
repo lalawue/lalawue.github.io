@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sucha's Blog - Archive for May, 2025</title>
+    <meta name="generator" content="MarkdownProjectCompositor.lua">
+    <meta name="author" content="Sucha">
+    <meta name="keywords" content="suchang, programming, Linux, Lua">
+    <meta name="description" content="Sucha's blog">
+    <link rel="shortcut icon" href="../images/ico.png">
+    <link rel="stylesheet" type="text/css" href="../styles/blog.css">
+    <link rel="stylesheet" type="text/css" href="../styles/prism.min.css">
+    <style id="site_theme"></style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="text">
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Archive for May, 2025</h1>
+<p><a id="p0"></a></p>
+<div class="date">25年5月24日 周六 19:55</div>
+<h2>iOS 下图表的绘制</h2>
+<p>工作中碰到，没有用之前支持 K 线的第三方库，而是自己摸索了一下，因为需求也没有高的要求。</p>
+<h3>UIBezierPath 曲线的平滑</h3>
+<p>用直线绘制其实也是可以的，相交部分用圆角过度还行，但只就美观效果来说，跟曲线的拟合相比差远了。</p>
+<p>可惜 iOS 下绘制曲线用的 UIBezierPath 仅支持有限点的控制，后台下发的数据可不止那几个点，这个时候就用到下面说的曲线的平滑了。</p>
+<p>网上说到的曲线平滑算法有不少，而我只会使用 UIBezierPath 来绘制，github 上找到的有 2、3 个都是可以用的，比如下面这个：</p>
+<ul>
+<li>https://github.com/Ramshandilya/Bezier</li>
+</ul>
+<p>绘制出来的还是挺好看的，唯一的缺点在于，虽然都经过了数据点，但数据点并不是在区域范围的极值点上，也就是说，数据点在曲线里面不是曲线的最高、最低点，曲线的最高、最低值，在数据集的范围之外，这就挺不好的。</p>
+<p>不过就曲线平滑这一点看，上面这个库还是很好用的。</p>
+<h3>X、Y 值的放大、缩小比例</h3>
+<p>二维的图表，为了在一张图表上表示所有的数据点，X、Y 轴上是需要刻度单位的，在 app 上虽然各图表的大小都一样，但是可能喂进去的数据各不相同，很多时候，并不需要同样的刻度来表现曲线，否则有的曲线，在刻度间隔较大的情况下，视觉上更像一条直线，表现不出具体的变化了。</p>
+<p>这个时候需要将 Y 轴的刻度变小，以上原因，不管是 X 轴、Y 轴，都需要根据数据集的范围，选择一个合理的刻度变化（在 UI 大小相同、而数据集不同的情况下）。</p>
+<h3>数据集到 UI、UI 到数据集的比例映射</h3>
+<p>我记得之前看的第三方库，用的是 matrix 来做变换的，我自己操作的过程中，没有懂这个，反正都是线性的，索性单独建立 X、Y 轴的比例映射了。</p>
+<p>就是转换的时候麻烦一点，显示的时候是 data -&gt; ui mapping，用户选择图表点的时候，是 ui -&gt; data mapping。</p>
+<p>以上，就是手搓 iOS 图表绘制的几个要点了，最困难的点，是使用 UIBezierPath 曲线来平滑，得用到看不懂的代码，可选的方案是绘制直线，转交点用 round 来做，效果吧，勉勉强强，也是能用的。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2025-05.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+<!-- Page published by cmark-gfm ends here -->
+  <div id="foot">2004-<script>var d = new
+	Date();document.write(d.getFullYear())</script> &copy;
+	Sucha. Powered by MarkdownProjectCompositor.
+  </div>
+  </div><!-- text -->
+  <div id="sidebar">
+  </div><!-- sidebar -->
+  <script src="../js/prism.min.js" async="async"></script>
+  <script src="../js/blog_sidebar.js"></script>
+  </div> <!-- body -->
+</body>
+</html>
