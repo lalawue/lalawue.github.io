@@ -15,7 +15,79 @@
   <body>
     <div id="body">
       <div id="text">
-	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">25年7月28日 周日 13:53</div>
+	   <!-- Page published by cmark-gfm begins here --><h1>Sucha's Blog ~ Welcome</h1><div class="date">25年8月30日 周六 21:56</div>
+<h2>iOS GCD （Grand Central Dispatch）的一些探索</h2>
+<p>面试遇到了相关问题，答得很烂，才发现自己之前只是粗浅地使用，并未理解。</p>
+<p>代码是类似这样的</p>
+<pre><code class="language-objc">- (void)exampleFunction {
+    dispatch_queue_t queue = dispatch_queue_create(@&quot;test_queue&quot;, NULL);
+    NSLog(@&quot;1&quot;);
+    dispatch_queue_async(queue, ^{
+        NSLog(@&quot;2&quot;);
+    });
+    NSLog(@&quot;3&quot;);
+    dispatch_queue_sync(queue, ^{
+        NSLog(@&quot;4&quot;);
+    });
+    NSLog(@&quot;5&quot;);
+}
+</code></pre>
+<p>那么其输出顺序将是：</p>
+<pre><code class="language-bash">1
+3
+2
+4
+5
+</code></pre>
+<p>更进一步，dispatch_queue_create 如果不指定绑定的 queue，那么其运行就是当前发起 queue 的空间。</p>
+<p>看了一下 GCD 的源码，不甚懂，太多条件编译了，以及宏代码。</p>
+<p>问了一下 AI，pthread、NSThread、GCD、NSOperationQueue 的区别，大概如下</p>
+<ul>
+<li>pthread 是 POSIX 标准定义的，操作系统调度的最小单元，线程的 C/C++ 接口</li>
+<li>NSThread 是 pthread 的 ObjC 的封装，方便使用</li>
+<li>GCD 管理的是可运行的闭包 block，具体实际运行在哪个 thread、CPU 核上，是由 GCD 库调度的</li>
+<li>NSOpeationQueue 直观了闭包的运行、suspend、resume、cancel，底层实际上是 GCD 的 dispatch_queue</li>
+</ul>
+<p>在 iOS 上用的最多的是 GCD，GCD 创建的时候，可以设定是串行、并行，优先级等，但不能指定其底层 thread，或者关联到自己创建的 NSThread 上。</p>
+<p>若提交的任务闭包是一个死循环，那么运行该闭包的 dispatch_queue 会卡住，关联的 thread 会吃满能够分配到的 CPU 资源，才被调度出去。</p>
+<ul>
+<li>闭包是一个个被调用的函数，如果是串行的 queue，提交的闭包不会被同时调度运行</li>
+<li>但如果两个不同串行 queue 的任务闭包，互相 sync 了 block，将会造成死锁</li>
+<li>但如果只是在该 queue 的内，sync 了闭包，其实就等于运行了一个引用了数据资源的任务块，与直接运行该闭包函数，感觉没啥不同，只是在调度上，由于串行 queue 的闭包是顺序执行的，那么在该 sync 的闭包之前提交的所有 async 闭包，都会被先调度运行，才会轮到该 sync 闭包调度运行</li>
+<li>提交到该 queue 的闭包，运行的线程空间，是其优先级指定的线程，比如创建了 background queue，在主线程 sync 了该 queue 的闭包，主线程堆栈会被保存，GCD 将调度到 queue 关联的线程运行完闭包后，才会回到主线程恢复堆栈继续</li>
+</ul>
+<p>以上串行 queue 的调度逻辑，体现在上面例子代码“2”、“4”的输出顺序上，async、sync 闭包运行的 queue 空间，也是该 queue 创建时候的空间（有另外的 create 接口，提供关联的管理queue，比如不同层级的优先级queue）。</p>
+<p>但如果是并行 queue，提交的任务闭包，就有可能被同时调度运行，具体跟该体系的 CPU 核心数量、线程调度资源有关系，但被重入是无法避免的。为了保证数据的一致性，提交到并行 queue 的任务闭包，得自己保证数据一致性。</p>
+<p>NSOperationQueue 由于底层仍然是关联的 GCD dispatch_queue，所以逻辑是一样的。</p>
+<p>以上，可以看到 GCD 是关注闭包，即逻辑关联的数据，而不需要关注线程空间的创建、销毁、挂起、恢复、CPU 的调度和分配逻辑。</p>
+<p>GCD 内建了比如主队列（UI相关）、默认队列、后台队列等等共 5 种 QOS 分配策略的队列。</p>
+<p>如果是自己创建的 pthread、NSThread 得通过相关接口，才能设置线程的优先级，但另一方面，如果有些业务逻辑包含其依赖的数据，在一个死循环里面更好处理，那不如就直接用 NSThread，或许比 GCD 的分配更好吧。</p>
+<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2025-08.html#p2">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">25年8月30日 周六 21:56</div>
+<h2>交管12123——学法减分</h2>
+<p>之前老家的车被我开到了深圳，住的离东莞很近，就经常到东莞的超市买东西，反正车一周总要热一次，补电瓶的电的。</p>
+<p>经常是下班回来后过去，都 20:30 之后了，那次是看到了红灯，但没管那么多，跟着人家粤S的车后面右转，这回是记 6 分，200 块。</p>
+<p>好在 交管12123 app 上，可以学法减分，上面会红点提示，但是如果一次被扣 12 分，就得妥妥的重新考试拿驾照了吧，还有，一年内考试最多可以补 6 分，所以，一年内是有 18 分可以扣的？</p>
+<p>所谓的学法减分，首先你得被扣分了，然后才能看减分入口，有网上学习，以及线下公益活动可选。这么热的天，还是学法减分好，首先得申请，通过之后才能看警示视频，之后是考试，20 道题错题少于3道才能过，只能补考一次，时间限制没那么严。</p>
+<p>看警示视频每次至少 30 分钟，间隔 5 分钟上报时间，中间有人脸识别流程，时间到了会提示，可以进入下一个环节，进行考试了。</p>
+<p>我裸考发现很难考，还是得多学习才能考试通过的。</p>
+<div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2025-08.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">25年8月30日 周六 21:36</div>
+<h2>凡人修仙传（3）</h2>
+<p>电子书凡人修仙传我已经看到慕兰人从对抗到联合了，但只可惜动画进度很慢，才到了慕沛灵自爆贴身侍女这里，韩立从闭关中出来。</p>
+<p>谁想到，电视剧都有了，不过我没有会员，都是从夸克下载的，也是断断续续地下载，不是 4k 的不看，要不 27 寸屏幕看着就太粗糙了，蓝瘦。</p>
+<p>电视剧的人物南宫婉的嘴是歪的，有仙女之气，但金晨来演，有点太冷了，我先看的是动画，原著里面没有那么多吃醋的场景，动画最多，哈哈哈，电视剧里面人物太冷了，从动画过来的，有点不习惯。</p>
+<p>其实看过原著就知道，电视剧很多是借鉴动画的。</p>
+<p>比如韩立的师傅李化元，原著里面对于其陨落，是在慕兰人入侵之后，当时韩立已经是落云宗长老了，见到了黄枫谷的弟子们，才知道的；动画里面，李还因为红佛跟云露老祖对抗，戏份还是很多的；电视剧因为篇幅问题吧，这段比较少。</p>
+<p>电视剧篇幅的原因，只有 30 集，以韩立从古传送阵离开天南为结束；结束时，也跟动画剧情一样，被王婵追杀，最后王婵看着韩立从古传送阵离开。</p>
+<p>电视剧的动画效果，跟动画版比起来，大部分是不如的，不过也有出彩的部分，毕竟真人演，如果有不习惯动画的，真人可以过渡一下。</p>
+<p>另外，从凡人的篇幅看，真人版应该也会拍外海的吧，然后看情况也会有其他篇的。</p>
+<p>总的来说，还行吧，能看，但看过动画的，就没必要看电视剧了，动画才是最雕的。</p>
+<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2025-08.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
+
+<div class="date">25年7月28日 周日 13:53</div>
 <h2>泥潭</h2>
 <p>朋友给介绍的小说，这本小说的特点在于故事线，分三个部分，分别从同一事件的三个不同人物（角色）来围绕故事展开。</p>
 <p>故事的背景是辛亥革命，主角 1 是其中的保皇派，主角 2 是其中的光复会成员（刚开始留日的时候是带着小辫子，之后逐渐转向了革命），主角 3 是神父，三个不同角色用不同的叙述、表现方式，展开了故事。</p>
@@ -64,7 +136,7 @@
 <div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2025-07.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 
 <div class="date">25年6月15日 周日 21:15</div>
-<h2>凡人修仙传(2)</h2>
+<h2>凡人修仙传（2）</h2>
 <p>是从 B 站的动画开始看的，一开始的动画有点粗糙，到后来大概八九十集，还是百来集的时候，4K 动画的精致程度，已经无与伦比，故事情节更是扣人心弦，每周一集的更新进度，让人等不及。</p>
 <p>于是开始看小说了，之前买的汉王 10.3 寸屏纸质书开始派上用场，看书的效果、效率、手感都很不错，相当好评，只是我看小说的进度还是偏慢，大概只看了 1/10，远远赶不上动画的进度。</p>
 <p>这篇网络小说我是大大推荐的，故事情节很不错。</p>
@@ -134,243 +206,6 @@
 <p>我还不如去摸金模式呢，我好歹还是个小糖人呢，大战场是真的四得不明不白的。</p>
 <p>吐槽完毕，貌似有 3 周没玩了，戒了。</p>
 <div class="category"><a href="CategoryLife.html">CategoryLife</a> / <a href="2025-02.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">25年1月26日 周日 22:39</div>
-<h2>WSL2 的网络配置</h2>
-<p>之前在 Win 11 23H 搞好的 Ubuntu 18.04 LTS 的网络配置，回到家里，又死活连不上了，原因未知，于是重新记录一下吧。</p>
-<p>Window 侧</p>
-<pre><code class="language-sh"> type .\.wslconfig
-[wsl2]
-networkingMode=bridged
-vmSwitch=WSLBridge
-ipv6=false
-</code></pre>
-<p>WSL2 这边之前按就安装好了 sshd，但是设置了不支持密码登陆，而是用 ssh 公钥登录，关键配置是：</p>
-<pre><code class="language-sh"># To disable tunneled clear text passwords, change to no here!
-PasswordAuthentication no
-#PermitEmptyPasswords no
-
-# Change to yes to enable challenge-response passwords (beware issues with
-# some PAM modules and threads)
-ChallengeResponseAuthentication no
-</code></pre>
-<p>然后支持 vscode 使用 Remote - SSH 连接，但是 Putty 用的自己的 SSH 方案的，还没搞懂要怎么连接。</p>
-<p>不过不管咋说，用 vscode 写这个 blog 没啥问题。</p>
-<div class="category"><a href="CategoryLinux.html">CategoryLinux</a> / <a href="2025-01.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">24年11月30日 周六 10:57</div>
-<h2>SwiftSQLiteORM</h2>
-<p>地址在 <a href="https://github.com/lalawue/SwiftSQLiteORM.git">https://github.com/lalawue/SwiftSQLiteORM.git</a>。</p>
-<p>之前在公司实现过一个 Swift SQLite 的 ORM 库，基于 <a href="https://github.com/groue/GRDB.swift">GRDB</a>，ORM 的优势就是方便，不用自己 CURD，也能享受到关系数据库的 ACID（原子性、一致性、完整性与持久性）能力。</p>
-<p>只不过 ORM 的方式，搜索能力确实一般而已，比如不好自己组 SQL 搜索子句，以及 join 其他表，或者仅 select 输出某几列。</p>
-<p>不过这个输出某几列没有实现的原因，倒不是不好组子句，只是 Swift 是有类型系统的，输出的额外的类型必须得先定义，这个其实跟已有的表结构可能完全不相同，所以省略不做的。</p>
-<p>因为之前自己也重构过 Lua 的 SQLite 的 ORM，所以多少熟悉了这个部分（没办法，工作很大一部分就是熟能生巧，在限制场景和条件下找解决方案，一边摸索一边实践，顺利的话，条件满足后就可以输出，当然纯逻辑的的数学、理论物理等这些领域不熟悉，不发表意见）。</p>
-<h3>使用介绍</h3>
-<p>先给个定义的例子：</p>
-<pre><code class="language-swift">    // nested struct will store as JSON string
-    struct ExampleNested: Codable {
-        let desc: String
-        let index: Int
-    }
-
-    struct ExampleType: DBTableDef {
-        let name: String
-        let data: ExampleNested
-
-        typealias ORMKey = Columns
-
-        /// keep blank or return nil for using hidden 'rowid' column
-        static var primaryKey: Columns? {
-            return .name
-        }
-
-        enum Columns: String, DBTableKey {
-            case name
-            case data
-        }
-    }
-</code></pre>
-<p><code>ExampleType</code> 是需要支持 ORM 的结构，遵循 <code>DBTableDef</code>，可以是 struct 或者是 class，不要求遵循 Codable 协议。</p>
-<p>如上也就定义了数据库中的表结构，其中使用 <code>DBTableKey</code> 定义了数据库中的字段类型（支持仅部分属性进入数据库），这里还额外定义了 primary key 是 name，这样就支持了后续的 <code>deletes([T]) </code> 的接口，可以直接传递需要删除的实例进去。</p>
-<p>如果结构有嵌套的子结构，比如上面的 <code>ExampleNested</code>，则需要支持 Codable 协议，因为非内建字段类型 ，默认是 Blob，将 encode 为 JSON 后保存，否则将 throw error。</p>
-<p>使用如下：</p>
-<pre><code class="language-swift">    do {
-        // insert / update
-        let c = ExampleType(name: &quot;c&quot;, data: ExampleNested(desc: &quot;c&quot;, index: 1))
-        let u = ExampleType(name: &quot;u&quot;, data: ExampleNested(desc: &quot;u&quot;, index: 2))
-        try DBMgnt.push([c, u])
-
-        // select
-        let arr = try DBMgnt.fetch(ExampleType.self, .eq(.name, c.name))
-        XCTAssert(arr.count == 1, &quot;failed&quot;)
-        XCTAssert(arr[0].name == c.name, &quot;failed&quot;)
-
-        // delete
-        try DBMgnt.deletes([c]) // require primaryKey in table definition
-        try DBMgnt.delete(ExampleType.self, .eq(.name, u.name))
-        let count = try DBMgnt.fetch(ExampleType.self, .eq(.name, c.name)).count
-        XCTAssert(count == 0, &quot;failed&quot;)
-
-        // clear
-        try DBMgnt.clear(ExampleType.self)
-
-        // drop table
-        try DBMgnt.drop(ExampleType.self)
-
-    } catch {
-        if let err = error as? DBORMError {
-            fatalError(&quot;failed to try block: \(err.localizedDescription)&quot;)
-        } else {
-            fatalError(&quot;failed to try block: \(error.localizedDescription)&quot;)
-        }
-    }
-</code></pre>
-<p>CURD 基本上就是 push、fetch、deletes、delete、clear、drop 这样，其中 fetch、delete 接口支持 <code>DBRecordFilter</code>，关联 <code>DBTableDef</code> 中的字段定义，计算操作、比较操作都是可以传递属性名称进去的，类型则遵循 SQLite select 的类型转换规定，我大体理解是跟字段定义相关，比如 SQLite 给的字段定义可以是 TEXT、INTEGER、REAL、BLOB。</p>
-<p>另外，我只实现了部分内建字段的映射定义，用户可以根据自己需要通过 <code>DBPrimitive</code> 协议，定义某些类型支持映射：</p>
-<pre><code class="language-swift">/// database column type
-/// - will perform relative type calculation in sql expression
-/// - https://sqlite.org/datatype3.html
-public enum DBStoreType {
-
-    /// Int64
-    case INTEGER
-
-    /// Double
-    case REAL
-
-    /// String, Numeric
-    case TEXT
-
-    /// Data
-    case BLOB
-}
-
-/// database store value type
-/// - will sotre as type's DatabaseValueConvertible through GRDB
-public enum DBStoreValue {
-
-    /// box with int64
-    case integer(Int64)
-
-    /// box with double
-    case real(Double)
-
-    /// box with String
-    case text(String)
-
-    /// box with data
-    case blob(Data)
-}
-
-/// type transform for store / restore from database
-public protocol DBPrimitive: DefaultConstructor {
-
-    /// database column type
-    static var ormStoreType: DBStoreType { get }
-
-    /// return TypeInfo for mocking, for example objc wrapper NSUUID
-    static func ormTypeInfo() throws -&gt; TypeInfo
-
-    /// mapping value to store in database
-    func ormToStoreValue() -&gt; DBStoreValue?
-
-    /// restore value from database
-    static func ormFromStoreValue(_ value: DBStoreValue) -&gt; Self?
-}
-</code></pre>
-<p>其中的 <code>DBStoreType</code> 是数据库列类型，<code>DBStoreValue</code> 则是将自定义字段的数据通过 String、Int64、Double 或者 Data 传递到数据库，以及读取的时候，数据库也将返回这几种数据，给自定义类型来恢复。</p>
-<p>比如最开始例子的 name 属性是 String 类型，将映射为 SQLite 下的 TEXT 列类型。</p>
-<p>比如下面例子的 URL 将映射为 TEXT 列类型：</p>
-<pre><code class="language-swift">extension URL: DBPrimitive {
-
-    public init() {
-        // will be placed by database value later
-        self.init(string: &quot;a://a.a&quot;)!
-    }
-
-    public static var ormStoreType: SwiftSQLiteORM.DBStoreType { .TEXT }
-
-    public func ormToStoreValue() -&gt; SwiftSQLiteORM.DBStoreValue? {
-        return .text(self.absoluteString)
-    }
-
-    public static func ormFromStoreValue(_ value: SwiftSQLiteORM.DBStoreValue) -&gt; URL? {
-        guard case .text(let string) = value else {
-            return nil
-        }
-        return URL(string: string)
-    }
-}
-</code></pre>
-<p>上面的例子都没有涉及到如何 connect 数据库，以及建立 table 等，因为这些 ORM 库都自动做了，甚至支持 alter table。</p>
-<p>比如需要多增加一个属性，并记录到数据库，只需要升级 <code>DBTableDef</code> 下的 <code>tableVersion</code> 就好，是一个 Double 类型的字段。</p>
-<p>当然还支持指定 table 名称，以及使用独立的数据库文件，如下：</p>
-<pre><code class="language-swift">extension DBTableDef {
-
-    /// ...
-
-    /// specify table name or use type name
-    /// - should be unique in all scope
-    static var tableName: String { get }
-
-    /// schema version for table columns, default 0
-    /// - increase version after you add columns
-    static var tableVersion: Double { get }
-
-    /// specify database file name or use default
-    static var databaseName: String { get }
-
-    /// ...
-}
-</code></pre>
-<h3>实现细节</h3>
-<p>ORM 需要将 struct、class 的指定字段，映射到 SQLite 中的表结构，对应列的类型需要能保存属性数据，便于后续的计算、比较操作，这里对 Swift 语法结构的获取，用的库是 <a href="https://github.com/wickwirew/Runtime">Runtime</a>，这个也是我在 github 上遇到了 <a href="https://github.com/pozi119/SQLiteORM">SQLiteORM</a> 后，读取其代码了解到的。</p>
-<p>从 Runtime 这个库，可以拿到 Swift 结构的属性列表，以及每一个属性的类型，甚至可以构造这个属性的实例。</p>
-<p>比如 <code>fetch</code> 接口操作之后，这个实例的字段数据，是依赖数据库字段读取到的，因为 <code>DBTableDef</code> 支持仅保存部分字段，因此其他字段可以通过下面的函数由用户自己填充，或者使用默认值。</p>
-<pre><code class="language-swift">/// Table ORM mapping definition
-public protocol DBTableDef {
-
-    /// ...
-
-    /// update instance property value created by type reflection
-    /// - only ORMKey covered property can restore value from database column
-    /// - others property will use default value
-    static func ormUpdateNew(_ value: inout Self) -&gt; Self
-}
-</code></pre>
-<p>Swift 侧的表结构大致可以定义，但是数据库这边我偷懒了，不像 SQLiteORM 那样通过 SQLite 的接口组织操作，而是利用了 GRDB 来做保存、读取。</p>
-<p>这次我用了 <code>GRDB.swift/SQLCipher</code> 来做底层存储操作接口，其中的加密用的 password phrase 是库自动生成后，保存到 keychain 里面的。所以每次重新安装后，password phrase 都会不一样，但不影响使用，用户侧也无需知道具体是什么。</p>
-<p>GRDB 的读取是通过 Row 结构，使用上类似字典，保存的时候是通过 <code>encode</code>，也是类似字典，将属性保存到 container 中：</p>
-<pre><code class="language-swift">    /// insert / update
-    override func encode(to container: inout PersistenceContainer) {
-        /// ...
-    }
-</code></pre>
-<p>其中遇到的一些问题，以及不大好解决的问题记录大概有：</p>
-<p>SQLite 不支持保存 UInt64，所以这个类型，我是保存为了 TEXT，记录、恢复当然是没有问题的，只是在计算、比较的时候，我大概理解 SQLite 应该是 cast 为了 TEXT 来进行比较的吧。对比之下，GRDB 几乎是不支持 UInt64。</p>
-<p>NSDecimalNumber 其实在 Swift 里面就是 Decimal，但在 ObjC 里面，是 NSNumber 的子类，在 GRDB 里面，是被认为是 NSNumber，然后内部比较后来保存的，GRDB 对于 NSDecimalNumber 仅支持保存 &gt;=Int64.min 和 &lt;=Int64.max 的值。</p>
-<p>而在本库 NSDecimalNumber 是作为 TEXT 保存，短板也是类似 UInt64。</p>
-<p>同样的 NSNumber 本库也是作为 TEXT 保存，估计计算、比较的时候会有点问题吧，但基本存取操作在边界上是没啥问题的。</p>
-<p>等于是将计算、比较任务，都扔给 SQLite 列类型来处理了，比如 Decimal 跟 Real 的比较，等于是 SQLite 中 TEXT 字段和输入 REAL 值的比较了。</p>
-<p>也许这部分后续可以改进一下，利用 GRDB 的 argument 参数，使用 SQLite 的 bind 接口来完成，估计会更好一些，后面再说吧。</p>
-<p>大概就是这样。</p>
-<div class="category"><a href="CategoryProgramming.html">CategoryProgramming</a> / <a href="2024-11.html#p0">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
-
-<div class="date">24年10月27日 周日 19:21</div>
-<h2>枢纽——3000年的中国</h2>
-<p>这个大部头读了好久，主线是中华民族的发展史，以及当前取得的成就，结合地缘、历史的深入解读。</p>
-<p><strong>枢纽</strong>是本书强调的中心点。</p>
-<p>和美国海权国家（英国也是），俄罗斯陆权国家（德国也是）不同，中国是海陆复合型国家（伊朗也是），我们不仅有绵长的海岸线、广阔的南海，还有这跟中亚、蒙古等国家接壤的国界线，是欧亚大陆（世界岛）的重要国家。跟深入内陆中亚的交流，几千年前就开始了。</p>
-<p>在中国的历史上，代表草原文明、农耕文明的各民族，在不同时期作为主线，开启了属于自己的朝代。不同的王朝，都有同样的考虑，如长久的统治、稳定的社会。因此统治时，必须同时考虑草原、农耕文明。在朝代更迭的历史发展中，草原、农耕文明你争我夺，最终融合。</p>
-<p>王朝最终是草原、农耕文明的枢纽，只有这样，才能稳定这两种不同的力量。</p>
-<p>作为拥有绵长海岸线的国家，王朝通过海洋跟世界其他地方的联系，早就有了规模。比如马来西亚、菲律宾的华人，当年因为各种原因下南洋，还保留着华人（社会）的很多传统，说明文明的传递，其实也跨越了海洋。不过我们近代对于海洋的争斗，比较吃亏，显得海洋方面的发展，比较落后而已。</p>
-<p>之前王朝在繁荣发展，人口膨胀后，都会陷入马尔萨斯陷阱，遇到天灾人祸，脆弱的经济将导致崩溃，人口减少后才能平衡下来。</p>
-<p>但是膨胀的人口，却不是都坏事。比如即便清朝，跟当时的工业国——英国的贸易，一直都是顺差。</p>
-<p>因为当时庞大的人口，使得即便非工业化的手工制造业，成本都很低。因此当时初步的工业化，对于王朝来说，并不划算，没法形成规模，导致社会本身没有强烈的动力去进行工业化。而王朝的框架结构，也没法在社会内部被突破改变，最终是外部世界输入的变化，压垮了王朝。</p>
-<p>而作为拥有统一的法律、庞大的受教育人口、巨大内部市场的大国，在如今的工业化时代，却是优势。</p>
-<p>比如我们工业化成体系后，对应现代供应链网络的迭代、进化非常快（必须拥有统一法律、巨大内部市场、相当规模人口的大国才可能），在逐渐进化的同时，东南亚的供应链也逐渐融入（一方面文化相距不远方便吸收，另一方面为了规避制裁换个牌其实很快），使得在东亚的制造业规模化成本、优化迭代成本，是全世界最经济的，不仅足以供应全世界。其规模竞争优势，也要远远优于世界其他地方的工业化成本。</p>
-<p>我们每天都在进口原材料、输出最经济的工业制成品、高科技产品，在当今社会，我们就是世界经济运转的枢纽。</p>
-<div class="category"><a href="CategoryReading.html">CategoryReading</a> / <a href="2024-10.html#p1">Permalink</a> / <a href="https://github.com/lalawue/homepage/discussions/categories/blog" target="_blank">Discussion</a></div>
 <!-- Page published by cmark-gfm ends here -->
   <div id="foot">2004-<script>var d = new
 	Date();document.write(d.getFullYear())</script> &copy;
